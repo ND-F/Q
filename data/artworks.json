@@ -1,0 +1,17 @@
+[
+  {
+    "id": "EGY-PH-001",
+    "title_en": "Statue of Horus",
+    "title_ar": "تمثال حورس",
+    "date": "1300 BC",
+    "material": "Granite",
+    "height": "85 cm",
+    "width": "22 cm",
+    "hall": "Hall 3",
+    "section": "pharaonic",
+    "image": "images/horus.jpg",
+    "audio": "",
+    "description_en": "Granite statue representing the falcon god Horus.",
+    "description_ar": "تمثال من الجرانيت يمثل الإله حورس."
+  }
+]
