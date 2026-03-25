@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Artwork</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:'Tajawal',sans-serif;
+background:#000;
+color:white;
+}
+
+.topbar{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+background:#000;
+padding:15px;
+display:flex;
+justify-content:space-between;
+border-bottom:2px solid #0F5C5E;
+z-index:10;
+}
+
+.topbar button{
+padding:10px 25px;
+background:#0F5C5E;
+border:none;
+color:white;
+cursor:pointer;
+font-family:'Tajawal';
+}
+
+.container{
+display:flex;
+height:100vh;
+padding-top:70px;
+}
+
+.image{
+flex:1;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#000;
+}
+
+.image img{
+max-width:90%;
+max-height:90%;
+box-shadow:0 0 40px #0F5C5E55;
+}
+
+.info{
+flex:1;
+padding:70px;
+background:#111;
+border-left:2px solid #0F5C5E;
+}
+
+.info h1{
+font-weight:700;
+}
+
+.info p{
+font-weight:300;
+line-height:1.8;
+}
+
+.nav button{
+padding:12px 30px;
+background:#0F5C5E;
+border:none;
+color:white;
+cursor:pointer;
+margin-right:10px;
+font-family:'Tajawal';
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+<button onclick="goGallery()">← Gallery</button>
+<div id="counter"></div>
+</div>
+
+<div class="container">
+
+<div class="image">
+<img id="img">
+</div>
+
+<div class="info">
+<h1 id="title"></h1>
+<p id="desc"></p>
+
+<div class="nav">
+<button onclick="prev()">◀ Prev</button>
+<button onclick="next()">Next ▶</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbzIH8SdUGDWYqlvHfExOBU0fbhQX729NKKAvqtPGygrjvCGX2ge2jQRFqLQIVW1OqUj/exec";
+
+let artworks=[];
+let index=0;
+
+fetch(API)
+.then(r=>r.json())
+.then(data=>{
+
+artworks=data.sort((a,b)=>a.order-b.order);
+
+const url=new URLSearchParams(location.search);
+const id=Number(url.get("id"));
+
+index=artworks.findIndex(a=>a.order===id);
+
+load();
+
+});
+
+function load(){
+
+const a=artworks[index];
+
+document.getElementById("img").src=
+a.image1 || "images/no-image.jpg";
+
+document.getElementById("title").innerText=
+a.title_en;
+
+document.getElementById("desc").innerText=
+a.description_en;
+
+document.getElementById("counter").innerText=
+(index+1)+" / "+artworks.length;
+
+}
+
+function next(){
+index=(index+1)%artworks.length;
+load();
+}
+
+function prev(){
+index=(index-1+artworks.length)%artworks.length;
+load();
+}
+
+function goGallery(){
+location.href="index.html";
+}
+
+</script>
+
+</body>
+</html>

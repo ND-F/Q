@@ -2,61 +2,76 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Islamic Museum</title>
+<title>Nadim Islamic Museum</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800&display=swap" rel="stylesheet">
 
 <style>
 
 body{
 margin:0;
-font-family:Arial;
+font-family:'Tajawal',sans-serif;
 background:#000;
 color:white;
 }
 
-header{
-padding:30px;
+.logoHeader{
 text-align:center;
-font-size:30px;
-letter-spacing:3px;
-background:#111;
+padding:30px;
+background:#000;
+border-bottom:2px solid #0F5C5E;
+}
+
+.logoHeader img{
+max-width:420px;
+width:90%;
 }
 
 .search{
-width:300px;
-padding:12px;
-margin:20px auto;
+width:320px;
+padding:14px;
+margin:30px auto;
 display:block;
+background:#111;
+border:1px solid #0F5C5E;
+color:white;
+font-size:16px;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-gap:20px;
-padding:40px;
+grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+gap:30px;
+padding:50px;
 }
 
 .card{
 background:#111;
 cursor:pointer;
-transition:.3s;
+transition:.4s;
+border:1px solid transparent;
 }
 
 .card:hover{
 transform:scale(1.05);
+border:1px solid #0F5C5E;
+box-shadow:0 0 20px #0F5C5E55;
 }
 
 .card img{
 width:100%;
-height:200px;
+height:220px;
 object-fit:cover;
 }
 
 .card p{
-padding:15px;
+padding:18px;
+color:#0F5C5E;
+letter-spacing:1px;
+font-weight:500;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -74,32 +89,30 @@ padding:15px;
 const API =
 "https://script.google.com/macros/s/AKfycbzIH8SdUGDWYqlvHfExOBU0fbhQX729NKKAvqtPGygrjvCGX2ge2jQRFqLQIVW1OqUj/exec";
 
-let artworks = [];
+let artworks=[];
 
 fetch(API)
 .then(r=>r.json())
 .then(data=>{
-
-artworks = data.sort((a,b)=>a.order-b.order);
+artworks=data.sort((a,b)=>a.order-b.order);
 render(artworks);
-
 });
 
 function render(list){
 
-const grid = document.getElementById("grid");
+const grid=document.getElementById("grid");
 grid.innerHTML="";
 
 list.forEach(a=>{
 
-const card = document.createElement("div");
+const card=document.createElement("div");
 card.className="card";
 
-card.onclick = ()=>{
-location.href="artwork.html?id="+a.order;
+card.onclick=()=>{
+location.href="scan.html?id="+a.order;
 };
 
-card.innerHTML = `
+card.innerHTML=`
 <img src="${a.image1}" onerror="this.src='images/no-image.jpg'">
 <p>${a.title_en}</p>
 `;
@@ -112,11 +125,11 @@ grid.appendChild(card);
 
 function searchArt(){
 
-const s = document.getElementById("search").value.toLowerCase();
+const s=document.getElementById("search").value.toLowerCase();
 
-const filtered = artworks.filter(a =>
-(a.title_en || "").toLowerCase().includes(s) ||
-(a.id || "").toLowerCase().includes(s)
+const filtered=artworks.filter(a =>
+(a.title_en||"").toLowerCase().includes(s) ||
+(a.id||"").toLowerCase().includes(s)
 );
 
 render(filtered);
