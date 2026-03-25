@@ -2,182 +2,134 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>QR Print System</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 
 <style>
 
 body{
-font-family:'Tajawal';
-background:#eee;
-margin:0;
-padding:20px;
-}
-
-button{
-padding:12px 25px;
-background:#0F5C5E;
-color:white;
-border:none;
-cursor:pointer;
-margin-bottom:20px;
-font-size:16px;
+font-family:Tajawal;
+background:white;
 }
 
 .page{
-width:794px;
-height:1123px;
-background:white;
-margin:20px auto;
-padding:30px;
-box-sizing:border-box;
+width:210mm;
+height:297mm;
 display:grid;
 grid-template-columns:repeat(2,1fr);
 grid-template-rows:repeat(3,1fr);
-gap:25px;
-position:relative;
+gap:5mm;
+padding:10mm;
+box-sizing:border-box;
+page-break-after:always;
 }
 
 .sticker{
-border:3px solid #0F5C5E;
+
+border:2px solid #0F5C5E;
+position:relative;
 display:flex;
 flex-direction:column;
-justify-content:space-between;
-padding:15px;
-position:relative;
-}
-
-.title{
-text-align:center;
-font-weight:700;
-color:#0F5C5E;
-font-size:18px;
+align-items:center;
+justify-content:center;
 }
 
 .qr{
-flex:1;
-display:flex;
-align-items:center;
-justify-content:center;
-position:relative;
+width:70mm;
+height:70mm;
 }
 
-.logo{
-position:absolute;
-width:45px;
-height:45px;
-background:white;
-padding:4px;
-}
-
-.scan{
-text-align:center;
+.title{
+margin-top:5mm;
+font-size:16px;
+font-weight:bold;
 color:#0F5C5E;
-font-weight:500;
 }
 
 .id{
-text-align:center;
+font-size:12px;
+color:#0F5C5E;
+}
+
+.scan{
+margin-top:2mm;
 font-size:12px;
 color:#0F5C5E;
 }
 
 .crop{
 position:absolute;
-width:20px;
-height:20px;
+width:6mm;
+height:6mm;
 border-color:black;
 }
 
-.crop.tl{top:-3px;left:-3px;border-top:2px solid;border-left:2px solid;}
-.crop.tr{top:-3px;right:-3px;border-top:2px solid;border-right:2px solid;}
-.crop.bl{bottom:-3px;left:-3px;border-bottom:2px solid;border-left:2px solid;}
-.crop.br{bottom:-3px;right:-3px;border-bottom:2px solid;border-right:2px solid;}
+.tl{top:-2mm;left:-2mm;border-top:1px solid;border-left:1px solid;}
+.tr{top:-2mm;right:-2mm;border-top:1px solid;border-right:1px solid;}
+.bl{bottom:-2mm;left:-2mm;border-bottom:1px solid;border-left:1px solid;}
+.br{bottom:-2mm;right:-2mm;border-bottom:1px solid;border-right:1px solid;}
 
 </style>
 </head>
 
 <body>
 
-<button onclick="downloadPDF()">Download Print PDF</button>
-
-<div id="printArea"></div>
+<div id="container"></div>
 
 <script>
 
-const API =
-"https://script.google.com/macros/s/AKfycbzIH8SdUGDWYqlvHfExOBU0fbhQX729NKKAvqtPGygrjvCGX2ge2jQRFqLQIVW1OqUj/exec";
+const base =
+"https://nd-f.github.io/Q/scan.html?id=";
 
-fetch(API)
-.then(r=>r.json())
-.then(data=>{
+let total = 30; // غيرها لـ 500
 
-data.sort((a,b)=>a.order-b.order);
+let perPage = 6;
 
-let page;
+for(let p=0;p<Math.ceil(total/perPage);p++){
 
-data.forEach((a,i)=>{
-
-if(i%6===0){
-page=document.createElement("div");
+let page = document.createElement("div");
 page.className="page";
-document.getElementById("printArea").appendChild(page);
-}
 
-const sticker=document.createElement("div");
+for(let i=1;i<=perPage;i++){
+
+let num = p*perPage+i;
+if(num>total) break;
+
+let sticker = document.createElement("div");
 sticker.className="sticker";
 
-sticker.innerHTML=`
+sticker.innerHTML = `
 <div class="crop tl"></div>
 <div class="crop tr"></div>
 <div class="crop bl"></div>
 <div class="crop br"></div>
 
-<div class="title">${a.title_en}</div>
-
-<div class="qr" id="qr${a.order}"></div>
-
+<div id="qr${num}" class="qr"></div>
+<div class="title">قطعة متحف</div>
+<div class="id">EGY-MIA-${String(num).padStart(4,'0')}</div>
 <div class="scan">⬇ Scan Me</div>
-<div class="id">${a.id}</div>
 `;
 
 page.appendChild(sticker);
 
-const url=
-"https://nd-f.github.io/Q/scan.html?id="+a.order;
-
-new QRCode(document.getElementById("qr"+a.order),{
-text:url,
-width:170,
-height:170,
+setTimeout(()=>{
+new QRCode(
+document.getElementById("qr"+num),
+{
+text: base+num,
+width:260,
+height:260,
 colorDark:"#0F5C5E",
 colorLight:"#ffffff",
 correctLevel:QRCode.CorrectLevel.H
 });
+},100);
 
-const logo=document.createElement("img");
-logo.src="images/qr-logo.png";
-logo.className="logo";
+}
 
-document.getElementById("qr"+a.order).appendChild(logo);
-
-});
-
-});
-
-function downloadPDF(){
-
-html2pdf().from(document.getElementById("printArea")).set({
-margin:0,
-filename:"Museum_QR_Print.pdf",
-image:{type:'jpeg',quality:1},
-html2canvas:{scale:2},
-jsPDF:{unit:'px',format:'a4',orientation:'portrait'}
-}).save();
+document.getElementById("container").appendChild(page);
 
 }
 

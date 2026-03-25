@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Visitor Analytics</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+font-family:Arial;
+background:#111;
+color:white;
+padding:40px;
+}
+
+canvas{
+background:white;
+margin-bottom:40px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Visitor Analytics Dashboard</h1>
+
+<canvas id="visitsChart"></canvas>
+<canvas id="deviceChart"></canvas>
+<canvas id="langChart"></canvas>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbzIH8SdUGDWYqlvHfExOBU0fbhQX729NKKAvqtPGygrjvCGX2ge2jQRFqLQIVW1OqUj/exec?stats=1";
+
+fetch(API)
+.then(r=>r.json())
+.then(data=>{
+
+let visits = {};
+let devices = {};
+let langs = {};
+
+data.forEach(r=>{
+
+visits[r.art] = (visits[r.art]||0)+1;
+devices[r.device] = (devices[r.device]||0)+1;
+langs[r.lang] = (langs[r.lang]||0)+1;
+
+});
+
+new Chart(visitsChart,{
+type:'bar',
+data:{
+labels:Object.keys(visits),
+datasets:[{
+label:'Visits per Artwork',
+data:Object.values(visits)
+}]
+}
+});
+
+new Chart(deviceChart,{
+type:'pie',
+data:{
+labels:Object.keys(devices),
+datasets:[{
+data:Object.values(devices)
+}]
+}
+});
+
+new Chart(langChart,{
+type:'doughnut',
+data:{
+labels:Object.keys(langs),
+datasets:[{
+data:Object.values(langs)
+}]
+}
+});
+
+});
+
+</script>
+
+</body>
+</html>
