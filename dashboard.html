@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+font-family:Tajawal;
+background:#0b0b0b;
+color:white;
+padding:30px;
+}
+
+h1{
+color:#0F5C5E;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:40px;
+}
+
+.card{
+background:#111;
+padding:20px;
+border-radius:12px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Visitor Analytics</h1>
+
+<div class="grid">
+
+<div class="card">
+<canvas id="artChart"></canvas>
+</div>
+
+<div class="card">
+<canvas id="langChart"></canvas>
+</div>
+
+</div>
+
+<script>
+
+const LOG_API =
+"https://script.google.com/macros/s/XXXX/exec?logs=1";
+
+fetch(LOG_API)
+.then(r=>r.json())
+.then(data=>{
+
+let artCount={};
+let langCount={};
+
+data.forEach(v=>{
+
+artCount[v.id]=(artCount[v.id]||0)+1;
+
+let lang = v.lang.split("-")[0];
+langCount[lang]=(langCount[lang]||0)+1;
+
+});
+
+new Chart(
+document.getElementById("artChart"),
+{
+type:'bar',
+data:{
+labels:Object.keys(artCount),
+datasets:[{
+label:'Scans',
+data:Object.values(artCount),
+backgroundColor:'#0F5C5E'
+}]
+}
+}
+);
+
+new Chart(
+document.getElementById("langChart"),
+{
+type:'pie',
+data:{
+labels:Object.keys(langCount),
+datasets:[{
+data:Object.values(langCount),
+backgroundColor:[
+'#0F5C5E',
+'#138a8d',
+'#1db9bd',
+'#46dede'
+]
+}]
+}
+}
+);
+
+});
+
+</script>
+
+</body>
+</html>
