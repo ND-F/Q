@@ -1,3 +1,18 @@
+.logoHeader{
+text-align:center;
+padding:30px;
+background:#000;
+}
+
+.logoHeader img{
+max-width:420px;
+width:90%;
+}
+
+
+
+
+
 body{
 margin:0;
 font-family:Arial;
