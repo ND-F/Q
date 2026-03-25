@@ -139,6 +139,9 @@ function load(){
 
 const a=artworks[index];
 
+fetch(API + "?track=" + a.order);
+
+
 document.getElementById("img").src=
 a.image1 || "images/no-image.jpg";
 
