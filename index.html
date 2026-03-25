@@ -3,16 +3,125 @@
 <head>
 <meta charset="UTF-8">
 <title>Islamic Museum</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#000;
+color:white;
+}
+
+header{
+padding:30px;
+text-align:center;
+font-size:30px;
+letter-spacing:3px;
+background:#111;
+}
+
+.search{
+width:300px;
+padding:12px;
+margin:20px auto;
+display:block;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:20px;
+padding:40px;
+}
+
+.card{
+background:#111;
+cursor:pointer;
+transition:.3s;
+}
+
+.card:hover{
+transform:scale(1.05);
+}
+
+.card img{
+width:100%;
+height:200px;
+object-fit:cover;
+}
+
+.card p{
+padding:15px;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<h1 class="home-title">Islamic Museum Collection</h1>
+<header>Islamic Museum Collection</header>
 
-<div class="home-info">
-Scan QR beside each artwork to explore details
-</div>
+<input class="search" id="search" placeholder="Search..." onkeyup="searchArt()">
+
+<div class="grid" id="grid"></div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbzIH8SdUGDWYqlvHfExOBU0fbhQX729NKKAvqtPGygrjvCGX2ge2jQRFqLQIVW1OqUj/exec";
+
+let artworks = [];
+
+fetch(API)
+.then(r=>r.json())
+.then(data=>{
+
+artworks = data.sort((a,b)=>a.order-b.order);
+render(artworks);
+
+});
+
+function render(list){
+
+const grid = document.getElementById("grid");
+grid.innerHTML="";
+
+list.forEach(a=>{
+
+const card = document.createElement("div");
+card.className="card";
+
+card.onclick = ()=>{
+location.href="artwork.html?id="+a.order;
+};
+
+card.innerHTML = `
+<img src="${a.image1}" onerror="this.src='images/no-image.jpg'">
+<p>${a.title_en}</p>
+`;
+
+grid.appendChild(card);
+
+});
+
+}
+
+function searchArt(){
+
+const s = document.getElementById("search").value.toLowerCase();
+
+const filtered = artworks.filter(a =>
+(a.title_en || "").toLowerCase().includes(s) ||
+(a.id || "").toLowerCase().includes(s)
+);
+
+render(filtered);
+
+}
+
+</script>
 
 </body>
 </html>
