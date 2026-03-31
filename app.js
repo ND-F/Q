@@ -1,5 +1,5 @@
 const API =
-"https://script.google.com/macros/s/AKfycbzIH8SdUGDWYqlvHfExOBU0fbhQX729NKKAvqtPGygrjvCGX2ge2jQRFqLQIVW1OqUj/exec";
+"https://script.google.com/macros/s/AKfycbxW__sGqYA7pI4KQFKrwSaV4eQ-p6YrTcAwoc8ORZLyl9NOdF1r2Y983_gGhpbkkdLv/exec";
 
 let artworks = [];
 let currentIndex = 0;

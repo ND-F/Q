@@ -1,50 +1,37 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Museum Artwork</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 
 body{
 margin:0;
-font-family:'Tajawal',sans-serif;
-background:#0b0b0b;
+background:#000;
 color:white;
-}
-
-.header{
-background:#0F5C5E;
-padding:15px;
-text-align:center;
-}
-
-.header img{
-height:60px;
+font-family:Tajawal;
 }
 
 .container{
 display:flex;
 flex-wrap:wrap;
-min-height:90vh;
 }
 
 .image{
 flex:1;
-background:black;
 display:flex;
-align-items:center;
 justify-content:center;
+align-items:center;
+background:black;
 }
 
 .image img{
 max-width:90%;
 max-height:80vh;
-object-fit:contain;
 }
 
 .info{
@@ -53,163 +40,124 @@ padding:40px;
 }
 
 h1{
-margin-top:0;
-font-size:40px;
+font-size:38px;
+margin-bottom:10px;
 }
 
-.row{
-border-bottom:1px solid #0F5C5E;
-padding:12px 0;
-font-size:18px;
+.meta{
+color:#0F5C5E;
+margin:10px 0;
 }
 
 .desc{
+margin-top:20px;
+line-height:1.8;
+}
+
+.views{
 margin-top:25px;
-font-size:18px;
-line-height:1.6;
-}
-
-.controls{
-position:fixed;
-bottom:20px;
-left:0;
-right:0;
-display:flex;
-justify-content:center;
-gap:20px;
-}
-
-.btn{
-background:#0F5C5E;
-border:none;
-color:white;
-padding:15px 25px;
-font-size:18px;
-cursor:pointer;
-border-radius:8px;
-}
-
-.btn:hover{
-background:#138a8d;
-}
-
-@media(max-width:900px){
-.container{
-flex-direction:column;
-}
-.info{
-padding:20px;
-}
-h1{
-font-size:28px;
-}
+font-size:20px;
+color:#0F5C5E;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="header">
-<img src="images/logo-full.png">
-</div>
-
 <div class="container">
 
 <div class="image">
-<img id="img" src="images/no-image.jpg">
+<img id="img">
 </div>
 
 <div class="info">
 
-<h1 id="title">Loading...</h1>
+<h1 id="title_en"></h1>
+<h2 id="title_ar"></h2>
 
-<div class="row">رقم القطعة: <span id="id"></span></div>
-<div class="row">التاريخ: <span id="date"></span></div>
-<div class="row">الخامة: <span id="material"></span></div>
-<div class="row">الارتفاع: <span id="height"></span></div>
-<div class="row">العرض: <span id="width"></span></div>
+<div class="meta">
+رقم القطعة: <span id="id"></span>
+</div>
 
-<div class="desc" id="desc"></div>
+<div class="meta">
+التاريخ: <span id="date"></span>
+</div>
 
+<div class="desc" id="desc_en"></div>
+
+<div class="desc" id="desc_ar"></div>
+
+<div class="views">
+تمت مشاهدة هذه القطعة
+<span id="views">0</span>
+مرة
 </div>
 
 </div>
 
-<div class="controls">
-<button class="btn" onclick="prev()">◀ السابق</button>
-<button class="btn" onclick="gallery()">الجاليري</button>
-<button class="btn" onclick="next()">التالي ▶</button>
 </div>
 
 <script>
 
-const API =
-"https://script.google.com/macros/s/AKfycbzIH8SdUGDWYqlvHfExOBU0fbhQX729NKKAvqtPGygrjvCGX2ge2jQRFqLQIVW1OqUj/exec";
+const API="https://script.google.com/macros/s/AKfycbz0zgMLLmtC4NPZNJylRPgD7Q8aNjhfsZh6YdCJ55p8E-Bt7heKvDvkKkwutoiuwTSG/exec";
 
 let artworks=[];
-let index=0;
 
-function getID(){
-let url = new URL(window.location.href);
-return url.searchParams.get("id");
-}
+const url=new URLSearchParams(location.search);
+
+const id=url.get("id");
 
 fetch(API)
 .then(r=>r.json())
 .then(data=>{
+
 artworks=data;
 
-let id = getID();
+let a=artworks.find(x=>x.id==id);
 
-index = artworks.findIndex(a=>a.id==id);
+load(a);
 
-if(index<0) index=0;
+track(id);
 
-load();
-
-trackVisit(id);
+loadViews();
 
 });
 
-function load(){
+function load(a){
 
-let a = artworks[index];
+img.src=a.image;
 
-document.getElementById("title").innerText=a.title;
+title_en.innerText=a.title_en;
+
+title_ar.innerText=a.title_ar;
+
+desc_en.innerText=a.desc_en;
+
+desc_ar.innerText=a.desc_ar;
+
+date.innerText=a.date;
+
 document.getElementById("id").innerText=a.id;
-document.getElementById("date").innerText=a.date;
-document.getElementById("material").innerText=a.material;
-document.getElementById("height").innerText=a.height;
-document.getElementById("width").innerText=a.width;
-document.getElementById("desc").innerText=a.description;
-
-document.getElementById("img").src =
-a.image || "images/no-image.jpg";
 
 }
 
-function next(){
-index=(index+1)%artworks.length;
-load();
+function track(id){
+
+fetch(API+"?track="+id);
+
 }
 
-function prev(){
-index=(index-1+artworks.length)%artworks.length;
-load();
-}
+function loadViews(){
 
-function gallery(){
-window.location="index.html";
-}
+fetch(API+"?stats=1")
+.then(r=>r.json())
+.then(data=>{
 
-function trackVisit(id){
+views.innerText=data[id]||0;
 
-fetch(
-"https://script.google.com/macros/s/AKfycbzIH8SdUGDWYqlvHfExOBU0fbhQX729NKKAvqtPGygrjvCGX2ge2jQRFqLQIVW1OqUj/exec?track="+id+
-"&lang="+navigator.language+
-"&device="+navigator.userAgent
-);
+});
 
 }
 

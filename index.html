@@ -1,74 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>Nadim Islamic Museum</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Nadim Foundation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 
 body{
 margin:0;
-font-family:'Tajawal',sans-serif;
-background:#000;
-color:white;
-}
-
-.logoHeader{
+font-family:Tajawal;
 text-align:center;
-padding:30px;
-background:#000;
-border-bottom:2px solid #0F5C5E;
+direction:rtl;
+transition:background .5s,color .5s;
+background:#0f2024;
+color:#e9f6f7;
+padding-bottom:100px;
 }
 
-.logoHeader img{
-max-width:420px;
-width:90%;
+.light{
+background:#f4f7f8;
+color:#0c4f57;
 }
 
-.search{
-width:320px;
-padding:14px;
-margin:30px auto;
-display:block;
-background:#111;
-border:1px solid #0F5C5E;
+.hero{
+height:130px;
+background:linear-gradient(-45deg,#0c4f57,#0f6c75,#148b96,#0c4f57);
+background-size:400% 400%;
+animation:gradient 12s ease infinite;
+position:relative;
+overflow:hidden;
+}
+
+.hero::after{
+content:"";
+position:absolute;
+width:200%;
+height:200%;
+background:radial-gradient(circle,#ffffff10 10%,transparent 60%);
+animation:pulse 8s infinite;
+}
+
+@keyframes pulse{
+0%{transform:translate(-20%,-20%) scale(1)}
+50%{transform:translate(-10%,-10%) scale(1.2)}
+100%{transform:translate(-20%,-20%) scale(1)}
+}
+
+@keyframes gradient{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+.logoStrip{
+background:#e9f6f7;
+padding:28px;
+border-radius:0 0 40px 40px;
+}
+
+.logo{
+width:260px;
+max-width:90%;
+opacity:0;
+transform:translateY(25px);
+animation:fadeLogo 1.4s forwards;
+}
+
+@keyframes fadeLogo{
+to{opacity:1;transform:translateY(0)}
+}
+
+.btn{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;
+background:#17363c;
+margin:12px auto;
+padding:16px;
+border-radius:18px;
+text-decoration:none;
 color:white;
-font-size:16px;
+width:90%;
+max-width:420px;
+font-weight:bold;
+box-shadow:0 10px 25px rgba(0,0,0,.2);
+transition:.3s;
 }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-gap:30px;
-padding:50px;
+.light .btn{
+background:white;
+color:#0c4f57;
 }
 
-.card{
-background:#111;
+.btn:hover{
+transform:translateY(-3px) scale(1.02);
+}
+
+.floatingBar{
+position:fixed;
+bottom:18px;
+left:50%;
+transform:translateX(-50%);
+padding:12px 22px;
+border-radius:40px;
+display:flex;
+gap:20px;
+backdrop-filter:blur(14px);
+background:rgba(255,255,255,.15);
+box-shadow:0 8px 30px rgba(0,0,0,.25);
+z-index:999;
+}
+
+.ctrl{
+font-size:22px;
 cursor:pointer;
 transition:.4s;
-border:1px solid transparent;
 }
 
-.card:hover{
-transform:scale(1.05);
-border:1px solid #0F5C5E;
-box-shadow:0 0 20px #0F5C5E55;
+.ctrl:active{
+transform:scale(.8) rotate(180deg);
 }
 
-.card img{
-width:100%;
-height:220px;
-object-fit:cover;
-}
-
-.card p{
-padding:18px;
-color:#0F5C5E;
-letter-spacing:1px;
-font-weight:500;
+.footer{
+margin:30px;
+opacity:.6;
 }
 
 </style>
@@ -76,71 +137,121 @@ font-weight:500;
 
 <body>
 
-<header class="logoHeader">
-<img src="images/logo-full.png">
-</header>
+<div class="hero"></div>
 
-<input class="search" id="search" placeholder="Search..." onkeyup="searchArt()">
+<div class="logoStrip">
 
-<div class="grid" id="grid"></div>
+<img class="logo"
+src="https://raw.githubusercontent.com/Sh33ar/https-github.com-/main/NADIM%20LOGO.png">
+
+</div>
+
+<div id="buttons"></div>
+
+<div class="floatingBar">
+
+<div class="ctrl" onclick="share()">🔗</div>
+
+<div class="ctrl" onclick="toggleTheme()" id="themeBtn">☀️</div>
+
+<div class="ctrl" onclick="toggleLang()">🌐</div>
+
+</div>
+
+<div class="footer">Nadim Foundation ©</div>
 
 <script>
 
-const API =
-"https://script.google.com/macros/s/AKfycbzIH8SdUGDWYqlvHfExOBU0fbhQX729NKKAvqtPGygrjvCGX2ge2jQRFqLQIVW1OqUj/exec";
+const API="https://script.google.com/macros/s/AKfycbz0zgMLLmtC4NPZNJylRPgD7Q8aNjhfsZh6YdCJ55p8E-Bt7heKvDvkKkwutoiuwTSG/exec";
 
-let artworks=[];
+let lang="ar";
 
 fetch(API)
 .then(r=>r.json())
 .then(data=>{
-artworks=data.sort((a,b)=>a.order-b.order);
-render(artworks);
-});
 
-function render(list){
-
-const grid=document.getElementById("grid");
-grid.innerHTML="";
-
-list.forEach(a=>{
-
-const card=document.createElement("div");
-card.className="card";
-
-card.onclick=()=>{
-location.href="scan.html?id="+a.order;
-};
-
-card.innerHTML=`
-<img src="${a.image1}" onerror="this.src='images/no-image.jpg'">
-<p>${a.title_en}</p>
-`;
-
-grid.appendChild(card);
+render(data);
 
 });
 
+function render(data){
+
+const wrap=document.getElementById("buttons");
+
+wrap.innerHTML="";
+
+data.forEach(a=>{
+
+const btn=document.createElement("a");
+
+btn.className="btn";
+
+btn.href="scan.html?id="+a.id;
+
+btn.innerHTML = lang==="ar" ? a.title_ar : a.title_en;
+
+wrap.appendChild(btn);
+
+});
+
 }
 
-function searchArt(){
+function toggleLang(){
 
-const s=document.getElementById("search").value.toLowerCase();
+lang = lang==="ar" ? "en" : "ar";
 
-const filtered=artworks.filter(a =>
-(a.title_en||"").toLowerCase().includes(s) ||
-(a.id||"").toLowerCase().includes(s)
-);
+document.body.dir = lang==="ar" ? "rtl":"ltr";
 
-render(filtered);
+fetch(API)
+.then(r=>r.json())
+.then(data=>render(data));
 
 }
 
-</script>
-<script>
-if("serviceWorker" in navigator){
-navigator.serviceWorker.register("sw.js");
+const body=document.body;
+
+const btn=document.getElementById("themeBtn");
+
+if(localStorage.getItem("theme")=="light"){
+
+body.classList.add("light");
+
+btn.innerHTML="🌙";
+
 }
+
+function toggleTheme(){
+
+body.classList.toggle("light");
+
+if(body.classList.contains("light")){
+
+btn.innerHTML="🌙";
+
+localStorage.setItem("theme","light");
+
+}else{
+
+btn.innerHTML="☀️";
+
+localStorage.setItem("theme","dark");
+
+}
+
+}
+
+function share(){
+
+navigator.share({
+
+title:"Nadim Foundation",
+
+url:window.location.href
+
+});
+
+}
+
 </script>
 
 </body>
