@@ -1,74 +1,91 @@
 <!DOCTYPE html>
 <html lang="ar">
-
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+<title>Nadim Museum</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
+:root{
+--main:#0F5C5E;
+--dark:#071f21;
+--light:#f4f7f8;
+}
+
 body{
 margin:0;
-font-family:Tajawal;
-background:#0f2024;
-color:#e9f6f7;
+font-family:'Tajawal',sans-serif;
+background:var(--dark);
+color:white;
 transition:.4s;
 }
 
 .light{
-background:#f4f7f8;
-color:#0c4f57;
+background:var(--light);
+color:#0f2c2e;
 }
 
 .header{
-background:#e9f6f7;
+background:var(--main);
 padding:20px;
 text-align:center;
 }
 
 .logo{
-width:220px;
+width:200px;
 }
 
 .container{
 display:flex;
 flex-wrap:wrap;
+gap:40px;
+padding:40px;
+max-width:1200px;
+margin:auto;
 }
 
 .image{
 flex:1;
-display:flex;
-align-items:center;
-justify-content:center;
-background:black;
+min-width:320px;
 }
 
 .image img{
-max-width:90%;
-max-height:85vh;
+width:100%;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,.4);
 }
 
 .info{
 flex:1;
-padding:40px;
+min-width:320px;
 }
 
-.title{
+h1{
 font-size:36px;
 margin-bottom:10px;
 }
 
 .meta{
-color:#0f6c75;
 margin:10px 0;
+font-size:18px;
+opacity:.9;
 }
 
 .desc{
-margin-top:20px;
-line-height:1.9;
+margin-top:25px;
+font-size:20px;
+line-height:1.8;
+}
+
+.counter{
+margin-top:25px;
+font-size:16px;
+opacity:.7;
 }
 
 .controls{
@@ -76,16 +93,17 @@ position:fixed;
 bottom:20px;
 left:50%;
 transform:translateX(-50%);
-background:rgba(255,255,255,.2);
-padding:10px 20px;
-border-radius:30px;
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(12px);
+padding:12px 22px;
+border-radius:40px;
 display:flex;
 gap:20px;
 }
 
 .btn{
 cursor:pointer;
-font-size:22px;
+font-size:20px;
 }
 
 </style>
@@ -95,10 +113,7 @@ font-size:22px;
 <body>
 
 <div class="header">
-
-<img class="logo"
-src="https://raw.githubusercontent.com/Sh33ar/https-github.com-/main/NADIM%20LOGO.png">
-
+<img class="logo" src="images/logo-full.png">
 </div>
 
 <div class="container">
@@ -109,31 +124,14 @@ src="https://raw.githubusercontent.com/Sh33ar/https-github.com-/main/NADIM%20LOG
 
 <div class="info">
 
-<div class="title" id="title"></div>
+<h1 id="title"></h1>
 
-<div class="meta">
-
-رقم القطعة: <span id="id"></span>
-
-</div>
-
-<div class="meta">
-
-التاريخ: <span id="date"></span>
-
-</div>
+<div class="meta" id="id"></div>
+<div class="meta" id="date"></div>
 
 <div class="desc" id="desc"></div>
 
-<div class="meta">
-
-تمت مشاهدة هذه القطعة
-
-<span id="views">0</span>
-
-مرة
-
-</div>
+<div class="counter" id="views"></div>
 
 </div>
 
@@ -141,102 +139,101 @@ src="https://raw.githubusercontent.com/Sh33ar/https-github.com-/main/NADIM%20LOG
 
 <div class="controls">
 
-<div class="btn" onclick="toggleLang()">🌐</div>
-
 <div class="btn" onclick="toggleTheme()">🌙</div>
+<div class="btn" onclick="toggleLang()">🌐</div>
 
 </div>
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbz0zgMLLmtC4NPZNJylRPgD7Q8aNjhfsZh6YdCJ55p8E-Bt7heKvDvkKkwutoiuwTSG/exec";
+const API="https://script.google.com/macros/s/AKfycbz0zgMLLmtC4NPZNJylRPgD7Q8aNjhfsZh6YdCJ55p8E-Bt7heKvDvkKkwutoiuwTSG/exec"
 
-let lang="ar";
+let lang="ar"
 
-const url=new URLSearchParams(location.search);
+const params=new URLSearchParams(location.search)
+const id=params.get("id")
 
-const id=url.get("id");
+let artwork
 
 fetch(API)
-
 .then(r=>r.json())
-
 .then(data=>{
 
-let a=data.find(x=>x.id==id);
+artwork=data.find(a=>a.id==id)
 
-window.art=a;
+if(!artwork){
+document.body.innerHTML="<h2 style='padding:40px'>Artwork not found</h2>"
+return
+}
 
-load();
+render()
 
-track();
+})
 
-loadViews();
+function render(){
 
-});
+document.getElementById("img").src=artwork.image || "images/no-image.jpg"
 
-function load(){
+if(lang=="ar"){
 
-img.src=art.image;
+document.documentElement.lang="ar"
+document.body.dir="rtl"
 
-title.innerText=
+document.getElementById("title").innerText=artwork.title_ar || ""
 
-lang==="ar"
+document.getElementById("id").innerText=
+"رقم القطعة: "+artwork.id
 
-? art.title_ar
+document.getElementById("date").innerText=
+"التاريخ: "+(artwork.date || "")
 
-: art.title_en;
+document.getElementById("desc").innerText=
+artwork.desc_ar || ""
 
-desc.innerText=
+document.getElementById("views").innerText=
+"تمت مشاهدة هذه القطعة "+(artwork.views || 0)+" مرة"
 
-lang==="ar"
+}
 
-? art.desc_ar
+else{
 
-: art.desc_en;
+document.documentElement.lang="en"
+document.body.dir="ltr"
 
-date.innerText=art.date;
+document.getElementById("title").innerText=artwork.title_en || ""
 
-document.getElementById("id").innerText=art.id;
+document.getElementById("id").innerText=
+"Item ID: "+artwork.id
+
+document.getElementById("date").innerText=
+"Date: "+(artwork.date || "")
+
+document.getElementById("desc").innerText=
+artwork.desc_en || ""
+
+document.getElementById("views").innerText=
+"This item was viewed "+(artwork.views || 0)+" times"
+
+}
 
 }
 
 function toggleLang(){
 
-lang = lang==="ar" ? "en" : "ar";
-
-load();
+lang=(lang=="ar")?"en":"ar"
+render()
 
 }
 
 function toggleTheme(){
 
-document.body.classList.toggle("light");
+document.body.classList.toggle("light")
 
 }
 
-function track(){
-
-fetch(API+"?track="+id);
-
-}
-
-function loadViews(){
-
-fetch(API+"?stats=1")
-
-.then(r=>r.json())
-
-.then(data=>{
-
-views.innerText=data[id]||0;
-
-});
-
-}
+fetch(API+"?track="+id)
 
 </script>
 
 </body>
-
 </html>
