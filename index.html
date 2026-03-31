@@ -3,254 +3,172 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>Nadim Foundation</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+
+<title>Nadim Collection</title>
 
 <style>
 
 body{
 margin:0;
 font-family:Tajawal;
-text-align:center;
-direction:rtl;
-transition:background .5s,color .5s;
 background:#0f2024;
 color:#e9f6f7;
-padding-bottom:100px;
+text-align:center;
 }
 
-.light{
-background:#f4f7f8;
-color:#0c4f57;
-}
-
-.hero{
-height:130px;
-background:linear-gradient(-45deg,#0c4f57,#0f6c75,#148b96,#0c4f57);
-background-size:400% 400%;
-animation:gradient 12s ease infinite;
-position:relative;
-overflow:hidden;
-}
-
-.hero::after{
-content:"";
-position:absolute;
-width:200%;
-height:200%;
-background:radial-gradient(circle,#ffffff10 10%,transparent 60%);
-animation:pulse 8s infinite;
-}
-
-@keyframes pulse{
-0%{transform:translate(-20%,-20%) scale(1)}
-50%{transform:translate(-10%,-10%) scale(1.2)}
-100%{transform:translate(-20%,-20%) scale(1)}
-}
-
-@keyframes gradient{
-0%{background-position:0% 50%}
-50%{background-position:100% 50%}
-100%{background-position:0% 50%}
-}
-
-.logoStrip{
+.header{
 background:#e9f6f7;
-padding:28px;
-border-radius:0 0 40px 40px;
+padding:25px;
 }
 
 .logo{
 width:260px;
-max-width:90%;
-opacity:0;
-transform:translateY(25px);
-animation:fadeLogo 1.4s forwards;
 }
 
-@keyframes fadeLogo{
-to{opacity:1;transform:translateY(0)}
+.search{
+margin:25px auto;
 }
 
-.btn{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:10px;
-background:#17363c;
-margin:12px auto;
-padding:16px;
-border-radius:18px;
-text-decoration:none;
+.search input{
+padding:10px;
+width:250px;
+border:1px solid #0f6c75;
+background:#0f2024;
 color:white;
-width:90%;
-max-width:420px;
-font-weight:bold;
-box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+gap:30px;
+padding:40px;
+}
+
+.card{
+background:#111;
+border-radius:10px;
+overflow:hidden;
+cursor:pointer;
 transition:.3s;
 }
 
-.light .btn{
-background:white;
-color:#0c4f57;
+.card:hover{
+transform:translateY(-6px);
 }
 
-.btn:hover{
-transform:translateY(-3px) scale(1.02);
+.card img{
+width:100%;
+height:200px;
+object-fit:cover;
 }
 
-.floatingBar{
-position:fixed;
-bottom:18px;
-left:50%;
-transform:translateX(-50%);
-padding:12px 22px;
-border-radius:40px;
-display:flex;
-gap:20px;
-backdrop-filter:blur(14px);
-background:rgba(255,255,255,.15);
-box-shadow:0 8px 30px rgba(0,0,0,.25);
-z-index:999;
+.title{
+padding:10px;
+font-weight:bold;
+color:#e9f6f7;
 }
 
-.ctrl{
-font-size:22px;
-cursor:pointer;
-transition:.4s;
-}
-
-.ctrl:active{
-transform:scale(.8) rotate(180deg);
-}
-
-.footer{
-margin:30px;
-opacity:.6;
+.id{
+color:#0f6c75;
+padding-bottom:15px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="hero"></div>
-
-<div class="logoStrip">
+<div class="header">
 
 <img class="logo"
 src="https://raw.githubusercontent.com/Sh33ar/https-github.com-/main/NADIM%20LOGO.png">
 
 </div>
 
-<div id="buttons"></div>
+<div class="search">
 
-<div class="floatingBar">
-
-<div class="ctrl" onclick="share()">🔗</div>
-
-<div class="ctrl" onclick="toggleTheme()" id="themeBtn">☀️</div>
-
-<div class="ctrl" onclick="toggleLang()">🌐</div>
+<input id="search" placeholder="Search...">
 
 </div>
 
-<div class="footer">Nadim Foundation ©</div>
+<div class="grid" id="grid"></div>
 
 <script>
 
 const API="https://script.google.com/macros/s/AKfycbz0zgMLLmtC4NPZNJylRPgD7Q8aNjhfsZh6YdCJ55p8E-Bt7heKvDvkKkwutoiuwTSG/exec";
 
-let lang="ar";
+let artworks=[];
 
 fetch(API)
 .then(r=>r.json())
 .then(data=>{
-
+artworks=data;
 render(data);
-
 });
 
-function render(data){
+function render(list){
 
-const wrap=document.getElementById("buttons");
+const grid=document.getElementById("grid");
 
-wrap.innerHTML="";
+grid.innerHTML="";
 
-data.forEach(a=>{
+list.forEach(a=>{
 
-const btn=document.createElement("a");
+const card=document.createElement("div");
 
-btn.className="btn";
+card.className="card";
 
-btn.href="scan.html?id="+a.id;
+card.onclick=()=>{
 
-btn.innerHTML = lang==="ar" ? a.title_ar : a.title_en;
+location.href="scan.html?id="+a.id;
 
-wrap.appendChild(btn);
+};
 
-});
+card.innerHTML=`
 
-}
+<img src="${a.image || 'images/no-image.jpg'}">
 
-function toggleLang(){
+<div class="title">
 
-lang = lang==="ar" ? "en" : "ar";
+${a.title_ar || a.title_en || "قطعة متحف"}
 
-document.body.dir = lang==="ar" ? "rtl":"ltr";
+</div>
 
-fetch(API)
-.then(r=>r.json())
-.then(data=>render(data));
+<div class="id">
 
-}
+${a.id}
 
-const body=document.body;
+</div>
 
-const btn=document.getElementById("themeBtn");
+`;
 
-if(localStorage.getItem("theme")=="light"){
-
-body.classList.add("light");
-
-btn.innerHTML="🌙";
-
-}
-
-function toggleTheme(){
-
-body.classList.toggle("light");
-
-if(body.classList.contains("light")){
-
-btn.innerHTML="🌙";
-
-localStorage.setItem("theme","light");
-
-}else{
-
-btn.innerHTML="☀️";
-
-localStorage.setItem("theme","dark");
-
-}
-
-}
-
-function share(){
-
-navigator.share({
-
-title:"Nadim Foundation",
-
-url:window.location.href
+grid.appendChild(card);
 
 });
 
 }
+
+document.getElementById("search").oninput=(e)=>{
+
+let q=e.target.value.toLowerCase();
+
+render(
+
+artworks.filter(a=>
+
+(a.title_ar||"").toLowerCase().includes(q) ||
+
+(a.title_en||"").toLowerCase().includes(q)
+
+)
+
+);
+
+};
 
 </script>
 

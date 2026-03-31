@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar">
+
 <head>
 
 <meta charset="UTF-8">
@@ -11,9 +12,25 @@
 
 body{
 margin:0;
-background:#000;
-color:white;
 font-family:Tajawal;
+background:#0f2024;
+color:#e9f6f7;
+transition:.4s;
+}
+
+.light{
+background:#f4f7f8;
+color:#0c4f57;
+}
+
+.header{
+background:#e9f6f7;
+padding:20px;
+text-align:center;
+}
+
+.logo{
+width:220px;
 }
 
 .container{
@@ -24,14 +41,14 @@ flex-wrap:wrap;
 .image{
 flex:1;
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
 background:black;
 }
 
 .image img{
 max-width:90%;
-max-height:80vh;
+max-height:85vh;
 }
 
 .info{
@@ -39,25 +56,36 @@ flex:1;
 padding:40px;
 }
 
-h1{
-font-size:38px;
+.title{
+font-size:36px;
 margin-bottom:10px;
 }
 
 .meta{
-color:#0F5C5E;
+color:#0f6c75;
 margin:10px 0;
 }
 
 .desc{
 margin-top:20px;
-line-height:1.8;
+line-height:1.9;
 }
 
-.views{
-margin-top:25px;
-font-size:20px;
-color:#0F5C5E;
+.controls{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:rgba(255,255,255,.2);
+padding:10px 20px;
+border-radius:30px;
+display:flex;
+gap:20px;
+}
+
+.btn{
+cursor:pointer;
+font-size:22px;
 }
 
 </style>
@@ -65,6 +93,13 @@ color:#0F5C5E;
 </head>
 
 <body>
+
+<div class="header">
+
+<img class="logo"
+src="https://raw.githubusercontent.com/Sh33ar/https-github.com-/main/NADIM%20LOGO.png">
+
+</div>
 
 <div class="container">
 
@@ -74,28 +109,41 @@ color:#0F5C5E;
 
 <div class="info">
 
-<h1 id="title_en"></h1>
-<h2 id="title_ar"></h2>
+<div class="title" id="title"></div>
 
 <div class="meta">
+
 رقم القطعة: <span id="id"></span>
+
 </div>
 
 <div class="meta">
+
 التاريخ: <span id="date"></span>
+
 </div>
 
-<div class="desc" id="desc_en"></div>
+<div class="desc" id="desc"></div>
 
-<div class="desc" id="desc_ar"></div>
+<div class="meta">
 
-<div class="views">
 تمت مشاهدة هذه القطعة
+
 <span id="views">0</span>
+
 مرة
+
 </div>
 
 </div>
+
+</div>
+
+<div class="controls">
+
+<div class="btn" onclick="toggleLang()">🌐</div>
+
+<div class="btn" onclick="toggleTheme()">🌙</div>
 
 </div>
 
@@ -103,47 +151,71 @@ color:#0F5C5E;
 
 const API="https://script.google.com/macros/s/AKfycbz0zgMLLmtC4NPZNJylRPgD7Q8aNjhfsZh6YdCJ55p8E-Bt7heKvDvkKkwutoiuwTSG/exec";
 
-let artworks=[];
+let lang="ar";
 
 const url=new URLSearchParams(location.search);
 
 const id=url.get("id");
 
 fetch(API)
+
 .then(r=>r.json())
+
 .then(data=>{
 
-artworks=data;
+let a=data.find(x=>x.id==id);
 
-let a=artworks.find(x=>x.id==id);
+window.art=a;
 
-load(a);
+load();
 
-track(id);
+track();
 
 loadViews();
 
 });
 
-function load(a){
+function load(){
 
-img.src=a.image;
+img.src=art.image;
 
-title_en.innerText=a.title_en;
+title.innerText=
 
-title_ar.innerText=a.title_ar;
+lang==="ar"
 
-desc_en.innerText=a.desc_en;
+? art.title_ar
 
-desc_ar.innerText=a.desc_ar;
+: art.title_en;
 
-date.innerText=a.date;
+desc.innerText=
 
-document.getElementById("id").innerText=a.id;
+lang==="ar"
+
+? art.desc_ar
+
+: art.desc_en;
+
+date.innerText=art.date;
+
+document.getElementById("id").innerText=art.id;
 
 }
 
-function track(id){
+function toggleLang(){
+
+lang = lang==="ar" ? "en" : "ar";
+
+load();
+
+}
+
+function toggleTheme(){
+
+document.body.classList.toggle("light");
+
+}
+
+function track(){
 
 fetch(API+"?track="+id);
 
@@ -152,7 +224,9 @@ fetch(API+"?track="+id);
 function loadViews(){
 
 fetch(API+"?stats=1")
+
 .then(r=>r.json())
+
 .then(data=>{
 
 views.innerText=data[id]||0;
@@ -164,4 +238,5 @@ views.innerText=data[id]||0;
 </script>
 
 </body>
+
 </html>
