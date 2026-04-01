@@ -3,8 +3,10 @@ const CACHE_NAME = "museum-cache-v2";
 const ASSETS = [
 "/Q/",
 "/Q/index.html",
+"/Q/scan.html",
 "/Q/style.css",
-"/Q/images/no-image.jpg"
+"/Q/images/no-image.jpg",
+"/Q/images/logo-nadim.png"
 ];
 
 
