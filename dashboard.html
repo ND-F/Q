@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="UTF-8">
 
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
@@ -32,74 +34,107 @@ padding:20px;
 border-radius:12px;
 }
 
+.stat{
+font-size:32px;
+margin-bottom:20px;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <h1>Visitor Analytics</h1>
 
+<div class="stat">
+Visits Today: <span id="today">0</span>
+</div>
+
 <div class="grid">
 
 <div class="card">
+<h3>🔥 Most Viewed Artworks</h3>
 <canvas id="artChart"></canvas>
 </div>
 
 <div class="card">
+<h3>🌍 Languages</h3>
 <canvas id="langChart"></canvas>
+</div>
+
+<div class="card">
+<h3>📱 Devices</h3>
+<canvas id="deviceChart"></canvas>
 </div>
 
 </div>
 
 <script>
 
-const LOG_API =
-"https://script.google.com/macros/s/AKfycbxW__sGqYA7pI4KQFKrwSaV4eQ-p6YrTcAwoc8ORZLyl9NOdF1r2Y983_gGhpbkkdLv/exec";
+const API="PUT_YOUR_API_LINK_HERE?stats=1";
 
-fetch(LOG_API)
+fetch(API)
 .then(r=>r.json())
 .then(data=>{
 
-let artCount={};
-let langCount={};
+document.getElementById("today").innerText=data.today;
 
-data.forEach(v=>{
 
-artCount[v.id]=(artCount[v.id]||0)+1;
-
-let lang = v.lang.split("-")[0];
-langCount[lang]=(langCount[lang]||0)+1;
-
-});
+// artworks chart
 
 new Chart(
 document.getElementById("artChart"),
 {
 type:'bar',
 data:{
-labels:Object.keys(artCount),
+labels:Object.keys(data.artworks),
 datasets:[{
-label:'Scans',
-data:Object.values(artCount),
+label:'Views',
+data:Object.values(data.artworks),
 backgroundColor:'#0F5C5E'
 }]
 }
 }
 );
 
+
+// languages chart
+
 new Chart(
 document.getElementById("langChart"),
 {
 type:'pie',
 data:{
-labels:Object.keys(langCount),
+labels:Object.keys(data.languages),
 datasets:[{
-data:Object.values(langCount),
+data:Object.values(data.languages),
 backgroundColor:[
 '#0F5C5E',
 '#138a8d',
 '#1db9bd',
 '#46dede'
+]
+}]
+}
+}
+);
+
+
+// devices chart
+
+new Chart(
+document.getElementById("deviceChart"),
+{
+type:'doughnut',
+data:{
+labels:Object.keys(data.devices),
+datasets:[{
+data:Object.values(data.devices),
+backgroundColor:[
+'#0F5C5E',
+'#138a8d',
+'#1db9bd'
 ]
 }]
 }
