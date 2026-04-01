@@ -1,23 +1,84 @@
-const CACHE="museum-cache";
+const CACHE_NAME = "museum-cache-v2";
 
-self.addEventListener("install",e=>{
-e.waitUntil(
-caches.open(CACHE).then(cache=>{
-return cache.addAll([
+const ASSETS = [
 "/Q/",
 "/Q/index.html",
-"/Q/scan.html",
 "/Q/style.css",
 "/Q/images/no-image.jpg"
-]);
+];
+
+
+// تثبيت الـ Service Worker
+self.addEventListener("install", event => {
+
+event.waitUntil(
+caches.open(CACHE_NAME).then(cache=>{
+return cache.addAll(ASSETS);
 })
 );
+
+self.skipWaiting();
+
 });
 
-self.addEventListener("fetch",e=>{
-e.respondWith(
-caches.match(e.request).then(res=>{
-return res || fetch(e.request);
+
+// تفعيل النسخة الجديدة وحذف القديمة
+self.addEventListener("activate", event => {
+
+event.waitUntil(
+
+caches.keys().then(keys=>{
+return Promise.all(
+keys.map(key=>{
+if(key !== CACHE_NAME){
+return caches.delete(key);
+}
 })
 );
+})
+
+);
+
+self.clients.claim();
+
+});
+
+
+// إدارة الطلبات
+self.addEventListener("fetch", event => {
+
+const request = event.request;
+
+
+// لا تخزن HTML حتى لا تظهر نسخة قديمة
+if(request.headers.get("accept").includes("text/html")){
+
+event.respondWith(
+fetch(request).catch(()=>{
+return caches.match("/Q/index.html");
+})
+);
+
+return;
+
+}
+
+
+// الصور و CSS و JS يتم تخزينهم
+event.respondWith(
+
+caches.match(request).then(cached=>{
+return cached || fetch(request).then(response=>{
+
+return caches.open(CACHE_NAME).then(cache=>{
+cache.put(request,response.clone());
+return response;
+});
+
+});
+
+})
+
+);
+
 });
