@@ -27,7 +27,6 @@ page-break-after:always;
 }
 
 .sticker{
-
 border:2px solid #0F5C5E;
 position:relative;
 display:flex;
@@ -36,9 +35,27 @@ align-items:center;
 justify-content:center;
 }
 
+.qrWrap{
+position:relative;
+width:70mm;
+height:70mm;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
 .qr{
 width:70mm;
 height:70mm;
+}
+
+.qrLogo{
+position:absolute;
+width:16mm;
+height:16mm;
+background:white;
+padding:2mm;
+border-radius:4mm;
 }
 
 .title{
@@ -83,7 +100,7 @@ border-color:black;
 const base =
 "https://nd-f.github.io/Q/scan.html?id=";
 
-let total = 30; // غيرها لـ 500
+let total = 30; // غيرها لاحقًا
 
 let perPage = 6;
 
@@ -101,30 +118,38 @@ let sticker = document.createElement("div");
 sticker.className="sticker";
 
 sticker.innerHTML = `
+
 <div class="crop tl"></div>
 <div class="crop tr"></div>
 <div class="crop bl"></div>
 <div class="crop br"></div>
 
+<div class="qrWrap">
 <div id="qr${num}" class="qr"></div>
+<img src="images/qr-logo.png" class="qrLogo">
+</div>
+
 <div class="title">قطعة متحف</div>
 <div class="id">EGY-MIA-${String(num).padStart(4,'0')}</div>
 <div class="scan">⬇ Scan Me</div>
+
 `;
 
 page.appendChild(sticker);
 
 setTimeout(()=>{
+
 new QRCode(
 document.getElementById("qr"+num),
 {
-text: base+num,
+text: base+"EGY-MIA-"+String(num).padStart(4,'0'),
 width:260,
 height:260,
 colorDark:"#0F5C5E",
 colorLight:"#ffffff",
 correctLevel:QRCode.CorrectLevel.H
 });
+
 },100);
 
 }
