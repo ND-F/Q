@@ -1,0 +1,19 @@
+```html
+<svg xmlns="http://www.w3.org/2000/svg"
+viewBox="0 0 512 512"
+fill="none"
+stroke="#0f5c5e"
+stroke-width="20"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<polygon points="256,40 460,160 460,352 256,472 52,352 52,160"/>
+
+<polyline points="256,256 256,120 360,180"/>
+<polyline points="256,256 152,180 256,120"/>
+
+<polyline points="256,256 360,332 256,392"/>
+<polyline points="256,256 152,332 256,392"/>
+
+</svg>
+```
