@@ -1,17 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg"
-viewBox="0 0 1024 1024"
-fill="none"
-stroke="#0F5C5E"
-stroke-width="26"
-stroke-linejoin="round"
-stroke-linecap="round">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
 
-<polygon points="512,60 880,280 880,744 512,964 144,744 144,280"/>
+<g fill="none" stroke="#0F5C5E" stroke-width="18" stroke-linejoin="round" stroke-linecap="round">
 
-<polyline points="512,512 512,270 690,360"/>
-<polyline points="512,512 334,360 512,270"/>
+<polygon points="256,32 448,144 448,368 256,480 64,368 64,144"/>
 
-<polyline points="512,512 690,660 512,750"/>
-<polyline points="512,512 334,660 512,750"/>
+<path d="M256 256 L256 128 L336 176"/>
+<path d="M256 256 L176 176 L256 128"/>
+
+<path d="M256 256 L336 336 L256 384"/>
+<path d="M256 256 L176 336 L256 384"/>
+
+</g>
 
 </svg>
