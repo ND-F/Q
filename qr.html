@@ -5,7 +5,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
-<script src="https://unpkg.com/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
+<script src="https://unpkg.com/qr-code-styling/lib/qr-code-styling.js"></script>
 
 <style>
 
@@ -78,6 +78,8 @@ const base =
 let total = 30;
 let perPage = 6;
 
+/* إنشاء الصفحات أولاً */
+
 for(let p=0;p<Math.ceil(total/perPage);p++){
 
 let page=document.createElement("div");
@@ -99,13 +101,23 @@ sticker.innerHTML=`
 <div class="crop bl"></div>
 <div class="crop br"></div>
 
-<div class="qrWrap" id="qr${num}"></div>
+<div class="qrWrap">
+<div id="qr${num}"></div>
+</div>
 
 `;
 
 page.appendChild(sticker);
 
-/* تصميم QR بزخرفة */
+}
+
+document.getElementById("container").appendChild(page);
+
+}
+
+/* توليد QR بعد بناء الصفحة */
+
+for(let num=1;num<=total;num++){
 
 const qrCode = new QRCodeStyling({
 
@@ -143,10 +155,6 @@ color:"#05444B"
 });
 
 qrCode.append(document.getElementById("qr"+num));
-
-}
-
-document.getElementById("container").appendChild(page);
 
 }
 
