@@ -12,107 +12,138 @@
 <style>
 
 :root{
---main:#0F5C5E;
+--main:#05444B;
 --dark:#071f21;
 --light:#f4f7f8;
 }
 
+/* PAGE */
+
 body{
 margin:0;
 font-family:'Tajawal',sans-serif;
-background:var(--dark);
-color:white;
-transition:.4s;
+background:linear-gradient(180deg,#031d20,#071f21);
+color:#e9f6f7;
+text-align:center;
+direction:rtl;
+opacity:0;
+transform:translateY(20px);
+animation:pageIn 1s forwards;
+padding-bottom:120px;
 }
 
-/* الوضع الفاتح */
+@keyframes pageIn{
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* LIGHT MODE */
 
 .light{
-background:var(--light);
-color:#0f2c2e;
+background:#f4f7f8;
+color:#0c4f57;
 }
 
-/* الهيدر */
+/* HEADER */
 
 .header{
-background:var(--light);
-padding:15px;
-text-align:center;
-border-bottom:2px solid #e4e8ea;
+background:#e9f6f7;
+padding:25px;
+border-radius:0 0 40px 40px;
 }
 
 .logo{
-width:120px;
+width:140px;
 }
 
-/* الصفحة */
+/* MAIN CARD */
 
-.container{
-display:flex;
-flex-wrap:wrap;
-gap:40px;
-padding:40px;
-max-width:1200px;
-margin:auto;
+.card{
+width:92%;
+max-width:900px;
+margin:40px auto;
+padding:30px;
+
+background:rgba(255,255,255,.06);
+backdrop-filter:blur(16px);
+
+border-radius:24px;
+
+box-shadow:
+0 10px 40px rgba(0,0,0,.45),
+inset 0 1px 0 rgba(255,255,255,.08);
 }
 
-.image{
-flex:1;
-min-width:320px;
-}
+/* IMAGE */
 
 .image img{
 width:100%;
-border-radius:12px;
-box-shadow:0 10px 30px rgba(0,0,0,.4);
+border-radius:16px;
+box-shadow:0 10px 40px rgba(0,0,0,.4);
 }
 
-.info{
-flex:1;
-min-width:320px;
-}
+/* TITLE */
 
 h1{
-font-size:36px;
-margin-bottom:10px;
+font-size:32px;
+margin:25px 0 10px;
+color:#d6f5f6;
 }
 
+/* META */
+
 .meta{
-margin:10px 0;
 font-size:18px;
-opacity:.9;
+opacity:.85;
+margin:6px 0;
 }
+
+/* DESCRIPTION */
 
 .desc{
 margin-top:25px;
-font-size:20px;
-line-height:1.8;
+font-size:19px;
+line-height:1.9;
 }
+
+/* VIEWS */
 
 .counter{
 margin-top:25px;
-font-size:16px;
-opacity:.7;
+font-size:14px;
+opacity:.65;
 }
 
-/* الأزرار */
+/* FLOAT BAR */
 
 .controls{
 position:fixed;
-bottom:20px;
+bottom:18px;
 left:50%;
 transform:translateX(-50%);
+
 background:rgba(255,255,255,.15);
-backdrop-filter:blur(12px);
+backdrop-filter:blur(14px);
+
 padding:12px 22px;
 border-radius:40px;
+
 display:flex;
-gap:20px;
+gap:22px;
+
+box-shadow:0 8px 30px rgba(0,0,0,.25);
 }
 
 .btn{
+font-size:22px;
 cursor:pointer;
-font-size:20px;
+transition:.3s;
+}
+
+.btn:active{
+transform:scale(.8) rotate(180deg);
 }
 
 </style>
@@ -125,13 +156,11 @@ font-size:20px;
 <img class="logo" src="images/logo-nadim.png">
 </div>
 
-<div class="container">
+<div class="card">
 
 <div class="image">
 <img id="img">
 </div>
-
-<div class="info">
 
 <h1 id="title"></h1>
 
@@ -144,11 +173,9 @@ font-size:20px;
 
 </div>
 
-</div>
-
 <div class="controls">
 
-<div class="btn" onclick="toggleTheme()">🌙</div>
+<div class="btn" onclick="toggleTheme()">☀️</div>
 <div class="btn" onclick="toggleLang()">🌐</div>
 
 </div>
@@ -190,17 +217,12 @@ document.body.dir="rtl"
 
 document.getElementById("title").innerText=artwork.title_ar || ""
 
-document.getElementById("id").innerText=
-"رقم القطعة: "+artwork.id
+document.getElementById("id").innerText="رقم القطعة: "+artwork.id
+document.getElementById("date").innerText="التاريخ: "+(artwork.date || "")
 
-document.getElementById("date").innerText=
-"التاريخ: "+(artwork.date || "")
+document.getElementById("desc").innerText=artwork.desc_ar || ""
 
-document.getElementById("desc").innerText=
-artwork.desc_ar || ""
-
-document.getElementById("views").innerText=
-"تمت مشاهدة هذه القطعة "+(artwork.views || 0)+" مرة"
+document.getElementById("views").innerText="تمت مشاهدة هذه القطعة "+(artwork.views || 0)+" مرة"
 
 }
 
@@ -211,33 +233,24 @@ document.body.dir="ltr"
 
 document.getElementById("title").innerText=artwork.title_en || ""
 
-document.getElementById("id").innerText=
-"Item ID: "+artwork.id
+document.getElementById("id").innerText="Item ID: "+artwork.id
+document.getElementById("date").innerText="Date: "+(artwork.date || "")
 
-document.getElementById("date").innerText=
-"Date: "+(artwork.date || "")
+document.getElementById("desc").innerText=artwork.desc_en || ""
 
-document.getElementById("desc").innerText=
-artwork.desc_en || ""
-
-document.getElementById("views").innerText=
-"This item was viewed "+(artwork.views || 0)+" times"
+document.getElementById("views").innerText="This item was viewed "+(artwork.views || 0)+" times"
 
 }
 
 }
 
 function toggleLang(){
-
 lang=(lang=="ar")?"en":"ar"
 render()
-
 }
 
 function toggleTheme(){
-
 document.body.classList.toggle("light")
-
 }
 
 fetch(API+"?track="+id)
