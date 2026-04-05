@@ -42,8 +42,8 @@ justify-content:center;
 /* مكان QR */
 
 .qrWrap{
-width:80mm;
-height:80mm;
+width:85mm;
+height:85mm;
 display:flex;
 align-items:center;
 justify-content:center;
@@ -58,33 +58,10 @@ height:6mm;
 border-color:black;
 }
 
-.tl{
-top:-2mm;
-left:-2mm;
-border-top:1px solid;
-border-left:1px solid;
-}
-
-.tr{
-top:-2mm;
-right:-2mm;
-border-top:1px solid;
-border-right:1px solid;
-}
-
-.bl{
-bottom:-2mm;
-left:-2mm;
-border-bottom:1px solid;
-border-left:1px solid;
-}
-
-.br{
-bottom:-2mm;
-right:-2mm;
-border-bottom:1px solid;
-border-right:1px solid;
-}
+.tl{top:-2mm;left:-2mm;border-top:1px solid;border-left:1px solid;}
+.tr{top:-2mm;right:-2mm;border-top:1px solid;border-right:1px solid;}
+.bl{bottom:-2mm;left:-2mm;border-bottom:1px solid;border-left:1px solid;}
+.br{bottom:-2mm;right:-2mm;border-bottom:1px solid;border-right:1px solid;}
 
 </style>
 </head>
@@ -96,27 +73,26 @@ border-right:1px solid;
 <script>
 
 const base =
-"https://nd-f.github.io/Q/scan.html?id=";
+"https://nd-f.github.io/QR/scan.html?id=";
 
 let total = 30;
-
 let perPage = 6;
 
 for(let p=0;p<Math.ceil(total/perPage);p++){
 
-let page = document.createElement("div");
+let page=document.createElement("div");
 page.className="page";
 
 for(let i=1;i<=perPage;i++){
 
-let num = p*perPage+i;
+let num=p*perPage+i;
 
 if(num>total) break;
 
-let sticker = document.createElement("div");
+let sticker=document.createElement("div");
 sticker.className="sticker";
 
-sticker.innerHTML = `
+sticker.innerHTML=`
 
 <div class="crop tl"></div>
 <div class="crop tr"></div>
@@ -129,20 +105,20 @@ sticker.innerHTML = `
 
 page.appendChild(sticker);
 
-/* إنشاء QR بالتصميم الجديد */
+/* تصميم QR بزخرفة */
 
 const qrCode = new QRCodeStyling({
 
-width:320,
-height:320,
+width:360,
+height:360,
 
 data: base+"EGY-MIA-"+String(num).padStart(4,'0'),
 
-image: "images/qr-logo.png",
+image:"images/qr-logo.png",
 
 dotsOptions:{
 color:"#05444B",
-type:"extra-rounded"
+type:"classy-rounded"
 },
 
 backgroundOptions:{
@@ -151,7 +127,7 @@ color:"#ffffff"
 
 imageOptions:{
 crossOrigin:"anonymous",
-margin:6
+margin:8
 },
 
 cornersSquareOptions:{
