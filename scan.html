@@ -1,380 +1,192 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Nadim Museum</title>
 
-<!-- FIX 1: Tajawal متوفرة في system fonts على معظم Android العربي
-     بس لو مش موجودة نحملها بـ display=swap عشان متبلوكش الرندر -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap"
-      rel="stylesheet" media="print" onload="this.media='all'">
-<noscript>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-</noscript>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
-:root {
-  --main: #05444B;
-  --dark: #071f21;
-  --accent: #28c3cc;
+:root{
+--main:#05444B;
+--dark:#071f21;
+--light:#f4f7f8;
 }
 
-/* ---- BASE ---- */
-
-*, *::before, *::after {
-  box-sizing: border-box;
+body{
+margin:0;
+font-family:'Tajawal',sans-serif;
+background:#071f21;
+color:#e9f6f7;
+text-align:center;
+direction:rtl;
+padding-bottom:100px;
 }
 
-body {
-  margin: 0;
-  /* FIX 2: system-ui fallback فوري لحد ما Tajawal يتحمل */
-  font-family: 'Tajawal', 'Segoe UI', system-ui, sans-serif;
-  background: var(--dark);
-  color: #e9f6f7;
-  text-align: center;
-  direction: rtl;
-  padding-bottom: calc(90px + env(safe-area-inset-bottom));
-  /* FIX 3: منع الفلاش الأبيض على Safari */
-  -webkit-text-size-adjust: 100%;
+.light{
+background:#f4f7f8;
+color:#0c4f57;
 }
 
-/* ---- THEME ---- */
-
-body.light {
-  background: #f4f7f8;
-  color: #0c4f57;
+.header{
+background:#e9f6f7;
+padding:22px;
+border-radius:0 0 36px 36px;
 }
 
-body.light .card {
-  background: rgba(0,0,0,.04);
+.logo{
+width:130px;
 }
 
-body.light h1 {
-  color: #05444B;
+.card{
+width:92%;
+max-width:900px;
+margin:35px auto;
+padding:26px;
+background:rgba(255,255,255,.05);
+border-radius:20px;
+box-shadow:0 6px 24px rgba(0,0,0,.35);
 }
 
-/* ---- HEADER ---- */
-
-.header {
-  background: #e9f6f7;
-  padding: 20px;
-  border-radius: 0 0 32px 32px;
+.image img{
+width:100%;
+border-radius:14px;
+box-shadow:0 8px 26px rgba(0,0,0,.35);
 }
 
-.logo {
-  width: 120px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
+h1{
+font-size:30px;
+margin:20px 0 10px;
+color:#d6f5f6;
 }
 
-/* ---- SKELETON (يظهر لحد ما البيانات تيجي) ---- */
-
-.skeleton {
-  background: linear-gradient(90deg,
-    rgba(255,255,255,.06) 25%,
-    rgba(255,255,255,.12) 50%,
-    rgba(255,255,255,.06) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s infinite;
-  border-radius: 10px;
+.meta{
+font-size:17px;
+opacity:.85;
+margin:6px 0;
 }
 
-@keyframes shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+.desc{
+margin-top:22px;
+font-size:18px;
+line-height:1.8;
 }
 
-.sk-img  { width: 100%; aspect-ratio: 4/3; border-radius: 14px; }
-.sk-h1   { height: 32px; width: 60%; margin: 18px auto 10px; }
-.sk-line { height: 18px; width: 45%; margin: 8px auto; }
-.sk-desc { height: 16px; margin: 6px 16px; border-radius: 6px; }
-.sk-desc.w80 { width: 80%; margin-inline: auto; }
-.sk-desc.w65 { width: 65%; margin-inline: auto; }
-.sk-desc.w70 { width: 70%; margin-inline: auto; }
-
-/* ---- CARD ---- */
-
-.card {
-  width: 92%;
-  max-width: 860px;
-  margin: 30px auto;
-  padding: 22px;
-  background: rgba(255,255,255,.05);
-  border-radius: 20px;
-  box-shadow: 0 6px 24px rgba(0,0,0,.3);
+.controls{
+position:fixed;
+bottom:18px;
+left:50%;
+transform:translateX(-50%);
+background:rgba(255,255,255,.12);
+padding:12px 22px;
+border-radius:40px;
+display:flex;
+gap:20px;
 }
 
-/* ---- IMAGE ---- */
-
-/* FIX 4: نحجز المساحة مسبقاً عشان نمنع layout shift */
-.img-wrap {
-  width: 100%;
-  aspect-ratio: 4/3;
-  border-radius: 14px;
-  overflow: hidden;
-  background: rgba(255,255,255,.06);
-  position: relative;
-}
-
-.img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 14px;
-  display: block;
-  /* يبدأ شفاف ويظهر بعد تحميل */
-  opacity: 0;
-  transition: opacity .35s;
-}
-
-.img-wrap img.loaded {
-  opacity: 1;
-}
-
-/* ---- CONTENT ---- */
-
-h1 {
-  font-size: 26px;
-  font-weight: 700;
-  margin: 18px 0 8px;
-  color: #d6f5f6;
-  line-height: 1.4;
-}
-
-.meta {
-  font-size: 16px;
-  opacity: .8;
-  margin: 5px 0;
-}
-
-.desc {
-  margin-top: 18px;
-  font-size: 17px;
-  line-height: 1.9;
-  text-align: justify;
-}
-
-.counter {
-  margin-top: 18px;
-  font-size: 13px;
-  opacity: .55;
-}
-
-/* ---- ERROR STATE ---- */
-
-.error-msg {
-  padding: 60px 20px;
-  font-size: 20px;
-  opacity: .75;
-}
-
-/* ---- CONTROLS ---- */
-
-.controls {
-  position: fixed;
-  bottom: calc(16px + env(safe-area-inset-bottom));
-  left: 50%;
-  /* FIX 5: translateZ عشان Safari مش يخبي الـ bar */
-  -webkit-transform: translateX(-50%) translateZ(0);
-  transform: translateX(-50%) translateZ(0);
-  background: rgba(255,255,255,.15);
-  padding: 10px 20px;
-  border-radius: 40px;
-  display: flex;
-  gap: 18px;
-  box-shadow: 0 4px 18px rgba(0,0,0,.25);
-  z-index: 100;
-}
-
-.btn {
-  font-size: 22px;
-  cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  -webkit-user-select: none;
-  transition: transform .2s;
-}
-
-.btn:active {
-  transform: scale(.85);
+.btn{
+font-size:22px;
+cursor:pointer;
 }
 
 </style>
 
 </head>
+
 <body>
 
 <div class="header">
-  <img class="logo" src="images/logo-nadim.png" alt="Nadim Museum" width="120" height="60">
+<img class="logo" src="images/logo-nadim.png">
 </div>
 
-<!-- Skeleton يظهر فوراً -->
-<div class="card" id="skeleton">
-  <div class="skeleton sk-img"></div>
-  <div class="skeleton sk-h1"></div>
-  <div class="skeleton sk-line"></div>
-  <div class="skeleton sk-line" style="width:35%"></div>
-  <div class="skeleton sk-desc w80" style="margin-top:20px"></div>
-  <div class="skeleton sk-desc w65"></div>
-  <div class="skeleton sk-desc w70"></div>
-  <div class="skeleton sk-desc w80"></div>
+<div class="card">
+
+<div class="image">
+<img id="img" loading="lazy">
 </div>
 
-<!-- الكارد الحقيقي مخفي لحد ما البيانات تيجي -->
-<div class="card" id="card" style="display:none">
-  <div class="img-wrap">
-    <img id="img" alt="">
-  </div>
-  <h1 id="title"></h1>
-  <div class="meta" id="meta-id"></div>
-  <div class="meta" id="meta-date"></div>
-  <div class="desc" id="desc"></div>
-  <div class="counter" id="views"></div>
+<h1 id="title"></h1>
+
+<div class="meta" id="id"></div>
+<div class="meta" id="date"></div>
+
+<div class="desc" id="desc"></div>
+
 </div>
 
 <div class="controls">
-  <div class="btn" id="themeBtn" onclick="toggleTheme()">☀️</div>
-  <div class="btn" onclick="toggleLang()">🌐</div>
+<div class="btn" onclick="toggleTheme()">☀️</div>
+<div class="btn" onclick="toggleLang()">🌐</div>
 </div>
 
 <script>
 
-const API = "https://script.google.com/macros/s/AKfycbzvJPDx_LBhtn19YvkNM0NlXvjTy80Nzzgze8JdDVuol0fw1o3LYqENi1d2gfrDPFJJ/exec";
+const API="https://script.google.com/macros/s/AKfycbzvJPDx_LBhtn19YvkNM0NlXvjTy80Nzzgze8JdDVuol0fw1o3LYqENi1d2gfrDPFJJ/exec"
 
-const params = new URLSearchParams(location.search);
-const qrId   = params.get("id");
+let lang="ar"
 
-let lang = "ar";
-let artwork = null;
+const params=new URLSearchParams(location.search)
+const id=params.get("id")
 
-/* ---- التحقق من الـ ID ---- */
+let artwork
 
-if (!qrId) {
-  document.getElementById("skeleton").innerHTML =
-    '<div class="error-msg">⚠️ QR Code غير صالح</div>';
-  throw new Error("No ID");
-}
+async function loadData(){
 
-/* ---- تحميل البيانات ---- */
+const res=await fetch("data/artworks.json")
+const data=await res.json()
 
-async function loadData() {
+artwork=data.find(a=>a.id===id)
 
-  try {
-
-    const res = await fetch(API + "?id=" + encodeURIComponent(qrId));
-
-    if (!res.ok) throw new Error("HTTP " + res.status);
-
-    artwork = await res.json();
-
-    showCard();
-
-  } catch (err) {
-
-    console.error(err);
-    document.getElementById("skeleton").innerHTML =
-      '<div class="error-msg">⚠️ تعذّر تحميل البيانات، حاول مرة أخرى</div>';
-
-  }
+render()
 
 }
 
-/* ---- إظهار الكارد ---- */
+function render(){
 
-function showCard() {
+document.getElementById("img").src=artwork.image1
 
-  // أخفي الـ skeleton
-  document.getElementById("skeleton").style.display = "none";
+if(lang=="ar"){
 
-  // أظهر الكارد
-  const card = document.getElementById("card");
-  card.style.display = "block";
+document.getElementById("title").textContent=artwork.title_ar
+document.getElementById("id").textContent="رقم القطعة: "+artwork.id
+document.getElementById("date").textContent="التاريخ: "+artwork.date
+document.getElementById("desc").textContent=artwork.desc_ar
 
-  // الصورة — نتابع onload عشان نضيف class بعد ما تتحمل
-  const imgEl = document.getElementById("img");
-  const src   = artwork.image1 || "images/no-image.jpg";
+}else{
 
-  imgEl.onload  = () => imgEl.classList.add("loaded");
-  imgEl.onerror = () => { imgEl.src = "images/no-image.jpg"; imgEl.classList.add("loaded"); };
-  imgEl.src     = src;
-
-  // ارسم النصوص
-  renderText();
+document.getElementById("title").textContent=artwork.title_en
+document.getElementById("id").textContent="Item ID: "+artwork.id
+document.getElementById("date").textContent="Date: "+artwork.date
+document.getElementById("desc").textContent=artwork.desc_en
 
 }
 
-/* ---- رسم النصوص بناءً على اللغة ---- */
+}
 
-function renderText() {
+function toggleLang(){
 
-  if (!artwork) return;
-
-  const isAr = (lang === "ar");
-
-  document.documentElement.lang = isAr ? "ar" : "en";
-  document.body.dir              = isAr ? "rtl" : "ltr";
-
-  document.getElementById("title").textContent =
-    (isAr ? artwork.title_ar : artwork.title_en) || "";
-
-  document.getElementById("meta-id").textContent =
-    isAr ? "رقم القطعة: " + artwork.id
-         : "Item ID: "    + artwork.id;
-
-  document.getElementById("meta-date").textContent =
-    isAr ? "التاريخ: "   + (artwork.date || "—")
-         : "Date: "       + (artwork.date || "—");
-
-  document.getElementById("desc").textContent =
-    (isAr ? artwork.desc_ar : artwork.desc_en) || "";
-
-  const v = artwork.views || 0;
-  document.getElementById("views").textContent =
-    isAr ? "تمت مشاهدة هذه القطعة " + v + " مرة"
-         : "This item was viewed "   + v + " times";
+lang=(lang=="ar")?"en":"ar"
+render()
 
 }
 
-/* ---- تغيير اللغة ---- */
+function toggleTheme(){
 
-function toggleLang() {
-  lang = (lang === "ar") ? "en" : "ar";
-  renderText();
+document.body.classList.toggle("light")
+
 }
 
-/* ---- تغيير الثيم ---- */
+loadData()
 
-const themeBtn = document.getElementById("themeBtn");
-
-function toggleTheme() {
-  const isLight = document.body.classList.toggle("light");
-  themeBtn.textContent = isLight ? "🌙" : "☀️";
-  localStorage.setItem("theme", isLight ? "light" : "dark");
-}
-
-// استرجاع الثيم المحفوظ
-if (localStorage.getItem("theme") === "light") {
-  document.body.classList.add("light");
-  themeBtn.textContent = "🌙";
-}
-
-/* ---- ابدأ ---- */
-
-loadData();
-
-/* tracking منفصل عشان متأثرش على البيانات الرئيسية */
-fetch(API + "?track=" + encodeURIComponent(qrId)).catch(() => {});
+fetch(API+"?track="+id).catch(()=>{})
 
 </script>
 
 </body>
+
 </html>
