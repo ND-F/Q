@@ -1,12 +1,202 @@
 [
-{
-"id":"EGY-MIA-0001",
-"title_ar":"تمثال فرعوني",
-"title_en":"Pharaonic Statue",
-"desc_ar":"وصف القطعة...",
-"desc_en":"Artwork description...",
-"date":"1200 BC",
-"image1":"images/001.jpg",
-"image2":"images/001b.jpg"
-}
+  {
+    "id": "EGY-MIA-0001",
+    "title_ar": "????",
+    "title_en": "MM",
+    "desc_ar": "???? ????",
+    "desc_en": " Pic",
+    "date": 1991,
+    "image1": "images/MIA-0001.jpg",
+    "image2": " "
+  },
+  {
+    "id": "EGY-MIA-0002",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": 1993,
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0003",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0004",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0005",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0006",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0007",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0008",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0009",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0010",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0011",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0012",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0013",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0014",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0015",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0016",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0017",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0018",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0019",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0020",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  }
 ]
