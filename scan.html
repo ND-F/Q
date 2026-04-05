@@ -48,32 +48,24 @@ width:130px;
 /* card */
 
 .card{
-
 width:92%;
 max-width:900px;
-
 margin:35px auto;
-
 padding:26px;
-
 background:rgba(255,255,255,.05);
-
 border-radius:20px;
-
 box-shadow:0 6px 24px rgba(0,0,0,.35);
-
 }
 
 /* image */
 
 .image img{
-
 width:100%;
 border-radius:14px;
-
 box-shadow:0 8px 26px rgba(0,0,0,.35);
-
 }
+
+/* title */
 
 h1{
 font-size:30px;
@@ -81,17 +73,23 @@ margin:20px 0 10px;
 color:#d6f5f6;
 }
 
+/* meta */
+
 .meta{
 font-size:17px;
 opacity:.85;
 margin:6px 0;
 }
 
+/* description */
+
 .desc{
 margin-top:22px;
 font-size:18px;
 line-height:1.8;
 }
+
+/* views */
 
 .counter{
 margin-top:22px;
@@ -102,34 +100,21 @@ opacity:.65;
 /* controls */
 
 .controls{
-
 position:fixed;
-
 bottom:18px;
 left:50%;
-
 transform:translateX(-50%);
-
 background:rgba(255,255,255,.12);
-
 padding:12px 22px;
-
 border-radius:40px;
-
 display:flex;
-
 gap:20px;
-
 box-shadow:0 6px 20px rgba(0,0,0,.25);
-
 }
 
 .btn{
-
 font-size:22px;
-
 cursor:pointer;
-
 }
 
 </style>
@@ -139,23 +124,18 @@ cursor:pointer;
 <body>
 
 <div class="header">
-
 <img class="logo" src="images/logo-nadim.png">
-
 </div>
 
 <div class="card">
 
 <div class="image">
-
 <img id="img" loading="lazy">
-
 </div>
 
 <h1 id="title"></h1>
 
 <div class="meta" id="id"></div>
-
 <div class="meta" id="date"></div>
 
 <div class="desc" id="desc"></div>
@@ -167,7 +147,6 @@ cursor:pointer;
 <div class="controls">
 
 <div class="btn" onclick="toggleTheme()">☀️</div>
-
 <div class="btn" onclick="toggleLang()">🌐</div>
 
 </div>
@@ -179,14 +158,34 @@ const API="https://script.google.com/macros/s/AKfycbzvJPDx_LBhtn19YvkNM0NlXvjTy8
 let lang="ar"
 
 const params=new URLSearchParams(location.search)
-
 const id=params.get("id")
+
+/* التحقق من وجود id */
+
+if(!id){
+
+document.body.innerHTML="<h2 style='padding:40px'>Invalid QR Code</h2>"
+
+throw new Error("No ID")
+
+}
 
 let artwork
 
+/* تحميل البيانات */
+
 async function loadData(){
 
-const res=await fetch(API+"?id="+id)
+try{
+
+const res=await fetch(API+"?id="+id+"&t="+Date.now())
+
+if(!res.ok){
+
+console.error("API Error")
+return
+
+}
 
 const data=await res.json()
 
@@ -194,7 +193,15 @@ artwork=data
 
 render()
 
+}catch(err){
+
+console.error("Fetch error",err)
+
 }
+
+}
+
+/* عرض البيانات */
 
 function render(){
 
@@ -203,7 +210,6 @@ document.getElementById("img").src=artwork.image1 || "images/no-image.jpg"
 if(lang=="ar"){
 
 document.documentElement.lang="ar"
-
 document.body.dir="rtl"
 
 document.getElementById("title").textContent=artwork.title_ar || ""
@@ -214,14 +220,14 @@ document.getElementById("date").textContent="التاريخ: "+(artwork.date || 
 
 document.getElementById("desc").textContent=artwork.desc_ar || ""
 
-document.getElementById("views").textContent="تمت مشاهدة هذه القطعة "+(artwork.views || 0)+" مرة"
+document.getElementById("views").textContent=
+"تمت مشاهدة هذه القطعة "+(artwork.views || 0)+" مرة"
 
 }
 
 else{
 
 document.documentElement.lang="en"
-
 document.body.dir="ltr"
 
 document.getElementById("title").textContent=artwork.title_en || ""
@@ -232,11 +238,14 @@ document.getElementById("date").textContent="Date: "+(artwork.date || "")
 
 document.getElementById("desc").textContent=artwork.desc_en || ""
 
-document.getElementById("views").textContent="This item was viewed "+(artwork.views || 0)+" times"
+document.getElementById("views").textContent=
+"This item was viewed "+(artwork.views || 0)+" times"
 
 }
 
 }
+
+/* تغيير اللغة */
 
 function toggleLang(){
 
@@ -246,15 +255,21 @@ render()
 
 }
 
+/* تغيير الثيم */
+
 function toggleTheme(){
 
 document.body.classList.toggle("light")
 
 }
 
+/* تحميل البيانات */
+
 loadData()
 
-fetch(API+"?track="+id)
+/* تسجيل الزيارة بدون تعطيل الصفحة */
+
+fetch(API+"?track="+id).catch(()=>{})
 
 </script>
 
