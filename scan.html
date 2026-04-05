@@ -270,12 +270,7 @@ async function loadData() {
 
   try {
 
-    // FIX 6: fetch واحدة بس، الـ tracking هنعمله في نفس الـ request
-    // بنضيف track=1 جنب الـ id عشان الـ Apps Script يعملهم مع بعض
-    const res = await fetch(API + "?id=" + encodeURIComponent(qrId) + "&track=1", {
-      // FIX 7: cache عادي — مش بنضيف timestamp عبثاً
-      cache: "no-store"
-    });
+    const res = await fetch(API + "?id=" + encodeURIComponent(qrId));
 
     if (!res.ok) throw new Error("HTTP " + res.status);
 
@@ -375,6 +370,9 @@ if (localStorage.getItem("theme") === "light") {
 /* ---- ابدأ ---- */
 
 loadData();
+
+/* tracking منفصل عشان متأثرش على البيانات الرئيسية */
+fetch(API + "?track=" + encodeURIComponent(qrId)).catch(() => {});
 
 </script>
 
