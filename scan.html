@@ -28,10 +28,14 @@ direction:rtl;
 padding-bottom:100px;
 }
 
+/* light mode */
+
 .light{
 background:#f4f7f8;
 color:#0c4f57;
 }
+
+/* header */
 
 .header{
 background:#e9f6f7;
@@ -43,6 +47,8 @@ border-radius:0 0 36px 36px;
 width:130px;
 }
 
+/* card */
+
 .card{
 width:92%;
 max-width:900px;
@@ -53,11 +59,15 @@ border-radius:20px;
 box-shadow:0 6px 24px rgba(0,0,0,.35);
 }
 
+/* image */
+
 .image img{
 width:100%;
 border-radius:14px;
 box-shadow:0 8px 26px rgba(0,0,0,.35);
 }
+
+/* title */
 
 h1{
 font-size:30px;
@@ -65,17 +75,23 @@ margin:20px 0 10px;
 color:#d6f5f6;
 }
 
+/* meta */
+
 .meta{
 font-size:17px;
 opacity:.85;
 margin:6px 0;
 }
 
+/* description */
+
 .desc{
 margin-top:22px;
 font-size:18px;
 line-height:1.8;
 }
+
+/* controls */
 
 .controls{
 position:fixed;
@@ -135,20 +151,40 @@ const id=params.get("id")
 
 let artwork
 
+/* تحميل البيانات */
+
 async function loadData(){
+
+try{
 
 const res=await fetch("data/artworks.json")
 const data=await res.json()
 
 artwork=data.find(a=>a.id===id)
 
-render()
+if(!artwork){
+
+document.querySelector(".card").innerHTML="<h2>Artwork not found</h2>"
+return
 
 }
 
+render()
+
+}catch(err){
+
+console.error(err)
+document.querySelector(".card").innerHTML="<h2>Error loading artwork</h2>"
+
+}
+
+}
+
+/* عرض البيانات */
+
 function render(){
 
-document.getElementById("img").src=artwork.image1
+document.getElementById("img").src=artwork.image1 || "images/no-image.jpg"
 
 if(lang=="ar"){
 
@@ -168,6 +204,8 @@ document.getElementById("desc").textContent=artwork.desc_en
 
 }
 
+/* تغيير اللغة */
+
 function toggleLang(){
 
 lang=(lang=="ar")?"en":"ar"
@@ -175,15 +213,21 @@ render()
 
 }
 
+/* تغيير الثيم */
+
 function toggleTheme(){
 
 document.body.classList.toggle("light")
 
 }
 
+/* تحميل البيانات */
+
 loadData()
 
-fetch(API+"?track="+id).catch(()=>{})
+/* تسجيل الزيارة */
+
+fetch(API+"?track="+id+"&lang="+lang+"&device="+navigator.userAgent).catch(()=>{})
 
 </script>
 
