@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar">
+
 <head>
 
 <meta charset="UTF-8">
@@ -7,7 +8,7 @@
 
 <title>Nadim Museum</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -17,133 +18,118 @@
 --light:#f4f7f8;
 }
 
-/* PAGE */
-
 body{
 margin:0;
 font-family:'Tajawal',sans-serif;
-background:linear-gradient(180deg,#031d20,#071f21);
+background:#071f21;
 color:#e9f6f7;
 text-align:center;
 direction:rtl;
-opacity:0;
-transform:translateY(20px);
-animation:pageIn 1s forwards;
-padding-bottom:120px;
+padding-bottom:100px;
 }
-
-@keyframes pageIn{
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-/* LIGHT MODE */
 
 .light{
 background:#f4f7f8;
 color:#0c4f57;
 }
 
-/* HEADER */
+/* header */
 
 .header{
 background:#e9f6f7;
-padding:25px;
-border-radius:0 0 40px 40px;
+padding:22px;
+border-radius:0 0 36px 36px;
 }
 
 .logo{
-width:140px;
+width:130px;
 }
 
-/* MAIN CARD */
+/* card */
 
 .card{
+
 width:92%;
 max-width:900px;
-margin:40px auto;
-padding:30px;
 
-background:rgba(255,255,255,.06);
-backdrop-filter:blur(16px);
+margin:35px auto;
 
-border-radius:24px;
+padding:26px;
 
-box-shadow:
-0 10px 40px rgba(0,0,0,.45),
-inset 0 1px 0 rgba(255,255,255,.08);
+background:rgba(255,255,255,.05);
+
+border-radius:20px;
+
+box-shadow:0 6px 24px rgba(0,0,0,.35);
+
 }
 
-/* IMAGE */
+/* image */
 
 .image img{
+
 width:100%;
-border-radius:16px;
-box-shadow:0 10px 40px rgba(0,0,0,.4);
+border-radius:14px;
+
+box-shadow:0 8px 26px rgba(0,0,0,.35);
+
 }
 
-/* TITLE */
-
 h1{
-font-size:32px;
-margin:25px 0 10px;
+font-size:30px;
+margin:20px 0 10px;
 color:#d6f5f6;
 }
 
-/* META */
-
 .meta{
-font-size:18px;
+font-size:17px;
 opacity:.85;
 margin:6px 0;
 }
 
-/* DESCRIPTION */
-
 .desc{
-margin-top:25px;
-font-size:19px;
-line-height:1.9;
+margin-top:22px;
+font-size:18px;
+line-height:1.8;
 }
 
-/* VIEWS */
-
 .counter{
-margin-top:25px;
+margin-top:22px;
 font-size:14px;
 opacity:.65;
 }
 
-/* FLOAT BAR */
+/* controls */
 
 .controls{
+
 position:fixed;
+
 bottom:18px;
 left:50%;
+
 transform:translateX(-50%);
 
-background:rgba(255,255,255,.15);
-backdrop-filter:blur(14px);
+background:rgba(255,255,255,.12);
 
 padding:12px 22px;
+
 border-radius:40px;
 
 display:flex;
-gap:22px;
 
-box-shadow:0 8px 30px rgba(0,0,0,.25);
+gap:20px;
+
+box-shadow:0 6px 20px rgba(0,0,0,.25);
+
 }
 
 .btn{
-font-size:22px;
-cursor:pointer;
-transition:.3s;
-}
 
-.btn:active{
-transform:scale(.8) rotate(180deg);
+font-size:22px;
+
+cursor:pointer;
+
 }
 
 </style>
@@ -153,18 +139,23 @@ transform:scale(.8) rotate(180deg);
 <body>
 
 <div class="header">
+
 <img class="logo" src="images/logo-nadim.png">
+
 </div>
 
 <div class="card">
 
 <div class="image">
-<img id="img">
+
+<img id="img" loading="lazy">
+
 </div>
 
 <h1 id="title"></h1>
 
 <div class="meta" id="id"></div>
+
 <div class="meta" id="date"></div>
 
 <div class="desc" id="desc"></div>
@@ -176,86 +167,97 @@ transform:scale(.8) rotate(180deg);
 <div class="controls">
 
 <div class="btn" onclick="toggleTheme()">☀️</div>
+
 <div class="btn" onclick="toggleLang()">🌐</div>
 
 </div>
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbz0zgMLLmtC4NPZNJylRPgD7Q8aNjhfsZh6YdCJ55p8E-Bt7heKvDvkKkwutoiuwTSG/exec"
+const API="https://script.google.com/macros/s/AKfycbzvJPDx_LBhtn19YvkNM0NlXvjTy80Nzzgze8JdDVuol0fw1o3LYqENi1d2gfrDPFJJ/exec"
 
 let lang="ar"
 
 const params=new URLSearchParams(location.search)
+
 const id=params.get("id")
 
 let artwork
 
-fetch(API)
-.then(r=>r.json())
-.then(data=>{
+async function loadData(){
 
-artwork=data.find(a=>a.id==id)
+const res=await fetch(API+"?id="+id)
 
-if(!artwork){
-document.body.innerHTML="<h2 style='padding:40px'>Artwork not found</h2>"
-return
-}
+const data=await res.json()
+
+artwork=data
 
 render()
 
-})
+}
 
 function render(){
 
-document.getElementById("img").src=artwork.image || "images/no-image.jpg"
+document.getElementById("img").src=artwork.image1 || "images/no-image.jpg"
 
 if(lang=="ar"){
 
 document.documentElement.lang="ar"
+
 document.body.dir="rtl"
 
-document.getElementById("title").innerText=artwork.title_ar || ""
+document.getElementById("title").textContent=artwork.title_ar || ""
 
-document.getElementById("id").innerText="رقم القطعة: "+artwork.id
-document.getElementById("date").innerText="التاريخ: "+(artwork.date || "")
+document.getElementById("id").textContent="رقم القطعة: "+artwork.id
 
-document.getElementById("desc").innerText=artwork.desc_ar || ""
+document.getElementById("date").textContent="التاريخ: "+(artwork.date || "")
 
-document.getElementById("views").innerText="تمت مشاهدة هذه القطعة "+(artwork.views || 0)+" مرة"
+document.getElementById("desc").textContent=artwork.desc_ar || ""
+
+document.getElementById("views").textContent="تمت مشاهدة هذه القطعة "+(artwork.views || 0)+" مرة"
 
 }
 
 else{
 
 document.documentElement.lang="en"
+
 document.body.dir="ltr"
 
-document.getElementById("title").innerText=artwork.title_en || ""
+document.getElementById("title").textContent=artwork.title_en || ""
 
-document.getElementById("id").innerText="Item ID: "+artwork.id
-document.getElementById("date").innerText="Date: "+(artwork.date || "")
+document.getElementById("id").textContent="Item ID: "+artwork.id
 
-document.getElementById("desc").innerText=artwork.desc_en || ""
+document.getElementById("date").textContent="Date: "+(artwork.date || "")
 
-document.getElementById("views").innerText="This item was viewed "+(artwork.views || 0)+" times"
+document.getElementById("desc").textContent=artwork.desc_en || ""
+
+document.getElementById("views").textContent="This item was viewed "+(artwork.views || 0)+" times"
 
 }
 
 }
 
 function toggleLang(){
+
 lang=(lang=="ar")?"en":"ar"
+
 render()
+
 }
 
 function toggleTheme(){
+
 document.body.classList.toggle("light")
+
 }
+
+loadData()
 
 fetch(API+"?track="+id)
 
 </script>
 
 </body>
+
 </html>
