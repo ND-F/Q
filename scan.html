@@ -61,6 +61,12 @@ box-shadow:0 6px 24px rgba(0,0,0,.35);
 
 /* image */
 
+.image{
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
 .image img{
 width:100%;
 border-radius:14px;
@@ -73,6 +79,9 @@ h1{
 font-size:30px;
 margin:20px 0 10px;
 color:#d6f5f6;
+}
+.light h1{
+color:#05444B;
 }
 
 /* meta */
@@ -123,7 +132,8 @@ cursor:pointer;
 <div class="card">
 
 <div class="image">
-<img id="img" loading="lazy">
+<img id="img1" loading="lazy">
+<img id="img2" loading="lazy">
 </div>
 
 <h1 id="title"></h1>
@@ -184,7 +194,13 @@ document.querySelector(".card").innerHTML="<h2>Error loading artwork</h2>"
 
 function render(){
 
-document.getElementById("img").src=artwork.image1 || "images/no-image.jpg"
+document.getElementById("img1").src = artwork.image1 || "images/no-image.jpg"
+
+if(artwork.image2){
+document.getElementById("img2").src = artwork.image2
+}else{
+document.getElementById("img2").style.display="none"
+}
 
 if(lang=="ar"){
 
