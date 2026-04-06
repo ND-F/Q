@@ -10,6 +10,9 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
 
+<!-- preload image -->
+<link rel="preload" as="image" id="preloadImg">
+
 <style>
 
 :root{
@@ -59,7 +62,7 @@ border-radius:20px;
 box-shadow:0 6px 24px rgba(0,0,0,.35);
 }
 
-/* image */
+/* images */
 
 .image{
 display:flex;
@@ -69,6 +72,7 @@ gap:20px;
 
 .image img{
 width:100%;
+height:auto;
 border-radius:14px;
 box-shadow:0 8px 26px rgba(0,0,0,.35);
 }
@@ -80,6 +84,7 @@ font-size:30px;
 margin:20px 0 10px;
 color:#d6f5f6;
 }
+
 .light h1{
 color:#05444B;
 }
@@ -132,8 +137,8 @@ cursor:pointer;
 <div class="card">
 
 <div class="image">
-<img id="img1" loading="lazy">
-<img id="img2" loading="lazy">
+<img id="img1" loading="lazy" decoding="async">
+<img id="img2" loading="lazy" decoding="async">
 </div>
 
 <h1 id="title"></h1>
@@ -161,13 +166,19 @@ const id=params.get("id")
 
 let artwork
 
-/* تحميل البيانات */
+const img1=document.getElementById("img1")
+const img2=document.getElementById("img2")
+
+const title=document.getElementById("title")
+const metaId=document.getElementById("id")
+const date=document.getElementById("date")
+const desc=document.getElementById("desc")
 
 async function loadData(){
 
 try{
 
-const res=await fetch("data/artworks.json")
+const res=await fetch("data/artworks.json",{cache:"force-cache"})
 const data=await res.json()
 
 artwork=data.find(a=>a.id===id)
@@ -178,6 +189,10 @@ document.querySelector(".card").innerHTML="<h2>Artwork not found</h2>"
 return
 
 }
+
+/* preload main image */
+
+document.getElementById("preloadImg").href = artwork.image1
 
 render()
 
@@ -190,46 +205,44 @@ document.querySelector(".card").innerHTML="<h2>Error loading artwork</h2>"
 
 }
 
-/* عرض البيانات */
-
 function render(){
 
-document.getElementById("img1").src = artwork.image1 || "images/no-image.jpg"
+img1.src = artwork.image1 || "images/no-image.jpg"
 
 if(artwork.image2){
-document.getElementById("img2").src = artwork.image2
-}else{
-document.getElementById("img2").style.display="none"
-}
 
-if(lang=="ar"){
-
-document.getElementById("title").textContent=artwork.title_ar
-document.getElementById("id").textContent="رقم القطعة: "+artwork.id
-document.getElementById("date").textContent="التاريخ: "+artwork.date
-document.getElementById("desc").textContent=artwork.desc_ar
+img2.src = artwork.image2
 
 }else{
 
-document.getElementById("title").textContent=artwork.title_en
-document.getElementById("id").textContent="Item ID: "+artwork.id
-document.getElementById("date").textContent="Date: "+artwork.date
-document.getElementById("desc").textContent=artwork.desc_en
+img2.style.display="none"
+
+}
+
+if(lang==="ar"){
+
+title.textContent=artwork.title_ar
+metaId.textContent="رقم القطعة: "+artwork.id
+date.textContent="التاريخ: "+artwork.date
+desc.textContent=artwork.desc_ar
+
+}else{
+
+title.textContent=artwork.title_en
+metaId.textContent="Item ID: "+artwork.id
+date.textContent="Date: "+artwork.date
+desc.textContent=artwork.desc_en
 
 }
 
 }
-
-/* تغيير اللغة */
 
 function toggleLang(){
 
-lang=(lang=="ar")?"en":"ar"
+lang=(lang==="ar")?"en":"ar"
 render()
 
 }
-
-/* تغيير الثيم */
 
 function toggleTheme(){
 
@@ -237,11 +250,11 @@ document.body.classList.toggle("light")
 
 }
 
-/* تحميل البيانات */
+/* load */
 
 loadData()
 
-/* تسجيل الزيارة */
+/* track scan */
 
 fetch(API+"?track="+id+"&lang="+lang+"&device="+navigator.userAgent).catch(()=>{})
 
