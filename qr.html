@@ -5,76 +5,59 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+<script src="https://unpkg.com/qr-code-styling/lib/qr-code-styling.js"></script>
 
 <style>
 
 body{
 font-family:Tajawal;
 background:white;
+margin:0;
 }
+
+/* صفحة الطباعة */
 
 .page{
 width:210mm;
 height:297mm;
+
+  
 display:grid;
 grid-template-columns:repeat(2,1fr);
 grid-template-rows:repeat(3,1fr);
-gap:5mm;
-padding:10mm;
+
+  
+gap:15mm;
+
+  
+padding:20mm;
+
+  
 box-sizing:border-box;
 page-break-after:always;
 }
 
+/* الاستيكر */
+
 .sticker{
-border:2px solid #0F5C5E;
+border:2.5px solid #05444B;
 position:relative;
 display:flex;
-flex-direction:column;
 align-items:center;
 justify-content:center;
 }
+
+/* مكان QR */
 
 .qrWrap{
-position:relative;
-width:70mm;
-height:70mm;
+width:85mm;
+height:85mm;
 display:flex;
 align-items:center;
 justify-content:center;
 }
 
-.qr{
-width:70mm;
-height:70mm;
-}
-
-.qrLogo{
-position:absolute;
-width:16mm;
-height:16mm;
-background:white;
-padding:2mm;
-border-radius:4mm;
-}
-
-.title{
-margin-top:5mm;
-font-size:16px;
-font-weight:bold;
-color:#0F5C5E;
-}
-
-.id{
-font-size:12px;
-color:#0F5C5E;
-}
-
-.scan{
-margin-top:2mm;
-font-size:12px;
-color:#0F5C5E;
-}
+/* crop marks */
 
 .crop{
 position:absolute;
@@ -83,10 +66,10 @@ height:6mm;
 border-color:black;
 }
 
-.tl{top:-2mm;left:-2mm;border-top:1px solid;border-left:1px solid;}
-.tr{top:-2mm;right:-2mm;border-top:1px solid;border-right:1px solid;}
-.bl{bottom:-2mm;left:-2mm;border-bottom:1px solid;border-left:1px solid;}
-.br{bottom:-2mm;right:-2mm;border-bottom:1px solid;border-right:1px solid;}
+.tl{top:-6mm;left:-6mm;border-top:1px solid;border-left:1px solid;}
+.tr{top:-6mm;right:-6mm;border-top:1px solid;border-right:1px solid;}
+.bl{bottom:-6mm;left:-6mm;border-bottom:1px solid;border-left:1px solid;}
+.br{bottom:-6mm;right:-6mm;border-bottom:1px solid;border-right:1px solid;}
 
 </style>
 </head>
@@ -100,24 +83,26 @@ border-color:black;
 const base =
 "https://nd-f.github.io/Q/scan.html?id=";
 
-let total = 30; // غيرها لاحقًا
-
+let total = 30;
 let perPage = 6;
+
+/* إنشاء الصفحات أولاً */
 
 for(let p=0;p<Math.ceil(total/perPage);p++){
 
-let page = document.createElement("div");
+let page=document.createElement("div");
 page.className="page";
 
 for(let i=1;i<=perPage;i++){
 
-let num = p*perPage+i;
+let num=p*perPage+i;
+
 if(num>total) break;
 
-let sticker = document.createElement("div");
+let sticker=document.createElement("div");
 sticker.className="sticker";
 
-sticker.innerHTML = `
+sticker.innerHTML=`
 
 <div class="crop tl"></div>
 <div class="crop tr"></div>
@@ -125,36 +110,59 @@ sticker.innerHTML = `
 <div class="crop br"></div>
 
 <div class="qrWrap">
-<div id="qr${num}" class="qr"></div>
-<img src="images/qr-logo.png" class="qrLogo">
+<div id="qr${num}"></div>
 </div>
-
-<div class="title">قطعة متحف</div>
-<div class="id">EGY-MIA-${String(num).padStart(4,'0')}</div>
-<div class="scan">⬇ Scan Me</div>
 
 `;
 
 page.appendChild(sticker);
 
-setTimeout(()=>{
-
-new QRCode(
-document.getElementById("qr"+num),
-{
-text: base+"EGY-MIA-"+String(num).padStart(4,'0'),
-width:260,
-height:260,
-colorDark:"#0F5C5E",
-colorLight:"#ffffff",
-correctLevel:QRCode.CorrectLevel.H
-});
-
-},100);
-
 }
 
 document.getElementById("container").appendChild(page);
+
+}
+
+/* توليد QR بعد بناء الصفحة */
+
+for(let num=1;num<=total;num++){
+
+const qrCode = new QRCodeStyling({
+
+width:360,
+height:360,
+
+data: base+"EGY-MIA-"+String(num).padStart(4,'0'),
+
+image:"images/qr-logo.png",
+
+dotsOptions:{
+color:"#05444B",
+type:"classy-rounded"
+},
+
+backgroundOptions:{
+color:"#ffffff"
+},
+
+imageOptions:{
+crossOrigin:"anonymous",
+margin:8
+},
+
+cornersSquareOptions:{
+type:"extra-rounded",
+color:"#05444B"
+},
+
+cornersDotOptions:{
+type:"dot",
+color:"#05444B"
+}
+
+});
+
+qrCode.append(document.getElementById("qr"+num));
 
 }
 

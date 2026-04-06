@@ -1,17 +1,202 @@
 [
   {
-    "id": "EGY-PH-001",
-    "title_en": "Statue of Horus",
-    "title_ar": "تمثال حورس",
-    "date": "1300 BC",
-    "material": "Granite",
-    "height": "85 cm",
-    "width": "22 cm",
-    "hall": "Hall 3",
-    "section": "pharaonic",
-    "image": "images/horus.jpg",
-    "audio": "",
-    "description_en": "Granite statue representing the falcon god Horus.",
-    "description_ar": "تمثال من الجرانيت يمثل الإله حورس."
+    "id": "EGY-MIA-0001",
+    "title_ar": "متحف",
+    "title_en": "MM",
+    "desc_ar": "صورة متحف",
+    "desc_en": " Pic",
+    "date": 1991,
+    "image1": "images/MIA-0001.jpg",
+    "image2": "images/MIA-0001b.jpg"
+  },
+  {
+    "id": "EGY-MIA-0002",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": 1993,
+    "image1": "images/MIA-0002.jpg",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0003",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "images/MIA-0003.jpg",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0004",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "images/MIA-0004.jpg",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0005",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "images/MIA-0005.jpg",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0006",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "images/MIA-0006.jpg",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0007",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "images/MIA-0007.jpg",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0008",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0009",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0010",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0011",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0012",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0013",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0014",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0015",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0016",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0017",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0018",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0019",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
+  },
+  {
+    "id": "EGY-MIA-0020",
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "images/MIA-0020.jpg",
+    "image2": ""
   }
 ]
