@@ -1,13 +1,13 @@
 [
   {
-    "id": "",
-    "title_ar": "اسم القطعة",
-    "title_en": "Title",
-    "desc_ar": "الوصف",
-    "desc_en": "Description",
-    "date": "Date",
-    "image1": "",
-    "image2": ""
+    "id": "id",
+    "title_ar": "title_ar",
+    "title_en": "title_en",
+    "desc_ar": "desc_ar",
+    "desc_en": "desc_en",
+    "date": "date",
+    "image1": "image1",
+    "image2": "image2"
   },
   {
     "id": "EGY-MIA-0001",
