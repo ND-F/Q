@@ -21,21 +21,21 @@
   },
   {
     "id": "NADIM-0003",
-    "title_ar": "متحف",
-    "title_en": "title_en",
-    "desc_ar": "desc_ar",
-    "desc_en": "desc_en",
-    "date": "date",
-    "image1": "image1",
-    "image2": "image2"
+    "title_ar": "",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
+    "image1": "",
+    "image2": ""
   },
   {
     "id": "NADIM-0004",
     "title_ar": "",
-    "title_en": "MM",
-    "desc_ar": "قطعة متحفية",
-    "desc_en": " Pic",
-    "date": "1991 العصر المملوكي",
+    "title_en": "",
+    "desc_ar": "",
+    "desc_en": "",
+    "date": "",
     "image1": "",
     "image2": ""
   },
@@ -45,7 +45,7 @@
     "title_en": "",
     "desc_ar": "",
     "desc_en": "",
-    "date": 1993,
+    "date": "",
     "image1": "",
     "image2": ""
   },
