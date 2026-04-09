@@ -14,11 +14,8 @@
     "section_ar": "العرض: 250 سم؛ الطول: 320 سم",
     "image1": "",
     "image2": "",
-    "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "Hall 1",
-    "hall_ar": "القاعة 1"
+    "image3": "Hall 1",
+    "image4": "القاعة 1"
   },
   {
     "id": "MIA-0002",
@@ -35,11 +32,8 @@
     "section_ar": "",
     "image1": "",
     "image2": "",
-    "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "Hall 1",
-    "hall_ar": "القاعة 1"
+    "image3": "Hall 1",
+    "image4": "القاعة 1"
   },
   {
     "id": "MIA-0003",
@@ -57,10 +51,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0004",
@@ -78,10 +69,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0005",
@@ -99,10 +87,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0006",
@@ -120,10 +105,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0007",
@@ -141,10 +123,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0008",
@@ -162,10 +141,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0009",
@@ -183,10 +159,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0010",
@@ -204,10 +177,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0011",
@@ -225,10 +195,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0012",
@@ -246,10 +213,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0013",
@@ -267,10 +231,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0014",
@@ -288,10 +249,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0015",
@@ -309,10 +267,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0016",
@@ -330,10 +285,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0017",
@@ -351,10 +303,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0018",
@@ -372,10 +321,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0019",
@@ -393,10 +339,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0020",
@@ -414,10 +357,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0021",
@@ -435,10 +375,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0022",
@@ -456,10 +393,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0023",
@@ -477,10 +411,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0024",
@@ -498,10 +429,7 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   },
   {
     "id": "MIA-0025",
@@ -519,9 +447,6 @@
     "image1": "",
     "image2": "",
     "image3": "",
-    "image4": "",
-    "image5": "",
-    "hall_en": "",
-    "hall_ar": ""
+    "image4": ""
   }
 ]
