@@ -4,7 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>NADIM in M.I.A.</title>
 
@@ -31,168 +31,182 @@ background:var(--light);
 color:#111;
 }
 
-header{
-background:#ADCAC9;
+/* HEADER */
+
+#museumHeader{
+
+position:sticky;
+top:0;
+
+background:#EAE8D8;
+
 padding:20px;
-text-align:center;
-}
-
-.logo{
-width:120px;
-cursor:pointer;
-}
-
-.page-title{
-text-align:center;
-font-size:30px;
-margin:20px 0;
-}
-
-.container{
-
-display:grid;
-grid-template-columns:100px 1fr 420px;
-gap:40px;
-max-width:1500px;
-margin:auto;
-padding:40px;
-
-}
-
-.viewer{
-
-text-align:center;
-
-}
-
-.viewer img{
-
-max-width:100%;
-border-radius:12px;
-touch-action:none;
-
-}
-
-.thumbs{
 
 display:flex;
 flex-direction:column;
+align-items:center;
+
 gap:12px;
 
+z-index:1000;
+
+transition:all .3s ease;
+
+}
+
+.logo-row{
+
+display:flex;
+align-items:center;
+gap:20px;
+
+}
+
+.logo{
+height:60px;
+cursor:pointer;
+}
+
+.header-title{
+
+font-size:30px;
+color:#06444C;
+text-align:center;
+max-width:900px;
+line-height:1.5;
+
+}
+
+.header-small{
+
+padding:12px;
+
+}
+
+.header-small .logo{
+
+height:45px;
+
+}
+
+.header-small .header-title{
+
+font-size:22px;
+
+}
+
+/* PAGE */
+
+.container{
+max-width:1300px;
+margin:auto;
+padding:20px;
+}
+
+/* viewer */
+
+.viewer img{
+width:100%;
+border-radius:12px;
+}
+
+/* thumbnails */
+
+.thumbs{
+display:flex;
+gap:10px;
+overflow-x:auto;
+margin-top:15px;
 }
 
 .thumbs img{
-
-width:80px;
-cursor:pointer;
+width:70px;
 border-radius:6px;
+cursor:pointer;
 opacity:.7;
-
+flex-shrink:0;
 }
 
 .thumbs img.active{
-
 border:3px solid var(--gold);
 opacity:1;
+}
 
+/* info */
+
+.info{
+margin-top:25px;
 }
 
 .info h1{
-
 font-size:30px;
 margin:10px 0;
-
 }
 
 .meta{
-
 font-size:20px;
 margin:6px 0;
-
 }
 
 .details{
-
 font-size:20px;
 line-height:1.8;
-margin-top:40px;
+margin-top:30px;
+}
+
+/* desktop */
+
+@media(min-width:900px){
+
+.container{
+display:grid;
+grid-template-columns:100px 1fr 420px;
+gap:40px;
+}
+
+.thumbs{
+flex-direction:column;
+overflow:visible;
+}
+
+.viewer{
+grid-column:2;
+}
+
+.info{
+grid-column:3;
+margin-top:0;
+}
+
+.details{
+grid-column:3;
+}
 
 }
 
-footer{
-
-text-align:center;
-margin:80px 0;
-font-size:18px;
-
-}
+/* controls */
 
 .controls{
-
 position:fixed;
 bottom:25px;
 left:50%;
 transform:translateX(-50%);
 background:rgba(0,0,0,.35);
-padding:10px 22px;
+padding:10px 20px;
 border-radius:40px;
 display:flex;
 gap:16px;
-
 }
 
 .controls div{
-
-cursor:pointer;
 font-size:22px;
-
+cursor:pointer;
 }
 
-/* MOBILE */
-
-@media(max-width:900px){
-
-.container{
-
-display:flex;
-flex-direction:column;
-padding:20px;
-
-}
-
-.thumbs{
-
-flex-direction:row;
-overflow-x:auto;
-order:2;
-
-}
-
-.viewer{
-
-order:1;
-
-}
-
-.info{
-
-order:3;
-
-}
-
-.details{
-
-order:4;
-
-}
-
-.thumbs img{
-
-width:70px;
-flex-shrink:0;
-
-}
-
+footer{
+text-align:center;
+margin:80px 0;
+font-size:18px;
 }
 
 </style>
@@ -201,26 +215,28 @@ flex-shrink:0;
 
 <body>
 
-<header>
+<header id="museumHeader">
+
+<div class="logo-row">
 
 <a href="https://nd-f.github.io/QR/">
-
 <img src="images/logo-nadim.png" class="logo">
-
 </a>
 
-</header>
+<img src="images/MIALOGO.png" class="logo">
 
-<div class="page-title" id="pageTitle"></div>
+</div>
+
+<div class="header-title" id="headerTitle"></div>
+
+</header>
 
 <div class="container">
 
 <div class="thumbs" id="thumbs"></div>
 
 <div class="viewer">
-
 <img id="mainImage">
-
 </div>
 
 <div class="info">
@@ -246,57 +262,46 @@ flex-shrink:0;
 <div class="controls">
 
 <div onclick="toggleLang()">🌐</div>
-
 <div onclick="toggleTheme()">☀️</div>
-
 <div onclick="share()">🔗</div>
 
 </div>
 
 <footer>
-
 Nadim Foundation - مؤسسة نديم © ®
-
 </footer>
 
 <script>
 
-let lang = navigator.language.startsWith("ar") ? "ar":"en"
+let lang=navigator.language.startsWith("ar")?"ar":"en"
 
 if(window.matchMedia("(prefers-color-scheme: light)").matches){
-
 document.body.classList.add("light")
-
 }
 
 const params=new URLSearchParams(location.search)
-
 const id=params.get("id")
 
+const mainImage=document.getElementById("mainImage")
+const thumbs=document.getElementById("thumbs")
+
 let images=[]
-
 let current=0
-
 let artwork
 
 async function load(){
 
 const res=await fetch("data/artworks.json")
-
 const data=await res.json()
 
 artwork=data.find(a=>a.id===id)
 
 if(!artwork){
-
 document.body.innerHTML="<h2 style='text-align:center'>Artwork not found</h2>"
-
 return
-
 }
 
 prepareImages()
-
 render()
 
 }
@@ -304,28 +309,31 @@ render()
 function prepareImages(){
 
 images=[
-
 artwork.image1,
 artwork.image2,
 artwork.image3,
 artwork.image4,
 artwork.image5
-
 ].filter(img=>img && img.trim()!=="")
 
-const thumbs=document.getElementById("thumbs")
-
 thumbs.innerHTML=""
+
+if(images.length===0){
+
+thumbs.style.display="none"
+mainImage.style.display="none"
+
+return
+
+}
 
 images.forEach((src,i)=>{
 
 const img=document.createElement("img")
 
 img.src=src
-
 img.onclick=()=>show(i)
-
-img.onerror=function(){this.remove()}
+img.onerror=()=>img.remove()
 
 thumbs.appendChild(img)
 
@@ -335,96 +343,74 @@ thumbs.appendChild(img)
 
 function show(i){
 
+if(images.length===0) return
+
 current=i
 
-document.getElementById("mainImage").src=images[i]
+mainImage.src=images[i]
 
 document.querySelectorAll(".thumbs img").forEach((t,k)=>{
-
 t.classList.toggle("active",k===i)
-
 })
 
 }
 
 function render(){
 
+document.documentElement.dir=lang==="ar"?"rtl":"ltr"
+
 document.getElementById("inv").textContent=artwork.inventory_number
+document.getElementById("title").textContent=lang==="ar"?artwork.title_ar:artwork.title_en
+document.getElementById("from").textContent=lang==="ar"?artwork.from_ar:artwork.from_en
+document.getElementById("date").textContent=lang==="ar"?artwork.date_ar:artwork.date_en
+document.getElementById("dim").textContent=lang==="ar"?artwork.dimensions_ar:artwork.dimensions_en
+document.getElementById("hall").textContent=lang==="ar"?artwork.hall_ar:artwork.hall_en
+document.getElementById("desc").textContent=lang==="ar"?artwork.desc_ar:artwork.desc_en
 
-document.getElementById("title").textContent=
-lang=="ar"?artwork.title_ar:artwork.title_en
-
-document.getElementById("from").textContent=
-lang=="ar"?artwork.from_ar:artwork.from_en
-
-document.getElementById("date").textContent=
-lang=="ar"?artwork.date_ar:artwork.date_en
-
-document.getElementById("dim").textContent=
-lang=="ar"?artwork.dimensions_ar:artwork.dimensions_en
-
-document.getElementById("hall").textContent=
-lang=="ar"?artwork.hall_ar:artwork.hall_en
-
-document.getElementById("desc").textContent=
-lang=="ar"?artwork.desc_ar:artwork.desc_en
-
-document.getElementById("pageTitle").textContent=
+document.getElementById("headerTitle").textContent=
 lang==="ar"
 ? "معرض من حياة التحفة، متحف الفن الإسلامي بالقاهرة ونديم"
 : "From the life of an Artifact Exhibition, Museum of Islamic Arts in Cairo and NADIM"
 
-show(0)
+if(images.length>0) show(0)
 
 }
 
 function toggleLang(){
-
 lang=lang==="ar"?"en":"ar"
-
 render()
-
 }
 
 function toggleTheme(){
-
 document.body.classList.toggle("light")
-
 }
 
 function share(){
 
-navigator.share?.({
-
-title:document.title,
-url:location.href
-
-})
+if(navigator.share){
+navigator.share({url:location.href})
+}else{
+navigator.clipboard.writeText(location.href)
+alert("Link copied")
+}
 
 }
 
-/* SWIPE */
+/* swipe */
 
 let startX=0
 
-const viewer=document.getElementById("mainImage")
-
-viewer.addEventListener("touchstart",e=>{
-
+mainImage.addEventListener("touchstart",e=>{
 startX=e.touches[0].clientX
+},{passive:true})
 
-})
+mainImage.addEventListener("touchend",e=>{
 
-viewer.addEventListener("touchend",e=>{
-
-let endX=e.changedTouches[0].clientX
-
-let diff=startX-endX
+let diff=startX-e.changedTouches[0].clientX
 
 if(Math.abs(diff)>60){
 
 if(diff>0) next()
-
 else prev()
 
 }
@@ -432,20 +418,26 @@ else prev()
 })
 
 function next(){
-
 current=(current+1)%images.length
-
 show(current)
-
 }
 
 function prev(){
-
 current=(current-1+images.length)%images.length
-
 show(current)
-
 }
+
+const header=document.getElementById("museumHeader")
+
+window.addEventListener("scroll",()=>{
+
+if(window.scrollY>40){
+header.classList.add("header-small")
+}else{
+header.classList.remove("header-small")
+}
+
+})
 
 load()
 
