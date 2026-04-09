@@ -1,270 +1,145 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="ar">
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title> NADIM in M.I.A. </title>
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
-
---dark:#06444C;
+--main:#06444C;
 --light:#EAE8D8;
---soft:#ADCAC9;
---accent:#4A121C;
+--accent:#ADCAC9;
+--dark:#4A121C;
 --gold:#E1A93E;
-
 }
 
 body{
-
 margin:0;
 font-family:Tajawal;
+background:var(--main);
+color:white;
+}
+
+.light{
 background:var(--light);
-color:var(--dark);
-
+color:#222;
 }
 
-.dark{
-
-background:var(--dark);
-color:var(--light);
-
-}
-
-/* header */
-
-.header{
-
+header{
 background:#ADCAC9;
+padding:20px;
 text-align:center;
-padding:22px;
-
 }
 
 .logo{
-
-height:70px;
-
+width:110px;
+cursor:pointer;
 }
 
-/* layout */
+.page-title{
+text-align:center;
+padding:10px;
+font-size:24px;
+}
 
 .container{
-
-max-width:1300px;
-margin:auto;
-padding:40px;
-
 display:grid;
-grid-template-columns:90px 1fr 420px;
+grid-template-columns:90px 1fr 360px;
 gap:30px;
-
-}
-
-/* thumbnails */
-
-.thumbs{
-
-display:flex;
-flex-direction:column;
-gap:12px;
-
-}
-
-.thumbs img{
-
-width:100%;
-cursor:pointer;
-border-radius:6px;
-opacity:.6;
-border:2px solid transparent;
-
-}
-
-.thumbs img.active{
-
-opacity:1;
-border:2px solid var(--gold);
-
-}
-
-/* viewer */
-
-.viewer{
-
-position:relative;
-
+padding:40px;
+max-width:1400px;
+margin:auto;
 }
 
 .viewer img{
-
 width:100%;
-border-radius:12px;
-cursor:zoom-in;
-
+border-radius:10px;
 }
 
-/* arrows hidden */
+.thumbs{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
 
-.arrow{
-
-position:absolute;
-top:50%;
-transform:translateY(-50%);
-font-size:30px;
-color:white;
-padding:10px;
+.thumbs img{
+width:70px;
 cursor:pointer;
-opacity:0;
-
+border-radius:6px;
+opacity:.7;
 }
 
-/* info */
-
-.info{
-
-padding-top:10px;
-
+.thumbs img.active{
+border:2px solid var(--gold);
+opacity:1;
 }
 
-.inventory{
-
-font-size:22px;
-margin-bottom:4px;
-
-}
-
-.title{
-
+.info h1{
 font-size:30px;
-font-weight:600;
-margin-bottom:6px;
-
+margin:10px 0;
 }
 
 .meta{
-
-font-size:22px;
-margin-bottom:4px;
-
+font-size:20px;
+opacity:.85;
+margin:4px 0;
 }
-
-/* details */
 
 .details{
-
-max-width:900px;
-margin:auto;
-padding:30px;
-border-top:1px solid var(--soft);
-
+margin-top:30px;
+line-height:1.8;
+font-size:20px;
+max-width:600px;
 }
-
-.details p{
-
-font-size:22px;
-line-height:1.7;
-
-}
-
-/* controls */
 
 .controls{
-
 position:fixed;
-bottom:25px;
+bottom:20px;
 left:50%;
 transform:translateX(-50%);
-
-background:rgba(0,0,0,.15);
-backdrop-filter:blur(10px);
-
+background:rgba(0,0,0,.3);
 padding:10px 20px;
 border-radius:30px;
-
 display:flex;
-gap:14px;
-
+gap:15px;
 }
 
-.controls button{
-
-border:none;
-background:none;
-font-size:18px;
+.controls div{
 cursor:pointer;
-
+font-size:20px;
 }
-
-/* footer */
 
 footer{
-
 text-align:center;
-margin:80px 0 30px;
-font-size:13px;
+margin:60px 0;
+font-size:12px;
 opacity:.7;
-
 }
 
-/* zoom */
-
-.zoom{
-
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.85);
-
-display:none;
-align-items:center;
-justify-content:center;
-
-}
-
-.zoom img{
-
-max-width:90%;
-max-height:90%;
-
-}
-
-/* mobile */
+/* MOBILE */
 
 @media(max-width:900px){
 
 .container{
-
-grid-template-columns:1fr;
-
+display:flex;
+flex-direction:column;
+padding:20px;
 }
 
 .thumbs{
-
 flex-direction:row;
-order:2;
-
+overflow-x:auto;
 }
 
-.viewer{
-
-order:1;
-
-}
-
-.info{
-
-order:3;
-
+.thumbs img{
+width:70px;
+flex-shrink:0;
 }
 
 }
@@ -275,280 +150,232 @@ order:3;
 
 <body>
 
-<header class="header">
-
+<header>
+<a href="https://nd-f.github.io/QR/">
 <img src="images/logo-nadim.png" class="logo">
-
+</a>
 </header>
+
+<div class="page-title" id="pageTitle"></div>
 
 <div class="container">
 
 <div class="thumbs" id="thumbs"></div>
 
 <div class="viewer">
-
 <img id="mainImage">
-
 </div>
 
 <div class="info">
 
-<div class="inventory" id="inventory"></div>
+<div class="meta" id="inv"></div>
 
-<div class="title" id="title"></div>
+<h1 id="title"></h1>
 
 <div class="meta" id="from"></div>
 
 <div class="meta" id="date"></div>
 
-<div class="meta" id="dimensions"></div>
+<div class="meta" id="dim"></div>
+
+<hr>
+
+<div class="meta" id="hall"></div>
+
+<div class="details" id="desc"></div>
 
 </div>
-
-</div>
-
-<div class="details">
-
-<p id="hall"></p>
-
-<p id="desc"></p>
 
 </div>
 
 <div class="controls">
 
-<button onclick="toggleLang()">🌐</button>
-<button onclick="toggleTheme()">☀️</button>
-<button onclick="shareItem()">🔗</button>
+<div onclick="toggleLang()">🌐</div>
+<div onclick="toggleTheme()">☀️</div>
+<div onclick="share()">🔗</div>
 
 </div>
 
 <footer>
-
 Nadim Foundation - مؤسسة نديم © ®
-
 </footer>
-
-<div class="zoom" id="zoom">
-
-<img id="zoomImg">
-
-</div>
 
 <script>
 
-/* language */
+let lang = navigator.language.startsWith("ar") ? "ar":"en"
 
-let lang=navigator.language.startsWith("ar")?"ar":"en"
-
-/* theme */
-
-if(window.matchMedia('(prefers-color-scheme: dark)').matches){
-
-document.body.classList.add("dark")
-
+if(window.matchMedia("(prefers-color-scheme: light)").matches){
+document.body.classList.add("light")
 }
-
-/* get id */
 
 const params=new URLSearchParams(location.search)
 const id=params.get("id")
 
 let images=[]
-let index=0
+let current=0
+let artwork
 
-async function loadData(){
+async function load(){
 
 const res=await fetch("data/artworks.json")
 const data=await res.json()
 
-const art=data.find(a=>a.id===id)
+artwork=data.find(a=>a.id===id)
 
-if(!art){
-
-document.body.innerHTML="<h2 style='text-align:center;margin-top:100px'>Artwork not found</h2>"
+if(!artwork){
+document.body.innerHTML="<h2 style='text-align:center'>Artwork not found</h2>"
 return
+}
+
+prepareImages()
+
+render()
 
 }
 
-renderInfo(art)
-loadImages(art)
-
-}
-
-/* info */
-
-function renderInfo(a){
-
-document.body.dir=lang==="ar"?"rtl":"ltr"
-
-document.getElementById("inventory").textContent=a.inventory_number
-
-document.getElementById("title").textContent=
-lang==="ar"?a.title_ar:a.title_en
-
-document.getElementById("from").textContent=
-lang==="ar"?a.from_ar:a.from_en
-
-document.getElementById("date").textContent=
-lang==="ar"?a.date_ar:a.date_en
-
-document.getElementById("dimensions").textContent=
-lang==="ar"?a.dimensions_ar:a.dimensions_en
-
-document.getElementById("desc").textContent=
-lang==="ar"?a.desc_ar:a.desc_en
-
-document.getElementById("hall").textContent=
-lang==="ar"?a.hall_ar:a.hall_en
-
-}
-
-/* images */
-
-function loadImages(a){
+function prepareImages(){
 
 images=[
-
-a.image1,
-a.image2,
-a.image3,
-a.image4,
-a.image5
-
-].filter(i=>i && i.trim()!="")
-
-if(images.length<=1){
-
-document.getElementById("thumbs").style.display="none"
-
-}
+artwork.image1,
+artwork.image2,
+artwork.image3,
+artwork.image4,
+artwork.image5
+].filter(img=>img && img.trim()!=="")
 
 const thumbs=document.getElementById("thumbs")
+
+thumbs.innerHTML=""
 
 images.forEach((src,i)=>{
 
 const img=document.createElement("img")
 
 img.src=src
+
 img.onclick=()=>show(i)
 
 thumbs.appendChild(img)
 
 })
 
-show(0)
-
 }
-
-/* show */
 
 function show(i){
 
-index=i
+current=i
 
 document.getElementById("mainImage").src=images[i]
-document.getElementById("zoomImg").src=images[i]
 
-document.querySelectorAll(".thumbs img").forEach((t,n)=>{
+document.querySelectorAll(".thumbs img").forEach((t,k)=>{
 
-t.classList.toggle("active",n===i)
-
-})
-
-}
-
-/* swipe */
-
-let startX=0
-
-document.getElementById("mainImage").addEventListener("touchstart",e=>{
-
-startX=e.touches[0].clientX
+t.classList.toggle("active",k===i)
 
 })
 
-document.getElementById("mainImage").addEventListener("touchend",e=>{
-
-let endX=e.changedTouches[0].clientX
-
-if(endX-startX>50) prev()
-if(startX-endX>50) next()
-
-})
-
-function next(){
-
-index=(index+1)%images.length
-show(index)
-
 }
 
-function prev(){
+function render(){
 
-index=(index-1+images.length)%images.length
-show(index)
+document.getElementById("inv").textContent=artwork.inventory_number
+
+document.getElementById("title").textContent=
+lang=="ar"?artwork.title_ar:artwork.title_en
+
+document.getElementById("from").textContent=
+lang=="ar"?artwork.from_ar:artwork.from_en
+
+document.getElementById("date").textContent=
+lang=="ar"?artwork.date_ar:artwork.date_en
+
+document.getElementById("dim").textContent=
+lang=="ar"?artwork.dimensions_ar:artwork.dimensions_en
+
+document.getElementById("hall").textContent=
+lang=="ar"?artwork.hall_ar:artwork.hall_en
+
+document.getElementById("desc").textContent=
+lang=="ar"?artwork.desc_ar:artwork.desc_en
+
+document.getElementById("pageTitle").textContent=
+lang==="ar"
+? "معرض من حياة التحفة، متحف الفن الإسلامي بالقاهرة ونديم"
+: "From the life of an Artifact Exhibition, Museum of Islamic Arts in Cairo and NADIM"
+
+show(0)
 
 }
-
-/* zoom */
-
-document.getElementById("mainImage").onclick=function(){
-
-document.getElementById("zoom").style.display="flex"
-
-}
-
-document.getElementById("zoom").onclick=function(){
-
-this.style.display="none"
-
-}
-
-/* language */
 
 function toggleLang(){
 
 lang=lang==="ar"?"en":"ar"
 
-loadData()
+render()
 
 }
-
-/* theme */
 
 function toggleTheme(){
 
-document.body.classList.toggle("dark")
+document.body.classList.toggle("light")
 
 }
 
-/* share */
+function share(){
 
-function shareItem(){
-
-if(navigator.share){
-
-navigator.share({
-
+navigator.share?.({
 title:document.title,
 url:location.href
+})
+
+}
+
+/* SWIPE */
+
+let startX=0
+
+const viewer=document.getElementById("mainImage")
+
+viewer.addEventListener("touchstart",e=>{
+startX=e.touches[0].clientX
+})
+
+viewer.addEventListener("touchend",e=>{
+
+let endX=e.changedTouches[0].clientX
+
+let diff=startX-endX
+
+if(Math.abs(diff)>50){
+
+if(diff>0){
+next()
+}else{
+prev()
+}
+
+}
 
 })
 
-}else{
+function next(){
 
-navigator.clipboard.writeText(location.href)
-alert("Link copied")
+current=(current+1)%images.length
+
+show(current)
 
 }
 
+function prev(){
+
+current=(current-1+images.length)%images.length
+
+show(current)
+
 }
 
-loadData()
+load()
 
 </script>
 
 </body>
-
 </html>
