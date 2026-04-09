@@ -8,120 +8,127 @@
 
 <title>Nadim Museum</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
-
-<!-- preload image -->
-<link rel="preload" as="image" id="preloadImg">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
---main:#05444B;
---dark:#071f21;
---light:#f4f7f8;
+
+--main:#06444C;
+--bg:#EAE8D8;
+--soft:#ADCAC9;
+--accent:#4A121C;
+--gold:#E1A93E;
+
 }
 
 body{
+
 margin:0;
 font-family:'Tajawal',sans-serif;
-background:#071f21;
-color:#e9f6f7;
-text-align:center;
-direction:rtl;
-padding-bottom:100px;
+background:var(--bg);
+color:var(--main);
+
 }
 
-/* light mode */
+.container{
 
-.light{
-background:#f4f7f8;
-color:#0c4f57;
+max-width:1200px;
+margin:auto;
+padding:40px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:50px;
+
 }
 
-/* header */
+/* gallery */
 
-.header{
-background:#e9f6f7;
-padding:22px;
-border-radius:0 0 36px 36px;
-}
+.gallery img{
 
-.logo{
-width:130px;
-}
-
-/* card */
-
-.card{
-width:92%;
-max-width:900px;
-margin:35px auto;
-padding:26px;
-background:rgba(255,255,255,.05);
-border-radius:20px;
-box-shadow:0 6px 24px rgba(0,0,0,.35);
-}
-
-/* images */
-
-.image{
-display:flex;
-flex-direction:column;
-gap:20px;
-}
-
-.image img{
 width:100%;
-height:auto;
-border-radius:14px;
-box-shadow:0 8px 26px rgba(0,0,0,.35);
+border-radius:12px;
+margin-bottom:20px;
+
 }
 
-/* title */
+/* info */
 
-h1{
-font-size:30px;
-margin:20px 0 10px;
-color:#d6f5f6;
+.info{
+
+direction:rtl;
+
 }
 
-.light h1{
-color:#05444B;
+.inventory{
+
+font-size:14px;
+color:var(--accent);
+margin-bottom:10px;
+
 }
 
-/* meta */
+.title{
 
-.meta{
-font-size:17px;
-opacity:.85;
-margin:6px 0;
+font-size:16px;
+font-weight:600;
+margin-bottom:6px;
+
 }
 
-/* description */
+.subtitle{
 
-.desc{
-margin-top:22px;
-font-size:18px;
+font-size:14px;
+color:#333;
+margin-bottom:6px;
+
+}
+
+.section{
+
+margin-top:30px;
+font-size:14px;
 line-height:1.8;
+
 }
 
-/* controls */
+.extra{
 
-.controls{
-position:fixed;
-bottom:18px;
-left:50%;
-transform:translateX(-50%);
-background:rgba(255,255,255,.12);
-padding:12px 22px;
-border-radius:40px;
-display:flex;
-gap:20px;
+margin-top:40px;
+padding-top:20px;
+border-top:1px solid var(--soft);
+
 }
 
-.btn{
-font-size:22px;
-cursor:pointer;
+.extra p{
+
+font-size:14px;
+margin-bottom:10px;
+
+}
+
+/* responsive */
+
+@media(max-width:900px){
+
+.container{
+
+grid-template-columns:1fr;
+
+}
+
+.gallery{
+
+order:1;
+
+}
+
+.info{
+
+order:2;
+
+}
+
 }
 
 </style>
@@ -130,133 +137,128 @@ cursor:pointer;
 
 <body>
 
-<div class="header">
-<img class="logo" src="images/logo-nadim.png">
+<div class="container">
+
+<div class="gallery" id="gallery"></div>
+
+<div class="info">
+
+<div class="inventory" id="inventory"></div>
+
+<div class="title" id="title"></div>
+
+<div class="subtitle" id="from"></div>
+
+<div class="subtitle" id="date"></div>
+
+<div class="extra">
+
+<p id="desc"></p>
+
+<p id="dimensions"></p>
+
+<p id="section"></p>
+
+<p id="hall"></p>
+
 </div>
 
-<div class="card">
-
-<div class="image">
-<img id="img1" loading="lazy" decoding="async">
-<img id="img2" loading="lazy" decoding="async">
 </div>
 
-<h1 id="title"></h1>
-
-<div class="meta" id="id"></div>
-<div class="meta" id="date"></div>
-
-<div class="desc" id="desc"></div>
-
-</div>
-
-<div class="controls">
-<div class="btn" onclick="toggleTheme()">☀️</div>
-<div class="btn" onclick="toggleLang()">🌐</div>
 </div>
 
 <script>
 
-const API="https://script.google.com/macros/s/AKfycbzvJPDx_LBhtn19YvkNM0NlXvjTy80Nzzgze8JdDVuol0fw1o3LYqENi1d2gfrDPFJJ/exec"
-
-let lang="ar"
-
 const params=new URLSearchParams(location.search)
 const id=params.get("id")
 
-let artwork
-
-const img1=document.getElementById("img1")
-const img2=document.getElementById("img2")
-
-const title=document.getElementById("title")
-const metaId=document.getElementById("id")
-const date=document.getElementById("date")
-const desc=document.getElementById("desc")
+let lang="ar"
 
 async function loadData(){
 
-try{
-
-const res=await fetch("data/artworks.json",{cache:"force-cache"})
+const res=await fetch("data/artworks.json")
 const data=await res.json()
 
-artwork=data.find(a=>a.id===id)
+const artwork=data.find(a=>a.id===id)
 
 if(!artwork){
 
-document.querySelector(".card").innerHTML="<h2>Artwork not found</h2>"
+document.body.innerHTML="Artwork not found"
 return
 
 }
 
-/* preload main image */
-
-document.getElementById("preloadImg").href = artwork.image1
-
-render()
-
-}catch(err){
-
-console.error(err)
-document.querySelector(".card").innerHTML="<h2>Error loading artwork</h2>"
+render(artwork)
 
 }
 
+function render(a){
+
+/* inventory */
+
+document.getElementById("inventory").textContent=a.inventory_number
+
+/* title */
+
+document.getElementById("title").textContent=
+lang==="ar"?a.title_ar:a.title_en
+
+/* from */
+
+document.getElementById("from").textContent=
+lang==="ar"?a.from_ar:a.from_en
+
+/* date */
+
+document.getElementById("date").textContent=
+lang==="ar"?a.date_ar:a.date_en
+
+/* description */
+
+document.getElementById("desc").textContent=
+lang==="ar"?a.desc_ar:a.desc_en
+
+/* dimensions */
+
+document.getElementById("dimensions").textContent=
+lang==="ar"?a.dimensions_ar:a.dimensions_en
+
+/* section */
+
+document.getElementById("section").textContent=
+lang==="ar"?a.section_ar:a.section_en
+
+/* hall */
+
+document.getElementById("hall").textContent=
+lang==="ar"?a.hall_ar:a.hall_en
+
+/* images */
+
+const gallery=document.getElementById("gallery")
+
+const images=[
+a.image1,
+a.image2,
+a.image3,
+a.image4,
+a.image5
+]
+
+images.forEach(src=>{
+
+if(!src) return
+
+const img=document.createElement("img")
+img.src=src
+
+gallery.appendChild(img)
+
+})
+
 }
-
-function render(){
-
-img1.src = artwork.image1 || "images/no-image.jpg"
-
-if(artwork.image2){
-
-img2.src = artwork.image2
-
-}else{
-
-img2.style.display="none"
-
-}
-
-if(lang==="ar"){
-
-title.textContent=artwork.title_ar
-metaId.textContent="رقم القطعة: "+artwork.id
-date.textContent="التاريخ: "+artwork.date
-desc.textContent=artwork.desc_ar
-
-}else{
-
-title.textContent=artwork.title_en
-metaId.textContent="Item ID: "+artwork.id
-date.textContent="Date: "+artwork.date
-desc.textContent=artwork.desc_en
-
-}
-
-}
-
-function toggleLang(){
-
-lang=(lang==="ar")?"en":"ar"
-render()
-
-}
-
-function toggleTheme(){
-
-document.body.classList.toggle("light")
-
-}
-
-/* load */
 
 loadData()
-
-/* track scan */
-
-fetch(API+"?track="+id+"&lang="+lang+"&device="+navigator.userAgent).catch(()=>{})
 
 </script>
 
