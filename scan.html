@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title> NADIM in M.I.A. </title>
+<title>NADIM in M.I.A.</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -15,7 +16,6 @@
 --main:#06444C;
 --light:#EAE8D8;
 --accent:#ADCAC9;
---dark:#4A121C;
 --gold:#E1A93E;
 }
 
@@ -28,7 +28,7 @@ color:white;
 
 .light{
 background:var(--light);
-color:#222;
+color:#111;
 }
 
 header{
@@ -38,88 +38,114 @@ text-align:center;
 }
 
 .logo{
-width:110px;
+width:120px;
 cursor:pointer;
 }
 
 .page-title{
 text-align:center;
-padding:10px;
-font-size:24px;
+font-size:30px;
+margin:20px 0;
 }
 
 .container{
+
 display:grid;
-grid-template-columns:90px 1fr 360px;
-gap:30px;
-padding:40px;
-max-width:1400px;
+grid-template-columns:100px 1fr 420px;
+gap:40px;
+max-width:1500px;
 margin:auto;
+padding:40px;
+
+}
+
+.viewer{
+
+text-align:center;
+
 }
 
 .viewer img{
-width:100%;
-border-radius:10px;
+
+max-width:100%;
+border-radius:12px;
+touch-action:none;
+
 }
 
 .thumbs{
+
 display:flex;
 flex-direction:column;
-gap:10px;
+gap:12px;
+
 }
 
 .thumbs img{
-width:70px;
+
+width:80px;
 cursor:pointer;
 border-radius:6px;
 opacity:.7;
+
 }
 
 .thumbs img.active{
-border:2px solid var(--gold);
+
+border:3px solid var(--gold);
 opacity:1;
+
 }
 
 .info h1{
+
 font-size:30px;
 margin:10px 0;
+
 }
 
 .meta{
+
 font-size:20px;
-opacity:.85;
-margin:4px 0;
+margin:6px 0;
+
 }
 
 .details{
-margin-top:30px;
+
+font-size:20px;
 line-height:1.8;
-font-size:20px;
-max-width:600px;
-}
+margin-top:40px;
 
-.controls{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-background:rgba(0,0,0,.3);
-padding:10px 20px;
-border-radius:30px;
-display:flex;
-gap:15px;
-}
-
-.controls div{
-cursor:pointer;
-font-size:20px;
 }
 
 footer{
+
 text-align:center;
-margin:60px 0;
-font-size:12px;
-opacity:.7;
+margin:80px 0;
+font-size:18px;
+
+}
+
+.controls{
+
+position:fixed;
+bottom:25px;
+left:50%;
+transform:translateX(-50%);
+background:rgba(0,0,0,.35);
+padding:10px 22px;
+border-radius:40px;
+display:flex;
+gap:16px;
+
+}
+
+.controls div{
+
+cursor:pointer;
+font-size:22px;
+
 }
 
 /* MOBILE */
@@ -127,19 +153,44 @@ opacity:.7;
 @media(max-width:900px){
 
 .container{
+
 display:flex;
 flex-direction:column;
 padding:20px;
+
 }
 
 .thumbs{
+
 flex-direction:row;
 overflow-x:auto;
+order:2;
+
+}
+
+.viewer{
+
+order:1;
+
+}
+
+.info{
+
+order:3;
+
+}
+
+.details{
+
+order:4;
+
 }
 
 .thumbs img{
+
 width:70px;
 flex-shrink:0;
+
 }
 
 }
@@ -151,9 +202,13 @@ flex-shrink:0;
 <body>
 
 <header>
+
 <a href="https://nd-f.github.io/QR/">
+
 <img src="images/logo-nadim.png" class="logo">
+
 </a>
+
 </header>
 
 <div class="page-title" id="pageTitle"></div>
@@ -163,7 +218,9 @@ flex-shrink:0;
 <div class="thumbs" id="thumbs"></div>
 
 <div class="viewer">
+
 <img id="mainImage">
+
 </div>
 
 <div class="info">
@@ -178,8 +235,6 @@ flex-shrink:0;
 
 <div class="meta" id="dim"></div>
 
-<hr>
-
 <div class="meta" id="hall"></div>
 
 <div class="details" id="desc"></div>
@@ -191,13 +246,17 @@ flex-shrink:0;
 <div class="controls">
 
 <div onclick="toggleLang()">🌐</div>
+
 <div onclick="toggleTheme()">☀️</div>
+
 <div onclick="share()">🔗</div>
 
 </div>
 
 <footer>
+
 Nadim Foundation - مؤسسة نديم © ®
+
 </footer>
 
 <script>
@@ -205,26 +264,35 @@ Nadim Foundation - مؤسسة نديم © ®
 let lang = navigator.language.startsWith("ar") ? "ar":"en"
 
 if(window.matchMedia("(prefers-color-scheme: light)").matches){
+
 document.body.classList.add("light")
+
 }
 
 const params=new URLSearchParams(location.search)
+
 const id=params.get("id")
 
 let images=[]
+
 let current=0
+
 let artwork
 
 async function load(){
 
 const res=await fetch("data/artworks.json")
+
 const data=await res.json()
 
 artwork=data.find(a=>a.id===id)
 
 if(!artwork){
+
 document.body.innerHTML="<h2 style='text-align:center'>Artwork not found</h2>"
+
 return
+
 }
 
 prepareImages()
@@ -236,11 +304,13 @@ render()
 function prepareImages(){
 
 images=[
+
 artwork.image1,
 artwork.image2,
 artwork.image3,
 artwork.image4,
 artwork.image5
+
 ].filter(img=>img && img.trim()!=="")
 
 const thumbs=document.getElementById("thumbs")
@@ -254,6 +324,8 @@ const img=document.createElement("img")
 img.src=src
 
 img.onclick=()=>show(i)
+
+img.onerror=function(){this.remove()}
 
 thumbs.appendChild(img)
 
@@ -323,8 +395,10 @@ document.body.classList.toggle("light")
 function share(){
 
 navigator.share?.({
+
 title:document.title,
 url:location.href
+
 })
 
 }
@@ -336,7 +410,9 @@ let startX=0
 const viewer=document.getElementById("mainImage")
 
 viewer.addEventListener("touchstart",e=>{
+
 startX=e.touches[0].clientX
+
 })
 
 viewer.addEventListener("touchend",e=>{
@@ -345,13 +421,11 @@ let endX=e.changedTouches[0].clientX
 
 let diff=startX-endX
 
-if(Math.abs(diff)>50){
+if(Math.abs(diff)>60){
 
-if(diff>0){
-next()
-}else{
-prev()
-}
+if(diff>0) next()
+
+else prev()
 
 }
 
