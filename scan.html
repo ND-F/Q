@@ -26,7 +26,7 @@
             color: var(--main);
         }
 
-        /* HEADER - ثابت دائماً باللون الفاتح */
+        /* HEADER */
         #museumHeader {
             position: sticky;
             top: 0;
@@ -47,13 +47,11 @@
             gap: 25px;
         }
 
-        /* تنسيق الهيدر حسب لغة المتصفح أو الاختيار */
         .lang-ar #museumHeader { direction: rtl; }
         .lang-en #museumHeader { direction: ltr; }
 
         .logo { height: 50px; cursor: pointer; transition: 0.3s; }
         .header-title { font-size: 18px; color: var(--main) !important; text-align: center; font-weight: 700; }
-
         .header-small .logo { height: 35px; }
 
         /* CONTAINER LAYOUT */
@@ -62,13 +60,13 @@
             margin: auto;
             padding: 20px;
             display: flex;
-            flex-direction: column; /* الترتيب الافتراضي للموبايل */
+            flex-direction: column;
         }
 
         /* MAIN VIEWER */
         .viewer {
             width: 100%;
-            height: 50vh; /* مقاس مناسب للموبايل */
+            height: 50vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -101,7 +99,7 @@
             opacity: .6;
             transition: 0.3s;
             flex-shrink: 0;
-            display: none; /* إخفاء مبدئي لمنع البروكن ايمدج */
+            display: none;
         }
 
         .thumbs img.active {
@@ -114,15 +112,13 @@
         .meta { font-size: 18px; margin: 6px 0; opacity: 0.9; }
         .details { margin-top: 30px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.7; }
 
-        /* محاذاة النصوص حسب اللغة */
         .lang-ar .info, .lang-ar .details { text-align: right; direction: rtl; }
         .lang-en .info, .lang-en .details { text-align: left; direction: ltr; }
 
-        /* KTOP LAYOUT (1100px+) */
         @media(min-width:1100px) {
             .container {
                 display: grid;
-                direction: ltr !important; /* تثبيت التخطيط: ثامنيل يسار | نص يمين */
+                direction: ltr !important;
                 grid-template-columns: 100px 1fr 450px;
                 grid-template-areas: 
                     "thumb viewer info"
@@ -130,16 +126,14 @@
                 gap: 40px;
                 align-items: start;
             }
-
             .viewer { grid-area: viewer; height: 70vh; }
             .thumbs { 
                 grid-area: thumb; 
                 flex-direction: column; 
-                margin-top: 150px; /* تماثل مع بداية النص */
+                margin-top: 150px;
                 overflow: visible;
             }
             .thumbs img { width: 85px; height: 85px; }
-
             .info { grid-area: info; margin-top: 150px; }
             .details { grid-area: details; margin-top: 40px; }
         }
@@ -159,7 +153,6 @@
             z-index: 2000;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
-
         .controls div { font-size: 24px; cursor: pointer; transition: 0.2s; }
         .controls div:hover { transform: scale(1.2); }
 
@@ -196,8 +189,7 @@
 
     <div class="details">
         <div class="meta" id="hall"></div>
-        <div id="c"></div>
-    </div>
+        <div id="desc"></div> </div>
 </div>
 
 <div class="controls">
@@ -213,7 +205,6 @@
 <script>
     let lang = navigator.language.startsWith("ar") ? "ar" : "en";
     
-    // ضبط اللغة الابتدائية
     function updateLangClass() {
         document.body.classList.remove('lang-ar', 'lang-en');
         document.body.classList.add(lang === 'ar' ? 'lang-ar' : 'lang-en');
@@ -233,17 +224,20 @@
 
     async function load() {
         try {
-            const res = await fetch("data/artworks.json");
+            // إضافة timestamp لضمان عدم تحميل نسخة مخزنة (Cache)
+            const res = await fetch("data/artworks.json?t=" + new Date().getTime());
             const data = await res.json();
             artwork = data.find(a => a.id === id);
 
             if(!artwork) {
-                document.body.innerHTML = "<h2 style='text-align:center; margin-top:100px;'>التحفة غير موجودة</h2>";
+                document.body.innerHTML = "<h2 style='text-align:center; margin-top:100px;'>التحفة غير موجودة / Artwork not found</h2>";
                 return;
             }
             prepareImages();
             render();
-        } catch (e) { console.error(e); }
+        } catch (e) { 
+            console.error("Error loading JSON:", e); 
+        }
     }
 
     function prepareImages() {
@@ -274,13 +268,19 @@
         updateLangClass();
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
 
-        document.getElementById("inv").textContent = artwork.inventory_number;
+        document.getElementById("inv").textContent = artwork.inventory_number || "";
         document.getElementById("title").textContent = lang === "ar" ? artwork.title_ar : artwork.title_en;
         document.getElementById("from").textContent = lang === "ar" ? artwork.from_ar : artwork.from_en;
         document.getElementById("date").textContent = lang === "ar" ? artwork.date_ar : artwork.date_en;
         document.getElementById("dim").textContent = lang === "ar" ? artwork.dimensions_ar : artwork.dimensions_en;
         document.getElementById("hall").textContent = lang === "ar" ? artwork.hall_ar : artwork.hall_en;
-        document.getElementById("desc").textContent = lang === "ar" ? artwork.desc_ar : artwork.desc_en;
+        
+        // تم التأكد من أن الـ ID مطابق للعنصر في الـ HTML
+        const descEl = document.getElementById("desc");
+        if(descEl) {
+            descEl.textContent = lang === "ar" ? artwork.desc_ar : artwork.desc_en;
+        }
+
         document.getElementById("headerTitle").textContent = lang === "ar" ? "معرض من حياة التحفة" : "From the Life of an Artefact Exhibition";
         show(0);
     }
@@ -296,8 +296,17 @@
     }
 
     function share() {
-        if (navigator.share) navigator.share({ url: location.href });
-        else alert("تم نسخ الرابط: " + location.href);
+        if (navigator.share) {
+            navigator.share({ url: location.href });
+        } else {
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = location.href;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            alert(lang === "ar" ? "تم نسخ الرابط!" : "Link copied!");
+        }
     }
 
     window.addEventListener("scroll", () => {
