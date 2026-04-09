@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NADIM in M.I.A.</title>
+<title> Museum of Islamic Arts in Cairo and NADIM - متحف الفن الإسلامي بالقاهرة ونديم </title>
 
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -50,7 +50,7 @@ gap:12px;
 
 z-index:1000;
 
-transition:all .3s ease;
+transition:.3s;
 
 }
 
@@ -58,7 +58,9 @@ transition:all .3s ease;
 
 display:flex;
 align-items:center;
-gap:20px;
+justify-content:center;
+gap:25px;
+flex-wrap:wrap;
 
 }
 
@@ -72,141 +74,201 @@ cursor:pointer;
 font-size:30px;
 color:#06444C;
 text-align:center;
-max-width:900px;
+max-width:800px;
 line-height:1.5;
 
 }
 
 .header-small{
 
-padding:12px;
+padding:8px;
 
 }
 
 .header-small .logo{
 
-height:45px;
+height:32px;
 
 }
 
 .header-small .header-title{
 
-font-size:22px;
+font-size:18px;
 
 }
 
 /* PAGE */
 
 .container{
+
 max-width:1300px;
 margin:auto;
 padding:20px;
+
 }
 
-/* viewer */
+/* IMAGE VIEWER */
 
 .viewer img{
+
 width:100%;
 border-radius:12px;
+
 }
 
-/* thumbnails */
+/* THUMBNAILS */
 
 .thumbs{
+
 display:flex;
 gap:10px;
-overflow-x:auto;
+flex-wrap:wrap;
 margin-top:15px;
+
 }
 
 .thumbs img{
-width:70px;
+
+width:80px;
 border-radius:6px;
 cursor:pointer;
 opacity:.7;
-flex-shrink:0;
+
 }
 
 .thumbs img.active{
+
 border:3px solid var(--gold);
 opacity:1;
+
 }
 
-/* info */
+/* INFO */
 
 .info{
-margin-top:25px;
+
+margin-top:20px;
+
 }
 
 .info h1{
+
 font-size:30px;
 margin:10px 0;
+
 }
 
 .meta{
+
 font-size:20px;
 margin:6px 0;
+
 }
 
 .details{
+
 font-size:20px;
 line-height:1.8;
 margin-top:30px;
+
 }
 
-/* desktop */
+/* DESKTOP LAYOUT */
 
-@media(min-width:900px){
+@media(min-width:1100px){
 
 .container{
+
 display:grid;
-grid-template-columns:100px 1fr 420px;
+grid-template-columns:100px 1fr;
 gap:40px;
+
 }
 
 .thumbs{
+
 flex-direction:column;
-overflow:visible;
+
 }
 
 .viewer{
+
 grid-column:2;
+
 }
 
 .info{
-grid-column:3;
-margin-top:0;
+
+grid-column:2;
+
 }
 
 .details{
-grid-column:3;
-}
+
+grid-column:1 / span 2;
 
 }
 
-/* controls */
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.container{
+
+display:block;
+
+}
+
+.thumbs{
+
+flex-direction:row;
+overflow-x:auto;
+
+}
+
+.viewer{
+
+margin-top:10px;
+
+}
+
+}
+
+/* CONTROLS */
 
 .controls{
+
 position:fixed;
 bottom:25px;
 left:50%;
 transform:translateX(-50%);
+
 background:rgba(0,0,0,.35);
 padding:10px 20px;
 border-radius:40px;
+
 display:flex;
 gap:16px;
+
 }
 
 .controls div{
+
 font-size:22px;
 cursor:pointer;
+
 }
 
+/* FOOTER */
+
 footer{
+
 text-align:center;
 margin:80px 0;
 font-size:18px;
+
 }
 
 </style>
@@ -223,11 +285,11 @@ font-size:18px;
 <img src="images/logo-nadim.png" class="logo">
 </a>
 
+<div class="header-title" id="headerTitle"></div>
+
 <img src="images/MIALOGO.png" class="logo">
 
 </div>
-
-<div class="header-title" id="headerTitle"></div>
 
 </header>
 
@@ -273,17 +335,16 @@ Nadim Foundation - مؤسسة نديم © ®
 
 <script>
 
-let lang=navigator.language.startsWith("ar")?"ar":"en"
+let lang = navigator.language.startsWith("ar") ? "ar" : "en"
 
 if(window.matchMedia("(prefers-color-scheme: light)").matches){
 document.body.classList.add("light")
 }
 
-const params=new URLSearchParams(location.search)
-const id=params.get("id")
+const params = new URLSearchParams(location.search)
+const id = params.get("id")
 
-const mainImage=document.getElementById("mainImage")
-const thumbs=document.getElementById("thumbs")
+const mainImage = document.getElementById("mainImage")
 
 let images=[]
 let current=0
@@ -291,10 +352,10 @@ let artwork
 
 async function load(){
 
-const res=await fetch("data/artworks.json")
-const data=await res.json()
+const res = await fetch("data/artworks.json")
+const data = await res.json()
 
-artwork=data.find(a=>a.id===id)
+artwork = data.find(a=>a.id===id)
 
 if(!artwork){
 document.body.innerHTML="<h2 style='text-align:center'>Artwork not found</h2>"
@@ -314,25 +375,22 @@ artwork.image2,
 artwork.image3,
 artwork.image4,
 artwork.image5
-].filter(img=>img && img.trim()!=="")
+].filter(img=>img && img.trim()!==""
+
+)
+
+const thumbs=document.getElementById("thumbs")
 
 thumbs.innerHTML=""
-
-if(images.length===0){
-
-thumbs.style.display="none"
-mainImage.style.display="none"
-
-return
-
-}
 
 images.forEach((src,i)=>{
 
 const img=document.createElement("img")
 
 img.src=src
+
 img.onclick=()=>show(i)
+
 img.onerror=()=>img.remove()
 
 thumbs.appendChild(img)
@@ -350,63 +408,76 @@ current=i
 mainImage.src=images[i]
 
 document.querySelectorAll(".thumbs img").forEach((t,k)=>{
+
 t.classList.toggle("active",k===i)
+
 })
 
 }
 
 function render(){
 
-document.documentElement.dir=lang==="ar"?"rtl":"ltr"
+document.documentElement.dir = lang==="ar" ? "rtl":"ltr"
 
 document.getElementById("inv").textContent=artwork.inventory_number
-document.getElementById("title").textContent=lang==="ar"?artwork.title_ar:artwork.title_en
-document.getElementById("from").textContent=lang==="ar"?artwork.from_ar:artwork.from_en
-document.getElementById("date").textContent=lang==="ar"?artwork.date_ar:artwork.date_en
-document.getElementById("dim").textContent=lang==="ar"?artwork.dimensions_ar:artwork.dimensions_en
-document.getElementById("hall").textContent=lang==="ar"?artwork.hall_ar:artwork.hall_en
-document.getElementById("desc").textContent=lang==="ar"?artwork.desc_ar:artwork.desc_en
 
-document.getElementById("headerTitle").textContent=
+document.getElementById("title").textContent =
+lang==="ar" ? artwork.title_ar : artwork.title_en
+
+document.getElementById("from").textContent =
+lang==="ar" ? artwork.from_ar : artwork.from_en
+
+document.getElementById("date").textContent =
+lang==="ar" ? artwork.date_ar : artwork.date_en
+
+document.getElementById("dim").textContent =
+lang==="ar" ? artwork.dimensions_ar : artwork.dimensions_en
+
+document.getElementById("hall").textContent =
+lang==="ar" ? artwork.hall_ar : artwork.hall_en
+
+document.getElementById("desc").textContent =
+lang==="ar" ? artwork.desc_ar : artwork.desc_en
+
+document.getElementById("headerTitle").textContent =
 lang==="ar"
-? "معرض من حياة التحفة، متحف الفن الإسلامي بالقاهرة ونديم"
-: "From the life of an Artifact Exhibition, Museum of Islamic Arts in Cairo and NADIM"
+? "معرض من حياة التحفة"
+: "From the life of an Artifact Exhibition"
 
-if(images.length>0) show(0)
+show(0)
 
 }
 
 function toggleLang(){
-lang=lang==="ar"?"en":"ar"
+
+lang = lang==="ar" ? "en":"ar"
 render()
+
 }
 
 function toggleTheme(){
+
 document.body.classList.toggle("light")
+
 }
 
 function share(){
 
-if(navigator.share){
-navigator.share({url:location.href})
-}else{
-navigator.clipboard.writeText(location.href)
-alert("Link copied")
-}
+navigator.share?.({url:location.href})
 
 }
-
-/* swipe */
 
 let startX=0
 
 mainImage.addEventListener("touchstart",e=>{
-startX=e.touches[0].clientX
-},{passive:true})
+
+startX = e.touches[0].clientX
+
+})
 
 mainImage.addEventListener("touchend",e=>{
 
-let diff=startX-e.changedTouches[0].clientX
+let diff = startX - e.changedTouches[0].clientX
 
 if(Math.abs(diff)>60){
 
@@ -418,13 +489,23 @@ else prev()
 })
 
 function next(){
+
+if(images.length===0) return
+
 current=(current+1)%images.length
+
 show(current)
+
 }
 
 function prev(){
+
+if(images.length===0) return
+
 current=(current-1+images.length)%images.length
+
 show(current)
+
 }
 
 const header=document.getElementById("museumHeader")
@@ -432,9 +513,13 @@ const header=document.getElementById("museumHeader")
 window.addEventListener("scroll",()=>{
 
 if(window.scrollY>40){
+
 header.classList.add("header-small")
+
 }else{
+
 header.classList.remove("header-small")
+
 }
 
 })
