@@ -14,7 +14,7 @@
 
 :root{
 
---main:#06444C;
+--dark:#06444C;
 --bg:#EAE8D8;
 --soft:#ADCAC9;
 --accent:#4A121C;
@@ -27,28 +27,92 @@ body{
 margin:0;
 font-family:'Tajawal',sans-serif;
 background:var(--bg);
-color:var(--main);
+color:var(--dark);
 
 }
+
+/* layout */
 
 .container{
 
-max-width:1200px;
+max-width:1300px;
 margin:auto;
 padding:40px;
+
 display:grid;
-grid-template-columns:1fr 1fr;
-gap:50px;
+grid-template-columns:90px 1fr 380px;
+gap:30px;
 
 }
 
-/* gallery */
+/* thumbnails */
 
-.gallery img{
+.thumbs{
+
+display:flex;
+flex-direction:column;
+gap:10px;
+
+}
+
+.thumbs img{
 
 width:100%;
-border-radius:12px;
-margin-bottom:20px;
+cursor:pointer;
+border-radius:6px;
+opacity:.7;
+border:2px solid transparent;
+
+}
+
+.thumbs img.active{
+
+opacity:1;
+border:2px solid var(--gold);
+
+}
+
+/* main image */
+
+.viewer{
+
+position:relative;
+
+}
+
+.viewer img{
+
+width:100%;
+border-radius:10px;
+cursor:zoom-in;
+
+}
+
+/* arrows */
+
+.arrow{
+
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+font-size:30px;
+background:rgba(0,0,0,.3);
+color:white;
+padding:10px 15px;
+cursor:pointer;
+user-select:none;
+
+}
+
+.arrow.left{
+
+left:10px;
+
+}
+
+.arrow.right{
+
+right:10px;
 
 }
 
@@ -63,8 +127,7 @@ direction:rtl;
 .inventory{
 
 font-size:14px;
-color:var(--accent);
-margin-bottom:10px;
+margin-bottom:6px;
 
 }
 
@@ -72,42 +135,61 @@ margin-bottom:10px;
 
 font-size:16px;
 font-weight:600;
-margin-bottom:6px;
+margin-bottom:8px;
 
 }
 
-.subtitle{
+.meta{
 
 font-size:14px;
-color:#333;
-margin-bottom:6px;
+margin-bottom:4px;
 
 }
 
-.section{
+/* details */
 
-margin-top:30px;
-font-size:14px;
-line-height:1.8;
+.details{
 
-}
+max-width:900px;
+margin:auto;
+padding:30px;
 
-.extra{
-
-margin-top:40px;
-padding-top:20px;
 border-top:1px solid var(--soft);
 
 }
 
-.extra p{
+.details p{
 
 font-size:14px;
-margin-bottom:10px;
+line-height:1.7;
 
 }
 
-/* responsive */
+/* zoom */
+
+.zoom{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.85);
+
+display:none;
+align-items:center;
+justify-content:center;
+
+}
+
+.zoom img{
+
+max-width:90%;
+max-height:90%;
+
+}
+
+/* mobile */
 
 @media(max-width:900px){
 
@@ -117,7 +199,14 @@ grid-template-columns:1fr;
 
 }
 
-.gallery{
+.thumbs{
+
+flex-direction:row;
+order:2;
+
+}
+
+.viewer{
 
 order:1;
 
@@ -125,7 +214,7 @@ order:1;
 
 .info{
 
-order:2;
+order:3;
 
 }
 
@@ -139,7 +228,17 @@ order:2;
 
 <div class="container">
 
-<div class="gallery" id="gallery"></div>
+<div class="thumbs" id="thumbs"></div>
+
+<div class="viewer">
+
+<div class="arrow left" onclick="prev()">‹</div>
+
+<img id="mainImage">
+
+<div class="arrow right" onclick="next()">›</div>
+
+</div>
 
 <div class="info">
 
@@ -147,11 +246,15 @@ order:2;
 
 <div class="title" id="title"></div>
 
-<div class="subtitle" id="from"></div>
+<div class="meta" id="from"></div>
 
-<div class="subtitle" id="date"></div>
+<div class="meta" id="date"></div>
 
-<div class="extra">
+</div>
+
+</div>
+
+<div class="details">
 
 <p id="desc"></p>
 
@@ -163,7 +266,9 @@ order:2;
 
 </div>
 
-</div>
+<div class="zoom" id="zoom" onclick="closeZoom()">
+
+<img id="zoomImg">
 
 </div>
 
@@ -173,88 +278,115 @@ const params=new URLSearchParams(location.search)
 const id=params.get("id")
 
 let lang="ar"
+let images=[]
+let index=0
 
 async function loadData(){
 
 const res=await fetch("data/artworks.json")
 const data=await res.json()
 
-const artwork=data.find(a=>a.id===id)
+const art=data.find(a=>a.id===id)
 
-if(!artwork){
-
-document.body.innerHTML="Artwork not found"
-return
+renderInfo(art)
+loadImages(art)
 
 }
 
-render(artwork)
-
-}
-
-function render(a){
-
-/* inventory */
+function renderInfo(a){
 
 document.getElementById("inventory").textContent=a.inventory_number
-
-/* title */
 
 document.getElementById("title").textContent=
 lang==="ar"?a.title_ar:a.title_en
 
-/* from */
-
 document.getElementById("from").textContent=
 lang==="ar"?a.from_ar:a.from_en
-
-/* date */
 
 document.getElementById("date").textContent=
 lang==="ar"?a.date_ar:a.date_en
 
-/* description */
-
 document.getElementById("desc").textContent=
 lang==="ar"?a.desc_ar:a.desc_en
-
-/* dimensions */
 
 document.getElementById("dimensions").textContent=
 lang==="ar"?a.dimensions_ar:a.dimensions_en
 
-/* section */
-
 document.getElementById("section").textContent=
 lang==="ar"?a.section_ar:a.section_en
-
-/* hall */
 
 document.getElementById("hall").textContent=
 lang==="ar"?a.hall_ar:a.hall_en
 
-/* images */
+}
 
-const gallery=document.getElementById("gallery")
+function loadImages(a){
 
-const images=[
+images=[
 a.image1,
 a.image2,
 a.image3,
 a.image4,
 a.image5
-]
+].filter(i=>i)
 
-images.forEach(src=>{
+const thumbs=document.getElementById("thumbs")
 
-if(!src) return
+images.forEach((src,i)=>{
 
 const img=document.createElement("img")
+
 img.src=src
 
-gallery.appendChild(img)
+img.onclick=()=>show(i)
+
+thumbs.appendChild(img)
 
 })
+
+show(0)
+
+}
+
+function show(i){
+
+index=i
+
+document.getElementById("mainImage").src=images[i]
+
+document.getElementById("zoomImg").src=images[i]
+
+document.querySelectorAll(".thumbs img").forEach((t,n)=>{
+
+t.classList.toggle("active",n===i)
+
+})
+
+}
+
+function next(){
+
+index=(index+1)%images.length
+show(index)
+
+}
+
+function prev(){
+
+index=(index-1+images.length)%images.length
+show(index)
+
+}
+
+document.getElementById("mainImage").onclick=function(){
+
+document.getElementById("zoom").style.display="flex"
+
+}
+
+function closeZoom(){
+
+document.getElementById("zoom").style.display="none"
 
 }
 
