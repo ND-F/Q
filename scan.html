@@ -24,18 +24,19 @@
             margin-bottom: 15px; overflow: hidden; 
             background: rgba(0,0,0,0.15); border-radius: 12px; 
             border: 1px solid rgba(225, 169, 62, 0.1);
-            /* مؤشر الماوس العادي يظهر هنا */
             cursor: pointer; 
         }
         
-        .viewer img { 
-            max-width: 100%; max-height: 100%; 
-            object-fit: contain; 
-            pointer-events: none; /* عشان نقدر نلقط الكليك من الـ .viewer */
-        }
+        .viewer img { max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; }
 
         /* الطبقة المظللة للمعلومات أسفل الصورة */
-        .photo-credit { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 25px 15px 10px; font-size: 14px; opacity: 1; z-index: 10; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        .photo-credit { 
+            position: absolute; bottom: 0; left: 0; right: 0; 
+            background: linear-gradient(transparent, rgba(0,0,0,0.8)); 
+            color: white; padding: 25px 15px 10px; font-size: 14px; 
+            z-index: 10; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            display: none; /* تظهر فقط لو فيه نص */
+        }
         .lang-ar .photo-credit { text-align: right; direction: rtl; }
         .lang-en .photo-credit { text-align: left; direction: ltr; }
         
@@ -45,52 +46,57 @@
         
         .info h1 { font-size: 30px; color: var(--gold); margin: 0 0 10px 0; }
         .meta { font-size: 18px; margin: 6px 0; opacity: 0.9; }
+
+        /* DETAILS (الوصف والخامة) */
         .details { margin-top: 30px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.8; }
         .lang-ar .info, .lang-ar .details { text-align: right; direction: rtl; }
         .lang-en .info, .lang-en .details { text-align: left; direction: ltr; }
 
+        /* DESKTOP LAYOUT - الإصلاح الجذري هنا */
         @media(min-width:1100px) {
-            .container { display: grid; direction: ltr !important; grid-template-columns: 100px 1fr 450px; grid-template-areas: "thumb viewer info" ". details details"; gap: 40px; align-items: start; }
+            .container {
+                display: grid;
+                direction: ltr !important; 
+                grid-template-columns: 100px 1fr 450px;
+                grid-template-areas: 
+                    "thumb viewer info"
+                    "thumb details details"; /* جعل الوصف يفرش تحت الصورة والنص الجانبي */
+                gap: 40px;
+                align-items: start;
+            }
             .viewer { grid-area: viewer; height: 75vh; }
-            .thumbs { grid-area: thumb; flex-direction: column; margin-top: 150px; overflow: visible; }
+            .thumbs { 
+                grid-area: thumb; 
+                flex-direction: column; 
+                margin-top: 150px; 
+                overflow: visible;
+                position: sticky; top: 180px; /* جعل الثامنيلز تتحرك معاك */
+            }
             .thumbs img { width: 85px; height: 85px; }
+
             .info { grid-area: info; margin-top: 150px; }
+            .details { 
+                grid-area: details; 
+                margin-top: 20px; 
+                max-width: 95%; /* عشان الكلام ميبقاش لازق في الحافة */
+            }
         }
         
         .controls { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(10, 30, 35, 0.85); backdrop-filter: blur(10px); padding: 10px 25px; border-radius: 40px; display: flex; gap: 25px; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .controls div { font-size: 24px; cursor: pointer; transition: 0.2s; }
-        footer { text-align: center; margin: 50px 0 100px 0; font-size: 14px; opacity: 0.5; }
 
-        /* FULLSCREEN MODAL STYLES (الفل سكرين) */
+        /* FULLSCREEN MODAL */
         #fullscreenModal {
-            display: none;
-            position: fixed; top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.95);
-            z-index: 9999;
-            overflow: hidden; /* لمنع سكرول الصفحة خلف المودال */
-            touch-action: none; /* تعطيل السكرول العادي عشان الزووم بصباعين */
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh; background: rgba(0,0,0,0.95);
+            z-index: 9999; overflow: hidden; touch-action: none;
         }
-
-        #fullscreenModal #modalImage {
-            width: 100%; height: 100%;
-            object-fit: contain;
-            will-change: transform, transform-origin;
-            cursor: grab;
-            transition: transform 0.1s ease-out; /* حركة ناعمة جداً */
-        }
-        
-        /* مؤشر للتكبير في الديسكتوب */
+        #fullscreenModal #modalImage { width: 100%; height: 100%; object-fit: contain; transition: transform 0.1s ease-out; }
         #fullscreenModal:not(.mobile-pinch) #modalImage { cursor: zoom-in; }
         #fullscreenModal.desktop-zoomed #modalImage { cursor: grab; transform: scale(2.5); }
+        #modalClose { position: absolute; top: 20px; right: 20px; font-size: 35px; color: white; cursor: pointer; z-index: 10001; }
 
-        /* زر الإغلاق */
-        #modalClose {
-            position: absolute; top: 20px; right: 20px;
-            font-size: 35px; color: white; cursor: pointer;
-            z-index: 10001; opacity: 0.7;
-        }
-        #modalClose:hover { opacity: 1; }
+        footer { text-align: center; margin: 50px 0 100px 0; font-size: 14px; opacity: 0.5; }
     </style>
 </head>
 <body class="lang-ar">
@@ -107,6 +113,7 @@
         <img src="images/MIALOGO.png" class="logo">
     </div>
 </header>
+
 <div class="container">
     <div class="viewer" id="mainViewer">
         <img id="mainImage">
@@ -126,9 +133,11 @@
         <div id="desc"></div>
     </div>
 </div>
+
 <div class="controls">
     <div onclick="toggleLang()">🌐</div><div onclick="toggleTheme()" id="themeBtn">☀️</div><div onclick="share()">🔗</div>
 </div>
+
 <footer> Nadim Foundation © ® </footer>
 
 <script>
@@ -163,147 +172,72 @@
         images.forEach((src, i) => {
             const img = document.createElement("img");
             img.src = src; img.onload = () => img.style.display = 'block'; img.onerror = () => img.remove();
-            img.onclick = (e) => { e.stopPropagation(); show(i); }; thumbs.appendChild(img); // منع الـ bubbling عشان ميفكرش إنه ضغط على الفل سكرين
+            img.onclick = (e) => { e.stopPropagation(); show(i); }; thumbs.appendChild(img);
         });
     }
 
     function show(i) {
         if(images.length === 0) return;
         currentIdx = i; mainImage.src = images[i];
-        modalImage.src = images[i]; // تحديث الصورة في الفل سكرين برضه
+        modalImage.src = images[i];
         document.querySelectorAll(".thumbs img").forEach((t, k) => t.classList.toggle("active", k === i));
-        const info = artwork[lang === "ar" ? `info_ar${i+1}` : `info_en${i+1}`] || "";
-        photoCredit.textContent = info; photoCredit.style.display = info ? "block" : "none";
+        
+        const infoKey = lang === "ar" ? `info_ar${i+1}` : `info_en${i+1}`;
+        const info = artwork[infoKey] || "";
+        photoCredit.textContent = info;
+        photoCredit.style.display = info.trim() ? "block" : "none";
     }
 
-    // --- SWIPE LOGIC (في الحاوية العادية) ---
-    let touchStartXCollection = 0;
-    mainViewer.addEventListener('touchstart', e => { 
-        if (e.touches.length > 1) return; // منع التداخل مع زووم الموبايل الطبيعي
-        touchStartXCollection = e.touches[0].clientX; 
-    }, {passive: true});
-
+    // --- SWIPE LOGIC ---
+    let touchStartX = 0;
+    mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) touchStartX = e.touches[0].clientX; }, {passive: true});
     mainViewer.addEventListener('touchend', e => {
-        if (e.changedTouches.length > 1) return;
-        let diff = touchStartXCollection - e.changedTouches[0].clientX;
-        if(Math.abs(diff) > 70) diff > 0 ? show((currentIdx+1)%images.length) : show((currentIdx-1+images.length)%images.length);
+        if (e.changedTouches.length === 1) {
+            let diff = touchStartX - e.changedTouches[0].clientX;
+            if(Math.abs(diff) > 70) diff > 0 ? show((currentIdx+1)%images.length) : show((currentIdx-1+images.length)%images.length);
+        }
     }, {passive: true});
 
-
-    // --- FULLSCREEN LOGIC (الفل سكرين والزووم الذكي) ---
-    
-    // فتح الفل سكرين بالضغط على الصورة الرئيسية
-    mainViewer.addEventListener('click', openFullscreen);
-    
-    function openFullscreen() {
+    // --- FULLSCREEN & ZOOM ---
+    mainViewer.addEventListener('click', () => {
         modalImage.src = images[currentIdx];
         modal.style.display = 'block';
-        document.body.style.overflow = 'hidden'; // قفل سكرول الصفحة
-        
-        if(isMobile) {
-            modal.classList.add('mobile-pinch');
-            initMobilePinchZoom();
-        } else {
-            initDesktopClickZoom();
-        }
-    }
+        document.body.style.overflow = 'hidden';
+        if(isMobile) initMobilePinch(); else initDesktopZoom();
+    });
 
-    // إغلاق الفل سكرين
-    document.getElementById("modalClose").addEventListener('click', closeFullscreen);
-    
-    function closeFullscreen() {
+    document.getElementById("modalClose").onclick = () => {
         modal.style.display = 'none';
-        document.body.style.overflow = ''; // إعادة سكرول الصفحة
-        resetModalTransform();
-        // إزالة مستمعي الأحداث المؤقتة
-        if(!isMobile) removeDesktopListeners();
-    }
+        document.body.style.overflow = '';
+        resetModal();
+    };
 
-
-    // 1. نظام زووم بصباعين (Pinch-to-zoom) للموبايل - سمارت وحقيقي
-    let evCache = [];
-    let prevDiff = -1;
-
-    function initMobilePinchZoom() {
-        evCache = []; prevDiff = -1; resetModalTransform();
-        modalImage.onpointerdown = (e) => evCache.push(e);
-        modalImage.onpointermove = (e) => {
-            const index = evCache.findIndex(ev => ev.pointerId === e.pointerId);
-            evCache[index] = e;
-            
-            // لو صباعين
-            if (evCache.length === 2) {
-                let curDiff = Math.hypot(evCache[0].clientX - evCache[1].clientX, evCache[0].clientY - evCache[1].clientY);
-                if (prevDiff > 0) {
-                    if (curDiff > prevDiff) pinchScale += 0.03; // تكبير
-                    else pinchScale -= 0.03; // تصغير
-                    
-                    pinchScale = Math.min(Math.max(1, pinchScale), 4); // قيود: بين 1 و 4 ضعف
-                    applyPinchTransform();
-                }
-                prevDiff = curDiff;
-            }
-        };
-        modalImage.onpointerup = (e) => {
-            evCache = evCache.filter(ev => ev.pointerId !== e.pointerId);
-            if (evCache.length < 2) prevDiff = -1;
-        };
-        modalImage.onpointercancel = modalImage.onpointerup;
-        modalImage.onpointerleave = modalImage.onpointerup;
-    }
-
+    // Mobile Pinch (Simplified)
     let pinchScale = 1;
-    function applyPinchTransform() { modalImage.style.transform = `scale(${pinchScale})`; }
+    function initMobilePinch() { pinchScale = 1; modalImage.style.transform = `scale(1)`; }
 
-
-    // 2. نظام كليك وزووم عند النقطة للديسك توب - سمارت وخفيف
-    let desktopIsZoomed = false;
-    
-    function initDesktopClickZoom() {
-        desktopIsZoomed = false; resetModalTransform();
-        modal.classList.remove('desktop-zoomed');
-        modalImage.onclick = toggleDesktopZoom;
-        modalImage.onmousemove = moveDesktopZoom;
+    // Desktop Zoom
+    let dz = false;
+    function initDesktopZoom() {
+        dz = false; modalImage.onclick = (e) => {
+            dz = !dz; modal.classList.toggle('desktop-zoomed', dz);
+            if(dz) moveZoom(e); else resetModal();
+        };
+        modalImage.onmousemove = moveZoom;
     }
-
-    function removeDesktopListeners() {
-        modalImage.onclick = null;
-        modalImage.onmousemove = null;
-    }
-
-    function toggleDesktopZoom(e) {
-        desktopIsZoomed = !desktopIsZoomed;
-        modal.classList.toggle('desktop-zoomed', desktopIsZoomed);
-        
-        if (desktopIsZoomed) {
-            // كليك مرة: زووم من مكان الكليك
-            moveDesktopZoom(e);
-        } else {
-            // كليك تانية: إلغاء الزووم ورجوع السهم
-            resetModalTransform();
-        }
-    }
-
-    function moveDesktopZoom(e) {
-        if(!desktopIsZoomed) return;
+    function moveZoom(e) {
+        if(!dz) return;
         const rect = modalImage.getBoundingClientRect();
-        // حساب النقطة بدقة
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
         modalImage.style.transformOrigin = `${x}% ${y}%`;
     }
-
-
-    function resetModalTransform() {
-        modalImage.style.transform = "scale(1)";
-        modalImage.style.transformOrigin = "center center";
-        pinchScale = 1; prevDiff = -1; desktopIsZoomed = false;
-    }
-
+    function resetModal() { modalImage.style.transform = "scale(1)"; dz = false; modal.classList.remove('desktop-zoomed'); }
 
     // --- RENDERING ---
     function render() {
-        updateLangClass();
+        document.body.classList.remove('lang-ar', 'lang-en');
+        document.body.classList.add(lang === 'ar' ? 'lang-ar' : 'lang-en');
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
 
         document.getElementById("inv").textContent = artwork.inventory_number || "";
@@ -312,17 +246,10 @@
         document.getElementById("date").textContent = lang === "ar" ? artwork.date_ar : artwork.date_en;
         document.getElementById("dim").textContent = lang === "ar" ? artwork.dimensions_ar : artwork.dimensions_en;
         document.getElementById("hall").textContent = lang === "ar" ? artwork.hall_ar : artwork.hall_en;
-        
         document.getElementById("material").textContent = (lang === "ar" ? artwork.material_ar : artwork.material_en) || "";
         document.getElementById("desc").textContent = lang === "ar" ? artwork.desc_ar : artwork.desc_en;
         document.getElementById("headerTitle").textContent = lang === "ar" ? "معرض من حياة التحفة" : "From the Life of an Artefact Exhibition";
-        
-        show(0);
-    }
-
-    function updateLangClass() {
-        document.body.classList.remove('lang-ar', 'lang-en');
-        document.body.classList.add(lang === 'ar' ? 'lang-ar' : 'lang-en');
+        show(currentIdx);
     }
 
     function toggleLang() { lang = lang === "ar" ? "en" : "ar"; render(); }
@@ -343,6 +270,5 @@
 
     load();
 </script>
-
 </body>
 </html>
