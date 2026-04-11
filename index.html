@@ -1,177 +1,189 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nadim Collection - مجموعة نديم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+    <script>
+        /* 1. نظام التحويل السريع (أول شيء ينفذ) */
+        const query = window.location.search.substring(1); // بياخد اللي بعد علامة الاستفهام
+        if (query && !isNaN(query) && query.length >= 1) {
+            // لو اللي مكتوب رقم (مثلاً 0001)، يحول فوراً لصفحة الـ scan
+            window.location.replace("scan.html?id=MIA-" + query);
+        }
+    </script>
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main: #06444C;   /* الكحلي */
+            --light: #EAE8D8;  /* الكريمي */
+            --gold: #E1A93E;   /* الذهبي */
+        }
 
-<title>Nadim Collection</title>
+        body {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            background: var(--main);
+            color: var(--light);
+            text-align: center;
+        }
 
-<style>
+        .logoHeader {
+            background: var(--light);
+            padding: 20px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+        }
 
-body{
-margin:0;
-font-family:Tajawal;
-background:#0f2024;
-color:#e9f6f7;
-text-align:center;
-}
+        .mainLogo {
+            width: 150px;
+            max-width: 80%;
+            height: auto;
+            display: block;
+            margin: 10px auto;
+        }
 
-.header{
-background:#e9f6f7;
-padding:25px;
-}
+        .search {
+            margin: 30px auto;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
 
-.mainLogo{
-width:180px;
-max-width:80%;
-height:auto;
-display:block;
-margin:40px auto;
-}
+        .search input {
+            padding: 12px 20px;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 30px;
+            border: 2px solid var(--gold);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-family: 'Tajawal';
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            outline: none;
+        }
 
-.search{
-margin:25px auto;
-}
+        .search input::placeholder { color: rgba(233, 246, 247, 0.5); }
 
-.search input{
-padding:10px;
-width:250px;
-border:1px solid #0f6c75;
-background:#0f2024;
-color:white;
-}
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-gap:30px;
-padding:40px;
-}
+        .card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(225, 169, 62, 0.1);
+        }
 
-.card{
-background:#111;
-border-radius:10px;
-overflow:hidden;
-cursor:pointer;
-transition:.3s;
-}
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
 
-.card:hover{
-transform:translateY(-6px);
-}
+        .card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
 
-.card img{
-width:100%;
-height:200px;
-object-fit:cover;
-}
+        .title {
+            padding: 15px;
+            font-weight: bold;
+            color: var(--light);
+            font-size: 16px;
+        }
 
-.title{
-padding:10px;
-font-weight:bold;
-color:#e9f6f7;
-}
+        .id-badge {
+            background: var(--gold);
+            color: var(--main);
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
 
-.id{
-color:#0f6c75;
-padding-bottom:15px;
-}
-
-</style>
-
+        /* Loading Spinner */
+        #loader { margin: 50px; color: var(--gold); }
+    </style>
 </head>
 
 <body>
 
 <div class="logoHeader">
-<img src="images/logo-nadim.png" class="mainLogo">
-
+    <img src="images/logo-nadim.png" class="mainLogo">
 </div>
 
 <div class="search">
-
-<input id="search" placeholder="Search...">
-
+    <input id="search" placeholder="ابحث عن قطعة... Search...">
 </div>
 
+<div id="loader">جاري تحميل المجموعة...</div>
 <div class="grid" id="grid"></div>
 
 <script>
+    let artworks = [];
 
-const API="https://script.google.com/macros/s/AKfycbz0zgMLLmtC4NPZNJylRPgD7Q8aNjhfsZh6YdCJ55p8E-Bt7heKvDvkKkwutoiuwTSG/exec";
+    /* استخدام ملف JSON المحلي لسرعة خارقة */
+    fetch("data/artworks.json?v=" + new Date().getTime())
+        .then(r => r.json())
+        .then(data => {
+            artworks = data;
+            document.getElementById("loader").style.display = "none";
+            render(data);
+        })
+        .catch(err => {
+            document.getElementById("loader").textContent = "حدث خطأ في تحميل البيانات.";
+            console.error(err);
+        });
 
-let artworks=[];
+    function render(list) {
+        const grid = document.getElementById("grid");
+        grid.innerHTML = "";
 
-fetch(API)
-.then(r=>r.json())
-.then(data=>{
-artworks=data;
-render(data);
-});
+        list.forEach(a => {
+            // نأكد إن فيه صورة، لو مفيش نحط صورة افتراضية
+            const imgPath = a.image1 ? a.image1 : 'images/no-image.jpg';
+            
+            const card = document.createElement("div");
+            card.className = "card";
+            card.onclick = () => {
+                location.href = "scan.html?id=" + a.id;
+            };
 
-function render(list){
+            card.innerHTML = `
+                <img src="${imgPath}" onerror="this.src='images/no-image.jpg'">
+                <div class="title">
+                    ${a.title_ar || a.title_en || "تحفة متحفية"}
+                </div>
+                <div class="id-badge">${a.id}</div>
+            `;
+            grid.appendChild(card);
+        });
+    }
 
-const grid=document.getElementById("grid");
-
-grid.innerHTML="";
-
-list.forEach(a=>{
-
-const card=document.createElement("div");
-
-card.className="card";
-
-card.onclick=()=>{
-
-location.href="scan.html?id="+a.id;
-
-};
-
-card.innerHTML=`
-
-<img src="${a.image || 'images/no-image.jpg'}">
-
-<div class="title">
-
-${a.title_ar || a.title_en || "قطعة متحف"}
-
-</div>
-
-<div class="id">
-
-${a.id}
-
-</div>
-
-`;
-
-grid.appendChild(card);
-
-});
-
-}
-
-document.getElementById("search").oninput=(e)=>{
-
-let q=e.target.value.toLowerCase();
-
-render(
-
-artworks.filter(a=>
-
-(a.title_ar||"").toLowerCase().includes(q) ||
-
-(a.title_en||"").toLowerCase().includes(q)
-
-)
-
-);
-
-};
-
+    /* نظام البحث الذكي */
+    document.getElementById("search").oninput = (e) => {
+        let q = e.target.value.toLowerCase();
+        const filtered = artworks.filter(a => 
+            (a.title_ar || "").toLowerCase().includes(q) || 
+            (a.title_en || "").toLowerCase().includes(q) ||
+            (a.id || "").toLowerCase().includes(q)
+        );
+        render(filtered);
+    };
 </script>
 
 </body>
