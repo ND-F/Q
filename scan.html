@@ -2,78 +2,104 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NADIM in Museum of Islamic Arts - نديم في متحف الفن الإسلامي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; }
-        body { margin: 0; font-family: 'Tajawal', sans-serif; background: var(--main); color: var(--light); transition: 0.4s; overflow-x: hidden; }
-        .light { background: var(--light); color: var(--main); }
         
-        #museumHeader { position: sticky; top: 0; background: var(--light) !important; color: var(--main) !important; padding: 15px 20px; display: flex; flex-direction: column; align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
-        .logo-row { display: flex; align-items: center; justify-content: center; gap: 25px; }
-        .logo { height: 50px; cursor: pointer; }
-        .header-title { font-size: 18px; color: var(--main) !important; text-align: center; font-weight: 700; line-height: 1.3; }
+        body { 
+            margin: 0; font-family: 'Tajawal', sans-serif; 
+            background: var(--main); color: var(--light); 
+            transition: background 0.4s ease; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .light { background: var(--light); color: var(--main); }
+
+        #museumHeader { 
+            position: -webkit-sticky; position: sticky; top: 0; 
+            background: var(--light) !important; color: var(--main) !important; 
+            padding: 15px 20px; display: flex; flex-direction: column; 
+            align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
+        }
+        .logo-row { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; }
+        .logo { height: 45px; -webkit-user-drag: none; }
+        .header-title { font-size: 16px; font-weight: 700; text-align: center; color: var(--main) !important; line-height: 1.3; }
 
         .container { max-width: 1400px; margin: auto; padding: 20px; display: flex; flex-direction: column; }
-        
-        /* VIEWER AREA */
+
         .viewer { 
-            width: 100%; height: 55vh; position: relative; 
+            width: 100%; height: 50vh; position: relative; 
             display: flex; align-items: center; justify-content: center; 
             margin-bottom: 15px; overflow: hidden; 
-            background: rgba(0,0,0,0.15); border-radius: 12px; 
-            border: 1px solid rgba(225, 169, 62, 0.1);
-            cursor: pointer; 
+            background: rgba(0,0,0,0.1); border-radius: 12px; 
+            cursor: pointer; touch-action: manipulation;
         }
         .viewer img { max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; }
 
-        /* PHOTO CREDIT - اختفاء وإظهار ذكي */
         .photo-credit { 
             position: absolute; bottom: 0; left: 0; right: 0; 
             background: linear-gradient(transparent, rgba(0,0,0,0.85)); 
-            color: white; padding: 35px 15px 15px; font-size: 14px; 
-            z-index: 10; opacity: 0; 
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            color: white; padding: 35px 15px 15px; font-size: 13px; 
+            z-index: 10; opacity: 0; transition: opacity 0.4s ease; 
+            pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
         }
-        /* يظهر عند الهوفر في الديسكتوب أو عند تفعيل كلاس الموبايل */
-        .viewer:hover .photo-credit, .viewer.info-active .photo-credit { 
-            opacity: 1 !important; 
-        }
+        .viewer:hover .photo-credit, .viewer.info-active .photo-credit { opacity: 1 !important; }
 
-        .lang-ar .photo-credit { text-align: right; direction: rtl; }
-        .lang-en .photo-credit { text-align: left; direction: ltr; }
-        
-        .thumbs { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; margin-bottom: 20px; }
-        .thumbs img { width: 75px; height: 75px; object-fit: cover; border-radius: 8px; cursor: pointer; opacity: .5; transition: 0.3s; flex-shrink: 0; display: none; }
+        .thumbs { 
+            display: flex; gap: 10px; overflow-x: auto; 
+            padding: 10px 5px; margin-bottom: 20px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .thumbs img { 
+            width: 70px; height: 70px; object-fit: cover; 
+            border-radius: 8px; cursor: pointer; opacity: .5; 
+            transition: 0.3s; flex-shrink: 0; display: none;
+        }
         .thumbs img.active { border: 3px solid var(--gold); opacity: 1; transform: scale(1.05); }
-        
-        .info h1 { font-size: 30px; color: var(--gold); margin: 0 0 10px 0; }
-        .meta { font-size: 18px; margin: 6px 0; opacity: 0.9; }
-        .details { margin-top: 30px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.8; }
+
+        .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; line-height: 1.2; }
+        .meta { font-size: 17px; margin: 5px 0; opacity: 0.9; }
+        .details { margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.7; }
+
+        .lang-ar { direction: rtl; text-align: right; }
+        .lang-en { direction: ltr; text-align: left; }
 
         @media(min-width:1100px) {
-            .container { display: grid; direction: ltr !important; grid-template-columns: 100px 1fr 450px; grid-template-areas: "thumb viewer info" "thumb details details"; gap: 40px; align-items: start; }
-            .viewer { grid-area: viewer; height: 75vh; }
-            .thumbs { grid-area: thumb; flex-direction: column; margin-top: 150px; position: sticky; top: 180px; }
+            .container { 
+                display: grid; 
+                grid-template-columns: 100px 1fr 400px; 
+                grid-template-areas: "thumb viewer info" "thumb details details";
+                gap: 40px; align-items: start;
+                direction: ltr; 
+            }
+            .viewer { grid-area: viewer; height: 70vh; }
+            .thumbs { 
+                grid-area: thumb; flex-direction: column; 
+                margin-top: 120px; position: -webkit-sticky; position: sticky; top: 150px; 
+            }
             .thumbs img { width: 85px; height: 85px; }
-            .info { grid-area: info; margin-top: 150px; }
+            .info { grid-area: info; margin-top: 120px; }
             .details { grid-area: details; margin-top: 20px; max-width: 95%; }
+            body.lang-ar .info, body.lang-ar .details { direction: rtl; text-align: right; }
+            body.lang-en .info, body.lang-en .details { direction: ltr; text-align: left; }
         }
-        
-        .controls { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(10, 30, 35, 0.85); backdrop-filter: blur(10px); padding: 10px 25px; border-radius: 40px; display: flex; gap: 25px; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+
+        .controls { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(10, 30, 35, 0.85); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); padding: 10px 25px; border-radius: 40px; display: flex; gap: 25px; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .controls div { font-size: 24px; cursor: pointer; transition: 0.2s; }
-        #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); z-index: 9999; overflow: hidden; touch-action: none; }
+        
+        #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.96); z-index: 9999; overflow: hidden; }
         #fullscreenModal #modalImage { width: 100%; height: 100%; object-fit: contain; transition: transform 0.1s ease-out; }
         #fullscreenModal.desktop-zoomed #modalImage { cursor: grab; transform: scale(2.5); }
-        #modalClose { position: absolute; top: 20px; right: 20px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; }
-        footer { text-align: center; margin: 50px 0 100px 0; font-size: 14px; opacity: 0.5; }
+        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; }
+        
+        footer { text-align: center; margin: 40px 0 100px 0; font-size: 13px; opacity: 0.4; }
     </style>
 </head>
-<body class="lang-ar">
 
+<body class="lang-ar">
 <div id="fullscreenModal"><div id="modalClose">×</div><img id="modalImage"></div>
 
 <header id="museumHeader">
@@ -85,7 +111,10 @@
 </header>
 
 <div class="container">
-    <div class="viewer" id="mainViewer"><img id="mainImage"><div class="photo-credit" id="photoCredit"></div></div>
+    <div class="viewer" id="mainViewer">
+        <img id="mainImage">
+        <div class="photo-credit" id="photoCredit"></div>
+    </div>
     <div class="thumbs" id="thumbs"></div>
     <div class="info">
         <div class="meta" id="inv"></div><h1 id="title"></h1>
@@ -93,7 +122,7 @@
     </div>
     <div class="details">
         <div class="meta" id="hall"></div>
-        <div class="meta" id="material" style="font-weight: bold; color: var(--gold);"></div>
+        <div class="meta" id="material" style="font-weight: 600; color: var(--gold);"></div>
         <div id="desc"></div>
     </div>
 </div>
@@ -114,12 +143,20 @@
     const modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
 
     async function load() {
-        const res = await fetch("data/artworks.json?t=" + new Date().getTime());
-        const data = await res.json();
-        const id = new URLSearchParams(location.search).get("id");
-        artwork = data.find(a => a.id === id);
-        if(!artwork) { document.body.innerHTML = "<h2 style='text-align:center;margin-top:100px'>Artwork Not Found</h2>"; return; }
-        prepareImages(); render();
+        try {
+            const res = await fetch("data/artworks.json?t=" + new Date().getTime());
+            const data = await res.json();
+            const params = new URLSearchParams(location.search);
+            let id = params.get("id");
+            if(!id) {
+                const pathParts = window.location.pathname.split('/');
+                const lastPart = pathParts.pop() || pathParts.pop();
+                if(lastPart !== 'scan.html') id = "MIA-" + lastPart;
+            }
+            artwork = data.find(a => a.id === id);
+            if(!artwork) { document.body.innerHTML = "<h2 style='text-align:center;margin-top:100px'>Artwork Not Found</h2>"; return; }
+            prepareImages(); render();
+        } catch(e) { console.error("Load Error"); }
     }
 
     function prepareImages() {
@@ -133,72 +170,48 @@
         });
     }
 
-    // --- الإصلاح الجوهري هنا ---
     function show(i) {
-        if(images.length === 0) return;
-        currentIdx = i;
-        mainImage.src = images[i];
+        if(!images[i]) return;
+        currentIdx = i; mainImage.src = images[i];
         modalImage.src = images[i];
-        
         document.querySelectorAll(".thumbs img").forEach((t, k) => t.classList.toggle("active", k === i));
-        
         const infoKey = lang === "ar" ? `info_ar${i+1}` : `info_en${i+1}`;
-        const infoText = (artwork[infoKey] || "").trim();
-        
-        photoCredit.textContent = infoText;
-
-        if(infoText !== "") {
-            photoCredit.style.opacity = ""; // مسح أي أمر إخفاء يدوي للسماح للـ CSS بالعمل
-            if(isMobile) triggerInfoMobile();
-        } else {
-            photoCredit.style.opacity = "0"; // إخفاء يدوي لو مفيش نص
-        }
+        const info = (artwork[infoKey] || "").trim();
+        photoCredit.textContent = info;
+        if(info) { photoCredit.style.opacity = ""; if(isMobile) triggerInfoMobile(); } 
+        else { photoCredit.style.opacity = "0"; }
+        resetModal();
     }
 
     function triggerInfoMobile() {
         if(!isMobile) return;
         clearTimeout(infoTimer);
         mainViewer.classList.add('info-active');
-        infoTimer = setTimeout(() => { mainViewer.classList.remove('info-active'); }, 3000);
+        infoTimer = setTimeout(() => mainViewer.classList.remove('info-active'), 3500);
     }
 
-    mainViewer.addEventListener('touchstart', triggerInfoMobile, {passive: true});
-
-    let touchStartX = 0;
-    mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) touchStartX = e.touches[0].clientX; }, {passive: true});
+    let startX = 0;
+    mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) startX = e.touches[0].clientX; triggerInfoMobile(); }, {passive: true});
     mainViewer.addEventListener('touchend', e => {
         if (e.changedTouches.length === 1) {
-            let diff = touchStartX - e.changedTouches[0].clientX;
+            let diff = startX - e.changedTouches[0].clientX;
             if(Math.abs(diff) > 70) diff > 0 ? show((currentIdx+1)%images.length) : show((currentIdx-1+images.length)%images.length);
         }
     }, {passive: true});
 
-    mainViewer.addEventListener('click', openFullscreen);
-    document.getElementById("modalClose").onclick = () => history.back();
-
-    function openFullscreen() {
+    mainViewer.onclick = () => {
         modalImage.src = images[currentIdx];
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
+        modal.style.display = 'block'; document.body.style.overflow = 'hidden';
         history.pushState({modal: true}, "");
         if(!isMobile) initDesktopZoom();
-    }
-
-    window.onpopstate = () => closeFullscreen();
+    };
+    document.getElementById("modalClose").onclick = () => history.back();
+    window.onpopstate = () => { modal.style.display = 'none'; document.body.style.overflow = ''; resetModal(); };
     window.addEventListener('keydown', e => { if (e.key === "Escape" && modal.style.display === 'block') history.back(); });
-
-    function closeFullscreen() {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-        resetModal();
-    }
 
     let dz = false;
     function initDesktopZoom() {
-        dz = false; modalImage.onclick = e => {
-            dz = !dz; modal.classList.toggle('desktop-zoomed', dz);
-            if(dz) moveZoom(e); else resetModal();
-        };
+        dz = false; modalImage.onclick = e => { dz = !dz; modal.classList.toggle('desktop-zoomed', dz); if(dz) moveZoom(e); else resetModal(); };
         modalImage.onmousemove = moveZoom;
     }
     function moveZoom(e) {
@@ -216,7 +229,6 @@
         const siteTitle = lang === "ar" ? "نديم في متحف الفن الإسلامي" : "NADIM in Museum of Islamic Arts";
         document.title = siteTitle;
         document.getElementById("headerTitle").textContent = siteTitle;
-
         document.getElementById("inv").textContent = artwork.inventory_number || "";
         document.getElementById("title").textContent = lang === "ar" ? artwork.title_ar : artwork.title_en;
         document.getElementById("from").textContent = lang === "ar" ? artwork.from_ar : artwork.from_en;
@@ -231,6 +243,7 @@
     function toggleLang() { lang = lang === "ar" ? "en" : "ar"; render(); }
     function toggleTheme() { const isLight = document.body.classList.toggle("light"); document.getElementById("themeBtn").textContent = isLight ? "🌙" : "☀️"; }
     function share() { navigator.share ? navigator.share({url: location.href}) : alert("Link Copied"); }
+    
     window.addEventListener("scroll", () => {
         const header = document.getElementById("museumHeader");
         if(window.scrollY > 40) header.classList.add("header-small");
