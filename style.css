@@ -1,21 +1,81 @@
-.logoHeader{
-text-align:center;
-padding:40px 20px;
-background:#071f21;
-border-bottom:1px solid rgba(255,255,255,0.1);
+/* NADIM x MIA - Official Global Stylesheet v3.1 
+   Brand Identity Colors: #06444C, #4A121C, #E1A93E, #EAE8D8, #ADCAC9
+*/
+
+:root {
+    --main: #06444C;       /* الأخضر الداكن - الأساسي */
+    --dark-red: #4A121C;   /* الأحمر الداكن - للفخامة والتباين */
+    --gold: #E1A93E;       /* الذهبي - للعناوين والتمييز */
+    --light: #EAE8D8;      /* الكريمي - للخلفيات والنصوص */
+    --accent: #ADCAC9;     /* الأخضر الفاتح - للمسات الحديثة */
+    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.logoHeader img{
-max-width:160px;
-width:100%;
-height:auto;
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+    margin: 0;
+    font-family: 'Tajawal', sans-serif;
+    background-color: var(--main);
+    color: var(--light);
+    line-height: 1.6;
+    transition: var(--transition);
+    -webkit-font-smoothing: antialiased;
 }
 
-/* خلفية الموقع الرئيسية */
+/* نظام الثيم الفاتح المتوافق مع الهوية */
+body.light {
+    background-color: var(--light) !important;
+    color: var(--main) !important;
+}
 
-body{
-margin:0;
-font-family:Arial;
-background:#f4f7f8;
-color:#0f2c2e;
+/* الهيدر المشترك */
+.logoHeader {
+    background: var(--light) !important;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    position: sticky; top: 0; z-index: 1000;
+    border-bottom: 2px solid var(--accent); /* لمسة بالأخضر الفاتح */
+}
+
+.logoHeader img {
+    height: 45px;
+    width: auto;
+    object-fit: contain;
+}
+
+.header-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--main) !important;
+    text-align: center;
+    line-height: 1.3;
+}
+
+/* الأزرار والبادجات */
+.id-badge {
+    background: var(--gold);
+    color: var(--main);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 800;
+}
+
+/* تفاعل البحث مع الأخضر الفاتح */
+input:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 10px rgba(173, 202, 201, 0.4) !important;
+}
+
+/* الألوان الثانوية للمنشورات أو التنبيهات */
+.bg-dark-red { background-color: var(--dark-red); color: var(--light); }
+.text-accent { color: var(--accent); }
+
+@media (max-width: 600px) {
+    .logoHeader img { height: 35px; }
+    .header-title { font-size: 12px; }
 }
