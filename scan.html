@@ -5,270 +5,188 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Museum of Islamic Arts - متحف الفن الإسلامي ونديم</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
-
     <style>
-        :root {
-            --main: #06444C;   /* الكحلي */
-            --light: #EAE8D8;  /* الكريمي */
-            --gold: #E1A93E;   /* الذهبي */
-        }
-
-        body {
-            margin: 0; font-family: 'Tajawal', sans-serif;
-            background: var(--main); color: var(--light);
-            transition: background 0.4s ease, color 0.4s ease;
-            overflow-x: hidden;
-        }
-
+        :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; }
+        body { margin: 0; font-family: 'Tajawal', sans-serif; background: var(--main); color: var(--light); transition: 0.4s; overflow-x: hidden; }
         .light { background: var(--light); color: var(--main); }
-
-        /* HEADER */
-        #museumHeader {
-            position: sticky; top: 0;
-            background: var(--light) !important; 
-            color: var(--main) !important;
-            padding: 15px 20px;
-            display: flex; flex-direction: column; align-items: center;
-            z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-        }
-
+        
+        #museumHeader { position: sticky; top: 0; background: var(--light) !important; color: var(--main) !important; padding: 15px 20px; display: flex; flex-direction: column; align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 25px; }
-        .logo { height: 50px; cursor: pointer; transition: 0.3s; }
+        .logo { height: 50px; cursor: pointer; }
         .header-title { font-size: 18px; color: var(--main) !important; text-align: center; font-weight: 700; }
 
-        /* CONTAINER */
-        .container {
-            max-width: 1400px; margin: auto; padding: 20px;
-            display: flex; flex-direction: column;
-        }
-
-        /* MAIN VIEWER (Zoom & Swap) */
-        .viewer {
-            width: 100%; height: 55vh; position: relative;
-            display: flex; align-items: center; justify-content: center;
+        .container { max-width: 1400px; margin: auto; padding: 20px; display: flex; flex-direction: column; }
+        
+        /* SMART VIEWER */
+        .viewer { 
+            width: 100%; height: 55vh; position: relative; 
+            display: flex; align-items: center; justify-content: center; 
             margin-bottom: 15px; overflow: hidden; 
-            background: rgba(0,0,0,0.1); border-radius: 12px;
-            touch-action: pan-y;
+            background: rgba(0,0,0,0.15); border-radius: 12px; 
+            touch-action: none; /* تعطيل السكرول العادي عشان الزووم الذكي */
+            cursor: none; 
+            border: 1px solid rgba(225, 169, 62, 0.1);
         }
-
-        .viewer img {
-            max-width: 100%; max-height: 100%;
-            object-fit: contain; transition: transform 0.3s ease-out;
-            cursor: zoom-in; user-select: none; -webkit-user-drag: none;
-        }
-
-        .viewer.zoomed img { cursor: zoom-out; max-width: none; max-height: none; }
-
-        /* PHOTO INFO OVERLAY (BBC Style) */
-        .photo-credit {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            color: white; padding: 25px 15px 10px; font-size: 14px;
-            opacity: 0; transition: opacity 0.3s ease;
+        
+        .viewer img { 
+            max-width: 100%; max-height: 100%; 
+            object-fit: contain; 
+            /* سر الحركة الانسيابية */
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
+            will-change: transform, transform-origin;
             pointer-events: none;
         }
 
+        /* فئة التكبير الذكي */
+        .viewer.zoomed img { 
+            transform: scale(3) !important; 
+        }
+
+        .photo-credit { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 25px 15px 10px; font-size: 14px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 10; }
         .lang-ar .photo-credit { text-align: right; direction: rtl; }
         .lang-en .photo-credit { text-align: left; direction: ltr; }
         .viewer:hover .photo-credit, .viewer.touch-active .photo-credit { opacity: 1; }
-
-        /* THUMBS */
+        
         .thumbs { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; margin-bottom: 20px; }
-        .thumbs img {
-            width: 75px; height: 75px; object-fit: cover;
-            border-radius: 8px; cursor: pointer; opacity: .5;
-            transition: 0.3s; flex-shrink: 0; display: none;
-        }
+        .thumbs img { width: 75px; height: 75px; object-fit: cover; border-radius: 8px; cursor: pointer; opacity: .5; transition: 0.3s; flex-shrink: 0; display: none; }
         .thumbs img.active { border: 3px solid var(--gold); opacity: 1; transform: scale(1.05); }
-
-        /* TEXT STYLING */
+        
         .info h1 { font-size: 30px; color: var(--gold); margin: 0 0 10px 0; }
         .meta { font-size: 18px; margin: 6px 0; opacity: 0.9; }
         .details { margin-top: 30px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.8; }
-
         .lang-ar .info, .lang-ar .details { text-align: right; direction: rtl; }
         .lang-en .info, .lang-en .details { text-align: left; direction: ltr; }
 
-        /* DESKTOP LAYOUT */
         @media(min-width:1100px) {
-            .container {
-                display: grid; direction: ltr !important;
-                grid-template-columns: 100px 1fr 450px;
-                grid-template-areas: "thumb viewer info" ". details details"; 
-                gap: 40px; align-items: start;
-            }
+            .container { display: grid; direction: ltr !important; grid-template-columns: 100px 1fr 450px; grid-template-areas: "thumb viewer info" ". details details"; gap: 40px; align-items: start; }
             .viewer { grid-area: viewer; height: 75vh; }
             .thumbs { grid-area: thumb; flex-direction: column; margin-top: 150px; overflow: visible; }
             .thumbs img { width: 85px; height: 85px; }
             .info { grid-area: info; margin-top: 150px; }
-            .details { grid-area: details; }
         }
-
-        /* CONTROLS */
-        .controls {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            background: rgba(10, 30, 35, 0.85); backdrop-filter: blur(10px);
-            padding: 10px 25px; border-radius: 40px; display: flex; gap: 25px;
-            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        }
+        
+        .controls { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(10, 30, 35, 0.85); backdrop-filter: blur(10px); padding: 10px 25px; border-radius: 40px; display: flex; gap: 25px; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .controls div { font-size: 24px; cursor: pointer; transition: 0.2s; }
         footer { text-align: center; margin: 50px 0 100px 0; font-size: 14px; opacity: 0.5; }
     </style>
 </head>
-
 <body class="lang-ar">
-
 <header id="museumHeader">
     <div class="logo-row">
-        <a href="https://nd-f.github.io/QR/">
-            <img src="images/logo-nadim.png" class="logo">
-        </a>
+        <a href="https://nd-f.github.io/QR/"><img src="images/logo-nadim.png" class="logo"></a>
         <div class="header-title" id="headerTitle"></div>
         <img src="images/MIALOGO.png" class="logo">
     </div>
 </header>
-
 <div class="container">
-    <div class="viewer" id="mainViewer">
-        <img id="mainImage" src="">
-        <div class="photo-credit" id="photoCredit"></div>
-    </div>
-
+    <div class="viewer" id="mainViewer"><img id="mainImage"><div class="photo-credit" id="photoCredit"></div></div>
     <div class="thumbs" id="thumbs"></div>
-
     <div class="info">
-        <div class="meta" id="inv"></div>
-        <h1 id="title"></h1>
-        <div class="meta" id="from"></div>
-        <div class="meta" id="date"></div>
-        <div class="meta" id="dim"></div>
+        <div class="meta" id="inv"></div><h1 id="title"></h1>
+        <div class="meta" id="from"></div><div class="meta" id="date"></div><div class="meta" id="dim"></div>
     </div>
-
     <div class="details">
         <div class="meta" id="hall"></div>
-        <div class="meta" id="material"></div>
+        <div class="meta" id="material" style="font-weight: bold; color: var(--gold);"></div>
         <div id="desc"></div>
     </div>
 </div>
-
 <div class="controls">
-    <div onclick="toggleLang()" title="اللغة">🌐</div>
-    <div onclick="toggleTheme()" id="themeBtn" title="الثيم">☀️</div>
-    <div onclick="share()" title="مشاركة">🔗</div>
+    <div onclick="toggleLang()">🌐</div><div onclick="toggleTheme()" id="themeBtn">☀️</div><div onclick="share()">🔗</div>
 </div>
-
-<footer> Nadim Foundation - مؤسسة نديم © ® </footer>
+<footer> Nadim Foundation © ® </footer>
 
 <script>
     let lang = navigator.language.startsWith("ar") ? "ar" : "en";
-    let images = [];
-    let currentIdx = 0;
-    let artwork;
-
-    const mainViewer = document.getElementById("mainViewer");
-    const mainImage = document.getElementById("mainImage");
-    const photoCredit = document.getElementById("photoCredit");
+    let images = [], currentIdx = 0, artwork, isZoomed = false;
+    const mainViewer = document.getElementById("mainViewer"), mainImage = document.getElementById("mainImage"), photoCredit = document.getElementById("photoCredit");
 
     async function load() {
-        try {
-            const res = await fetch("data/artworks.json?t=" + new Date().getTime());
-            const data = await res.json();
-            
-            // تعديل: قراءة الـ ID سواء كان من ?id= أو من الرابط المباشر /0001
-            const params = new URLSearchParams(location.search);
-            let id = params.get("id");
-            
-            if(!id) {
-                const pathParts = window.location.pathname.split('/');
-                const lastPart = pathParts.pop() || pathParts.pop();
-                if(lastPart !== 'scan.html') id = "MIA-" + lastPart; // يحول 0001 إلى MIA-0001
-            }
-
-            artwork = data.find(a => a.id === id);
-
-            if(!artwork) {
-                document.body.innerHTML = "<h2 style='text-align:center; margin-top:100px;'>التحفة غير موجودة</h2>";
-                return;
-            }
-            prepareImages();
-            render();
-        } catch (e) { console.error(e); }
+        const res = await fetch("data/artworks.json?t=" + new Date().getTime());
+        const data = await res.json();
+        const id = new URLSearchParams(location.search).get("id");
+        artwork = data.find(a => a.id === id);
+        if(!artwork) { document.body.innerHTML = "<h2 style='text-align:center;margin-top:100px'>Artwork Not Found</h2>"; return; }
+        prepareImages(); render();
     }
 
     function prepareImages() {
-        images = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5]
-                 .filter(img => img && img.trim() !== "");
-
+        images = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].filter(img => img && img.trim() !== "");
         const thumbs = document.getElementById("thumbs");
         thumbs.innerHTML = "";
         images.forEach((src, i) => {
             const img = document.createElement("img");
-            img.src = src;
-            img.onload = () => img.style.display = 'block';
-            img.onerror = () => img.remove();
-            img.onclick = () => show(i);
-            thumbs.appendChild(img);
+            img.src = src; img.onload = () => img.style.display = 'block'; img.onerror = () => img.remove();
+            img.onclick = () => show(i); thumbs.appendChild(img);
         });
     }
 
     function show(i) {
-        if(images.length === 0) return;
-        currentIdx = i;
-        mainImage.src = images[i];
-        resetZoom();
-        
+        currentIdx = i; mainImage.src = images[i];
         document.querySelectorAll(".thumbs img").forEach((t, k) => t.classList.toggle("active", k === i));
-
-        // تحديث معلومة الصورة (Info 1-5)
-        const infoKey = lang === "ar" ? `info_ar${i+1}` : `info_en${i+1}`;
-        const infoText = artwork[infoKey] || "";
-        photoCredit.textContent = infoText;
-        photoCredit.style.display = infoText.trim() === "" ? "none" : "block";
+        const info = artwork[lang === "ar" ? `info_ar${i+1}` : `info_en${i+1}`] || "";
+        photoCredit.textContent = info; photoCredit.style.display = info ? "block" : "none";
+        resetZoom();
     }
 
-    // --- SMART SWAP (Swipe) ---
-    let touchStartX = 0;
-    mainViewer.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive: true});
-    mainViewer.addEventListener('touchend', e => {
-        let diff = touchStartX - e.changedTouches[0].screenX;
-        if (Math.abs(diff) > 50) diff > 0 ? show((currentIdx + 1) % images.length) : show((currentIdx - 1 + images.length) % images.length);
-    }, {passive: true});
+    // --- SMART LOGIC: ZOOM & SWIPE ---
 
-    // --- SMART ZOOM ---
-    let isZoomed = false;
+    function handleMove(clientX, clientY) {
+        if (!isZoomed) return;
+        const rect = mainViewer.getBoundingClientRect();
+        const x = ((clientX - rect.left) / rect.width) * 100;
+        const y = ((clientY - rect.top) / rect.height) * 100;
+        // تحريك بؤرة الصورة بنعومة
+        mainImage.style.transformOrigin = `${x}% ${y}%`;
+    }
+
     mainViewer.addEventListener('click', () => {
         isZoomed = !isZoomed;
         mainViewer.classList.toggle('zoomed', isZoomed);
         if(!isZoomed) resetZoom();
     });
-    mainViewer.addEventListener('mousemove', (e) => {
-        if (window.innerWidth >= 1100 && isZoomed) {
-            const rect = mainViewer.getBoundingClientRect();
-            const x = ((e.clientX - rect.left) / rect.width) * 100;
-            const y = ((e.clientY - rect.top) / rect.height) * 100;
-            mainImage.style.transformOrigin = `${x}% ${y}%`;
-            mainImage.style.transform = "scale(2.5)";
+
+    mainViewer.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+
+    // اللمس الذكي: يدعم السحب والزووم
+    let touchStartX = 0;
+    mainViewer.addEventListener('touchstart', e => {
+        touchStartX = e.touches[0].clientX;
+        mainViewer.classList.add('touch-active');
+    }, {passive: false});
+
+    mainViewer.addEventListener('touchmove', e => {
+        if (isZoomed) {
+            e.preventDefault(); // منع سكرول الصفحة أثناء الزووم
+            handleMove(e.touches[0].clientX, e.touches[0].clientY);
         }
+    }, {passive: false});
+
+    mainViewer.addEventListener('touchend', e => {
+        if (!isZoomed) {
+            let diff = touchStartX - e.changedTouches[0].clientX;
+            if(Math.abs(diff) > 50) diff > 0 ? show((currentIdx+1)%images.length) : show((currentIdx-1+images.length)%images.length);
+        }
+        setTimeout(() => mainViewer.classList.remove('touch-active'), 2000);
     });
-    function resetZoom() { isZoomed = false; mainImage.style.transform = "scale(1)"; mainViewer.classList.remove('zoomed'); }
+
+    function resetZoom() {
+        isZoomed = false;
+        mainViewer.classList.remove('zoomed');
+        mainImage.style.transform = "scale(1)";
+        mainImage.style.transformOrigin = "center center";
+    }
 
     function render() {
-        document.body.classList.remove('lang-ar', 'lang-en');
-        document.body.classList.add(lang === 'ar' ? 'lang-ar' : 'lang-en');
+        document.body.className = lang === "ar" ? "lang-ar" : "lang-en";
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-
-        document.getElementById("inv").textContent = artwork.inventory_number || "";
+        document.getElementById("inv").textContent = artwork.inventory_number;
         document.getElementById("title").textContent = lang === "ar" ? artwork.title_ar : artwork.title_en;
         document.getElementById("from").textContent = lang === "ar" ? artwork.from_ar : artwork.from_en;
         document.getElementById("date").textContent = lang === "ar" ? artwork.date_ar : artwork.date_en;
         document.getElementById("dim").textContent = lang === "ar" ? artwork.dimensions_ar : artwork.dimensions_en;
         document.getElementById("hall").textContent = lang === "ar" ? artwork.hall_ar : artwork.hall_en;
-        
-        // عرض الخامة (Material)
-        const matLabel = lang === "ar" ? "الخامة: " : "Material: ";
-        const matVal = lang === "ar" ? artwork.material_ar : artwork.material_en;
-        document.getElementById("material").textContent = matVal ? matLabel + matVal : "";
-
+        document.getElementById("material").textContent = (lang === "ar" ? "الخامة: " : "Material: ") + (artwork[lang === "ar" ? "material_ar" : "material_en"] || "");
         document.getElementById("desc").textContent = lang === "ar" ? artwork.desc_ar : artwork.desc_en;
         document.getElementById("headerTitle").textContent = lang === "ar" ? "معرض من حياة التحفة" : "From the Life of an Artefact Exhibition";
         show(currentIdx);
@@ -276,10 +194,7 @@
 
     function toggleLang() { lang = lang === "ar" ? "en" : "ar"; render(); }
     function toggleTheme() { const isLight = document.body.classList.toggle("light"); document.getElementById("themeBtn").textContent = isLight ? "🌙" : "☀️"; }
-    function share() {
-        if (navigator.share) navigator.share({ url: location.href });
-        else alert(lang === "ar" ? "تم نسخ الرابط!" : "Link copied!");
-    }
+    function share() { navigator.share ? navigator.share({url: location.href}) : alert("Link Copied"); }
     load();
 </script>
 </body>
