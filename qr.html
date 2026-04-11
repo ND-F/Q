@@ -2,106 +2,49 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>QR Generator - NADIM Museum Project - Premium Edition</title>
+    <title>QR Generator - Official MIA Identity</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/qr-code-styling/lib/qr-code-styling.js"></script>
 
     <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: #f0f0f0; /* خلفية الصفحة العامة للمعاينة */
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* تنسيق صفحة الطباعة A4 */
+        body { font-family: 'Tajawal', sans-serif; background: #f0f0f0; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        
         .page {
-            width: 210mm;
-            height: 297mm;
-            background: #E8E3D5; /* لون الخلفية الكريمي الدقيق من الصورة */
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 10mm;
-            padding: 15mm;
-            box-sizing: border-box;
-            page-break-after: always;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            width: 210mm; height: 297mm;
+            background: #EAE8D8; /* الكريمي الرسمي */
+            display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr);
+            gap: 10mm; padding: 15mm; box-sizing: border-box;
+            page-break-after: always; box-shadow: 0 0 20px rgba(0,0,0,0.1); margin-bottom: 20px;
         }
 
-        .sticker {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            /* تم إزالة الإطار المتقطع ليكون التصميم نظيفاً تماماً مثل الصورة */
-        }
+        .sticker { position: relative; display: flex; align-items: center; justify-content: center; }
+        .qrWrap { width: 80mm; height: 80mm; display: flex; align-items: center; justify-content: center; }
 
-        .qrWrap {
-            width: 80mm;
-            height: 80mm;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* علامات القص (Crop Marks) بالكحلي الغامق */
-        .crop {
-            position: absolute;
-            width: 8mm;
-            height: 8mm;
-            border-color: #04434B; /* الكحلي الدقيق من الصورة */
-        }
+        /* علامات القص بالأخضر الفاتح لإعطاء مظهر راقي */
+        .crop { position: absolute; width: 8mm; height: 8mm; border-color: #ADCAC9; }
         .tl { top: 0; left: 0; border-top: 1px solid; border-left: 1px solid; }
         .tr { top: 0; right: 0; border-top: 1px solid; border-right: 1px solid; }
         .bl { bottom: 0; left: 0; border-bottom: 1px solid; border-left: 1px solid; }
         .br { bottom: 0; right: 0; border-bottom: 1px solid; border-right: 1px solid; }
 
-        .info-tag {
-            position: absolute;
-            bottom: 5mm;
-            font-size: 10px;
-            color: #04434B; /* الكحلي الدقيق من الصورة */
-            font-weight: bold;
-        }
+        .info-tag { position: absolute; bottom: 5mm; font-size: 11px; color: #06444C; font-weight: bold; letter-spacing: 1px; }
 
         @media print {
             body { background: white; }
-            .page { box-shadow: none; margin: 0; background: #E8E3D5 !important; -webkit-print-color-adjust: exact; }
+            .page { box-shadow: none; margin: 0; background: #EAE8D8 !important; -webkit-print-color-adjust: exact; }
             #controls { display: none; }
         }
 
-        #controls {
-            padding: 20px;
-            background: #04434B; /* الكحلي الدقيق من الصورة */
-            width: 100%;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        button {
-            padding: 10px 25px;
-            font-family: 'Tajawal';
-            font-weight: bold;
-            background: #4E0C1B; /* العنابي الدقيق من الصورة */
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            color: #E8E3D5; /* الكريمي الدقيق من الصورة */
-        }
+        #controls { padding: 25px; background: #06444C; width: 100%; text-align: center; position: sticky; top: 0; z-index: 100; border-bottom: 3px solid #E1A93E; }
+        button { padding: 12px 30px; font-family: 'Tajawal'; font-weight: bold; background: #E1A93E; border: none; border-radius: 30px; cursor: pointer; color: #06444C; font-size: 16px; transition: 0.3s; }
+        button:hover { background: #ADCAC9; transform: scale(1.05); }
     </style>
 </head>
 
 <body>
 
 <div id="controls">
-    <button onclick="window.print()">اضغط لطباعة الأكواد بجودة HQ (Print to PDF)</button>
+    <button onclick="window.print()">طباعة الاستيكرات الرسمية (HQ PDF)</button>
 </div>
 
 <div id="container"></div>
@@ -112,7 +55,6 @@
     const stickersPerPage = 6; 
 
     const container = document.getElementById("container");
-
     const totalPages = Math.ceil(totalStickers / stickersPerPage);
 
     for (let p = 0; p < totalPages; p++) {
@@ -124,40 +66,34 @@
             if (currentNum > totalStickers) break;
 
             let idFormatted = String(currentNum).padStart(4, '0');
-            
             let sticker = document.createElement("div");
             sticker.className = "sticker";
             sticker.innerHTML = `
-                <div class="crop tl"></div>
-                <div class="crop tr"></div>
-                <div class="crop bl"></div>
-                <div class="crop br"></div>
-                <div class="qrWrap">
-                    <div id="qr${currentNum}"></div>
-                </div>
-                <div class="info-tag">MIA-${idFormatted}</div>
+                <div class="crop tl"></div><div class="crop tr"></div>
+                <div class="crop bl"></div><div class="crop br"></div>
+                <div class="qrWrap"><div id="qr${currentNum}"></div></div>
+                <div class="info-tag">ITEM NO: MIA-${idFormatted}</div>
             `;
             page.appendChild(sticker);
         }
         container.appendChild(page);
     }
 
-    /* توليد الأكواد بمطابقة تامة للصورة (جودة HQ) */
+    /* توليد الكود بمطابقة كيميائية للألوان المختارة */
     for (let num = 1; num <= totalStickers; num++) {
         let idFormatted = String(num).padStart(4, '0');
         
         const qrCode = new QRCodeStyling({
-            width: 280,
-            height: 280,
-            type: "svg", /* جودة SVG لا تتبكسل أبداً عند الطباعة */
+            width: 280, height: 280,
+            type: "svg",
             data: baseUrl + idFormatted,
-            image: "images/logo-nadim.png",
+            image: "images/logo-nadim.png", 
             dotsOptions: {
-                color: "#04434B", /* الكحلي الدقيق من الصورة */
-                type: "square" /* مربعات كلاسيكية حادة لتطابق الصورة */
+                color: "#06444C", /* الأخضر الداكن */
+                type: "square" 
             },
             backgroundOptions: {
-                color: "#E8E3D5", /* الخلفية الكريمية الدقيقة من الصورة */
+                color: "#EAE8D8", /* الكريمي الرسمي */
             },
             imageOptions: {
                 crossOrigin: "anonymous",
@@ -165,12 +101,12 @@
                 imageSize: 0.4
             },
             cornersSquareOptions: {
-                type: "extra-rounded", /* الحواف الخارجية دائرية لتطابق الصورة */
-                color: "#04434B" /* الكحلي الدقيق من الصورة */
+                type: "extra-rounded",
+                color: "#06444C" /* الأخضر الداكن */
             },
             cornersDotOptions: {
-                type: "square", /* المربعات الداخلية حادة لتطابق الصورة */
-                color: "#4E0C1B" /* العنابي الدقيق من الصورة */
+                type: "square", 
+                color: "#4A121C" /* الأحمر الداكن للمربعات الداخلية - قمة الفخامة */
             }
         });
 
