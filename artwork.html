@@ -1,41 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Museum Artwork</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <script>
+        // التقاط الـ ID وتحويل المستخدم فوراً لأحدث نسخة من الكود
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        if (id) {
+            window.location.replace("scan.html?id=" + id);
+        } else {
+            window.location.replace("index.html");
+        }
+    </script>
 </head>
-
-<body>
-
-<div class="container">
-
-<div class="image">
-<img id="img">
-</div>
-
-<div class="info">
-
-<h1 id="title"></h1>
-
-<p>ID: <span id="id"></span></p>
-<p>Date: <span id="date"></span></p>
-<p>Material: <span id="material"></span></p>
-<p>Height: <span id="height"></span></p>
-<p>Width: <span id="width"></span></p>
-
-<p id="desc"></p>
-
-<div class="nav">
-<button onclick="prev()">◀ Prev</button>
-<button onclick="next()">Next ▶</button>
-</div>
-
-</div>
-
-</div>
-
-<script src="app.js"></script>
-
+<body style="background:#06444C; color:#EAE8D8; font-family:sans-serif; text-align:center; padding-top:20%;">
+    <p>جاري الانتقال لأحدث نسخة من العارض... جاري التحميل</p>
 </body>
 </html>
