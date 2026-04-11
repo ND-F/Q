@@ -2,39 +2,87 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes"> <title>NADIM in Museum of Islamic Arts - نديم في متحف الفن الإسلامي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>NADIM in Museum of Islamic Arts - نديم في متحف الفن الإسلامي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; }
-        body { margin: 0; font-family: 'Tajawal', sans-serif; background: var(--main); color: var(--light); transition: 0.4s; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-        .light { background: var(--light); color: var(--main); }
-        #museumHeader { position: sticky; top: 0; background: var(--light) !important; color: var(--main) !important; padding: 15px 20px; display: flex; flex-direction: column; align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
-        .logo-row { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; }
-        .logo { height: 45px; -webkit-user-drag: none; }
-        .header-title { font-size: 16px; font-weight: 700; text-align: center; color: var(--main) !important; line-height: 1.3; }
-        .container { max-width: 1400px; margin: auto; padding: 20px; display: flex; flex-direction: column; }
         
-        .viewer { width: 100%; height: 50vh; position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; overflow: hidden; background: rgba(0,0,0,0.1); border-radius: 12px; border: 1px solid rgba(225, 169, 62, 0.1); cursor: pointer; touch-action: pan-y; }
+        /* الأساسيات وتوافق المتصفحات */
+        body { 
+            margin: 0; font-family: 'Tajawal', sans-serif; 
+            background: var(--main); color: var(--light); 
+            transition: background 0.4s ease; overflow-x: hidden;
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+        }
+        .light { background: var(--light); color: var(--main); }
+
+        /* HEADER */
+        #museumHeader { 
+            position: -webkit-sticky; position: sticky; top: 0; 
+            background: var(--light) !important; color: var(--main) !important; 
+            padding: 15px 20px; display: flex; flex-direction: column; 
+            align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
+        }
+        .logo-row { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; }
+        .logo { height: 45px; -webkit-user-drag: none; cursor: pointer; }
+        .header-title { font-size: 16px; font-weight: 700; text-align: center; color: var(--main) !important; line-height: 1.3; }
+
+        /* CONTAINER LAYOUT */
+        .container { max-width: 1400px; margin: auto; padding: 20px; display: flex; flex-direction: column; }
+
+        /* VIEWER AREA */
+        .viewer { 
+            width: 100%; height: 50vh; position: relative; 
+            display: flex; align-items: center; justify-content: center; 
+            margin-bottom: 15px; overflow: hidden; 
+            background: rgba(0,0,0,0.1); border-radius: 12px; 
+            cursor: pointer; touch-action: pan-y;
+        }
         .viewer img { max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; }
 
-        .photo-credit { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: white; padding: 35px 15px 15px; font-size: 13px; z-index: 10; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+        /* PHOTO INFO OVERLAY */
+        .photo-credit { 
+            position: absolute; bottom: 0; left: 0; right: 0; 
+            background: linear-gradient(transparent, rgba(0,0,0,0.85)); 
+            color: white; padding: 35px 15px 15px; font-size: 13px; 
+            z-index: 10; opacity: 0; transition: opacity 0.4s ease; 
+            pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
         .viewer:hover .photo-credit, .viewer.info-active .photo-credit { opacity: 1 !important; }
-        .lang-ar .photo-credit { text-align: right; direction: rtl; }
-        .lang-en .photo-credit { text-align: left; direction: ltr; }
-        
-        .thumbs { display: flex; gap: 10px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; }
+
+        /* THUMBS - إخفاء شريط التمرير */
+        .thumbs { 
+            display: flex; gap: 10px; overflow-x: auto; 
+            padding: 10px 5px; margin-bottom: 20px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
         .thumbs::-webkit-scrollbar { display: none; }
-        .thumbs img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; cursor: pointer; opacity: .5; transition: 0.3s; flex-shrink: 0; display: none; }
+        .thumbs img { 
+            width: 70px; height: 70px; object-fit: cover; 
+            border-radius: 8px; cursor: pointer; opacity: .4; 
+            transition: 0.3s; flex-shrink: 0; display: none; 
+        }
         .thumbs img.active { border: 3px solid var(--gold); opacity: 1; transform: scale(1.05); }
 
+        /* TEXTS & DIRECTIONS */
         .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; line-height: 1.2; }
         .meta { font-size: 17px; margin: 5px 0; opacity: 0.9; }
         .details { margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.7; }
+
         .lang-ar { direction: rtl; text-align: right; }
         .lang-en { direction: ltr; text-align: left; }
+        .lang-ar .photo-credit { text-align: right; direction: rtl; }
+        .lang-en .photo-credit { text-align: left; direction: ltr; }
 
+        /* DESKTOP LAYOUT (1100px+) */
         @media(min-width:1100px) {
-            .container { display: grid; grid-template-columns: 100px 1fr 400px; grid-template-areas: "thumb viewer info" "thumb details details"; gap: 40px; align-items: start; direction: ltr; }
+            .container { 
+                display: grid; grid-template-columns: 100px 1fr 400px; 
+                grid-template-areas: "thumb viewer info" "thumb details details";
+                gap: 40px; align-items: start; direction: ltr; 
+            }
             .viewer { grid-area: viewer; height: 70vh; }
             .thumbs { grid-area: thumb; flex-direction: column; margin-top: 120px; position: sticky; top: 150px; }
             .thumbs img { width: 85px; height: 85px; }
@@ -44,60 +92,60 @@
             body.lang-en .info, body.lang-en .details { direction: ltr; text-align: left; }
         }
 
-        /* FULLSCREEN MODAL - المودال الذكي للزووم الطبيعي */
+        /* FULLSCREEN MODAL */
         #fullscreenModal { 
-            display: none; position: fixed; top: 0; left: 0; 
-            width: 100vw; height: 100vh; background: rgba(0,0,0,0.98); 
-            z-index: 9999; 
-            overflow: auto; /* السماح بالسكرول الطبيعي عند الزووم في الموبايل */
-            -webkit-overflow-scrolling: touch; 
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: rgba(0,0,0,0.98); z-index: 9999; 
+            overflow: auto; -webkit-overflow-scrolling: touch; 
         }
-        
-        #modalContent {
-            display: flex; min-height: 100%; align-items: center; justify-content: center;
-            width: 100%;
-        }
-
-        #modalImage { 
-            max-width: 100%; max-height: 100%; object-fit: contain; 
-            transition: transform 0.1s ease-out; 
-            will-change: transform;
-        }
-
-        /* تنسيقات خاصة بالديسك توب للزووم بدقة الماوس */
+        #modalContent { display: flex; min-height: 100%; align-items: center; justify-content: center; width: 100%; }
+        #modalImage { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.1s ease-out; will-change: transform; }
         #fullscreenModal.desktop-view { overflow: hidden; }
         #fullscreenModal.desktop-view #modalImage { cursor: zoom-in; }
         #fullscreenModal.desktop-zoomed #modalImage { cursor: grab; transform: scale(2.5); }
-
         #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; text-shadow: 0 0 10px rgba(0,0,0,0.8); }
-        .controls { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(10, 30, 35, 0.85); backdrop-filter: blur(10px); padding: 10px 25px; border-radius: 40px; display: flex; gap: 25px; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-        .controls div { font-size: 24px; cursor: pointer; transition: 0.2s; }
+
+        /* شريط التحكم السفلي الثابت (LTR) */
+        .controls { 
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
+            background: rgba(10, 30, 35, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); 
+            padding: 12px 25px; border-radius: 40px; display: flex; align-items: center; gap: 20px; 
+            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid rgba(225, 169, 62, 0.2);
+            direction: ltr !important; 
+        }
+        .controls div { font-size: 22px; cursor: pointer; transition: 0.2s; color: var(--light); display: flex; align-items: center; }
+        .controls .nav-btn { color: var(--gold); font-size: 26px; }
+        .controls .nav-btn.disabled { opacity: 0.15; cursor: default; pointer-events: none; }
+        .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3); }
+
         footer { text-align: center; margin: 40px 0 100px 0; font-size: 13px; opacity: 0.4; }
     </style>
 </head>
 
 <body class="lang-ar">
-<div id="fullscreenModal">
-    <div id="modalClose">×</div>
-    <div id="modalContent">
-        <img id="modalImage">
-    </div>
-</div>
+
+<div id="fullscreenModal"><div id="modalClose">×</div><div id="modalContent"><img id="modalImage"></div></div>
 
 <header id="museumHeader">
     <div class="logo-row">
-        <a href="https://nd-f.github.io/QR/"><img src="images/logo-nadim.png" class="logo"></a>
+        <a href="https://nd-f.github.io/Q/"><img src="images/logo-nadim.png" class="logo"></a>
         <div class="header-title" id="headerTitle"></div>
         <img src="images/MIALOGO.png" class="logo">
     </div>
 </header>
 
 <div class="container">
-    <div class="viewer" id="mainViewer"><img id="mainImage"><div class="photo-credit" id="photoCredit"></div></div>
+    <div class="viewer" id="mainViewer">
+        <img id="mainImage">
+        <div class="photo-credit" id="photoCredit"></div>
+    </div>
     <div class="thumbs" id="thumbs"></div>
     <div class="info">
-        <div class="meta" id="inv"></div><h1 id="title"></h1>
-        <div class="meta" id="from"></div><div class="meta" id="date"></div><div class="meta" id="dim"></div>
+        <div class="meta" id="inv"></div>
+        <h1 id="title"></h1>
+        <div class="meta" id="from"></div>
+        <div class="meta" id="date"></div>
+        <div class="meta" id="dim"></div>
     </div>
     <div class="details">
         <div class="meta" id="hall"></div>
@@ -107,29 +155,42 @@
 </div>
 
 <div class="controls">
-    <div onclick="toggleLang()">🌐</div><div onclick="toggleTheme()" id="themeBtn">☀️</div><div onclick="share()">🔗</div>
+    <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" title="Previous">◀</div>
+    <div class="sep"></div>
+    <div onclick="toggleLang()" title="Language">🌐</div>
+    <div onclick="toggleTheme()" id="themeBtn" title="Theme">☀️</div>
+    <div onclick="share()" title="Share">🔗</div>
+    <div class="sep"></div>
+    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn" title="Next">▶</div>
 </div>
 
 <footer> Nadim Foundation © ® </footer>
 
 <script>
     let lang = navigator.language.startsWith("ar") ? "ar" : "en";
-    let images = [], validImages = [], currentIdx = 0, artwork;
+    let allArtworks = [], validImages = [], currentIdx = 0, artwork;
     const isMobile = window.innerWidth < 1100;
     let infoTimer;
 
     const mainViewer = document.getElementById("mainViewer"), mainImage = document.getElementById("mainImage"), photoCredit = document.getElementById("photoCredit");
-    const modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage"), modalContent = document.getElementById("modalContent");
+    const modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
 
     async function load() {
         try {
             const res = await fetch("data/artworks.json?t=" + new Date().getTime());
-            const data = await res.json();
+            allArtworks = await res.json();
             const id = new URLSearchParams(location.search).get("id");
-            artwork = data.find(a => a.id === id);
-            if(!artwork) { document.body.innerHTML = "<h2 style='text-align:center;margin-top:100px'>Artwork Not Found</h2>"; return; }
-            prepareImages(); render();
-        } catch(e) { console.error("Load Error"); }
+            initPiece(id || allArtworks[0].id);
+        } catch(e) { console.error("Data Load Failed"); }
+    }
+
+    function initPiece(id) {
+        artwork = allArtworks.find(a => a.id === id);
+        if(!artwork) return;
+        currentIdx = 0;
+        prepareImages();
+        render();
+        updateNavButtons();
     }
 
     function prepareImages() {
@@ -157,8 +218,6 @@
         if(i < 0 || i >= validImages.length) i = 0;
         currentIdx = i;
         const currentSrc = validImages[i];
-        if(!currentSrc) return;
-
         mainImage.src = currentSrc;
         modalImage.src = currentSrc;
         
@@ -168,8 +227,12 @@
         const info = (artwork[lang === "ar" ? `info_ar${originalIndex}` : `info_en${originalIndex}`] || "").trim();
         
         photoCredit.textContent = info;
-        if(info) { photoCredit.style.opacity = "1"; if(isMobile) triggerInfoMobile(); } 
-        else { photoCredit.style.opacity = "0"; }
+        if(info) { 
+            photoCredit.style.opacity = "1"; 
+            if(isMobile) triggerInfoMobile(); 
+        } else { 
+            photoCredit.style.opacity = "0"; 
+        }
         resetModal();
     }
 
@@ -180,80 +243,69 @@
         infoTimer = setTimeout(() => mainViewer.classList.remove('info-active'), 3500);
     }
 
-    // Smart Swipe
+    // التنقل بين القطع
+    function navigatePiece(step) {
+        const currentIndexInList = allArtworks.findIndex(a => a.id === artwork.id);
+        const nextIndex = currentIndexInList + step;
+        if (nextIndex >= 0 && nextIndex < allArtworks.length) {
+            const nextId = allArtworks[nextIndex].id;
+            const newUrl = window.location.pathname + '?id=' + nextId;
+            window.history.pushState({id: nextId}, '', newUrl);
+            initPiece(nextId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    function updateNavButtons() {
+        const index = allArtworks.findIndex(a => a.id === artwork.id);
+        document.getElementById("prevPiece").classList.toggle("disabled", index === 0);
+        document.getElementById("nextPiece").classList.toggle("disabled", index === allArtworks.length - 1);
+    }
+
+    // Smart Swap
     let startX = 0;
     mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) startX = e.touches[0].clientX; triggerInfoMobile(); }, {passive: true});
     mainViewer.addEventListener('touchend', e => {
         if (validImages.length <= 1) return;
         let diff = startX - e.changedTouches[0].clientX;
         if(Math.abs(diff) > 70) {
-            currentIdx = diff > 0 ? (currentIdx + 1) % validImages.length : (currentIdx - 1 + validImages.length) % validImages.length;
-            show(currentIdx);
+            let nextI = diff > 0 ? (currentIdx + 1) % validImages.length : (currentIdx - 1 + validImages.length) % validImages.length;
+            show(nextI);
         }
     }, {passive: true});
 
-    // --- FULLSCREEN OPEN/CLOSE LOGIC (تم تعديلها كلياً للموبايل) ---
-    mainViewer.onclick = openFullscreen;
-    document.getElementById("modalClose").onclick = () => history.back();
-
-    function openFullscreen() {
-        modal.style.display = 'block';
-        
-        if(isMobile) {
-            // في الموبايل: نعتمد على الزووم الطبيعي للمتصفح داخل الـ Modal
-            modal.classList.remove('desktop-view');
-            // قفل سكرول الصفحة خلف المودال
-            document.body.style.overflow = 'hidden'; 
-            document.documentElement.style.overflow = 'hidden';
-        } else {
-            // في الديسكتوب: نستخدم الزووم المخصص بدقة الماوس
-            modal.classList.add('desktop-view');
-            document.body.style.overflow = 'hidden';
-            initDesktopZoom();
-        }
-        
+    // Fullscreen & Zoom
+    mainViewer.onclick = () => {
+        modal.style.display = 'block'; document.body.style.overflow = 'hidden';
         history.pushState({modal: true}, "");
-    }
-
-    window.onpopstate = closeFullscreen;
+        if(!isMobile) initDesktopZoom();
+    };
+    document.getElementById("modalClose").onclick = () => history.back();
+    window.onpopstate = (e) => {
+        if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetModal(); }
+        else if (e.state && e.state.id) initPiece(e.state.id);
+    };
     window.addEventListener('keydown', e => { if (e.key === "Escape" && modal.style.display === 'block') history.back(); });
 
-    function closeFullscreen() {
-        modal.style.display = 'none';
-        // إعادة سكرول الصفحة
-        document.body.style.overflow = '';
-        document.documentElement.style.overflow = '';
-        resetModal();
-    }
-
-    // Desktop Zoom Logic (فقط للديسكتوب)
     let dz = false;
     function initDesktopZoom() {
-        dz = false; modalImage.onclick = e => {
-            dz = !dz; modal.classList.toggle('desktop-zoomed', dz);
-            if(dz) moveZoom(e); else resetModal();
-        };
+        dz = false; modalImage.onclick = e => { dz = !dz; modal.classList.toggle('desktop-zoomed', dz); if(dz) moveZoom(e); else resetModal(); };
         modalImage.onmousemove = moveZoom;
     }
     function moveZoom(e) {
-        if(!dz || isMobile) return; // منع التداخل في الموبايل
+        if(!dz || isMobile) return;
         const rect = modalImage.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 100, y = ((e.clientY - rect.top) / rect.height) * 100;
         modalImage.style.transformOrigin = `${x}% ${y}%`;
     }
-    function resetModal() { 
-        modalImage.style.transform = "scale(1)"; 
-        modalImage.style.transformOrigin = "center center";
-        dz = false; modal.classList.remove('desktop-zoomed'); 
-    }
+    function resetModal() { modalImage.style.transform = "scale(1)"; modalImage.style.transformOrigin = "center center"; dz = false; modal.classList.remove('desktop-zoomed'); }
 
-    // --- RENDERING ---
     function render() {
         document.body.className = lang === "ar" ? "lang-ar" : "lang-en";
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-        const siteTitle = lang === "ar" ? "نديم في متحف الفن الإسلامي" : "NADIM in Museum of Islamic Arts";
-        document.title = siteTitle;
-        document.getElementById("headerTitle").textContent = siteTitle;
+        const titleText = lang === "ar" ? "نديم في متحف الفن الإسلامي" : "NADIM in Museum of Islamic Arts";
+        document.title = titleText;
+        document.getElementById("headerTitle").textContent = titleText;
         document.getElementById("inv").textContent = artwork.inventory_number || "";
         document.getElementById("title").textContent = lang === "ar" ? artwork.title_ar : artwork.title_en;
         document.getElementById("from").textContent = lang === "ar" ? artwork.from_ar : artwork.from_en;
@@ -267,6 +319,7 @@
     function toggleLang() { lang = lang === "ar" ? "en" : "ar"; render(); show(currentIdx); }
     function toggleTheme() { const isLight = document.body.classList.toggle("light"); document.getElementById("themeBtn").textContent = isLight ? "🌙" : "☀️"; }
     function share() { navigator.share ? navigator.share({url: location.href}) : alert("Link Copied"); }
+    
     window.addEventListener("scroll", () => {
         const header = document.getElementById("museumHeader");
         if(window.scrollY > 40) header.classList.add("header-small"); else header.classList.remove("header-small");
@@ -274,4 +327,4 @@
     load();
 </script>
 </body>
-</html> 
+</html>
