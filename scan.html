@@ -11,10 +11,8 @@
         body { 
             margin: 0; font-family: 'Tajawal', sans-serif; 
             background: var(--main); color: var(--light); 
-            transition: background 0.4s ease; 
-            overflow-x: hidden;
+            transition: background 0.4s ease; overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
         .light { background: var(--light); color: var(--main); }
 
@@ -35,7 +33,7 @@
             display: flex; align-items: center; justify-content: center; 
             margin-bottom: 15px; overflow: hidden; 
             background: rgba(0,0,0,0.1); border-radius: 12px; 
-            cursor: pointer; touch-action: manipulation;
+            cursor: pointer; touch-action: pan-y;
         }
         .viewer img { max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; }
 
@@ -52,11 +50,14 @@
             display: flex; gap: 10px; overflow-x: auto; 
             padding: 10px 5px; margin-bottom: 20px;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; -ms-overflow-style: none;
         }
+        .thumbs::-webkit-scrollbar { display: none; }
+
         .thumbs img { 
             width: 70px; height: 70px; object-fit: cover; 
             border-radius: 8px; cursor: pointer; opacity: .5; 
-            transition: 0.3s; flex-shrink: 0; display: none;
+            transition: 0.3s; flex-shrink: 0; display: none; /* مخفي لحين التأكد من وجوده */
         }
         .thumbs img.active { border: 3px solid var(--gold); opacity: 1; transform: scale(1.05); }
 
@@ -69,17 +70,12 @@
 
         @media(min-width:1100px) {
             .container { 
-                display: grid; 
-                grid-template-columns: 100px 1fr 400px; 
+                display: grid; grid-template-columns: 100px 1fr 400px; 
                 grid-template-areas: "thumb viewer info" "thumb details details";
-                gap: 40px; align-items: start;
-                direction: ltr; 
+                gap: 40px; align-items: start; direction: ltr; 
             }
             .viewer { grid-area: viewer; height: 70vh; }
-            .thumbs { 
-                grid-area: thumb; flex-direction: column; 
-                margin-top: 120px; position: -webkit-sticky; position: sticky; top: 150px; 
-            }
+            .thumbs { grid-area: thumb; flex-direction: column; margin-top: 120px; position: sticky; top: 150px; }
             .thumbs img { width: 85px; height: 85px; }
             .info { grid-area: info; margin-top: 120px; }
             .details { grid-area: details; margin-top: 20px; max-width: 95%; }
@@ -87,14 +83,13 @@
             body.lang-en .info, body.lang-en .details { direction: ltr; text-align: left; }
         }
 
-        .controls { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(10, 30, 35, 0.85); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); padding: 10px 25px; border-radius: 40px; display: flex; gap: 25px; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-        .controls div { font-size: 24px; cursor: pointer; transition: 0.2s; }
-        
         #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.96); z-index: 9999; overflow: hidden; }
         #fullscreenModal #modalImage { width: 100%; height: 100%; object-fit: contain; transition: transform 0.1s ease-out; }
         #fullscreenModal.desktop-zoomed #modalImage { cursor: grab; transform: scale(2.5); }
         #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; }
         
+        .controls { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(10, 30, 35, 0.85); backdrop-filter: blur(10px); padding: 10px 25px; border-radius: 40px; display: flex; gap: 25px; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .controls div { font-size: 24px; cursor: pointer; transition: 0.2s; }
         footer { text-align: center; margin: 40px 0 100px 0; font-size: 13px; opacity: 0.4; }
     </style>
 </head>
@@ -111,10 +106,7 @@
 </header>
 
 <div class="container">
-    <div class="viewer" id="mainViewer">
-        <img id="mainImage">
-        <div class="photo-credit" id="photoCredit"></div>
-    </div>
+    <div class="viewer" id="mainViewer"><img id="mainImage"><div class="photo-credit" id="photoCredit"></div></div>
     <div class="thumbs" id="thumbs"></div>
     <div class="info">
         <div class="meta" id="inv"></div><h1 id="title"></h1>
@@ -135,7 +127,7 @@
 
 <script>
     let lang = navigator.language.startsWith("ar") ? "ar" : "en";
-    let images = [], currentIdx = 0, artwork;
+    let images = [], validImages = [], currentIdx = 0, artwork;
     const isMobile = window.innerWidth < 1100;
     let infoTimer;
 
@@ -146,13 +138,7 @@
         try {
             const res = await fetch("data/artworks.json?t=" + new Date().getTime());
             const data = await res.json();
-            const params = new URLSearchParams(location.search);
-            let id = params.get("id");
-            if(!id) {
-                const pathParts = window.location.pathname.split('/');
-                const lastPart = pathParts.pop() || pathParts.pop();
-                if(lastPart !== 'scan.html') id = "MIA-" + lastPart;
-            }
+            const id = new URLSearchParams(location.search).get("id");
             artwork = data.find(a => a.id === id);
             if(!artwork) { document.body.innerHTML = "<h2 style='text-align:center;margin-top:100px'>Artwork Not Found</h2>"; return; }
             prepareImages(); render();
@@ -160,27 +146,58 @@
     }
 
     function prepareImages() {
-        images = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].filter(img => img && img.trim() !== "");
-        const thumbs = document.getElementById("thumbs");
-        thumbs.innerHTML = "";
-        images.forEach((src, i) => {
+        const potentialImages = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5];
+        const thumbsContainer = document.getElementById("thumbs");
+        thumbsContainer.innerHTML = "";
+        validImages = []; // إعادة تعيين الصور الصحيحة فقط
+
+        potentialImages.forEach((src, i) => {
+            if (!src) return;
             const img = document.createElement("img");
-            img.src = src; img.onload = () => img.style.display = 'block'; img.onerror = () => img.remove();
-            img.onclick = (e) => { e.stopPropagation(); show(i); }; thumbs.appendChild(img);
+            img.src = src;
+            
+            // لو الصورة اشتغلت، ضيفها للقائمة
+            img.onload = () => {
+                img.style.display = 'block';
+                validImages.push(src);
+                // ترتيب الصور المصغرة حسب ورودها في JSON
+                validImages.sort((a, b) => potentialImages.indexOf(a) - potentialImages.indexOf(b));
+                if (validImages.length === 1) show(0);
+            };
+            
+            // لو الصورة مكسورة، احذف العنصر تماماً
+            img.onerror = () => {
+                img.remove();
+            };
+            
+            img.onclick = (e) => { e.stopPropagation(); show(validImages.indexOf(src)); };
+            thumbsContainer.appendChild(img);
         });
     }
 
     function show(i) {
-        if(!images[i]) return;
-        currentIdx = i; mainImage.src = images[i];
-        modalImage.src = images[i];
-        document.querySelectorAll(".thumbs img").forEach((t, k) => t.classList.toggle("active", k === i));
-        const infoKey = lang === "ar" ? `info_ar${i+1}` : `info_en${i+1}`;
+        if(i < 0 || i >= validImages.length) i = 0;
+        currentIdx = i;
+        const currentSrc = validImages[i];
+        if(!currentSrc) return;
+
+        mainImage.src = currentSrc;
+        modalImage.src = currentSrc;
+        
+        // تحديث حالة الثامنيل النشط
+        document.querySelectorAll(".thumbs img").forEach((t) => {
+            t.classList.toggle("active", t.src.includes(currentSrc));
+        });
+
+        // تحديد أي معلومة تظهر (info1, info2...) بناءً على ترتيب الصورة الحقيقي
+        // هنا بنعرف هي كانت image كام أصلاً في الـ JSON عشان نختار الـ info الصح
+        const originalIndex = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].indexOf(currentSrc) + 1;
+        const infoKey = lang === "ar" ? `info_ar${originalIndex}` : `info_en${originalIndex}`;
         const info = (artwork[infoKey] || "").trim();
+        
         photoCredit.textContent = info;
-        if(info) { photoCredit.style.opacity = ""; if(isMobile) triggerInfoMobile(); } 
+        if(info) { photoCredit.style.opacity = "1"; if(isMobile) triggerInfoMobile(); } 
         else { photoCredit.style.opacity = "0"; }
-        resetModal();
     }
 
     function triggerInfoMobile() {
@@ -190,17 +207,20 @@
         infoTimer = setTimeout(() => mainViewer.classList.remove('info-active'), 3500);
     }
 
+    // Smart Swap
     let startX = 0;
     mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) startX = e.touches[0].clientX; triggerInfoMobile(); }, {passive: true});
     mainViewer.addEventListener('touchend', e => {
-        if (e.changedTouches.length === 1) {
-            let diff = startX - e.changedTouches[0].clientX;
-            if(Math.abs(diff) > 70) diff > 0 ? show((currentIdx+1)%images.length) : show((currentIdx-1+images.length)%images.length);
+        if (validImages.length <= 1) return;
+        let diff = startX - e.changedTouches[0].clientX;
+        if(Math.abs(diff) > 60) {
+            currentIdx = diff > 0 ? (currentIdx + 1) % validImages.length : (currentIdx - 1 + validImages.length) % validImages.length;
+            show(currentIdx);
         }
     }, {passive: true});
 
+    // Fullscreen Logic
     mainViewer.onclick = () => {
-        modalImage.src = images[currentIdx];
         modal.style.display = 'block'; document.body.style.overflow = 'hidden';
         history.pushState({modal: true}, "");
         if(!isMobile) initDesktopZoom();
@@ -217,8 +237,7 @@
     function moveZoom(e) {
         if(!dz) return;
         const rect = modalImage.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        const x = ((e.clientX - rect.left) / rect.width) * 100, y = ((e.clientY - rect.top) / rect.height) * 100;
         modalImage.style.transformOrigin = `${x}% ${y}%`;
     }
     function resetModal() { modalImage.style.transform = "scale(1)"; dz = false; modal.classList.remove('desktop-zoomed'); }
@@ -237,10 +256,9 @@
         document.getElementById("hall").textContent = lang === "ar" ? artwork.hall_ar : artwork.hall_en;
         document.getElementById("material").textContent = (lang === "ar" ? artwork.material_ar : artwork.material_en) || "";
         document.getElementById("desc").textContent = lang === "ar" ? artwork.desc_ar : artwork.desc_en;
-        show(currentIdx);
     }
 
-    function toggleLang() { lang = lang === "ar" ? "en" : "ar"; render(); }
+    function toggleLang() { lang = lang === "ar" ? "en" : "ar"; render(); show(currentIdx); }
     function toggleTheme() { const isLight = document.body.classList.toggle("light"); document.getElementById("themeBtn").textContent = isLight ? "🌙" : "☀️"; }
     function share() { navigator.share ? navigator.share({url: location.href}) : alert("Link Copied"); }
     
