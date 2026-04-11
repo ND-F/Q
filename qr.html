@@ -1,171 +1,181 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>QR Generator - NADIM Museum Project - Premium Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/qr-code-styling/lib/qr-code-styling.js"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #f0f0f0; /* خلفية الصفحة العامة للمعاينة */
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-<script src="https://unpkg.com/qr-code-styling/lib/qr-code-styling.js"></script>
+        /* تنسيق صفحة الطباعة A4 */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: #E8E3D5; /* لون الخلفية الكريمي الدقيق من الصورة */
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10mm;
+            padding: 15mm;
+            box-sizing: border-box;
+            page-break-after: always;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
 
-<style>
+        .sticker {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            /* تم إزالة الإطار المتقطع ليكون التصميم نظيفاً تماماً مثل الصورة */
+        }
 
-body{
-font-family:Tajawal;
-background:white;
-margin:0;
-}
+        .qrWrap {
+            width: 80mm;
+            height: 80mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-/* صفحة الطباعة */
+        /* علامات القص (Crop Marks) بالكحلي الغامق */
+        .crop {
+            position: absolute;
+            width: 8mm;
+            height: 8mm;
+            border-color: #04434B; /* الكحلي الدقيق من الصورة */
+        }
+        .tl { top: 0; left: 0; border-top: 1px solid; border-left: 1px solid; }
+        .tr { top: 0; right: 0; border-top: 1px solid; border-right: 1px solid; }
+        .bl { bottom: 0; left: 0; border-bottom: 1px solid; border-left: 1px solid; }
+        .br { bottom: 0; right: 0; border-bottom: 1px solid; border-right: 1px solid; }
 
-.page{
-width:210mm;
-height:297mm;
+        .info-tag {
+            position: absolute;
+            bottom: 5mm;
+            font-size: 10px;
+            color: #04434B; /* الكحلي الدقيق من الصورة */
+            font-weight: bold;
+        }
 
-  
-display:grid;
-grid-template-columns:repeat(2,1fr);
-grid-template-rows:repeat(3,1fr);
+        @media print {
+            body { background: white; }
+            .page { box-shadow: none; margin: 0; background: #E8E3D5 !important; -webkit-print-color-adjust: exact; }
+            #controls { display: none; }
+        }
 
-  
-gap:15mm;
+        #controls {
+            padding: 20px;
+            background: #04434B; /* الكحلي الدقيق من الصورة */
+            width: 100%;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-  
-padding:20mm;
-
-  
-box-sizing:border-box;
-page-break-after:always;
-}
-
-/* الاستيكر */
-
-.sticker{
-border:2.5px solid #05444B;
-position:relative;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-/* مكان QR */
-
-.qrWrap{
-width:85mm;
-height:85mm;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-/* crop marks */
-
-.crop{
-position:absolute;
-width:6mm;
-height:6mm;
-border-color:black;
-}
-
-.tl{top:-6mm;left:-6mm;border-top:1px solid;border-left:1px solid;}
-.tr{top:-6mm;right:-6mm;border-top:1px solid;border-right:1px solid;}
-.bl{bottom:-6mm;left:-6mm;border-bottom:1px solid;border-left:1px solid;}
-.br{bottom:-6mm;right:-6mm;border-bottom:1px solid;border-right:1px solid;}
-
-</style>
+        button {
+            padding: 10px 25px;
+            font-family: 'Tajawal';
+            font-weight: bold;
+            background: #4E0C1B; /* العنابي الدقيق من الصورة */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #E8E3D5; /* الكريمي الدقيق من الصورة */
+        }
+    </style>
 </head>
 
 <body>
 
+<div id="controls">
+    <button onclick="window.print()">اضغط لطباعة الأكواد بجودة HQ (Print to PDF)</button>
+</div>
+
 <div id="container"></div>
 
 <script>
+    const baseUrl = "https://nd-f.github.io/Q/scan.html?id=MIA-";
+    const totalStickers = 30;
+    const stickersPerPage = 6; 
 
-const base =
-"https://nd-f.github.io/Q/scan.html?id=";
+    const container = document.getElementById("container");
 
-let total = 30;
-let perPage = 6;
+    const totalPages = Math.ceil(totalStickers / stickersPerPage);
 
-/* إنشاء الصفحات أولاً */
+    for (let p = 0; p < totalPages; p++) {
+        let page = document.createElement("div");
+        page.className = "page";
 
-for(let p=0;p<Math.ceil(total/perPage);p++){
+        for (let i = 1; i <= stickersPerPage; i++) {
+            let currentNum = (p * stickersPerPage) + i;
+            if (currentNum > totalStickers) break;
 
-let page=document.createElement("div");
-page.className="page";
+            let idFormatted = String(currentNum).padStart(4, '0');
+            
+            let sticker = document.createElement("div");
+            sticker.className = "sticker";
+            sticker.innerHTML = `
+                <div class="crop tl"></div>
+                <div class="crop tr"></div>
+                <div class="crop bl"></div>
+                <div class="crop br"></div>
+                <div class="qrWrap">
+                    <div id="qr${currentNum}"></div>
+                </div>
+                <div class="info-tag">MIA-${idFormatted}</div>
+            `;
+            page.appendChild(sticker);
+        }
+        container.appendChild(page);
+    }
 
-for(let i=1;i<=perPage;i++){
+    /* توليد الأكواد بمطابقة تامة للصورة (جودة HQ) */
+    for (let num = 1; num <= totalStickers; num++) {
+        let idFormatted = String(num).padStart(4, '0');
+        
+        const qrCode = new QRCodeStyling({
+            width: 280,
+            height: 280,
+            type: "svg", /* جودة SVG لا تتبكسل أبداً عند الطباعة */
+            data: baseUrl + idFormatted,
+            image: "images/logo-nadim.png",
+            dotsOptions: {
+                color: "#04434B", /* الكحلي الدقيق من الصورة */
+                type: "square" /* مربعات كلاسيكية حادة لتطابق الصورة */
+            },
+            backgroundOptions: {
+                color: "#E8E3D5", /* الخلفية الكريمية الدقيقة من الصورة */
+            },
+            imageOptions: {
+                crossOrigin: "anonymous",
+                margin: 5,
+                imageSize: 0.4
+            },
+            cornersSquareOptions: {
+                type: "extra-rounded", /* الحواف الخارجية دائرية لتطابق الصورة */
+                color: "#04434B" /* الكحلي الدقيق من الصورة */
+            },
+            cornersDotOptions: {
+                type: "square", /* المربعات الداخلية حادة لتطابق الصورة */
+                color: "#4E0C1B" /* العنابي الدقيق من الصورة */
+            }
+        });
 
-let num=p*perPage+i;
-
-if(num>total) break;
-
-let sticker=document.createElement("div");
-sticker.className="sticker";
-
-sticker.innerHTML=`
-
-<div class="crop tl"></div>
-<div class="crop tr"></div>
-<div class="crop bl"></div>
-<div class="crop br"></div>
-
-<div class="qrWrap">
-<div id="qr${num}"></div>
-</div>
-
-`;
-
-page.appendChild(sticker);
-
-}
-
-document.getElementById("container").appendChild(page);
-
-}
-
-/* توليد QR بعد بناء الصفحة */
-
-for(let num=1;num<=total;num++){
-
-const qrCode = new QRCodeStyling({
-
-width:360,
-height:360,
-
-data: base+"EGY-MIA-"+String(num).padStart(4,'0'),
-
-image:"images/qr-logo.png",
-
-dotsOptions:{
-color:"#05444B",
-type:"classy-rounded"
-},
-
-backgroundOptions:{
-color:"#ffffff"
-},
-
-imageOptions:{
-crossOrigin:"anonymous",
-margin:8
-},
-
-cornersSquareOptions:{
-type:"extra-rounded",
-color:"#05444B"
-},
-
-cornersDotOptions:{
-type:"dot",
-color:"#05444B"
-}
-
-});
-
-qrCode.append(document.getElementById("qr"+num));
-
-}
-
+        qrCode.append(document.getElementById("qr" + num));
+    }
 </script>
 
 </body>
