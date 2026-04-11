@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>QR Generator - Official MIA Identity</title>
+    <title>QR Generator - Official MIA Identity (Clean Edition)</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/qr-code-styling/lib/qr-code-styling.js"></script>
 
@@ -20,14 +20,12 @@
         .sticker { position: relative; display: flex; align-items: center; justify-content: center; }
         .qrWrap { width: 80mm; height: 80mm; display: flex; align-items: center; justify-content: center; }
 
-        /* علامات القص بالأخضر الفاتح لإعطاء مظهر راقي */
+        /* علامات القص بالأخضر الفاتح */
         .crop { position: absolute; width: 8mm; height: 8mm; border-color: #ADCAC9; }
         .tl { top: 0; left: 0; border-top: 1px solid; border-left: 1px solid; }
         .tr { top: 0; right: 0; border-top: 1px solid; border-right: 1px solid; }
         .bl { bottom: 0; left: 0; border-bottom: 1px solid; border-left: 1px solid; }
         .br { bottom: 0; right: 0; border-bottom: 1px solid; border-right: 1px solid; }
-
-        .info-tag { position: absolute; bottom: 5mm; font-size: 11px; color: #06444C; font-weight: bold; letter-spacing: 1px; }
 
         @media print {
             body { background: white; }
@@ -44,7 +42,7 @@
 <body>
 
 <div id="controls">
-    <button onclick="window.print()">طباعة الاستيكرات الرسمية (HQ PDF)</button>
+    <button onclick="window.print()">طباعة الاستيكرات الرسمية (Clean HQ)</button>
 </div>
 
 <div id="container"></div>
@@ -65,21 +63,19 @@
             let currentNum = (p * stickersPerPage) + i;
             if (currentNum > totalStickers) break;
 
-            let idFormatted = String(currentNum).padStart(4, '0');
             let sticker = document.createElement("div");
             sticker.className = "sticker";
             sticker.innerHTML = `
                 <div class="crop tl"></div><div class="crop tr"></div>
                 <div class="crop bl"></div><div class="crop br"></div>
                 <div class="qrWrap"><div id="qr${currentNum}"></div></div>
-                <div class="info-tag">ITEM NO: MIA-${idFormatted}</div>
             `;
             page.appendChild(sticker);
         }
         container.appendChild(page);
     }
 
-    /* توليد الكود بمطابقة كيميائية للألوان المختارة */
+    /* توليد الكود بجودة مطابقة للصورة السابقة */
     for (let num = 1; num <= totalStickers; num++) {
         let idFormatted = String(num).padStart(4, '0');
         
@@ -89,11 +85,11 @@
             data: baseUrl + idFormatted,
             image: "images/logo-nadim.png", 
             dotsOptions: {
-                color: "#06444C", /* الأخضر الداكن */
+                color: "#06444C", 
                 type: "square" 
             },
             backgroundOptions: {
-                color: "#EAE8D8", /* الكريمي الرسمي */
+                color: "#EAE8D8", 
             },
             imageOptions: {
                 crossOrigin: "anonymous",
@@ -102,11 +98,11 @@
             },
             cornersSquareOptions: {
                 type: "extra-rounded",
-                color: "#06444C" /* الأخضر الداكن */
+                color: "#06444C" 
             },
             cornersDotOptions: {
                 type: "square", 
-                color: "#4A121C" /* الأحمر الداكن للمربعات الداخلية - قمة الفخامة */
+                color: "#4A121C" 
             }
         });
 
