@@ -14,148 +14,104 @@
         }
 
         body {
-            margin: 0;
-            font-family: 'Tajawal';
-            background: var(--main);
-            color: var(--light);
+            margin: 0; font-family: 'Tajawal', sans-serif;
+            background: var(--main); color: var(--light);
             transition: background 0.4s ease, color 0.4s ease;
+            overflow-x: hidden;
         }
 
-        .light {
-            background: var(--light);
-            color: var(--main);
-        }
+        .light { background: var(--light); color: var(--main); }
 
         /* HEADER */
         #museumHeader {
-            position: sticky;
-            top: 0;
+            position: sticky; top: 0;
             background: var(--light) !important; 
             color: var(--main) !important;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 1000;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            display: flex; flex-direction: column; align-items: center;
+            z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1);
         }
 
-        .logo-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 25px;
-        }
-
-        .lang-ar #museumHeader { direction: rtl; }
-        .lang-en #museumHeader { direction: ltr; }
-
+        .logo-row { display: flex; align-items: center; justify-content: center; gap: 25px; }
         .logo { height: 50px; cursor: pointer; transition: 0.3s; }
         .header-title { font-size: 18px; color: var(--main) !important; text-align: center; font-weight: 700; }
-        .header-small .logo { height: 35px; }
 
-        /* CONTAINER LAYOUT */
+        /* CONTAINER */
         .container {
-            max-width: 1400px;
-            margin: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
+            max-width: 1400px; margin: auto; padding: 20px;
+            display: flex; flex-direction: column;
         }
 
-        /* MAIN VIEWER */
+        /* MAIN VIEWER (Zoom & Swap) */
         .viewer {
-            width: 100%;
-            height: 50vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
+            width: 100%; height: 55vh; position: relative;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 15px; overflow: hidden; 
+            background: rgba(0,0,0,0.1); border-radius: 12px;
+            touch-action: pan-y;
         }
 
         .viewer img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+            max-width: 100%; max-height: 100%;
+            object-fit: contain; transition: transform 0.3s ease-out;
+            cursor: zoom-in; user-select: none; -webkit-user-drag: none;
         }
+
+        .viewer.zoomed img { cursor: zoom-out; max-width: none; max-height: none; }
+
+        /* PHOTO INFO OVERLAY (BBC Style) */
+        .photo-credit {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white; padding: 25px 15px 10px; font-size: 14px;
+            opacity: 0; transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .lang-ar .photo-credit { text-align: right; direction: rtl; }
+        .lang-en .photo-credit { text-align: left; direction: ltr; }
+        .viewer:hover .photo-credit, .viewer.touch-active .photo-credit { opacity: 1; }
 
         /* THUMBS */
-        .thumbs {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 10px 0;
-            margin-bottom: 20px;
-            -webkit-overflow-scrolling: touch;
-        }
-
+        .thumbs { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; margin-bottom: 20px; }
         .thumbs img {
-            width: 75px;
-            height: 75px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            opacity: .6;
-            transition: 0.3s;
-            flex-shrink: 0;
-            display: none;
+            width: 75px; height: 75px; object-fit: cover;
+            border-radius: 8px; cursor: pointer; opacity: .5;
+            transition: 0.3s; flex-shrink: 0; display: none;
         }
-
-        .thumbs img.active {
-            border: 3px solid var(--gold);
-            opacity: 1;
-        }
+        .thumbs img.active { border: 3px solid var(--gold); opacity: 1; transform: scale(1.05); }
 
         /* TEXT STYLING */
-        .info h1 { font-size: 28px; color: var(--gold); margin: 0 0 10px 0; }
+        .info h1 { font-size: 30px; color: var(--gold); margin: 0 0 10px 0; }
         .meta { font-size: 18px; margin: 6px 0; opacity: 0.9; }
-        .details { margin-top: 30px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.7; }
+        .details { margin-top: 30px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.8; }
 
         .lang-ar .info, .lang-ar .details { text-align: right; direction: rtl; }
         .lang-en .info, .lang-en .details { text-align: left; direction: ltr; }
 
+        /* DESKTOP LAYOUT */
         @media(min-width:1100px) {
             .container {
-                display: grid;
-                direction: ltr !important;
+                display: grid; direction: ltr !important;
                 grid-template-columns: 100px 1fr 450px;
-                grid-template-areas: 
-                    "thumb viewer info"
-                    ". details details"; 
-                gap: 40px;
-                align-items: start;
+                grid-template-areas: "thumb viewer info" ". details details"; 
+                gap: 40px; align-items: start;
             }
-            .viewer { grid-area: viewer; height: 70vh; }
-            .thumbs { 
-                grid-area: thumb; 
-                flex-direction: column; 
-                margin-top: 150px;
-                overflow: visible;
-            }
+            .viewer { grid-area: viewer; height: 75vh; }
+            .thumbs { grid-area: thumb; flex-direction: column; margin-top: 150px; overflow: visible; }
             .thumbs img { width: 85px; height: 85px; }
             .info { grid-area: info; margin-top: 150px; }
-            .details { grid-area: details; margin-top: 40px; }
+            .details { grid-area: details; }
         }
 
         /* CONTROLS */
         .controls {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(10, 30, 35, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 10px 25px;
-            border-radius: 40px;
-            display: flex;
-            gap: 25px;
-            z-index: 2000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            background: rgba(10, 30, 35, 0.85); backdrop-filter: blur(10px);
+            padding: 10px 25px; border-radius: 40px; display: flex; gap: 25px;
+            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
         .controls div { font-size: 24px; cursor: pointer; transition: 0.2s; }
-        .controls div:hover { transform: scale(1.2); }
-
         footer { text-align: center; margin: 50px 0 100px 0; font-size: 14px; opacity: 0.5; }
     </style>
 </head>
@@ -173,8 +129,9 @@
 </header>
 
 <div class="container">
-    <div class="viewer">
+    <div class="viewer" id="mainViewer">
         <img id="mainImage" src="">
+        <div class="photo-credit" id="photoCredit"></div>
     </div>
 
     <div class="thumbs" id="thumbs"></div>
@@ -189,7 +146,9 @@
 
     <div class="details">
         <div class="meta" id="hall"></div>
-        <div id="desc"></div> </div>
+        <div class="meta" id="material"></div>
+        <div id="desc"></div>
+    </div>
 </div>
 
 <div class="controls">
@@ -198,46 +157,42 @@
     <div onclick="share()" title="مشاركة">🔗</div>
 </div>
 
-<footer>
-    Nadim Foundation - مؤسسة نديم © ®
-</footer>
+<footer> Nadim Foundation - مؤسسة نديم © ® </footer>
 
 <script>
     let lang = navigator.language.startsWith("ar") ? "ar" : "en";
-    
-    function updateLangClass() {
-        document.body.classList.remove('lang-ar', 'lang-en');
-        document.body.classList.add(lang === 'ar' ? 'lang-ar' : 'lang-en');
-    }
-
-    const themeBtn = document.getElementById("themeBtn");
-    if(window.matchMedia("(prefers-color-scheme: light)").matches){
-        document.body.classList.add("light");
-        themeBtn.textContent = "🌙";
-    }
-
-    const params = new URLSearchParams(location.search);
-    const id = params.get("id");
-    const mainImage = document.getElementById("mainImage");
     let images = [];
+    let currentIdx = 0;
     let artwork;
+
+    const mainViewer = document.getElementById("mainViewer");
+    const mainImage = document.getElementById("mainImage");
+    const photoCredit = document.getElementById("photoCredit");
 
     async function load() {
         try {
-            // إضافة timestamp لضمان عدم تحميل نسخة مخزنة (Cache)
             const res = await fetch("data/artworks.json?t=" + new Date().getTime());
             const data = await res.json();
+            
+            // تعديل: قراءة الـ ID سواء كان من ?id= أو من الرابط المباشر /0001
+            const params = new URLSearchParams(location.search);
+            let id = params.get("id");
+            
+            if(!id) {
+                const pathParts = window.location.pathname.split('/');
+                const lastPart = pathParts.pop() || pathParts.pop();
+                if(lastPart !== 'scan.html') id = "MIA-" + lastPart; // يحول 0001 إلى MIA-0001
+            }
+
             artwork = data.find(a => a.id === id);
 
             if(!artwork) {
-                document.body.innerHTML = "<h2 style='text-align:center; margin-top:100px;'>التحفة غير موجودة / Artwork not found</h2>";
+                document.body.innerHTML = "<h2 style='text-align:center; margin-top:100px;'>التحفة غير موجودة</h2>";
                 return;
             }
             prepareImages();
             render();
-        } catch (e) { 
-            console.error("Error loading JSON:", e); 
-        }
+        } catch (e) { console.error(e); }
     }
 
     function prepareImages() {
@@ -249,7 +204,7 @@
         images.forEach((src, i) => {
             const img = document.createElement("img");
             img.src = src;
-            img.onload = () => img.style.display = 'block'; 
+            img.onload = () => img.style.display = 'block';
             img.onerror = () => img.remove();
             img.onclick = () => show(i);
             thumbs.appendChild(img);
@@ -258,14 +213,48 @@
 
     function show(i) {
         if(images.length === 0) return;
+        currentIdx = i;
         mainImage.src = images[i];
-        document.querySelectorAll(".thumbs img").forEach((t, k) => {
-            t.classList.toggle("active", k === i);
-        });
+        resetZoom();
+        
+        document.querySelectorAll(".thumbs img").forEach((t, k) => t.classList.toggle("active", k === i));
+
+        // تحديث معلومة الصورة (Info 1-5)
+        const infoKey = lang === "ar" ? `info_ar${i+1}` : `info_en${i+1}`;
+        const infoText = artwork[infoKey] || "";
+        photoCredit.textContent = infoText;
+        photoCredit.style.display = infoText.trim() === "" ? "none" : "block";
     }
 
+    // --- SMART SWAP (Swipe) ---
+    let touchStartX = 0;
+    mainViewer.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive: true});
+    mainViewer.addEventListener('touchend', e => {
+        let diff = touchStartX - e.changedTouches[0].screenX;
+        if (Math.abs(diff) > 50) diff > 0 ? show((currentIdx + 1) % images.length) : show((currentIdx - 1 + images.length) % images.length);
+    }, {passive: true});
+
+    // --- SMART ZOOM ---
+    let isZoomed = false;
+    mainViewer.addEventListener('click', () => {
+        isZoomed = !isZoomed;
+        mainViewer.classList.toggle('zoomed', isZoomed);
+        if(!isZoomed) resetZoom();
+    });
+    mainViewer.addEventListener('mousemove', (e) => {
+        if (window.innerWidth >= 1100 && isZoomed) {
+            const rect = mainViewer.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            mainImage.style.transformOrigin = `${x}% ${y}%`;
+            mainImage.style.transform = "scale(2.5)";
+        }
+    });
+    function resetZoom() { isZoomed = false; mainImage.style.transform = "scale(1)"; mainViewer.classList.remove('zoomed'); }
+
     function render() {
-        updateLangClass();
+        document.body.classList.remove('lang-ar', 'lang-en');
+        document.body.classList.add(lang === 'ar' ? 'lang-ar' : 'lang-en');
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
 
         document.getElementById("inv").textContent = artwork.inventory_number || "";
@@ -275,48 +264,23 @@
         document.getElementById("dim").textContent = lang === "ar" ? artwork.dimensions_ar : artwork.dimensions_en;
         document.getElementById("hall").textContent = lang === "ar" ? artwork.hall_ar : artwork.hall_en;
         
-        // تم التأكد من أن الـ ID مطابق للعنصر في الـ HTML
-        const descEl = document.getElementById("desc");
-        if(descEl) {
-            descEl.textContent = lang === "ar" ? artwork.desc_ar : artwork.desc_en;
-        }
+        // عرض الخامة (Material)
+        const matLabel = lang === "ar" ? "الخامة: " : "Material: ";
+        const matVal = lang === "ar" ? artwork.material_ar : artwork.material_en;
+        document.getElementById("material").textContent = matVal ? matLabel + matVal : "";
 
+        document.getElementById("desc").textContent = lang === "ar" ? artwork.desc_ar : artwork.desc_en;
         document.getElementById("headerTitle").textContent = lang === "ar" ? "معرض من حياة التحفة" : "From the Life of an Artefact Exhibition";
-        show(0);
+        show(currentIdx);
     }
 
-    function toggleLang() {
-        lang = lang === "ar" ? "en" : "ar";
-        render();
-    }
-
-    function toggleTheme() {
-        const isLight = document.body.classList.toggle("light");
-        themeBtn.textContent = isLight ? "🌙" : "☀️";
-    }
-
+    function toggleLang() { lang = lang === "ar" ? "en" : "ar"; render(); }
+    function toggleTheme() { const isLight = document.body.classList.toggle("light"); document.getElementById("themeBtn").textContent = isLight ? "🌙" : "☀️"; }
     function share() {
-        if (navigator.share) {
-            navigator.share({ url: location.href });
-        } else {
-            const dummy = document.createElement('input');
-            document.body.appendChild(dummy);
-            dummy.value = location.href;
-            dummy.select();
-            document.execCommand('copy');
-            document.body.removeChild(dummy);
-            alert(lang === "ar" ? "تم نسخ الرابط!" : "Link copied!");
-        }
+        if (navigator.share) navigator.share({ url: location.href });
+        else alert(lang === "ar" ? "تم نسخ الرابط!" : "Link copied!");
     }
-
-    window.addEventListener("scroll", () => {
-        const header = document.getElementById("museumHeader");
-        if(window.scrollY > 40) header.classList.add("header-small");
-        else header.classList.remove("header-small");
-    });
-
     load();
 </script>
-
 </body>
 </html>
