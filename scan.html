@@ -154,7 +154,7 @@
 
 <footer> Nadim Foundation © ® </footer>
 
-<script>
+<>
     let lang = navigator.language.startsWith("ar") ? "ar" : "en";
     let allArtworks = [], validImages = [], currentIdx = 0, artwork;
     const isMobile = window.innerWidth < 1100;
@@ -261,7 +261,14 @@
         if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetModal(); }
         else if (e.state && e.state.id) initPiece(e.state.id);
     };
+     // إضافة دعم لزر الـ Escape لإغلاق الزووم
+    document.addEventListener('keydown', (e) => {
+        if (e.key === "Escape" && modal.style.display === 'block') {
+            history.back(); // هيقفل المودال ويرجعك للصفحة
+        }
+    });
 
+    load(); // السطر ده موجود أصلاً في نهاية الكود عندك       
     let dz = false;
     function initDesktopZoom() {
         if(isMobile) return;
@@ -311,6 +318,6 @@
         if(window.scrollY > 40) header.classList.add("header-small"); else header.classList.remove("header-small");
     });
     load();
-</script>
+</>
 </body>
 </html>
