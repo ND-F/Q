@@ -256,16 +256,16 @@
                 return; 
             }
             
-            // استبدال أوتوماتيكي بـ png
-            const pngSrc = src.replace(/\.[^/.]+$/, ".png");
+            // التعديل هنا: استبدال أوتوماتيكي بـ .webp بدلا من .png
+            const webpSrc = src.replace(/\.[^/.]+$/, ".webp");
             const img = document.createElement("img");
-            img.src = pngSrc;
+            img.src = webpSrc;
             
             img.onload = () => {
                 checkedCount++;
                 loadedCount++;
                 img.style.display = 'block';
-                validImages[index] = pngSrc;
+                validImages[index] = webpSrc;
                 if (!firstFound) { show(index); firstFound = true; }
             };
             
