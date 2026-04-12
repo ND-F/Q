@@ -2,172 +2,233 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <title>NADIM in Museum of Islamic Arts - نديم في متحف الفن الإسلامي</title>
+
     <link rel="icon" type="image/svg+xml" href="images/nadim-icon.svg">
     <link rel="apple-touch-icon" href="images/nadim-icon.svg">
 
-    <!-- FIX 1: Non-blocking font loading -->
+    <!-- فونت non-blocking: الصفحة ترسم فوراً، الفونت يتحمل في الخلفية -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" onload="this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap"></noscript>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; }
 
+        /* ─── BASE ─── */
         body {
             margin: 0; font-family: 'Tajawal', sans-serif;
             background: var(--main); color: var(--light);
             transition: background 0.4s ease, color 0.4s ease;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden; -webkit-font-smoothing: antialiased;
         }
         .light { background: var(--light) !important; color: var(--main) !important; }
 
+        /* ─── HEADER ─── */
         #museumHeader {
             position: -webkit-sticky; position: sticky; top: 0;
-            background: var(--light) !important; color: var(--main) !important;
+            background: var(--light) !important;
             padding: 15px 20px; display: flex; flex-direction: column;
-            align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            align-items: center; z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.12);
+            border-radius: 0 0 40px 40px;
         }
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; }
-        .logo { height: 45px; -webkit-user-drag: none; cursor: pointer; }
+        .logo { height: 45px; cursor: pointer; transition: opacity 0.3s; -webkit-user-drag: none; }
+        .logo:hover { opacity: 0.8; }
         .header-title { font-size: 16px; font-weight: 700; text-align: center; color: var(--main) !important; line-height: 1.3; }
 
+        /* ─── LAYOUT ─── */
         .container { max-width: 1400px; margin: auto; padding: 20px; display: flex; flex-direction: column; }
 
+        /* ─── VIEWER ─── */
         .viewer {
             width: 100%; height: 50vh; position: relative;
             display: flex; align-items: center; justify-content: center;
             margin-bottom: 15px; overflow: hidden;
-            background: rgba(0,0,0,0.1); border-radius: 12px;
-            cursor: pointer; touch-action: pan-y;
+            background: transparent; border-radius: 12px;
+            cursor: zoom-in; touch-action: pan-y;
         }
-        /* FIX 2: Skeleton screen while image loads */
+        /* Skeleton shimmer أثناء تحميل الصورة */
         .viewer::before {
             content: ''; position: absolute; inset: 0;
-            background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+            background: linear-gradient(90deg,
+                rgba(255,255,255,0.03) 25%,
+                rgba(255,255,255,0.08) 50%,
+                rgba(255,255,255,0.03) 75%);
             background-size: 200% 100%;
             animation: skeleton 1.5s infinite;
             border-radius: 12px; pointer-events: none;
-            opacity: 1; transition: opacity 0.4s ease;
+            opacity: 1; transition: opacity 0.5s ease;
         }
         .viewer.loaded::before { opacity: 0; }
         @keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
         .viewer img {
-            max-width: 100%; max-height: 100%; object-fit: contain;
-            pointer-events: none;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
-            /* FIX 3: Reserve aspect ratio to prevent layout shift */
-            aspect-ratio: auto;
+            max-width: 95%; max-height: 95%;
+            object-fit: contain; pointer-events: none;
+            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3));
+            transition: opacity 0.35s ease;
         }
 
+        /* بالونة معلومات الصورة */
         .photo-credit {
             position: absolute; bottom: 0; left: 0; right: 0;
             background: linear-gradient(transparent, rgba(0,0,0,0.85));
             color: white !important; padding: 35px 15px 15px; font-size: 13px;
-            z-index: 10; opacity: 0; transition: opacity 0.4s ease;
+            z-index: 10; opacity: 0; transition: opacity 0.4s;
             pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
         }
-        .viewer:hover .photo-credit, .viewer.info-active .photo-credit { opacity: 1 !important; }
+        .viewer:hover .photo-credit,
+        .viewer.info-active .photo-credit { opacity: 1 !important; }
 
+        /* ─── THUMBNAILS ─── */
         .thumbs {
-            display: flex; gap: 10px; overflow-x: auto;
-            padding: 10px 5px; margin-bottom: 20px;
-            scrollbar-width: none;
+            display: flex; gap: 12px; overflow-x: auto;
+            padding: 10px 5px; scrollbar-width: none; margin-bottom: 20px;
         }
         .thumbs::-webkit-scrollbar { display: none; }
         .thumbs img {
-            width: 70px; height: 70px; object-fit: contain;
-            border-radius: 8px; cursor: pointer; opacity: .4;
-            transition: 0.3s; flex-shrink: 0; display: none;
+            width: 75px; height: 75px; object-fit: contain;
+            border-radius: 15px; cursor: pointer; opacity: 0.4;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 0; display: none;
             background: rgba(255,255,255,0.05);
+            border: 2px solid transparent;
         }
-        .thumbs img.active { border: 3px solid var(--gold); opacity: 1; transform: scale(1.05); }
+        .thumbs img.active {
+            border-color: var(--gold); opacity: 1;
+            transform: scale(1.1);
+            background: rgba(225, 169, 62, 0.1);
+        }
 
-        .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; line-height: 1.2; }
+        /* ─── INFO & DETAILS ─── */
+        .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; line-height: 1.25; }
         .meta { font-size: 17px; margin: 5px 0; opacity: 0.9; }
-        .details { margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.7; }
+        .details {
+            margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2);
+            padding-top: 20px; line-height: 1.8;
+        }
 
-        .lang-ar { direction: rtl; text-align: right; }
-        .lang-en { direction: ltr; text-align: left; }
-
-        /* بالونات الكلام للأزرار */
+        /* ─── TOOLTIP على أزرار الـ controls ─── */
         [data-tooltip] { position: relative; }
         [data-tooltip]::before {
             content: attr(data-tooltip);
-            position: absolute; bottom: 140%; left: 50%; transform: translateX(-50%);
-            background: var(--light); color: var(--main); padding: 5px 12px;
-            border-radius: 8px; font-size: 12px; font-weight: 700;
-            white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.2s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1000;
+            position: absolute; bottom: 140%; left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: var(--light); color: var(--main);
+            padding: 7px 14px; border-radius: 10px;
+            font-size: 13px; font-weight: 700; white-space: nowrap;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.25s, transform 0.25s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 9999;
         }
-        [data-tooltip]:hover::before { opacity: 1; visibility: visible; }
+        [data-tooltip]:hover::before {
+            opacity: 1; visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
         .light [data-tooltip]::before { background: var(--main); color: var(--light); }
 
-        @media(min-width:1100px) {
+        /* ─── DESKTOP GRID ─── */
+        @media(min-width: 1100px) {
             .container {
-                display: grid; grid-template-columns: 100px 1fr 400px;
+                display: grid;
+                grid-template-columns: 120px 1fr 450px;
                 grid-template-areas: "thumb viewer info" "thumb details details";
-                gap: 40px; align-items: start; direction: ltr;
+                gap: 50px; align-items: start; direction: ltr;
             }
             .viewer { grid-area: viewer; height: 70vh; }
-            .thumbs { grid-area: thumb; flex-direction: column; margin-top: 120px; position: sticky; top: 150px; }
-            .thumbs img { width: 85px; height: 85px; }
+            .thumbs { grid-area: thumb; flex-direction: column; position: sticky; top: 150px; margin-top: 120px; }
+            .thumbs img { width: 90px; height: 90px; }
             .info { grid-area: info; margin-top: 120px; }
             .details { grid-area: details; margin-top: 20px; max-width: 95%; }
             body.lang-ar .info, body.lang-ar .details { direction: rtl; text-align: right; }
             body.lang-en .info, body.lang-en .details { direction: ltr; text-align: left; }
         }
 
+        /* ─── FULLSCREEN MODAL ─── */
         #fullscreenModal {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.98); z-index: 9999; overflow: auto;
+            display: none; position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--main); z-index: 10001; overflow: auto;
         }
         #modalContent { display: flex; min-height: 100%; align-items: center; justify-content: center; width: 100%; }
-        #modalImage { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.1s ease-out; }
-        #fullscreenModal.desktop-view #modalImage { cursor: zoom-in; }
+        #modalImage {
+            max-width: 95%; max-height: 95%;
+            object-fit: contain; transition: transform 0.15s ease-out;
+        }
+        #fullscreenModal.desktop-view  #modalImage { cursor: zoom-in; }
         #fullscreenModal.desktop-zoomed #modalImage { cursor: grab; transform: scale(2.5); }
-        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; }
+        #modalClose {
+            position: absolute; top: 25px; right: 25px;
+            font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002;
+            transition: opacity 0.2s;
+        }
+        #modalClose:hover { opacity: 0.7; }
 
+        /* ─── CONTROLS BAR ─── */
         .controls {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            background: rgba(10, 30, 35, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            padding: 12px 25px; border-radius: 40px; display: flex; align-items: center; gap: 20px;
-            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid rgba(225, 169, 62, 0.2);
+            background: rgba(10, 30, 35, 0.95);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 12px 30px; border-radius: 50px;
+            display: flex; align-items: center; gap: 25px;
+            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 1px solid rgba(225, 169, 62, 0.2);
             direction: ltr !important;
         }
-        .controls div { font-size: 22px; cursor: pointer; transition: 0.2s; color: white; display: flex; align-items: center; }
-        .controls .nav-btn { color: var(--gold); font-size: 26px; }
-        .controls .nav-btn.disabled { opacity: 0.15; cursor: default; pointer-events: none; }
-        .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3); }
+        .controls div {
+            font-size: 24px; cursor: pointer; transition: opacity 0.2s, transform 0.2s;
+            color: white; display: flex; align-items: center;
+        }
+        .controls div:hover { opacity: 0.75; transform: scale(1.1); }
+        .controls .nav-btn { color: var(--gold); font-size: 28px; }
+        .controls .nav-btn.disabled { opacity: 0.15 !important; cursor: default; pointer-events: none; transform: none !important; }
+        .controls .sep { width: 1px; height: 22px; background: rgba(225, 169, 62, 0.3); cursor: default; }
+        .controls .sep:hover { opacity: 1; transform: none; }
 
-        footer { text-align: center; margin: 40px 0 100px 0; font-size: 13px; opacity: 0.4; }
+        footer { text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
     </style>
 </head>
 
 <body class="lang-ar">
 
-<div id="fullscreenModal"><div id="modalClose">×</div><div id="modalContent"><img id="modalImage"></div></div>
+<!-- Fullscreen Modal -->
+<div id="fullscreenModal">
+    <div id="modalClose">×</div>
+    <div id="modalContent"><img id="modalImage" alt=""></div>
+</div>
 
+<!-- Header -->
 <header id="museumHeader">
     <div class="logo-row">
-        <a href="https://nd-f.github.io/QR/"><img src="images/logo-nadim.png" class="logo"></a>
+        <a href="https://nd-f.github.io/QR/"><img src="images/logo-nadim.png" class="logo" alt="Nadim"></a>
         <div class="header-title" id="headerTitle"></div>
-        <img src="images/MIALOGO.png" class="logo">
+        <img src="images/MIALOGO.png" class="logo" alt="MIA" style="height: 35px;">
     </div>
 </header>
 
+<!-- Main Content -->
 <div class="container">
-    <div class="viewer" id="mainViewer"><img id="mainImage"><div class="photo-credit" id="photoCredit"></div></div>
-    <div class="thumbs" id="thumbs"></div>
-    <div class="info">
-        <div class="meta" id="inv"></div><h1 id="title"></h1>
-        <div class="meta" id="from"></div><div class="meta" id="date"></div><div class="meta" id="dim"></div>
+    <div class="viewer" id="mainViewer">
+        <img id="mainImage" alt="">
+        <div class="photo-credit" id="photoCredit"></div>
     </div>
+
+    <div class="thumbs" id="thumbs"></div>
+
+    <div class="info">
+        <div class="meta" id="inv"></div>
+        <h1 id="title"></h1>
+        <div class="meta" id="from"></div>
+        <div class="meta" id="date"></div>
+        <div class="meta" id="dim"></div>
+    </div>
+
     <div class="details">
         <div class="meta" id="hall"></div>
         <div class="meta" id="material" style="font-weight: 600; color: var(--gold);"></div>
@@ -175,30 +236,33 @@
     </div>
 </div>
 
+<!-- Controls Bar -->
 <div class="controls">
-    <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
+    <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn"
+         data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
     <div class="sep"></div>
-    <div onclick="toggleLang()" data-ar="اللغة" data-en="Language">🌐</div>
-    <div onclick="toggleTheme()" id="themeBtn" data-ar="المظهر" data-en="Theme">☀️</div>
-    <div onclick="share()" data-ar="مشاركة" data-en="Share">🔗</div>
+    <div onclick="toggleLang()"  data-ar="تغيير اللغة"  data-en="Change Language">🌐</div>
+    <div onclick="toggleTheme()" data-ar="تغيير المظهر" data-en="Change Theme" id="themeBtn">☀️</div>
+    <div onclick="share()"       data-ar="مشاركة"        data-en="Share">🔗</div>
     <div class="sep"></div>
-    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn" data-ar="القطعة التالية" data-en="Next Piece">▶</div>
+    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn"
+         data-ar="القطعة التالية" data-en="Next Piece">▶</div>
 </div>
 
-<footer> Nadim Foundation © ® </footer>
+<footer>Nadim Foundation © ®</footer>
 
 <script>
-    // ──────────────────────────────────────────────
-    // 1. الإعدادات الأولية (لغة وثيم)
-    // ──────────────────────────────────────────────
-    const systemLang    = navigator.language.startsWith("ar") ? "ar" : "en";
-    const prefersDark   = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isMobile      = window.innerWidth < 1100;
+    // ════════════════════════════════════════════════
+    // 1. الإعدادات الأولية
+    // ════════════════════════════════════════════════
+    const systemLang  = navigator.language.startsWith("ar") ? "ar" : "en";
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const isMobile    = window.innerWidth < 1100;
 
     let lang        = systemLang;
     let allArtworks = [];
-    let validImages = [];   // مسارات الصور الصالحة للعرض بالترتيب
-    let currentIdx  = 0;
+    let validImages = [];   // مصفوفة مُفلترة بالصور الصالحة فقط، بدون nulls، بالترتيب
+    let currentIdx  = 0;    // index داخل validImages (مش داخل sources)
     let artwork;
     let infoTimer;
 
@@ -208,155 +272,160 @@
     const modal       = document.getElementById("fullscreenModal");
     const modalImage  = document.getElementById("modalImage");
 
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
     // 2. تحميل البيانات
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
     async function load() {
         try {
-            // FIX 4: إزالة ?t= لتفعيل cache المتصفح
-            // استخدم رقم إصدار ثابت لو احتجت تكسر الـ cache: ?v=2
+            // بدون ?t= عشان المتصفح يكاش الـ JSON بدل ما يحمّله كل زيارة
             const res = await fetch("data/artworks.json");
             allArtworks = await res.json();
-            const id = new URLSearchParams(location.search).get("id");
 
-            // تطبيق الثيم الأولي
             if (!prefersDark) document.body.classList.add("light");
             updateThemeIcon();
 
+            const id = new URLSearchParams(location.search).get("id");
             initPiece(id || allArtworks[0].id);
-        } catch(e) {
-            console.error("Data Load Failed", e);
+        } catch (e) {
+            console.error("فشل تحميل البيانات:", e);
         }
     }
 
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
     // 3. تهيئة قطعة جديدة
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
     function initPiece(id) {
         artwork = allArtworks.find(a => a.id === id);
         if (!artwork) return;
-        currentIdx = 0;
-        validImages = [];
+
+        currentIdx  = 0;
+        validImages = [];   // ← مسح صور القطعة السابقة قبل أي شيء
+
         prepareImages();
         render();
         updateNavButtons();
     }
 
-    // ──────────────────────────────────────────────
-    // 4. تحضير الصور
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
+    // 4. تحضير الصور — قلب المنطق
+    // ════════════════════════════════════════════════
     function prepareImages() {
         const thumbsEl = document.getElementById("thumbs");
         thumbsEl.innerHTML = "";
-        validImages = [];
         mainViewer.classList.remove("loaded");
 
-        // قائمة الصور المحتملة بترتيبها الأصلي
+        // الحصول على قائمة المصادر بترتيبها الأصلي، مع تحويل الامتداد لـ .png
         const sources = [
             artwork.image1, artwork.image2, artwork.image3,
             artwork.image4, artwork.image5
-        ]
-        // FIX 5: تحويل الامتداد مع الاحتفاظ بالترتيب الأصلي
-        .map(src => src && src.trim() ? src.replace(/\.[^/.]+$/, ".png") : null);
+        ].map(src => (src && src.trim()) ? src.replace(/\.[^/.]+$/, ".png") : null);
 
-        let loadedCount = 0;
-        const total = sources.filter(Boolean).length;
-        if (total === 0) return;
+        // مصفوفة مؤقتة تحافظ على المواضع الأصلية أثناء التحقق من كل صورة
+        const pending = new Array(5).fill(null);
+        let firstShown = false;
 
         sources.forEach((pngSrc, originalIndex) => {
             if (!pngSrc) return;
 
-            const img = document.createElement("img");
+            const thumbImg = document.createElement("img");
+            thumbImg.loading = "lazy";  // تحميل الـ thumbnails عند الحاجة فقط
 
-            // FIX 6: lazy loading للصور الـ thumbnails
-            img.loading = "lazy";
+            thumbImg.onload = () => {
+                thumbImg.style.display = "block";
 
-            img.onload = () => {
-                img.style.display = "block";
+                // حفظ الصورة في موضعها الأصلي للحفاظ على الترتيب
+                pending[originalIndex] = pngSrc;
 
-                // FIX 7: الإدراج في مكانه الصحيح حسب الترتيب الأصلي
-                // بدل push + sort الخاطئة
-                validImages[originalIndex] = pngSrc;
+                // إعادة بناء validImages من pending بدون فراغات
+                validImages = pending.filter(Boolean);
 
-                // أول صورة صالحة: اعرضها فوراً
-                const firstValid = validImages.find(Boolean);
-                if (firstValid && loadedCount === 0) {
-                    show(validImages.indexOf(firstValid));
+                // أول صورة تتحمل = اعرضها فوراً في الـ viewer
+                if (!firstShown) {
+                    firstShown = true;
+                    // currentIdx يبقى 0 لأن validImages متسلسلة من الأول
+                    show(0);
                 }
-                loadedCount++;
             };
 
-            img.onerror = () => img.remove();
+            thumbImg.onerror = () => thumbImg.remove();
 
-            img.onclick = (e) => {
+            thumbImg.onclick = (e) => {
                 e.stopPropagation();
-                // FIX 8: البحث عن الصورة بعد تنظيف المصفوفة
-                const cleanIdx = validImages.filter(Boolean).indexOf(pngSrc);
-                if (cleanIdx !== -1) show(cleanIdx);
+                // إيجاد موضع هذه الصورة في validImages المُنظّفة
+                const idx = validImages.indexOf(pngSrc);
+                if (idx !== -1) show(idx);
             };
 
-            img.src = pngSrc;
-            thumbsEl.appendChild(img);
+            thumbImg.src = pngSrc;
+            thumbsEl.appendChild(thumbImg);
         });
     }
 
-    // ──────────────────────────────────────────────
-    // 5. عرض صورة معينة
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
+    // 5. عرض صورة بمؤشرها في validImages
+    // ════════════════════════════════════════════════
     function show(i) {
-        // FIX 9: تنظيف المصفوفة من الفراغات قبل الاستخدام
-        const cleanImages = validImages.filter(Boolean);
-        if (!cleanImages.length) return;
-        if (i < 0 || i >= cleanImages.length) i = 0;
+        if (!validImages.length) return;
+
+        // تقييد المؤشر داخل الحدود
+        i = Math.max(0, Math.min(i, validImages.length - 1));
         currentIdx = i;
 
-        const src = cleanImages[i];
+        const src = validImages[i];
 
-        // FIX 10: الصورة الرئيسية تتحمل مرة واحدة فقط
-        // لو نفس الـ src موجود بالفعل، ما نعيدش التحميل
-        if (mainImage.src !== src) {
+        // تحديث الـ viewer فقط لو الصورة مختلفة
+        // (getAttribute يرجع الـ src النسبي كما أُسند، عكس .src الذي يُصبح URL كامل)
+        if (mainImage.getAttribute("src") !== src) {
             mainViewer.classList.remove("loaded");
-            mainImage.onload = () => mainViewer.classList.add("loaded");
-            mainImage.src = src;
+            mainImage.onload  = () => mainViewer.classList.add("loaded");
+            mainImage.onerror = () => mainViewer.classList.add("loaded");
+            mainImage.setAttribute("src", src);
+        } else {
+            // الصورة نفسها — تأكد من إظهار الـ loaded state
+            mainViewer.classList.add("loaded");
         }
 
-        // الـ modal يشارك نفس الصورة مباشرة عند الفتح (مش هنا)
+        // تمييز الـ thumbnail النشط
         document.querySelectorAll(".thumbs img").forEach(t => {
-            t.classList.toggle("active", t.src.endsWith(src.split("/").pop()));
+            // مقارنة بالـ src النسبي للـ thumbnail أيضاً
+            t.classList.toggle("active", t.getAttribute("src") === src);
         });
 
-        // بيانات الصورة من حقلَي info
-        const imgNum = i + 1;
-        const info = (artwork[`info_${lang}${imgNum}`] || "").trim();
-        photoCredit.textContent = info;
-        if (info) {
-            photoCredit.style.opacity = "1";
-            if (isMobile) triggerInfoMobile();
-        } else {
-            photoCredit.style.opacity = "0";
-        }
+        // بالونة معلومات الصورة (info_ar1 / info_en1 ...)
+        const imgNum  = i + 1;
+        const infoKey = `info_${lang}${imgNum}`;
+        const infoText = (artwork[infoKey] || "").trim();
+
+        photoCredit.textContent   = infoText;
+        photoCredit.style.opacity = infoText ? "1" : "0";
+
+        if (infoText && isMobile) triggerInfoMobile();
     }
 
-    // ──────────────────────────────────────────────
-    // 6. رسم محتوى القطعة
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
+    // 6. رسم محتوى القطعة (نص + اتجاه)
+    // ════════════════════════════════════════════════
     function render() {
+        // toggle بدل className= عشان لا يُمسح كلاس "light"
         document.body.classList.toggle("lang-ar", lang === "ar");
         document.body.classList.toggle("lang-en", lang === "en");
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
 
-        const siteTitle = lang === "ar" ? "معرض من حياة التحفة" : "From the Life of an Artifact Exhibition";
+        const siteTitle = lang === "ar"
+            ? "معرض من حياة التحفة"
+            : "From the Life of an Artifact Exhibition";
         document.title = siteTitle;
         document.getElementById("headerTitle").textContent = siteTitle;
 
+        const ar = lang === "ar";
         document.getElementById("inv").textContent      = artwork.inventory_number || "";
-        document.getElementById("title").textContent    = lang === "ar" ? artwork.title_ar    : artwork.title_en;
-        document.getElementById("from").textContent     = lang === "ar" ? artwork.from_ar     : artwork.from_en;
-        document.getElementById("date").textContent     = lang === "ar" ? artwork.date_ar     : artwork.date_en;
-        document.getElementById("dim").textContent      = lang === "ar" ? artwork.dimensions_ar : artwork.dimensions_en;
-        document.getElementById("hall").textContent     = lang === "ar" ? artwork.hall_ar     : artwork.hall_en;
-        document.getElementById("material").textContent = (lang === "ar" ? artwork.material_ar : artwork.material_en) || "";
-        document.getElementById("desc").textContent     = lang === "ar" ? artwork.desc_ar     : artwork.desc_en;
+        document.getElementById("title").textContent    = ar ? artwork.title_ar       : artwork.title_en;
+        document.getElementById("from").textContent     = ar ? artwork.from_ar        : artwork.from_en;
+        document.getElementById("date").textContent     = ar ? artwork.date_ar        : artwork.date_en;
+        document.getElementById("dim").textContent      = ar ? artwork.dimensions_ar  : artwork.dimensions_en;
+        document.getElementById("hall").textContent     = ar ? artwork.hall_ar        : artwork.hall_en;
+        document.getElementById("material").textContent = (ar ? artwork.material_ar   : artwork.material_en) || "";
+        document.getElementById("desc").textContent     = ar ? artwork.desc_ar        : artwork.desc_en;
 
         // تحديث نصوص بالونات الأزرار
         document.querySelectorAll("[data-ar]").forEach(el => {
@@ -364,33 +433,33 @@
         });
     }
 
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
     // 7. التنقل بين القطع
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
     function navigatePiece(step) {
-        const currentIndex = allArtworks.findIndex(a => a.id === artwork.id);
-        const nextIndex = currentIndex + step;
-        if (nextIndex >= 0 && nextIndex < allArtworks.length) {
-            const nextId = allArtworks[nextIndex].id;
-            window.history.pushState({ id: nextId }, "", "?id=" + nextId);
-            initPiece(nextId);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+        const idx     = allArtworks.findIndex(a => a.id === artwork.id);
+        const nextIdx = idx + step;
+        if (nextIdx < 0 || nextIdx >= allArtworks.length) return;
+
+        const nextId = allArtworks[nextIdx].id;
+        window.history.pushState({ id: nextId }, "", "?id=" + nextId);
+        initPiece(nextId);
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function updateNavButtons() {
-        const index = allArtworks.findIndex(a => a.id === artwork.id);
-        document.getElementById("prevPiece").classList.toggle("disabled", index === 0);
-        document.getElementById("nextPiece").classList.toggle("disabled", index === allArtworks.length - 1);
+        const idx = allArtworks.findIndex(a => a.id === artwork.id);
+        document.getElementById("prevPiece").classList.toggle("disabled", idx === 0);
+        document.getElementById("nextPiece").classList.toggle("disabled", idx === allArtworks.length - 1);
     }
 
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
     // 8. الثيم واللغة والمشاركة
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
     function toggleLang() {
         lang = lang === "ar" ? "en" : "ar";
         render();
-        show(currentIdx);
+        show(currentIdx);   // تحديث بالونة الصورة الحالية فوراً
     }
 
     function toggleTheme() {
@@ -399,19 +468,28 @@
     }
 
     function updateThemeIcon() {
-        const isLight = document.body.classList.contains("light");
-        document.getElementById("themeBtn").textContent = isLight ? "🌙" : "☀️";
+        document.getElementById("themeBtn").textContent =
+            document.body.classList.contains("light") ? "🌙" : "☀️";
     }
 
     function share() {
-        navigator.share ? navigator.share({ url: location.href }) : navigator.clipboard.writeText(location.href).then(() => alert("تم نسخ الرابط"));
+        if (navigator.share) {
+            navigator.share({ title: artwork[lang === "ar" ? "title_ar" : "title_en"], url: location.href });
+        } else {
+            try {
+                navigator.clipboard.writeText(location.href).then(() => {
+                    alert(lang === "ar" ? "تم نسخ الرابط!" : "Link copied!");
+                });
+            } catch {
+                alert(lang === "ar" ? "تم نسخ الرابط!" : "Link copied!");
+            }
+        }
     }
 
-    // ──────────────────────────────────────────────
-    // 9. التفاعل على الموبايل
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
+    // 9. التفاعل بالسحب (Swipe) على الموبايل
+    // ════════════════════════════════════════════════
     function triggerInfoMobile() {
-        if (!isMobile) return;
         clearTimeout(infoTimer);
         mainViewer.classList.add("info-active");
         infoTimer = setTimeout(() => mainViewer.classList.remove("info-active"), 3500);
@@ -424,23 +502,22 @@
     }, { passive: true });
 
     mainViewer.addEventListener("touchend", e => {
-        const cleanImages = validImages.filter(Boolean);
-        if (cleanImages.length <= 1) return;
+        if (validImages.length <= 1) return;
         const diff = startX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 70) {
-            show(diff > 0
-                ? (currentIdx + 1) % cleanImages.length
-                : (currentIdx - 1 + cleanImages.length) % cleanImages.length
-            );
+            const next = diff > 0
+                ? (currentIdx + 1) % validImages.length
+                : (currentIdx - 1 + validImages.length) % validImages.length;
+            show(next);
         }
     }, { passive: true });
 
-    // ──────────────────────────────────────────────
-    // 10. الوضع الكامل (Fullscreen Modal)
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
+    // 10. Fullscreen Modal
+    // ════════════════════════════════════════════════
     mainViewer.onclick = () => {
-        // FIX 11: نقل src للـ modal عند الفتح فقط (مش في كل show)
-        modalImage.src = mainImage.src;
+        // نقل الـ src للـ modal عند الفتح فقط، لا في كل show()
+        modalImage.setAttribute("src", mainImage.getAttribute("src"));
         modal.style.display = "block";
         document.body.style.overflow = "hidden";
         history.pushState({ modal: true }, "");
@@ -461,11 +538,13 @@
 
     document.addEventListener("keydown", e => {
         if (e.key === "Escape" && modal.style.display === "block") history.back();
+        if (e.key === "ArrowRight" && modal.style.display !== "block") navigatePiece(lang === "ar" ? 1 : -1);
+        if (e.key === "ArrowLeft"  && modal.style.display !== "block") navigatePiece(lang === "ar" ? -1 : 1);
     });
 
-    // ──────────────────────────────────────────────
-    // 11. التكبير على الديسكتوب
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
+    // 11. Zoom على الديسكتوب داخل الـ Modal
+    // ════════════════════════════════════════════════
     let dz = false;
 
     function initDesktopZoom() {
@@ -482,8 +561,8 @@
     function moveZoom(e) {
         if (!dz || isMobile) return;
         const rect = modalImage.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width)  * 100;
-        const y = ((e.clientY - rect.top)  / rect.height) * 100;
+        const x = ((e.clientX - rect.left)  / rect.width)  * 100;
+        const y = ((e.clientY - rect.top)   / rect.height) * 100;
         modalImage.style.transformOrigin = `${x}% ${y}%`;
     }
 
@@ -491,20 +570,20 @@
         modalImage.style.transform       = "scale(1)";
         modalImage.style.transformOrigin = "center center";
         dz = false;
-        modal.classList.remove("desktop-zoomed");
+        modal.classList.remove("desktop-view", "desktop-zoomed");
     }
 
-    // ──────────────────────────────────────────────
-    // 12. تصغير الهيدر عند الـ scroll
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
+    // 12. تصغير الهيدر عند الـ Scroll
+    // ════════════════════════════════════════════════
     window.addEventListener("scroll", () => {
-        const header = document.getElementById("museumHeader");
-        header.classList.toggle("header-small", window.scrollY > 40);
-    });
+        document.getElementById("museumHeader")
+            .classList.toggle("header-small", window.scrollY > 40);
+    }, { passive: true });
 
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
     // بدء التطبيق
-    // ──────────────────────────────────────────────
+    // ════════════════════════════════════════════════
     load();
 </script>
 </body>
