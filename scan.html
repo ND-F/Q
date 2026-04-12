@@ -8,11 +8,7 @@
     
     <link rel="icon" type="image/svg+xml" href="images/nadim-icon.svg">
     <link rel="apple-touch-icon" href="images/nadim-icon.svg">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap"></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -21,124 +17,94 @@
         body { 
             margin: 0; font-family: 'Tajawal', sans-serif; 
             background: var(--main); color: var(--light); 
-            transition: background 0.4s ease, color 0.4s ease; 
-            overflow-x: hidden; -webkit-font-smoothing: antialiased;
+            transition: background 0.4s ease; overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
         .light { background: var(--light) !important; color: var(--main) !important; }
 
         /* HEADER */
         #museumHeader { 
-            position: -webkit-sticky; position: sticky; top: 0; 
-            background: var(--light) !important; color: var(--main) !important; 
+            position: sticky; top: 0; background: var(--light) !important; 
             padding: 15px 20px; display: flex; flex-direction: column; 
             align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
             border-radius: 0 0 40px 40px; transition: padding 0.3s ease;
         }
-        #museumHeader.header-small { padding: 10px 20px; }
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; }
-        .logo { height: 45px; cursor: pointer; transition: 0.3s; -webkit-user-drag: none; }
-        .header-title { font-size: 16px; font-weight: 700; text-align: center; color: var(--main) !important; line-height: 1.3; }
+        .logo { height: 45px; cursor: pointer; }
+        .header-title { font-size: 16px; font-weight: 700; text-align: center; color: var(--main) !important; }
 
-        .container { max-width: 1400px; margin: auto; padding: 20px; display: flex; flex-direction: column; }
+        /* LAYOUT - Forced LTR for Grid Stability */
+        .container { 
+            max-width: 1400px; margin: auto; padding: 20px; 
+            display: flex; flex-direction: column; 
+        }
 
-        /* VIEWER */
         .viewer { 
             width: 100%; height: 50vh; position: relative; 
             display: flex; align-items: center; justify-content: center; 
             margin-bottom: 15px; overflow: hidden; background: transparent; 
-            border-radius: 12px; cursor: zoom-in; touch-action: pan-y;
+            cursor: zoom-in;
         }
         .viewer img { 
-            max-width: 95%; max-height: 95%; object-fit: contain; pointer-events: none; 
+            max-width: 95%; max-height: 95%; object-fit: contain; 
             filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3)); opacity: 0; transition: opacity 0.3s;
         }
         .viewer.loaded img { opacity: 1; }
 
-        /* Shimmer Loading */
-        .viewer::before {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
-            background-size: 200% 100%; animation: skeleton 1.5s infinite;
-            border-radius: 12px; pointer-events: none; opacity: 1; transition: opacity 0.4s; z-index: 1;
-        }
-        .viewer.loaded::before { opacity: 0; }
-        @keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-        .photo-credit { 
-            position: absolute; bottom: 0; left: 0; right: 0; 
-            background: linear-gradient(transparent, rgba(0,0,0,0.85)); 
-            color: white !important; padding: 35px 15px 15px; font-size: 13px; 
-            z-index: 10; opacity: 0; transition: opacity 0.4s ease; 
-            pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-        }
-        .viewer:hover .photo-credit, .viewer.info-active .photo-credit { opacity: 1 !important; }
-
         /* THUMBS */
-        .thumbs { display: flex; gap: 12px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; margin-bottom: 20px; }
-        .thumbs::-webkit-scrollbar { display: none; }
+        .thumbs { display: flex; gap: 12px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
         .thumbs img { 
             width: 75px; height: 75px; object-fit: contain; border-radius: 15px; 
             cursor: pointer; opacity: .4; background: rgba(255,255,255,0.05); 
             border: 2px solid transparent; display: none; transition: 0.3s;
         }
-        .thumbs img.active { border-color: var(--gold); opacity: 1; transform: scale(1.1); background: rgba(225, 169, 62, 0.1); }
+        .thumbs img.active { border-color: var(--gold); opacity: 1; transform: scale(1.1); }
 
-        .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; line-height: 1.2; }
-        .meta { font-size: 17px; margin: 5px 0; opacity: 0.9; }
+        .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; }
         .details { margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.8; }
 
-        /* اتجاهات النصوص */
-        .lang-ar { direction: rtl; text-align: right; }
-        .lang-en { direction: ltr; text-align: left; }
-        .lang-ar .photo-credit { text-align: right; direction: rtl; }
-        .lang-en .photo-credit { text-align: left; direction: ltr; }
-
-        /* TOOLTIPS */
-        [data-tooltip] { position: relative; }
-        [data-tooltip]::before {
-            content: attr(data-tooltip); position: absolute; bottom: 140%; left: 50%; transform: translateX(-50%) translateY(10px);
-            background: var(--light); color: var(--main); padding: 7px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
-            white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 9999;
-        }
-        [data-tooltip]:hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-        .light [data-tooltip]::before { background: var(--main); color: var(--light); }
+        /* Alignment Logic */
+        .lang-ar { text-align: right; }
+        .lang-en { text-align: left; }
 
         @media(min-width:1100px) {
             .container { 
-                display: grid; grid-template-columns: 120px 1fr 450px; 
+                display: grid; 
+                grid-template-columns: 120px 1fr 450px; 
                 grid-template-areas: "thumb viewer info" "thumb details details";
-                gap: 50px; direction: ltr !important; /* تثبيت الثامنيلز شمال */
+                gap: 50px; 
+                direction: ltr !important; 
             }
             .viewer { grid-area: viewer; height: 70vh; }
-            .thumbs { grid-area: thumb; flex-direction: column; margin-top: 120px; position: sticky; top: 150px; }
-            .thumbs img { width: 85px; height: 85px; }
+            .thumbs { grid-area: thumb; flex-direction: column; position: sticky; top: 150px; margin-top: 120px; }
             .info { grid-area: info; margin-top: 120px; }
             .details { grid-area: details; }
-            body.lang-ar .info, body.lang-ar .details { direction: rtl; text-align: right; }
-            body.lang-en .info, body.lang-en .details { direction: ltr; text-align: left; }
+            
+            .lang-ar .info, .lang-ar .details { text-align: right; direction: rtl; }
+            .lang-en .info, .lang-en .details { text-align: left; direction: ltr; }
         }
-
-        /* FULLSCREEN MODAL */
-        #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--main); z-index: 10001; }
-        #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; }
-        #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; transition: transform 0.1s ease-out; }
-        #fullscreenModal.desktop-view { overflow: hidden; }
-        #fullscreenModal.desktop-view #modalImage { cursor: zoom-in; }
-        #fullscreenModal.desktop-zoomed #modalImage { cursor: grab; transform: scale(2.5); }
-        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002; }
 
         /* CONTROLS */
         .controls { 
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
-            background: rgba(10, 30, 35, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); 
-            padding: 12px 30px; border-radius: 50px; display: flex; align-items: center; gap: 20px; 
+            background: rgba(10, 30, 35, 0.95); backdrop-filter: blur(15px);
+            padding: 12px 30px; border-radius: 50px; display: flex; align-items: center; gap: 25px; 
             z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid rgba(225, 169, 62, 0.2);
-            direction: ltr !important; 
+            direction: ltr !important;
         }
-        .controls div { font-size: 24px; cursor: pointer; transition: 0.2s; color: white; display: flex; align-items: center; }
+        .controls div { font-size: 24px; cursor: pointer; color: white; transition: 0.2s; }
         .controls .nav-btn { color: var(--gold); font-size: 28px; }
-        .controls .nav-btn.disabled { opacity: 0.15; cursor: default; pointer-events: none; }
+        .controls .nav-btn.disabled { opacity: 0.15; pointer-events: none; }
         .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3); }
+
+        /* MODAL */
+        #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--main); z-index: 10001; }
+        #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; }
+        #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; }
+        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002; }
+
+        .photo-credit { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: white !important; padding: 35px 15px 15px; font-size: 13px; z-index: 10; opacity: 0; transition: 0.4s; pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+        .viewer:hover .photo-credit, .viewer.info-active .photo-credit { opacity: 1 !important; }
 
         footer { text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
     </style>
@@ -171,19 +137,18 @@
 </div>
 
 <div class="controls">
-    <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
+    <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn">◀</div>
     <div class="sep"></div>
-    <div onclick="toggleLang()" data-ar="تغيير اللغة" data-en="Change Language">🌐</div>
-    <div onclick="toggleTheme()" id="themeBtn" data-ar="تغيير المظهر" data-en="Change Theme">☀️</div>
-    <div onclick="share()" data-ar="مشاركة" data-en="Share">🔗</div>
+    <div onclick="toggleLang()">🌐</div>
+    <div onclick="toggleTheme()" id="themeBtn">☀️</div>
+    <div onclick="share()">🔗</div>
     <div class="sep"></div>
-    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn" data-ar="القطعة التالية" data-en="Next Piece">▶</div>
+    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn">▶</div>
 </div>
 
 <footer> Nadim Foundation © ® </footer>
 
 <script>
-    // 1. الإعدادات الأولية للذاكرة (Storage)
     const systemLang = navigator.language.startsWith("ar") ? "ar" : "en";
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     let lang = localStorage.getItem("nadim_lang") || systemLang;
@@ -195,20 +160,15 @@
 
     async function load() {
         try {
-            // تطبيق الثيم الأولي لمنع الوميض
             const savedTheme = localStorage.getItem("nadim_theme");
             if (savedTheme === "light" || (!savedTheme && !prefersDark)) document.body.classList.add("light");
             updateThemeIcon();
 
-            const res = await fetch("data/artworks.json");
+            const res = await fetch("data/artworks.json?t=" + new Date().getTime());
             allArtworks = await res.json();
-            const id = newSearchParams(location.search).get("id");
+            const id = new URLSearchParams(location.search).get("id");
             initPiece(id || allArtworks[0].id);
         } catch(e) { console.error("Data Load Failed"); }
-    }
-
-    function newSearchParams(search) {
-        return new URLSearchParams(search);
     }
 
     function initPiece(id) {
@@ -216,7 +176,14 @@
         if(!artwork) return;
         currentIdx = 0;
         validImages = Array(5).fill(null);
-        mainImage.src = ""; 
+        
+        // --- الحل الجذري لمنع ظهور الصورة القديمة ---
+        mainImage.removeAttribute("src");
+        // حقن بيكسل شفاف لتفريغ الذاكرة البصرية فوراً
+        mainImage.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+        modalImage.removeAttribute("src");
+        // --------------------------------------------
+
         mainViewer.classList.remove("loaded", "empty-piece");
         photoCredit.style.opacity = "0";
         prepareImages();
@@ -226,9 +193,10 @@
 
     function setNoImageFallback() {
         mainViewer.classList.remove("loaded");
-        mainImage.src = "images/no-image.png";
+        // ربط الـ onload قبل تمرير مسار الصورة لضمان استجابة الكاش
         mainImage.onload = () => mainViewer.classList.add("loaded");
-        mainViewer.classList.add("empty-piece"); // لمنع فتحها في الفل سكرين
+        mainImage.src = "images/no-image.png";
+        mainViewer.classList.add("empty-piece"); 
         photoCredit.style.opacity = "0";
     }
 
@@ -239,7 +207,6 @@
 
         const validSources = potential.filter(src => src && src.trim() !== "");
         
-        // استخدام صورة Repo كبديل في حال عدم وجود صور في الـ JSON
         if (validSources.length === 0) {
             setNoImageFallback();
             return;
@@ -256,7 +223,6 @@
                 return; 
             }
             
-            // التعديل هنا: استبدال أوتوماتيكي بـ .webp بدلا من .png
             const webpSrc = src.replace(/\.[^/.]+$/, ".webp");
             const img = document.createElement("img");
             img.src = webpSrc;
@@ -272,7 +238,6 @@
             img.onerror = () => {
                 checkedCount++;
                 img.remove();
-                // إذا فشلت كل الصور في التحميل، اعرض صورة no-image
                 if (checkedCount === potential.length && loadedCount === 0) setNoImageFallback();
             };
             
@@ -287,13 +252,14 @@
         
         currentIdx = i;
         mainViewer.classList.remove("loaded", "empty-piece");
-        mainImage.src = src;
+        
+        // ربط الـ onload قبل السورس
         mainImage.onload = () => mainViewer.classList.add("loaded");
+        mainImage.src = src;
         modalImage.src = src;
         
         document.querySelectorAll(".thumbs img").forEach(t => t.classList.toggle("active", t.src.includes(src)));
         
-        // تعديل 1: استخدام innerHTML لدعم التنسيق في البالونة
         const info = (artwork[`info_${lang}${i + 1}`] || "").trim();
         photoCredit.innerHTML = info;
         photoCredit.style.opacity = info ? "1" : "0";
@@ -306,7 +272,6 @@
         
         const ar = lang === "ar";
 
-        // تعديل 2 & 4: استخدام innerHTML + Safety Check
         document.getElementById("inv").innerHTML = artwork.inventory_number || "";
         document.getElementById("title").innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "";
         document.getElementById("from").innerHTML = (ar ? artwork.from_ar : artwork.from_en) || "";
@@ -315,13 +280,8 @@
         document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
         document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
         
-        // تعديل 3: معالجة Line breaks
         const descText = (ar ? artwork.desc_ar : artwork.desc_en) || "";
         document.getElementById("desc").innerHTML = descText.replace(/\n/g, '<br>');
-
-        document.querySelectorAll('[data-ar]').forEach(el => {
-            el.setAttribute('data-tooltip', el.getAttribute(`data-${lang}`));
-        });
     }
 
     function toggleLang() { lang = lang === "ar" ? "en" : "ar"; localStorage.setItem("nadim_lang", lang); render(); if(!mainViewer.classList.contains("empty-piece")) show(currentIdx); }
@@ -355,8 +315,7 @@
         infoTimer = setTimeout(() => mainViewer.classList.remove('info-active'), 3500);
     }
 
-    // إغلاق الفل سكرين عند ضغط ESC
-    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; } });
+    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetModal(); } });
 
     let startX = 0;
     mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) startX = e.touches[0].clientX; triggerInfoMobile(); }, {passive: true});
@@ -377,7 +336,10 @@
         history.pushState({modal: true}, "");
         if(!isMobile) { modal.classList.add('desktop-view'); initDesktopZoom(); }
     };
-    document.getElementById("modalClose").onclick = () => history.back();
+    
+    document.getElementById("modalClose").onclick = () => {
+        modal.style.display = 'none'; document.body.style.overflow = ''; resetModal();
+    };
     
     window.onpopstate = (e) => {
         if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetModal(); }
