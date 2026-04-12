@@ -38,7 +38,14 @@
             background: rgba(0,0,0,0.1); border-radius: 12px; 
             cursor: pointer; touch-action: pan-y;
         }
-        .viewer img { max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; }
+        .viewer img { max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3)); }
+        
+        /* تصميم أيقونة لا توجد صورة */
+        .no-image-placeholder {
+            display: none; flex-direction: column; align-items: center; 
+            justify-content: center; opacity: 0.4; font-size: 14px; gap: 10px;
+        }
+        .no-image-placeholder svg { width: 40px; height: 40px; fill: currentColor; }
 
         .photo-credit { 
             position: absolute; bottom: 0; left: 0; right: 0; 
@@ -75,7 +82,7 @@
             .container { 
                 display: grid; grid-template-columns: 100px 1fr 400px; 
                 grid-template-areas: "thumb viewer info" "thumb details details";
-                gap: 40px; align-items: start; direction: ltr !important; /* ضمان ثبات الثامنيلز على الشمال */
+                gap: 40px; align-items: start; direction: ltr; 
             }
             .viewer { grid-area: viewer; height: 70vh; }
             .thumbs { grid-area: thumb; flex-direction: column; margin-top: 120px; position: sticky; top: 150px; }
@@ -115,7 +122,7 @@
 
 <body class="lang-ar">
 
-<div id="fullscreenModal"><div id="modalClose">×</div><div id="modalContent"><img id="modalImage"></div></div>
+<div id="fullscreenModal"><div id="modalClose">×</div><div id="modalContent"><img id="modalImage" decoding="async"></div></div>
 
 <header id="museumHeader">
     <div class="logo-row">
@@ -126,7 +133,14 @@
 </header>
 
 <div class="container">
-    <div class="viewer" id="mainViewer"><img id="mainImage"><div class="photo-credit" id="photoCredit"></div></div>
+    <div class="viewer" id="mainViewer">
+        <img id="mainImage" decoding="async">
+        <div class="no-image-placeholder" id="noImagePlaceholder">
+            <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            <span id="noImageText">لا توجد صورة</span>
+        </div>
+        <div class="photo-credit" id="photoCredit"></div>
+    </div>
     <div class="thumbs" id="thumbs"></div>
     <div class="info">
         <div class="meta" id="inv"></div><h1 id="title"></h1>
@@ -157,13 +171,13 @@
     const isMobile = window.innerWidth < 1100;
     let infoTimer;
 
-    const mainViewer = document.getElementById("mainViewer"), mainImage = document.getElementById("mainImage"), photoCredit = document.getElementById("photoCredit");
-    const modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
+    const mainViewer = document.getElementById("mainViewer"), mainImage = document.getElementById("mainImage");
+    const noImagePlaceholder = document.getElementById("noImagePlaceholder"), noImageText = document.getElementById("noImageText");
+    const photoCredit = document.getElementById("photoCredit"), modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
 
     async function load() {
         try {
-            // إزالة ?t= لمنع البطء والاعتماد على الكاش
-            const res = await fetch("data/artworks.json");
+            const res = await fetch("data/artworks.json?t=" + new Date().getTime());
             allArtworks = await res.json();
             const id = new URLSearchParams(location.search).get("id");
             initPiece(id || allArtworks[0].id);
@@ -174,6 +188,13 @@
         artwork = allArtworks.find(a => a.id === id);
         if(!artwork) return;
         currentIdx = 0;
+        
+        // تنظيف الشاشة فوراً لمنع الـ Ghost Images
+        mainImage.src = "";
+        mainImage.style.display = "none";
+        noImagePlaceholder.style.display = "none";
+        photoCredit.style.opacity = "0";
+        
         prepareImages();
         render();
         updateNavButtons();
@@ -184,29 +205,28 @@
         const thumbs = document.getElementById("thumbs");
         thumbs.innerHTML = ""; validImages = [];
 
-        potential.forEach((src) => {
-            if (!src || src.trim() === "") return;
+        const validSources = potential.filter(src => src && src.trim() !== "");
+        
+        // لو مفيش أي مسارات صور في الـ JSON، أظهر الأيقونة الفاضية فوراً
+        if (validSources.length === 0) {
+            noImagePlaceholder.style.display = "flex";
+            return;
+        }
+
+        let first = true;
+        validSources.forEach((src) => {
             const img = document.createElement("img");
-            
-            // تحويل الامتداد لـ png
-            const pngSrc = src.replace(/\.[^/.]+$/, ".png");
-            img.src = pngSrc;
+            img.src = src;
+            img.loading = "lazy"; // تسريع التحميل
             
             img.onload = () => {
                 img.style.display = 'block';
-                validImages.push(pngSrc);
-                
-                // الحفاظ على الترتيب الأصلي للصور
-                validImages.sort((a, b) => {
-                    const baseA = a.split('/').pop().split('.')[0];
-                    const baseB = b.split('/').pop().split('.')[0];
-                    return potential.findIndex(p => p && p.includes(baseA)) - potential.findIndex(p => p && p.includes(baseB));
-                });
-                
-                if (validImages.length === 1) show(0);
+                validImages.push(src);
+                validImages.sort((a, b) => potential.indexOf(a) - potential.indexOf(b));
+                if (first && validImages.length > 0) { show(0); first = false; }
             };
             img.onerror = () => img.remove();
-            img.onclick = (e) => { e.stopPropagation(); show(validImages.indexOf(pngSrc)); };
+            img.onclick = (e) => { e.stopPropagation(); show(validImages.indexOf(src)); };
             thumbs.appendChild(img);
         });
     }
@@ -215,24 +235,25 @@
         if(i < 0 || i >= validImages.length) i = 0;
         currentIdx = i;
         const currentSrc = validImages[i];
-        if(!currentSrc) return;
+        
+        // التأكد من وجود صورة
+        if(!currentSrc) {
+            mainImage.style.display = "none";
+            noImagePlaceholder.style.display = "flex";
+            return;
+        }
 
+        noImagePlaceholder.style.display = "none";
+        mainImage.style.display = "block";
         mainImage.src = currentSrc;
         modalImage.src = currentSrc;
         
         document.querySelectorAll(".thumbs img").forEach((t) => t.classList.toggle("active", t.src.includes(currentSrc)));
         
-        // استخراج الـ index الأصلي بشكل دقيق لربطه بـ info_ar
-        const potential = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5];
-        const baseSrc = currentSrc.split('/').pop().split('.')[0];
-        const originalIndex = potential.findIndex(p => p && p.includes(baseSrc)) + 1;
-        
-        // Safety Check
+        const originalIndex = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].indexOf(currentSrc) + 1;
         const info = (artwork[lang === "ar" ? `info_ar${originalIndex}` : `info_en${originalIndex}`] || "").trim();
         
-        // إضافة خاصية innerHTML لدعم التنسيق في البالونة
         photoCredit.innerHTML = info;
-        
         if(info) { photoCredit.style.opacity = "1"; if(isMobile) triggerInfoMobile(); } 
         else { photoCredit.style.opacity = "0"; }
     }
@@ -272,6 +293,7 @@
     }, {passive: true});
 
     mainViewer.onclick = () => {
+        if (!mainImage.src || validImages.length === 0) return; // منع التكبير لو مفيش صورة
         modal.style.display = 'block'; document.body.style.overflow = 'hidden';
         history.pushState({modal: true}, "");
         if(!isMobile) modal.classList.add('desktop-view'); initDesktopZoom();
@@ -297,10 +319,14 @@
     function resetModal() { modalImage.style.transform = "scale(1)"; modalImage.style.transformOrigin = "center center"; dz = false; modal.classList.remove('desktop-zoomed'); }
 
     function render() {
-        document.body.className = (lang === "ar" ? "lang-ar" : "lang-en") + (document.body.classList.contains("light") ? " light" : "");
-        const ar = (lang === "ar");
+        document.body.classList.toggle("lang-ar", lang === "ar");
+        document.body.classList.toggle("lang-en", lang === "en");
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+        
+        const ar = lang === "ar";
+        noImageText.textContent = ar ? "لا توجد صورة" : "No image available";
 
-        // استخدام innerHTML لجميع الحقول + Safety Check || ""
+        // استخدام innerHTML لجميع الحقول + Safety Check
         document.getElementById("inv").innerHTML = artwork.inventory_number || "";
         document.getElementById("title").innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "";
         document.getElementById("from").innerHTML = (ar ? artwork.from_ar : artwork.from_en) || "";
@@ -309,13 +335,12 @@
         document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
         document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
         
-        // معالجة السطر الجديد في الديسكربشن (Line Breaks)
         const descText = (ar ? artwork.desc_ar : artwork.desc_en) || "";
         document.getElementById("desc").innerHTML = descText.replace(/\n/g, '<br>');
     }
 
     function toggleLang() { lang = lang === "ar" ? "en" : "ar"; render(); show(currentIdx); }
-    function toggleTheme() { document.body.classList.toggle("light"); document.getElementById("themeBtn").textContent = document.body.classList.contains("light") ? "🌙" : "☀️"; }
+    function toggleTheme() { const isLight = document.body.classList.toggle("light"); document.getElementById("themeBtn").textContent = isLight ? "🌙" : "☀️"; }
     function share() { navigator.share ? navigator.share({url: location.href}) : alert("Link Copied"); }
     
     window.addEventListener("scroll", () => {
