@@ -8,18 +8,15 @@
     <link rel="icon" type="image/svg+xml" href="images/nadim-icon.svg">
     <link rel="apple-touch-icon" href="images/nadim-icon.svg">
 
-    <!-- فونت non-blocking: الصفحة ترسم فوراً، الفونت يتحمل في الخلفية -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" onload="this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap"></noscript>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; }
 
-        /* ─── BASE ─── */
         body {
             margin: 0; font-family: 'Tajawal', sans-serif;
             background: var(--main); color: var(--light);
@@ -36,7 +33,9 @@
             align-items: center; z-index: 1000;
             box-shadow: 0 2px 20px rgba(0,0,0,0.12);
             border-radius: 0 0 40px 40px;
+            transition: padding 0.3s ease;
         }
+        #museumHeader.header-small { padding: 10px 20px; }
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; }
         .logo { height: 45px; cursor: pointer; transition: opacity 0.3s; -webkit-user-drag: none; }
         .logo:hover { opacity: 0.8; }
@@ -53,7 +52,7 @@
             background: transparent; border-radius: 12px;
             cursor: zoom-in; touch-action: pan-y;
         }
-        /* Skeleton shimmer أثناء تحميل الصورة */
+        /* Skeleton shimmer */
         .viewer::before {
             content: ''; position: absolute; inset: 0;
             background: linear-gradient(90deg,
@@ -61,12 +60,12 @@
                 rgba(255,255,255,0.08) 50%,
                 rgba(255,255,255,0.03) 75%);
             background-size: 200% 100%;
-            animation: skeleton 1.5s infinite;
+            animation: shimmer 1.5s infinite;
             border-radius: 12px; pointer-events: none;
-            opacity: 1; transition: opacity 0.5s ease;
+            opacity: 1; transition: opacity 0.5s ease; z-index: 1;
         }
         .viewer.loaded::before { opacity: 0; }
-        @keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
         .viewer img {
             max-width: 95%; max-height: 95%;
@@ -74,6 +73,16 @@
             filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3));
             transition: opacity 0.35s ease;
         }
+
+        /* No-image placeholder */
+        .viewer .no-image {
+            display: none; flex-direction: column; align-items: center;
+            justify-content: center; gap: 12px; opacity: 0.35;
+            font-size: 15px; pointer-events: none;
+        }
+        .viewer .no-image i { font-size: 48px; }
+        .viewer.empty::before { opacity: 0; }
+        .viewer.empty .no-image { display: flex; }
 
         /* بالونة معلومات الصورة */
         .photo-credit {
@@ -103,18 +112,22 @@
         .thumbs img.active {
             border-color: var(--gold); opacity: 1;
             transform: scale(1.1);
-            background: rgba(225, 169, 62, 0.1);
+            background: rgba(225,169,62,0.1);
         }
 
         /* ─── INFO & DETAILS ─── */
         .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; line-height: 1.25; }
         .meta { font-size: 17px; margin: 5px 0; opacity: 0.9; }
         .details {
-            margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2);
+            margin-top: 25px; border-top: 1px solid rgba(225,169,62,0.2);
             padding-top: 20px; line-height: 1.8;
         }
 
-        /* ─── TOOLTIP على أزرار الـ controls ─── */
+        /* ─── LANG / DIR ─── */
+        .lang-ar { direction: rtl; text-align: right; }
+        .lang-en { direction: ltr; text-align: left; }
+
+        /* ─── TOOLTIPS ─── */
         [data-tooltip] { position: relative; }
         [data-tooltip]::before {
             content: attr(data-tooltip);
@@ -157,65 +170,60 @@
             background: var(--main); z-index: 10001; overflow: auto;
         }
         #modalContent { display: flex; min-height: 100%; align-items: center; justify-content: center; width: 100%; }
-        #modalImage {
-            max-width: 95%; max-height: 95%;
-            object-fit: contain; transition: transform 0.15s ease-out;
-        }
+        #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; transition: transform 0.15s ease-out; }
         #fullscreenModal.desktop-view  #modalImage { cursor: zoom-in; }
         #fullscreenModal.desktop-zoomed #modalImage { cursor: grab; transform: scale(2.5); }
         #modalClose {
             position: absolute; top: 25px; right: 25px;
             font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002;
-            transition: opacity 0.2s;
+            transition: opacity 0.2s; line-height: 1;
         }
         #modalClose:hover { opacity: 0.7; }
 
         /* ─── CONTROLS BAR ─── */
         .controls {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            background: rgba(10, 30, 35, 0.95);
+            background: rgba(10,30,35,0.95);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             padding: 12px 30px; border-radius: 50px;
             display: flex; align-items: center; gap: 25px;
             z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            border: 1px solid rgba(225, 169, 62, 0.2);
+            border: 1px solid rgba(225,169,62,0.2);
             direction: ltr !important;
         }
         .controls div {
-            font-size: 24px; cursor: pointer; transition: opacity 0.2s, transform 0.2s;
+            font-size: 24px; cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
             color: white; display: flex; align-items: center;
         }
-        .controls div:hover { opacity: 0.75; transform: scale(1.1); }
+        .controls div:not(.sep):not(.disabled):hover { opacity: 0.75; transform: scale(1.1); }
         .controls .nav-btn { color: var(--gold); font-size: 28px; }
         .controls .nav-btn.disabled { opacity: 0.15 !important; cursor: default; pointer-events: none; transform: none !important; }
-        .controls .sep { width: 1px; height: 22px; background: rgba(225, 169, 62, 0.3); cursor: default; }
-        .controls .sep:hover { opacity: 1; transform: none; }
+        .controls .sep { width: 1px; height: 22px; background: rgba(225,169,62,0.3); cursor: default; }
 
         footer { text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
     </style>
 </head>
 
-<body class="lang-ar">
+<body>
 
-<!-- Fullscreen Modal -->
 <div id="fullscreenModal">
     <div id="modalClose">×</div>
     <div id="modalContent"><img id="modalImage" alt=""></div>
 </div>
 
-<!-- Header -->
 <header id="museumHeader">
     <div class="logo-row">
         <a href="https://nd-f.github.io/QR/"><img src="images/logo-nadim.png" class="logo" alt="Nadim"></a>
         <div class="header-title" id="headerTitle"></div>
-        <img src="images/MIALOGO.png" class="logo" alt="MIA" style="height: 35px;">
+        <img src="images/MIALOGO.png" class="logo" alt="MIA" style="height:35px;">
     </div>
 </header>
 
-<!-- Main Content -->
 <div class="container">
     <div class="viewer" id="mainViewer">
         <img id="mainImage" alt="">
+        <div class="no-image"><i class="fa-regular fa-image"></i><span id="noImageText">لا توجد صورة</span></div>
         <div class="photo-credit" id="photoCredit"></div>
     </div>
 
@@ -231,12 +239,11 @@
 
     <div class="details">
         <div class="meta" id="hall"></div>
-        <div class="meta" id="material" style="font-weight: 600; color: var(--gold);"></div>
+        <div class="meta" id="material" style="font-weight:600;color:var(--gold);"></div>
         <div id="desc"></div>
     </div>
 </div>
 
-<!-- Controls Bar -->
 <div class="controls">
     <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn"
          data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
@@ -252,17 +259,24 @@
 <footer>Nadim Foundation © ®</footer>
 
 <script>
-    // ════════════════════════════════════════════════
-    // 1. الإعدادات الأولية
-    // ════════════════════════════════════════════════
-    const systemLang  = navigator.language.startsWith("ar") ? "ar" : "en";
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isMobile    = window.innerWidth < 1100;
+    // ════════════════════════════════════════════
+    // 1. الإعدادات الأولية — مع localStorage
+    // ════════════════════════════════════════════
 
-    let lang        = systemLang;
+    // اللغة: من localStorage أولاً، ثم إعداد الجهاز
+    const systemLang = navigator.language.startsWith("ar") ? "ar" : "en";
+    let lang = localStorage.getItem("nadim_lang") || systemLang;
+
+    // الثيم: من localStorage أولاً، ثم إعداد الجهاز
+    const systemDark  = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const savedTheme  = localStorage.getItem("nadim_theme"); // "dark" | "light" | null
+    const startLight  = savedTheme ? savedTheme === "light" : !systemDark;
+
+    const isMobile = window.innerWidth < 1100;
+
     let allArtworks = [];
-    let validImages = [];   // مصفوفة مُفلترة بالصور الصالحة فقط، بدون nulls، بالترتيب
-    let currentIdx  = 0;    // index داخل validImages (مش داخل sources)
+    let validImages = [];
+    let currentIdx  = 0;
     let artwork;
     let infoTimer;
 
@@ -272,18 +286,19 @@
     const modal       = document.getElementById("fullscreenModal");
     const modalImage  = document.getElementById("modalImage");
 
-    // ════════════════════════════════════════════════
+    // تطبيق اللغة والثيم قبل أي حاجة (يمنع الوميض)
+    document.body.classList.add(lang === "ar" ? "lang-ar" : "lang-en");
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    if (startLight) document.body.classList.add("light");
+    updateThemeIcon();
+
+    // ════════════════════════════════════════════
     // 2. تحميل البيانات
-    // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════
     async function load() {
         try {
-            // بدون ?t= عشان المتصفح يكاش الـ JSON بدل ما يحمّله كل زيارة
             const res = await fetch("data/artworks.json");
             allArtworks = await res.json();
-
-            if (!prefersDark) document.body.classList.add("light");
-            updateThemeIcon();
-
             const id = new URLSearchParams(location.search).get("id");
             initPiece(id || allArtworks[0].id);
         } catch (e) {
@@ -291,48 +306,51 @@
         }
     }
 
-    // ════════════════════════════════════════════════
-    // 3. تهيئة قطعة جديدة
-    // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════
+    // 3. تهيئة قطعة
+    // ════════════════════════════════════════════
     function initPiece(id) {
         artwork = allArtworks.find(a => a.id === id);
         if (!artwork) return;
-
         currentIdx  = 0;
-        validImages = [];   // ← مسح صور القطعة السابقة قبل أي شيء
-
+        validImages = [];
         prepareImages();
         render();
         updateNavButtons();
     }
 
-    // ════════════════════════════════════════════════
-    // 4. تحضير الصور — قلب المنطق
-    // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════
+    // 4. تحضير الصور
+    // ════════════════════════════════════════════
     function prepareImages() {
         const thumbsEl = document.getElementById("thumbs");
         thumbsEl.innerHTML = "";
-        mainViewer.classList.remove("loaded");
+        mainViewer.classList.remove("loaded", "empty");
+        mainImage.removeAttribute("src");
 
-        // قائمة المصادر بترتيبها الأصلي مع تحويل الامتداد لـ .png
         const sources = [
             artwork.image1, artwork.image2, artwork.image3,
             artwork.image4, artwork.image5
         ].map(src => (src && src.trim()) ? src.replace(/\.[^/.]+$/, ".png") : null);
 
-        // مصفوفة مؤقتة لحفظ المواضع الأصلية ريثما تتحقق كل صورة
-        const pending   = new Array(5).fill(null);
-        // thumbnail elements مرتبة بنفس الترتيب عشان نقدر نعرضهم بعدين
-        const thumbEls  = new Array(5).fill(null);
+        const validSources = sources.filter(Boolean);
+
+        // لو مفيش مصادر خالص → empty state فوراً
+        if (validSources.length === 0) {
+            mainViewer.classList.add("empty");
+            return;
+        }
+
+        const pending    = new Array(5).fill(null);
+        const thumbEls   = new Array(5).fill(null);
         let   firstShown = false;
+        let   errorCount = 0;
 
         sources.forEach((pngSrc, originalIndex) => {
             if (!pngSrc) return;
 
-            // ── إنشاء عنصر الـ thumbnail في الـ DOM ──
+            // Thumbnail element (بدون src الآن)
             const thumbImg = document.createElement("img");
-            // لا lazy هنا — الـ thumbnail مش في الـ viewport دايماً
-            // وبالتالي lazy يمنع onload من الإطلاق ويكسر كل المنطق
             thumbImg.onclick = (e) => {
                 e.stopPropagation();
                 const idx = validImages.indexOf(pngSrc);
@@ -341,19 +359,18 @@
             thumbsEl.appendChild(thumbImg);
             thumbEls[originalIndex] = thumbImg;
 
-            // ── كائن Image() منفصل للتحقق من وجود الصورة ──
-            // الفصل ده ضروري: التحقق يحصل بغض النظر عن موضع الـ thumbnail في الـ viewport
+            // Probe منفصل — بيتحمل بغض النظر عن الـ viewport
             const probe = new Image();
 
             probe.onload = () => {
-                // الصورة موجودة — سجّلها وأظهر الـ thumbnail
                 pending[originalIndex] = pngSrc;
                 validImages = pending.filter(Boolean);
 
-                thumbImg.src               = pngSrc;
-                thumbImg.style.display     = "block";
+                // إظهار الـ thumbnail
+                thumbImg.setAttribute("src", pngSrc);
+                thumbImg.style.display = "block";
 
-                // أول صورة تتأكد = حمّل الـ viewer فوراً
+                // أول صورة تتأكد → اعرضها
                 if (!firstShown) {
                     firstShown = true;
                     show(0);
@@ -361,60 +378,53 @@
             };
 
             probe.onerror = () => {
-                // الصورة مش موجودة — امسح الـ thumbnail من الـ DOM
                 thumbImg.remove();
+                errorCount++;
+                // لو كل الصور فشلت → empty state
+                if (errorCount === validSources.length) {
+                    mainViewer.classList.add("empty");
+                }
             };
 
             probe.src = pngSrc;
         });
     }
 
-    // ════════════════════════════════════════════════
-    // 5. عرض صورة بمؤشرها في validImages
-    // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════
+    // 5. عرض صورة
+    // ════════════════════════════════════════════
     function show(i) {
         if (!validImages.length) return;
-
-        // تقييد المؤشر داخل الحدود
         i = Math.max(0, Math.min(i, validImages.length - 1));
         currentIdx = i;
 
         const src = validImages[i];
 
-        // تحديث الـ viewer فقط لو الصورة مختلفة
-        // (getAttribute يرجع الـ src النسبي كما أُسند، عكس .src الذي يُصبح URL كامل)
         if (mainImage.getAttribute("src") !== src) {
             mainViewer.classList.remove("loaded");
-            mainImage.onload  = () => mainViewer.classList.add("loaded");
+            mainImage.onload  = () => { mainViewer.classList.add("loaded"); mainViewer.classList.remove("empty"); };
             mainImage.onerror = () => mainViewer.classList.add("loaded");
             mainImage.setAttribute("src", src);
         } else {
-            // الصورة نفسها — تأكد من إظهار الـ loaded state
             mainViewer.classList.add("loaded");
         }
 
-        // تمييز الـ thumbnail النشط
+        // تمييز الـ thumbnail
         document.querySelectorAll(".thumbs img").forEach(t => {
-            // مقارنة بالـ src النسبي للـ thumbnail أيضاً
             t.classList.toggle("active", t.getAttribute("src") === src);
         });
 
-        // بالونة معلومات الصورة (info_ar1 / info_en1 ...)
-        const imgNum  = i + 1;
-        const infoKey = `info_${lang}${imgNum}`;
-        const infoText = (artwork[infoKey] || "").trim();
-
+        // بالونة معلومات الصورة
+        const infoText = (artwork[`info_${lang}${i + 1}`] || "").trim();
         photoCredit.textContent   = infoText;
         photoCredit.style.opacity = infoText ? "1" : "0";
-
         if (infoText && isMobile) triggerInfoMobile();
     }
 
-    // ════════════════════════════════════════════════
-    // 6. رسم محتوى القطعة (نص + اتجاه)
-    // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════
+    // 6. رسم النصوص
+    // ════════════════════════════════════════════
     function render() {
-        // toggle بدل className= عشان لا يُمسح كلاس "light"
         document.body.classList.toggle("lang-ar", lang === "ar");
         document.body.classList.toggle("lang-en", lang === "en");
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
@@ -424,31 +434,30 @@
             : "From the Life of an Artifact Exhibition";
         document.title = siteTitle;
         document.getElementById("headerTitle").textContent = siteTitle;
+        document.getElementById("noImageText").textContent = lang === "ar" ? "لا توجد صورة" : "No image available";
 
         const ar = lang === "ar";
         document.getElementById("inv").textContent      = artwork.inventory_number || "";
-        document.getElementById("title").textContent    = ar ? artwork.title_ar       : artwork.title_en;
-        document.getElementById("from").textContent     = ar ? artwork.from_ar        : artwork.from_en;
-        document.getElementById("date").textContent     = ar ? artwork.date_ar        : artwork.date_en;
-        document.getElementById("dim").textContent      = ar ? artwork.dimensions_ar  : artwork.dimensions_en;
-        document.getElementById("hall").textContent     = ar ? artwork.hall_ar        : artwork.hall_en;
-        document.getElementById("material").textContent = (ar ? artwork.material_ar   : artwork.material_en) || "";
-        document.getElementById("desc").textContent     = ar ? artwork.desc_ar        : artwork.desc_en;
+        document.getElementById("title").textContent    = ar ? artwork.title_ar      : artwork.title_en;
+        document.getElementById("from").textContent     = ar ? artwork.from_ar       : artwork.from_en;
+        document.getElementById("date").textContent     = ar ? artwork.date_ar       : artwork.date_en;
+        document.getElementById("dim").textContent      = ar ? artwork.dimensions_ar : artwork.dimensions_en;
+        document.getElementById("hall").textContent     = ar ? artwork.hall_ar       : artwork.hall_en;
+        document.getElementById("material").textContent = (ar ? artwork.material_ar  : artwork.material_en) || "";
+        document.getElementById("desc").textContent     = ar ? artwork.desc_ar       : artwork.desc_en;
 
-        // تحديث نصوص بالونات الأزرار
         document.querySelectorAll("[data-ar]").forEach(el => {
             el.setAttribute("data-tooltip", el.getAttribute(`data-${lang}`));
         });
     }
 
-    // ════════════════════════════════════════════════
-    // 7. التنقل بين القطع
-    // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════
+    // 7. التنقل
+    // ════════════════════════════════════════════
     function navigatePiece(step) {
         const idx     = allArtworks.findIndex(a => a.id === artwork.id);
         const nextIdx = idx + step;
         if (nextIdx < 0 || nextIdx >= allArtworks.length) return;
-
         const nextId = allArtworks[nextIdx].id;
         window.history.pushState({ id: nextId }, "", "?id=" + nextId);
         initPiece(nextId);
@@ -461,17 +470,12 @@
         document.getElementById("nextPiece").classList.toggle("disabled", idx === allArtworks.length - 1);
     }
 
-    // ════════════════════════════════════════════════
-    // 8. الثيم واللغة والمشاركة
-    // ════════════════════════════════════════════════
-    function toggleLang() {
-        lang = lang === "ar" ? "en" : "ar";
-        render();
-        show(currentIdx);   // تحديث بالونة الصورة الحالية فوراً
-    }
-
+    // ════════════════════════════════════════════
+    // 8. الثيم — مع حفظ الاختيار
+    // ════════════════════════════════════════════
     function toggleTheme() {
-        document.body.classList.toggle("light");
+        const isLight = document.body.classList.toggle("light");
+        localStorage.setItem("nadim_theme", isLight ? "light" : "dark");
         updateThemeIcon();
     }
 
@@ -480,9 +484,23 @@
             document.body.classList.contains("light") ? "🌙" : "☀️";
     }
 
+    // ════════════════════════════════════════════
+    // 9. اللغة — مع حفظ الاختيار
+    // ════════════════════════════════════════════
+    function toggleLang() {
+        lang = lang === "ar" ? "en" : "ar";
+        localStorage.setItem("nadim_lang", lang);
+        render();
+        show(currentIdx);
+    }
+
+    // ════════════════════════════════════════════
+    // 10. المشاركة
+    // ════════════════════════════════════════════
     function share() {
+        const title = artwork[lang === "ar" ? "title_ar" : "title_en"] || "";
         if (navigator.share) {
-            navigator.share({ title: artwork[lang === "ar" ? "title_ar" : "title_en"], url: location.href });
+            navigator.share({ title, url: location.href });
         } else {
             try {
                 navigator.clipboard.writeText(location.href).then(() => {
@@ -494,9 +512,9 @@
         }
     }
 
-    // ════════════════════════════════════════════════
-    // 9. التفاعل بالسحب (Swipe) على الموبايل
-    // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════
+    // 11. Swipe (موبايل)
+    // ════════════════════════════════════════════
     function triggerInfoMobile() {
         clearTimeout(infoTimer);
         mainViewer.classList.add("info-active");
@@ -520,12 +538,14 @@
         }
     }, { passive: true });
 
-    // ════════════════════════════════════════════════
-    // 10. Fullscreen Modal
-    // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════
+    // 12. Fullscreen Modal
+    // ════════════════════════════════════════════
     mainViewer.onclick = () => {
-        // نقل الـ src للـ modal عند الفتح فقط، لا في كل show()
-        modalImage.setAttribute("src", mainImage.getAttribute("src"));
+        if (mainViewer.classList.contains("empty")) return;
+        const src = mainImage.getAttribute("src");
+        if (!src) return;
+        modalImage.setAttribute("src", src);
         modal.style.display = "block";
         document.body.style.overflow = "hidden";
         history.pushState({ modal: true }, "");
@@ -545,14 +565,14 @@
     };
 
     document.addEventListener("keydown", e => {
-        if (e.key === "Escape" && modal.style.display === "block") history.back();
-        if (e.key === "ArrowRight" && modal.style.display !== "block") navigatePiece(lang === "ar" ? 1 : -1);
-        if (e.key === "ArrowLeft"  && modal.style.display !== "block") navigatePiece(lang === "ar" ? -1 : 1);
+        if (e.key === "Escape"      && modal.style.display === "block") history.back();
+        if (e.key === "ArrowRight"  && modal.style.display !== "block") navigatePiece(lang === "ar" ? 1 : -1);
+        if (e.key === "ArrowLeft"   && modal.style.display !== "block") navigatePiece(lang === "ar" ? -1 : 1);
     });
 
-    // ════════════════════════════════════════════════
-    // 11. Zoom على الديسكتوب داخل الـ Modal
-    // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════
+    // 13. Desktop Zoom
+    // ════════════════════════════════════════════
     let dz = false;
 
     function initDesktopZoom() {
@@ -569,8 +589,8 @@
     function moveZoom(e) {
         if (!dz || isMobile) return;
         const rect = modalImage.getBoundingClientRect();
-        const x = ((e.clientX - rect.left)  / rect.width)  * 100;
-        const y = ((e.clientY - rect.top)   / rect.height) * 100;
+        const x = ((e.clientX - rect.left) / rect.width)  * 100;
+        const y = ((e.clientY - rect.top)  / rect.height) * 100;
         modalImage.style.transformOrigin = `${x}% ${y}%`;
     }
 
@@ -578,20 +598,21 @@
         modalImage.style.transform       = "scale(1)";
         modalImage.style.transformOrigin = "center center";
         dz = false;
-        modal.classList.remove("desktop-view", "desktop-zoomed");
+        modal.classList.remove("desktop-view");
+        modal.classList.remove("desktop-zoomed");
     }
 
-    // ════════════════════════════════════════════════
-    // 12. تصغير الهيدر عند الـ Scroll
-    // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════
+    // 14. Scroll → header-small
+    // ════════════════════════════════════════════
     window.addEventListener("scroll", () => {
         document.getElementById("museumHeader")
             .classList.toggle("header-small", window.scrollY > 40);
     }, { passive: true });
 
-    // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════
     // بدء التطبيق
-    // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════
     load();
 </script>
 </body>
