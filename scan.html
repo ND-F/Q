@@ -314,50 +314,58 @@
         thumbsEl.innerHTML = "";
         mainViewer.classList.remove("loaded");
 
-        // الحصول على قائمة المصادر بترتيبها الأصلي، مع تحويل الامتداد لـ .png
+        // قائمة المصادر بترتيبها الأصلي مع تحويل الامتداد لـ .png
         const sources = [
             artwork.image1, artwork.image2, artwork.image3,
             artwork.image4, artwork.image5
         ].map(src => (src && src.trim()) ? src.replace(/\.[^/.]+$/, ".png") : null);
 
-        // مصفوفة مؤقتة تحافظ على المواضع الأصلية أثناء التحقق من كل صورة
-        const pending = new Array(5).fill(null);
-        let firstShown = false;
+        // مصفوفة مؤقتة لحفظ المواضع الأصلية ريثما تتحقق كل صورة
+        const pending   = new Array(5).fill(null);
+        // thumbnail elements مرتبة بنفس الترتيب عشان نقدر نعرضهم بعدين
+        const thumbEls  = new Array(5).fill(null);
+        let   firstShown = false;
 
         sources.forEach((pngSrc, originalIndex) => {
             if (!pngSrc) return;
 
+            // ── إنشاء عنصر الـ thumbnail في الـ DOM ──
             const thumbImg = document.createElement("img");
-            thumbImg.loading = "lazy";  // تحميل الـ thumbnails عند الحاجة فقط
+            // لا lazy هنا — الـ thumbnail مش في الـ viewport دايماً
+            // وبالتالي lazy يمنع onload من الإطلاق ويكسر كل المنطق
+            thumbImg.onclick = (e) => {
+                e.stopPropagation();
+                const idx = validImages.indexOf(pngSrc);
+                if (idx !== -1) show(idx);
+            };
+            thumbsEl.appendChild(thumbImg);
+            thumbEls[originalIndex] = thumbImg;
 
-            thumbImg.onload = () => {
-                thumbImg.style.display = "block";
+            // ── كائن Image() منفصل للتحقق من وجود الصورة ──
+            // الفصل ده ضروري: التحقق يحصل بغض النظر عن موضع الـ thumbnail في الـ viewport
+            const probe = new Image();
 
-                // حفظ الصورة في موضعها الأصلي للحفاظ على الترتيب
+            probe.onload = () => {
+                // الصورة موجودة — سجّلها وأظهر الـ thumbnail
                 pending[originalIndex] = pngSrc;
-
-                // إعادة بناء validImages من pending بدون فراغات
                 validImages = pending.filter(Boolean);
 
-                // أول صورة تتحمل = اعرضها فوراً في الـ viewer
+                thumbImg.src               = pngSrc;
+                thumbImg.style.display     = "block";
+
+                // أول صورة تتأكد = حمّل الـ viewer فوراً
                 if (!firstShown) {
                     firstShown = true;
-                    // currentIdx يبقى 0 لأن validImages متسلسلة من الأول
                     show(0);
                 }
             };
 
-            thumbImg.onerror = () => thumbImg.remove();
-
-            thumbImg.onclick = (e) => {
-                e.stopPropagation();
-                // إيجاد موضع هذه الصورة في validImages المُنظّفة
-                const idx = validImages.indexOf(pngSrc);
-                if (idx !== -1) show(idx);
+            probe.onerror = () => {
+                // الصورة مش موجودة — امسح الـ thumbnail من الـ DOM
+                thumbImg.remove();
             };
 
-            thumbImg.src = pngSrc;
-            thumbsEl.appendChild(thumbImg);
+            probe.src = pngSrc;
         });
     }
 
