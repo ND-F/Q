@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>NADIM in Museum of Islamic Arts - نديم في متحف الفن الإسلامي</title>
+    <title>NADIM Foundation - مؤسسة نديم</title>
 
     <link rel="icon" type="image/svg+xml" href="images/nadim-icon.svg">
     <link rel="apple-touch-icon" href="images/nadim-icon.svg">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap"></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -20,14 +19,14 @@
         body {
             margin: 0; font-family: 'Tajawal', sans-serif;
             background: var(--main); color: var(--light);
-            transition: background 0.4s ease, color 0.4s ease;
+            transition: background 0.4s ease;
             overflow-x: hidden; -webkit-font-smoothing: antialiased;
         }
         .light { background: var(--light) !important; color: var(--main) !important; }
 
-        /* ─── HEADER ─── */
+        /* HEADER */
         #museumHeader {
-            position: -webkit-sticky; position: sticky; top: 0;
+            position: sticky; top: 0;
             background: var(--light) !important;
             padding: 15px 20px; display: flex; flex-direction: column;
             align-items: center; z-index: 1000;
@@ -37,54 +36,35 @@
         }
         #museumHeader.header-small { padding: 10px 20px; }
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; }
-        .logo { height: 45px; cursor: pointer; transition: opacity 0.3s; -webkit-user-drag: none; }
-        .logo:hover { opacity: 0.8; }
-        .header-title { font-size: 16px; font-weight: 700; text-align: center; color: var(--main) !important; line-height: 1.3; }
+        .logo { height: 45px; cursor: pointer; -webkit-user-drag: none; }
+        .header-title { font-size: 16px; font-weight: 700; text-align: center; color: var(--main) !important; }
 
-        /* ─── LAYOUT ─── */
         .container { max-width: 1400px; margin: auto; padding: 20px; display: flex; flex-direction: column; }
 
-        /* ─── VIEWER ─── */
+        /* VIEWER */
         .viewer {
             width: 100%; height: 50vh; position: relative;
             display: flex; align-items: center; justify-content: center;
-            margin-bottom: 15px; overflow: hidden;
-            background: transparent; border-radius: 12px;
+            margin-bottom: 15px; overflow: hidden; background: transparent;
             cursor: zoom-in; touch-action: pan-y;
         }
-        /* Skeleton shimmer */
+        /* Shimmer effect */
         .viewer::before {
             content: ''; position: absolute; inset: 0;
-            background: linear-gradient(90deg,
-                rgba(255,255,255,0.03) 25%,
-                rgba(255,255,255,0.08) 50%,
-                rgba(255,255,255,0.03) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 12px; pointer-events: none;
-            opacity: 1; transition: opacity 0.5s ease; z-index: 1;
+            background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+            background-size: 200% 100%; animation: shimmer 1.5s infinite;
+            border-radius: 12px; opacity: 1; transition: opacity 0.4s; z-index: 1;
         }
-        .viewer.loaded::before { opacity: 0; }
+        .viewer.loaded::before, .viewer.empty::before { opacity: 0; }
         @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
         .viewer img {
-            max-width: 95%; max-height: 95%;
-            object-fit: contain; pointer-events: none;
+            max-width: 95%; max-height: 95%; object-fit: contain;
             filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3));
-            transition: opacity 0.35s ease;
+            opacity: 0; transition: opacity 0.3s ease;
         }
+        .viewer.loaded img { opacity: 1; }
 
-        /* No-image placeholder */
-        .viewer .no-image {
-            display: none; flex-direction: column; align-items: center;
-            justify-content: center; gap: 12px; opacity: 0.35;
-            font-size: 15px; pointer-events: none;
-        }
-        .viewer .no-image i { font-size: 48px; }
-        .viewer.empty::before { opacity: 0; }
-        .viewer.empty .no-image { display: flex; }
-
-        /* بالونة معلومات الصورة */
         .photo-credit {
             position: absolute; bottom: 0; left: 0; right: 0;
             background: linear-gradient(transparent, rgba(0,0,0,0.85));
@@ -92,125 +72,74 @@
             z-index: 10; opacity: 0; transition: opacity 0.4s;
             pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
         }
-        .viewer:hover .photo-credit,
-        .viewer.info-active .photo-credit { opacity: 1 !important; }
+        .viewer:hover .photo-credit, .viewer.info-active .photo-credit { opacity: 1 !important; }
 
-        /* ─── THUMBNAILS ─── */
-        .thumbs {
-            display: flex; gap: 12px; overflow-x: auto;
-            padding: 10px 5px; scrollbar-width: none; margin-bottom: 20px;
-        }
+        /* THUMBS */
+        .thumbs { display: flex; gap: 12px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
         .thumbs::-webkit-scrollbar { display: none; }
         .thumbs img {
             width: 75px; height: 75px; object-fit: contain;
             border-radius: 15px; cursor: pointer; opacity: 0.4;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            flex-shrink: 0; display: none;
-            background: rgba(255,255,255,0.05);
-            border: 2px solid transparent;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255,255,255,0.05); border: 2px solid transparent; display: none;
         }
-        .thumbs img.active {
-            border-color: var(--gold); opacity: 1;
-            transform: scale(1.1);
-            background: rgba(225,169,62,0.1);
-        }
+        .thumbs img.active { border-color: var(--gold); opacity: 1; transform: scale(1.1); background: rgba(225,169,62,0.1); }
 
-        /* ─── INFO & DETAILS ─── */
-        .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; line-height: 1.25; }
-        .meta { font-size: 17px; margin: 5px 0; opacity: 0.9; }
-        .details {
-            margin-top: 25px; border-top: 1px solid rgba(225,169,62,0.2);
-            padding-top: 20px; line-height: 1.8;
-        }
+        /* INFO */
+        .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; }
+        .details { margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.8; }
 
-        /* ─── LANG / DIR ─── */
         .lang-ar { direction: rtl; text-align: right; }
         .lang-en { direction: ltr; text-align: left; }
 
-        /* ─── TOOLTIPS ─── */
+        /* TOOLTIPS */
         [data-tooltip] { position: relative; }
         [data-tooltip]::before {
-            content: attr(data-tooltip);
-            position: absolute; bottom: 140%; left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background: var(--light); color: var(--main);
-            padding: 7px 14px; border-radius: 10px;
-            font-size: 13px; font-weight: 700; white-space: nowrap;
-            opacity: 0; visibility: hidden;
-            transition: opacity 0.25s, transform 0.25s;
+            content: attr(data-tooltip); position: absolute; bottom: 140%; left: 50%;
+            transform: translateX(-50%) translateY(10px); background: var(--light); color: var(--main);
+            padding: 7px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
+            white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.25s;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 9999;
         }
-        [data-tooltip]:hover::before {
-            opacity: 1; visibility: visible;
-            transform: translateX(-50%) translateY(0);
-        }
+        [data-tooltip]:hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
         .light [data-tooltip]::before { background: var(--main); color: var(--light); }
 
-        /* ─── DESKTOP GRID ─── */
-        @media(min-width: 1100px) {
-            .container {
-                display: grid;
-                grid-template-columns: 120px 1fr 450px;
-                grid-template-areas: "thumb viewer info" "thumb details details";
-                gap: 50px; align-items: start; direction: ltr;
-            }
-            .viewer { grid-area: viewer; height: 70vh; }
-            .thumbs { grid-area: thumb; flex-direction: column; position: sticky; top: 150px; margin-top: 120px; }
-            .thumbs img { width: 90px; height: 90px; }
-            .info { grid-area: info; margin-top: 120px; }
-            .details { grid-area: details; margin-top: 20px; max-width: 95%; }
-            body.lang-ar .info, body.lang-ar .details { direction: rtl; text-align: right; }
-            body.lang-en .info, body.lang-en .details { direction: ltr; text-align: left; }
-        }
-
-        /* ─── FULLSCREEN MODAL ─── */
-        #fullscreenModal {
-            display: none; position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--main); z-index: 10001; overflow: auto;
-        }
-        #modalContent { display: flex; min-height: 100%; align-items: center; justify-content: center; width: 100%; }
-        #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; transition: transform 0.15s ease-out; }
-        #fullscreenModal.desktop-view  #modalImage { cursor: zoom-in; }
-        #fullscreenModal.desktop-zoomed #modalImage { cursor: grab; transform: scale(2.5); }
-        #modalClose {
-            position: absolute; top: 25px; right: 25px;
-            font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002;
-            transition: opacity 0.2s; line-height: 1;
-        }
-        #modalClose:hover { opacity: 0.7; }
-
-        /* ─── CONTROLS BAR ─── */
+        /* CONTROLS */
         .controls {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            background: rgba(10,30,35,0.95);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            padding: 12px 30px; border-radius: 50px;
-            display: flex; align-items: center; gap: 25px;
-            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            border: 1px solid rgba(225,169,62,0.2);
+            background: rgba(10,30,35,0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 12px 30px; border-radius: 50px; display: flex; align-items: center; gap: 25px;
+            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid rgba(225,169,62,0.2);
             direction: ltr !important;
         }
-        .controls div {
-            font-size: 24px; cursor: pointer;
-            transition: opacity 0.2s, transform 0.2s;
-            color: white; display: flex; align-items: center;
-        }
-        .controls div:not(.sep):not(.disabled):hover { opacity: 0.75; transform: scale(1.1); }
+        .controls div { font-size: 24px; cursor: pointer; transition: 0.2s; color: white; display: flex; align-items: center; }
         .controls .nav-btn { color: var(--gold); font-size: 28px; }
-        .controls .nav-btn.disabled { opacity: 0.15 !important; cursor: default; pointer-events: none; transform: none !important; }
-        .controls .sep { width: 1px; height: 22px; background: rgba(225,169,62,0.3); cursor: default; }
+        .controls .nav-btn.disabled { opacity: 0.15; cursor: default; pointer-events: none; }
+        .controls .sep { width: 1px; height: 22px; background: rgba(225,169,62,0.3); }
+
+        #fullscreenModal {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--main); z-index: 10001;
+        }
+        #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; }
+        #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; }
+        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--light); cursor: pointer; }
+
+        @media(min-width: 1100px) {
+            .container { display: grid; grid-template-columns: 120px 1fr 450px; grid-template-areas: "thumb viewer info" "thumb details details"; gap: 50px; }
+            .viewer { grid-area: viewer; height: 70vh; }
+            .thumbs { grid-area: thumb; flex-direction: column; position: sticky; top: 150px; margin-top: 120px; }
+            .info { grid-area: info; margin-top: 120px; }
+            .details { grid-area: details; }
+        }
 
         footer { text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
     </style>
 </head>
 
-<body>
+<body class="lang-ar">
 
-<div id="fullscreenModal">
-    <div id="modalClose">×</div>
-    <div id="modalContent"><img id="modalImage" alt=""></div>
-</div>
+<div id="fullscreenModal"><div id="modalClose">×</div><div id="modalContent"><img id="modalImage"></div></div>
 
 <header id="museumHeader">
     <div class="logo-row">
@@ -221,256 +150,171 @@
 </header>
 
 <div class="container">
-    <div class="viewer" id="mainViewer">
-        <img id="mainImage" alt="">
-        <div class="no-image"><i class="fa-regular fa-image"></i><span id="noImageText">لا توجد صورة</span></div>
-        <div class="photo-credit" id="photoCredit"></div>
-    </div>
-
+    <div class="viewer" id="mainViewer"><img id="mainImage"><div class="photo-credit" id="photoCredit"></div></div>
     <div class="thumbs" id="thumbs"></div>
-
     <div class="info">
-        <div class="meta" id="inv"></div>
-        <h1 id="title"></h1>
-        <div class="meta" id="from"></div>
-        <div class="meta" id="date"></div>
-        <div class="meta" id="dim"></div>
+        <div class="meta" id="inv"></div><h1 id="title"></h1>
+        <div class="meta" id="from"></div><div class="meta" id="date"></div><div class="meta" id="dim"></div>
     </div>
-
     <div class="details">
         <div class="meta" id="hall"></div>
-        <div class="meta" id="material" style="font-weight:600;color:var(--gold);"></div>
+        <div class="meta" id="material" style="font-weight: 600; color: var(--gold);"></div>
         <div id="desc"></div>
     </div>
 </div>
 
 <div class="controls">
-    <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn"
-         data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
+    <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
     <div class="sep"></div>
-    <div onclick="toggleLang()"  data-ar="تغيير اللغة"  data-en="Change Language">🌐</div>
-    <div onclick="toggleTheme()" data-ar="تغيير المظهر" data-en="Change Theme" id="themeBtn">☀️</div>
-    <div onclick="share()"       data-ar="مشاركة"        data-en="Share">🔗</div>
+    <div onclick="toggleLang()" data-ar="اللغة" data-en="Language">🌐</div>
+    <div onclick="toggleTheme()" id="themeBtn" data-ar="المظهر" data-en="Theme">☀️</div>
+    <div onclick="share()" data-ar="مشاركة" data-en="Share">🔗</div>
     <div class="sep"></div>
-    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn"
-         data-ar="القطعة التالية" data-en="Next Piece">▶</div>
+    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn" data-ar="القطعة التالية" data-en="Next Piece">▶</div>
 </div>
 
-<footer>Nadim Foundation © ®</footer>
+<footer> Nadim Foundation © ® </footer>
 
 <script>
-    // ════════════════════════════════════════════
-    // 1. الإعدادات الأولية — مع localStorage
-    // ════════════════════════════════════════════
-
-    // اللغة: من localStorage أولاً، ثم إعداد الجهاز
+    // 1. الذكاء الأولي (لغة وثيم الموبايل)
     const systemLang = navigator.language.startsWith("ar") ? "ar" : "en";
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
     let lang = localStorage.getItem("nadim_lang") || systemLang;
+    let allArtworks = [], validImages = [], currentIdx = 0, artwork, infoTimer;
 
-    // الثيم: من localStorage أولاً، ثم إعداد الجهاز
-    const systemDark  = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const savedTheme  = localStorage.getItem("nadim_theme"); // "dark" | "light" | null
-    const startLight  = savedTheme ? savedTheme === "light" : !systemDark;
+    const mainViewer = document.getElementById("mainViewer"), mainImage = document.getElementById("mainImage");
+    const photoCredit = document.getElementById("photoCredit"), modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
 
-    const isMobile = window.innerWidth < 1100;
-
-    let allArtworks = [];
-    let validImages = [];
-    let currentIdx  = 0;
-    let artwork;
-    let infoTimer;
-
-    const mainViewer  = document.getElementById("mainViewer");
-    const mainImage   = document.getElementById("mainImage");
-    const photoCredit = document.getElementById("photoCredit");
-    const modal       = document.getElementById("fullscreenModal");
-    const modalImage  = document.getElementById("modalImage");
-
-    // تطبيق اللغة والثيم قبل أي حاجة (يمنع الوميض)
-    document.body.classList.add(lang === "ar" ? "lang-ar" : "lang-en");
-    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-    if (startLight) document.body.classList.add("light");
-    updateThemeIcon();
-
-    // ════════════════════════════════════════════
-    // 2. تحميل البيانات
-    // ════════════════════════════════════════════
     async function load() {
         try {
             const res = await fetch("data/artworks.json");
             allArtworks = await res.json();
             const id = new URLSearchParams(location.search).get("id");
+            
+            // تطبيق الثيم التلقائي المريح
+            const savedTheme = localStorage.getItem("nadim_theme");
+            if (savedTheme === "light" || (!savedTheme && !prefersDark)) document.body.classList.add("light");
+            updateThemeIcon();
+
             initPiece(id || allArtworks[0].id);
-        } catch (e) {
-            console.error("فشل تحميل البيانات:", e);
-        }
+        } catch(e) { console.error("Load Failed"); }
     }
 
-    // ════════════════════════════════════════════
-    // 3. تهيئة قطعة
-    // ════════════════════════════════════════════
     function initPiece(id) {
         artwork = allArtworks.find(a => a.id === id);
-        if (!artwork) return;
-        currentIdx  = 0;
-        validImages = [];
+        if(!artwork) return;
+        currentIdx = 0;
         prepareImages();
         render();
         updateNavButtons();
     }
 
-    // ════════════════════════════════════════════
-    // 4. تحضير الصور
-    // ════════════════════════════════════════════
-function prepareImages() {
+    function prepareImages() {
+        const potential = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5];
+        const thumbs = document.getElementById("thumbs");
+        thumbs.innerHTML = ""; 
+        validImages = Array(5).fill(null); // مصفوفة ثابتة للحفاظ على العلاقة بـ info_ar1..5
 
-    const thumbsEl = document.getElementById("thumbs");
-    thumbsEl.innerHTML = "";
+        let firstFound = false;
 
-    mainViewer.classList.remove("loaded", "empty");
-    mainImage.removeAttribute("src");
+        potential.forEach((src, index) => {
+            if (!src || src.trim() === "") return;
+            
+            // تحويل الامتداد لـ PNG أوتوماتيك
+            const pngSrc = src.replace(/\.[^/.]+$/, ".png");
+            const img = document.createElement("img");
+            img.src = pngSrc;
 
-    const sources = [
-        artwork.image1,
-        artwork.image2,
-        artwork.image3,
-        artwork.image4,
-        artwork.image5
-    ].map(src => (src && src.trim()) ? src : null);
-
-    const validSources = sources.filter(Boolean);
-
-    if (validSources.length === 0) {
-        mainViewer.classList.add("empty");
-        return;
+            img.onload = () => {
+                img.style.display = 'block';
+                validImages[index] = pngSrc;
+                if (!firstFound) { show(index); firstFound = true; }
+            };
+            img.onclick = () => show(index);
+            thumbs.appendChild(img);
+        });
     }
 
-    const pending = new Array(5).fill(null);
-    const thumbEls = new Array(5).fill(null);
-    let errorCount = 0;
-
-    sources.forEach((src, originalIndex) => {
-
-        if (!src) return;
-
-        const thumbImg = document.createElement("img");
-
-        thumbImg.onclick = (e) => {
-            e.stopPropagation();
-            const idx = validImages.indexOf(src);
-            if (idx !== -1) show(idx);
-        };
-
-        thumbsEl.appendChild(thumbImg);
-        thumbEls[originalIndex] = thumbImg;
-
-        const probe = new Image();
-
-        probe.onload = () => {
-
-            pending[originalIndex] = src;
-
-            validImages = pending.filter(Boolean);
-
-            thumbImg.src = src;
-            thumbImg.style.display = "block";
-
-            // عرض الصورة الأولى فقط بعد التأكد منها
-            if (originalIndex === 0) {
-                show(0);
-            }
-
-        };
-
-        probe.onerror = () => {
-
-            thumbImg.remove();
-            errorCount++;
-
-            if (errorCount === validSources.length) {
-                mainViewer.classList.add("empty");
-            }
-
-        };
-
-        probe.src = src;
-
-    });
-
-}
-
-    // ════════════════════════════════════════════
-    // 5. عرض صورة
-    // ════════════════════════════════════════════
     function show(i) {
-        if (!validImages.length) return;
-        i = Math.max(0, Math.min(i, validImages.length - 1));
-        currentIdx = i;
-
         const src = validImages[i];
-
-        if (mainImage.getAttribute("src") !== src) {
-            mainViewer.classList.remove("loaded");
-            mainImage.onload  = () => { mainViewer.classList.add("loaded"); mainViewer.classList.remove("empty"); };
-            mainImage.onerror = () => mainViewer.classList.add("loaded");
-            mainImage.setAttribute("src", src);
-        } else {
-            mainViewer.classList.add("loaded");
-        }
-
-        // تمييز الـ thumbnail
-        document.querySelectorAll(".thumbs img").forEach(t => {
-            t.classList.toggle("active", t.getAttribute("src") === src);
-        });
-
-        // بالونة معلومات الصورة
-        const infoText = (artwork[`info_${lang}${i + 1}`] || "").trim();
-        photoCredit.textContent   = infoText;
-        photoCredit.style.opacity = infoText ? "1" : "0";
-        if (infoText && isMobile) triggerInfoMobile();
+        if(!src) return;
+        
+        currentIdx = i;
+        mainViewer.classList.remove("loaded");
+        mainImage.src = src;
+        mainImage.onload = () => mainViewer.classList.add("loaded");
+        modalImage.src = src;
+        
+        document.querySelectorAll(".thumbs img").forEach(t => t.classList.toggle("active", t.src.includes(src)));
+        
+        // بالونة معلومات الصورة (info_ar1..5)
+        const info = (artwork[`info_${lang}${i + 1}`] || "").trim();
+        photoCredit.textContent = info;
+        photoCredit.style.opacity = info ? "1" : "0";
+        if(info && window.innerWidth < 1100) triggerInfoMobile();
     }
 
-    // ════════════════════════════════════════════
-    // 6. رسم النصوص
-    // ════════════════════════════════════════════
     function render() {
-        document.body.classList.toggle("lang-ar", lang === "ar");
-        document.body.classList.toggle("lang-en", lang === "en");
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+        document.body.className = lang === "ar" ? "lang-ar" : "lang-en";
+        if (document.body.classList.contains("light")) document.body.classList.add("light");
 
-        const siteTitle = lang === "ar"
-            ? "معرض من حياة التحفة"
-            : "From the Life of an Artifact Exhibition";
-        document.title = siteTitle;
+        // العنوان المعتمد
+        const siteTitle = lang === "ar" ? "معرض من حياة التحفة" : "From the Life of an Artifact Exhibition";
         document.getElementById("headerTitle").textContent = siteTitle;
-        document.getElementById("noImageText").textContent = lang === "ar" ? "لا توجد صورة" : "No image available";
+        document.title = siteTitle;
 
-        const ar = lang === "ar";
-        document.getElementById("inv").textContent      = artwork.inventory_number || "";
-        document.getElementById("title").textContent    = ar ? artwork.title_ar      : artwork.title_en;
-        document.getElementById("from").textContent     = ar ? artwork.from_ar       : artwork.from_en;
-        document.getElementById("date").textContent     = ar ? artwork.date_ar       : artwork.date_en;
-        document.getElementById("dim").textContent      = ar ? artwork.dimensions_ar : artwork.dimensions_en;
-        document.getElementById("hall").textContent     = ar ? artwork.hall_ar       : artwork.hall_en;
-        document.getElementById("material").textContent = (ar ? artwork.material_ar  : artwork.material_en) || "";
-        document.getElementById("desc").textContent     = ar ? artwork.desc_ar       : artwork.desc_en;
+        document.getElementById("title").textContent = lang === "ar" ? artwork.title_ar : artwork.title_en;
+        document.getElementById("desc").textContent = lang === "ar" ? artwork.desc_ar : artwork.desc_en;
+        document.getElementById("inv").textContent = artwork.inventory_number;
+        document.getElementById("material").textContent = lang === "ar" ? artwork.material_ar : artwork.material_en;
+        document.getElementById("date").textContent = lang === "ar" ? artwork.date_ar : artwork.date_en;
+        document.getElementById("from").textContent = lang === "ar" ? artwork.from_ar : artwork.from_en;
+        document.getElementById("dim").textContent = lang === "ar" ? artwork.dimensions_ar : artwork.dimensions_en;
+        document.getElementById("hall").textContent = lang === "ar" ? artwork.hall_ar : artwork.hall_en;
 
-        document.querySelectorAll("[data-ar]").forEach(el => {
-            el.setAttribute("data-tooltip", el.getAttribute(`data-${lang}`));
+        // بالونات الأزرار
+        document.querySelectorAll('[data-ar]').forEach(el => {
+            el.setAttribute('data-tooltip', el.getAttribute(`data-${lang}`));
         });
     }
 
-    // ════════════════════════════════════════════
-    // 7. التنقل
-    // ════════════════════════════════════════════
+    function toggleLang() { 
+        lang = lang === "ar" ? "en" : "ar"; 
+        localStorage.setItem("nadim_lang", lang);
+        render(); 
+        show(currentIdx); 
+    }
+
+    function toggleTheme() { 
+        const isLight = document.body.classList.toggle("light"); 
+        localStorage.setItem("nadim_theme", isLight ? "light" : "dark");
+        updateThemeIcon(); 
+    }
+
+    function updateThemeIcon() {
+        document.getElementById("themeBtn").textContent = document.body.classList.contains("light") ? "🌙" : "☀️";
+    }
+
+    function share() { 
+        const title = lang === "ar" ? artwork.title_ar : artwork.title_en;
+        if (navigator.share) {
+            navigator.share({ title: title, url: window.location.href });
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert(lang === 'ar' ? "تم نسخ الرابط!" : "Link Copied!");
+        }
+    }
+
     function navigatePiece(step) {
-        const idx     = allArtworks.findIndex(a => a.id === artwork.id);
-        const nextIdx = idx + step;
-        if (nextIdx < 0 || nextIdx >= allArtworks.length) return;
-        const nextId = allArtworks[nextIdx].id;
-        window.history.pushState({ id: nextId }, "", "?id=" + nextId);
-        initPiece(nextId);
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        const idx = allArtworks.findIndex(a => a.id === artwork.id) + step;
+        if(idx >= 0 && idx < allArtworks.length) {
+            const nextId = allArtworks[idx].id;
+            window.history.pushState({id: nextId}, '', '?id=' + nextId);
+            initPiece(nextId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     }
 
     function updateNavButtons() {
@@ -479,149 +323,19 @@ function prepareImages() {
         document.getElementById("nextPiece").classList.toggle("disabled", idx === allArtworks.length - 1);
     }
 
-    // ════════════════════════════════════════════
-    // 8. الثيم — مع حفظ الاختيار
-    // ════════════════════════════════════════════
-    function toggleTheme() {
-        const isLight = document.body.classList.toggle("light");
-        localStorage.setItem("nadim_theme", isLight ? "light" : "dark");
-        updateThemeIcon();
-    }
-
-    function updateThemeIcon() {
-        document.getElementById("themeBtn").textContent =
-            document.body.classList.contains("light") ? "🌙" : "☀️";
-    }
-
-    // ════════════════════════════════════════════
-    // 9. اللغة — مع حفظ الاختيار
-    // ════════════════════════════════════════════
-    function toggleLang() {
-        lang = lang === "ar" ? "en" : "ar";
-        localStorage.setItem("nadim_lang", lang);
-        render();
-        show(currentIdx);
-    }
-
-    // ════════════════════════════════════════════
-    // 10. المشاركة
-    // ════════════════════════════════════════════
-    function share() {
-        const title = artwork[lang === "ar" ? "title_ar" : "title_en"] || "";
-        if (navigator.share) {
-            navigator.share({ title, url: location.href });
-        } else {
-            try {
-                navigator.clipboard.writeText(location.href).then(() => {
-                    alert(lang === "ar" ? "تم نسخ الرابط!" : "Link copied!");
-                });
-            } catch {
-                alert(lang === "ar" ? "تم نسخ الرابط!" : "Link copied!");
-            }
-        }
-    }
-
-    // ════════════════════════════════════════════
-    // 11. Swipe (موبايل)
-    // ════════════════════════════════════════════
     function triggerInfoMobile() {
         clearTimeout(infoTimer);
-        mainViewer.classList.add("info-active");
-        infoTimer = setTimeout(() => mainViewer.classList.remove("info-active"), 3500);
+        mainViewer.classList.add('info-active');
+        infoTimer = setTimeout(() => mainViewer.classList.remove('info-active'), 3500);
     }
 
-    let startX = 0;
-    mainViewer.addEventListener("touchstart", e => {
-        if (e.touches.length === 1) startX = e.touches[0].clientX;
-        triggerInfoMobile();
-    }, { passive: true });
-
-    mainViewer.addEventListener("touchend", e => {
-        if (validImages.length <= 1) return;
-        const diff = startX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 70) {
-            const next = diff > 0
-                ? (currentIdx + 1) % validImages.length
-                : (currentIdx - 1 + validImages.length) % validImages.length;
-            show(next);
-        }
-    }, { passive: true });
-
-    // ════════════════════════════════════════════
-    // 12. Fullscreen Modal
-    // ════════════════════════════════════════════
-    mainViewer.onclick = () => {
-        if (mainViewer.classList.contains("empty")) return;
-        const src = mainImage.getAttribute("src");
-        if (!src) return;
-        modalImage.setAttribute("src", src);
-        modal.style.display = "block";
-        document.body.style.overflow = "hidden";
-        history.pushState({ modal: true }, "");
-        if (!isMobile) { modal.classList.add("desktop-view"); initDesktopZoom(); }
-    };
-
-    document.getElementById("modalClose").onclick = () => history.back();
-
-    window.onpopstate = (e) => {
-        if (modal.style.display === "block") {
-            modal.style.display = "none";
-            document.body.style.overflow = "";
-            resetModal();
-        } else if (e.state && e.state.id) {
-            initPiece(e.state.id);
-        }
-    };
-
-    document.addEventListener("keydown", e => {
-        if (e.key === "Escape"      && modal.style.display === "block") history.back();
-        if (e.key === "ArrowRight"  && modal.style.display !== "block") navigatePiece(lang === "ar" ? 1 : -1);
-        if (e.key === "ArrowLeft"   && modal.style.display !== "block") navigatePiece(lang === "ar" ? -1 : 1);
-    });
-
-    // ════════════════════════════════════════════
-    // 13. Desktop Zoom
-    // ════════════════════════════════════════════
-    let dz = false;
-
-    function initDesktopZoom() {
-        if (isMobile) return;
-        dz = false;
-        modalImage.onclick = e => {
-            dz = !dz;
-            modal.classList.toggle("desktop-zoomed", dz);
-            if (dz) moveZoom(e); else resetModal();
-        };
-        modalImage.onmousemove = moveZoom;
-    }
-
-    function moveZoom(e) {
-        if (!dz || isMobile) return;
-        const rect = modalImage.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width)  * 100;
-        const y = ((e.clientY - rect.top)  / rect.height) * 100;
-        modalImage.style.transformOrigin = `${x}% ${y}%`;
-    }
-
-    function resetModal() {
-        modalImage.style.transform       = "scale(1)";
-        modalImage.style.transformOrigin = "center center";
-        dz = false;
-        modal.classList.remove("desktop-view");
-        modal.classList.remove("desktop-zoomed");
-    }
-
-    // ════════════════════════════════════════════
-    // 14. Scroll → header-small
-    // ════════════════════════════════════════════
+    mainViewer.onclick = () => { modal.style.display = 'block'; document.body.style.overflow = 'hidden'; };
+    document.getElementById("modalClose").onclick = () => { modal.style.display = 'none'; document.body.style.overflow = ''; };
+    
     window.addEventListener("scroll", () => {
-        document.getElementById("museumHeader")
-            .classList.toggle("header-small", window.scrollY > 40);
+        document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40);
     }, { passive: true });
 
-    // ════════════════════════════════════════════
-    // بدء التطبيق
-    // ════════════════════════════════════════════
     load();
 </script>
 </body>
