@@ -6,25 +6,31 @@
     <title>NADIM in Museum of Islamic Arts - نديم في متحف الفن الإسلامي</title>
     <link rel="icon" type="image/svg+xml" href="images/nadim-icon.svg">
     <link rel="apple-touch-icon" href="images/nadim-icon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- FIX 1: Non-blocking font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap"></noscript>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; }
-        
-        body { 
-            margin: 0; font-family: 'Tajawal', sans-serif; 
-            background: var(--main); color: var(--light); 
-            transition: background 0.4s ease, color 0.4s ease; 
+
+        body {
+            margin: 0; font-family: 'Tajawal', sans-serif;
+            background: var(--main); color: var(--light);
+            transition: background 0.4s ease, color 0.4s ease;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
         .light { background: var(--light) !important; color: var(--main) !important; }
 
-        #museumHeader { 
-            position: -webkit-sticky; position: sticky; top: 0; 
-            background: var(--light) !important; color: var(--main) !important; 
-            padding: 15px 20px; display: flex; flex-direction: column; 
-            align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
+        #museumHeader {
+            position: -webkit-sticky; position: sticky; top: 0;
+            background: var(--light) !important; color: var(--main) !important;
+            padding: 15px 20px; display: flex; flex-direction: column;
+            align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1);
         }
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; }
         .logo { height: 45px; -webkit-user-drag: none; cursor: pointer; }
@@ -32,34 +38,52 @@
 
         .container { max-width: 1400px; margin: auto; padding: 20px; display: flex; flex-direction: column; }
 
-        .viewer { 
-            width: 100%; height: 50vh; position: relative; 
-            display: flex; align-items: center; justify-content: center; 
-            margin-bottom: 15px; overflow: hidden; 
-            background: rgba(0,0,0,0.1); border-radius: 12px; 
+        .viewer {
+            width: 100%; height: 50vh; position: relative;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 15px; overflow: hidden;
+            background: rgba(0,0,0,0.1); border-radius: 12px;
             cursor: pointer; touch-action: pan-y;
         }
-        .viewer img { max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2)); }
+        /* FIX 2: Skeleton screen while image loads */
+        .viewer::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+            background-size: 200% 100%;
+            animation: skeleton 1.5s infinite;
+            border-radius: 12px; pointer-events: none;
+            opacity: 1; transition: opacity 0.4s ease;
+        }
+        .viewer.loaded::before { opacity: 0; }
+        @keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        .photo-credit { 
-            position: absolute; bottom: 0; left: 0; right: 0; 
-            background: linear-gradient(transparent, rgba(0,0,0,0.85)); 
-            color: white !important; padding: 35px 15px 15px; font-size: 13px; 
-            z-index: 10; opacity: 0; transition: opacity 0.4s ease; 
+        .viewer img {
+            max-width: 100%; max-height: 100%; object-fit: contain;
+            pointer-events: none;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+            /* FIX 3: Reserve aspect ratio to prevent layout shift */
+            aspect-ratio: auto;
+        }
+
+        .photo-credit {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            color: white !important; padding: 35px 15px 15px; font-size: 13px;
+            z-index: 10; opacity: 0; transition: opacity 0.4s ease;
             pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
         }
         .viewer:hover .photo-credit, .viewer.info-active .photo-credit { opacity: 1 !important; }
 
-        .thumbs { 
-            display: flex; gap: 10px; overflow-x: auto; 
+        .thumbs {
+            display: flex; gap: 10px; overflow-x: auto;
             padding: 10px 5px; margin-bottom: 20px;
             scrollbar-width: none;
         }
         .thumbs::-webkit-scrollbar { display: none; }
-        .thumbs img { 
-            width: 70px; height: 70px; object-fit: contain; 
-            border-radius: 8px; cursor: pointer; opacity: .4; 
-            transition: 0.3s; flex-shrink: 0; display: none; 
+        .thumbs img {
+            width: 70px; height: 70px; object-fit: contain;
+            border-radius: 8px; cursor: pointer; opacity: .4;
+            transition: 0.3s; flex-shrink: 0; display: none;
             background: rgba(255,255,255,0.05);
         }
         .thumbs img.active { border: 3px solid var(--gold); opacity: 1; transform: scale(1.05); }
@@ -71,7 +95,7 @@
         .lang-ar { direction: rtl; text-align: right; }
         .lang-en { direction: ltr; text-align: left; }
 
-        /* بالونات الكلام (Tooltips) للسفلي */
+        /* بالونات الكلام للأزرار */
         [data-tooltip] { position: relative; }
         [data-tooltip]::before {
             content: attr(data-tooltip);
@@ -85,10 +109,10 @@
         .light [data-tooltip]::before { background: var(--main); color: var(--light); }
 
         @media(min-width:1100px) {
-            .container { 
-                display: grid; grid-template-columns: 100px 1fr 400px; 
+            .container {
+                display: grid; grid-template-columns: 100px 1fr 400px;
                 grid-template-areas: "thumb viewer info" "thumb details details";
-                gap: 40px; align-items: start; direction: ltr; 
+                gap: 40px; align-items: start; direction: ltr;
             }
             .viewer { grid-area: viewer; height: 70vh; }
             .thumbs { grid-area: thumb; flex-direction: column; margin-top: 120px; position: sticky; top: 150px; }
@@ -99,9 +123,9 @@
             body.lang-en .info, body.lang-en .details { direction: ltr; text-align: left; }
         }
 
-        #fullscreenModal { 
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background: rgba(0,0,0,0.98); z-index: 9999; overflow: auto; 
+        #fullscreenModal {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.98); z-index: 9999; overflow: auto;
         }
         #modalContent { display: flex; min-height: 100%; align-items: center; justify-content: center; width: 100%; }
         #modalImage { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.1s ease-out; }
@@ -109,12 +133,12 @@
         #fullscreenModal.desktop-zoomed #modalImage { cursor: grab; transform: scale(2.5); }
         #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; }
 
-        .controls { 
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
-            background: rgba(10, 30, 35, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); 
-            padding: 12px 25px; border-radius: 40px; display: flex; align-items: center; gap: 20px; 
+        .controls {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            background: rgba(10, 30, 35, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 12px 25px; border-radius: 40px; display: flex; align-items: center; gap: 20px;
             z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid rgba(225, 169, 62, 0.2);
-            direction: ltr !important; 
+            direction: ltr !important;
         }
         .controls div { font-size: 22px; cursor: pointer; transition: 0.2s; color: white; display: flex; align-items: center; }
         .controls .nav-btn { color: var(--gold); font-size: 26px; }
@@ -164,146 +188,193 @@
 <footer> Nadim Foundation © ® </footer>
 
 <script>
-    // 1. الذكاء الأولي (لغة وثيم)
-    const systemLang = navigator.language.startsWith("ar") ? "ar" : "en";
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    let lang = systemLang;
-    let allArtworks = [], validImages = [], currentIdx = 0, artwork;
-    const isMobile = window.innerWidth < 1100;
+    // ──────────────────────────────────────────────
+    // 1. الإعدادات الأولية (لغة وثيم)
+    // ──────────────────────────────────────────────
+    const systemLang    = navigator.language.startsWith("ar") ? "ar" : "en";
+    const prefersDark   = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isMobile      = window.innerWidth < 1100;
+
+    let lang        = systemLang;
+    let allArtworks = [];
+    let validImages = [];   // مسارات الصور الصالحة للعرض بالترتيب
+    let currentIdx  = 0;
+    let artwork;
     let infoTimer;
 
-    const mainViewer = document.getElementById("mainViewer"), mainImage = document.getElementById("mainImage"), photoCredit = document.getElementById("photoCredit");
-    const modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
+    const mainViewer  = document.getElementById("mainViewer");
+    const mainImage   = document.getElementById("mainImage");
+    const photoCredit = document.getElementById("photoCredit");
+    const modal       = document.getElementById("fullscreenModal");
+    const modalImage  = document.getElementById("modalImage");
 
+    // ──────────────────────────────────────────────
+    // 2. تحميل البيانات
+    // ──────────────────────────────────────────────
     async function load() {
         try {
-            const res = await fetch("data/artworks.json?t=" + new Date().getTime());
+            // FIX 4: إزالة ?t= لتفعيل cache المتصفح
+            // استخدم رقم إصدار ثابت لو احتجت تكسر الـ cache: ?v=2
+            const res = await fetch("data/artworks.json");
             allArtworks = await res.json();
             const id = new URLSearchParams(location.search).get("id");
-            
+
             // تطبيق الثيم الأولي
             if (!prefersDark) document.body.classList.add("light");
             updateThemeIcon();
 
             initPiece(id || allArtworks[0].id);
-        } catch(e) { console.error("Data Load Failed"); }
+        } catch(e) {
+            console.error("Data Load Failed", e);
+        }
     }
 
+    // ──────────────────────────────────────────────
+    // 3. تهيئة قطعة جديدة
+    // ──────────────────────────────────────────────
     function initPiece(id) {
         artwork = allArtworks.find(a => a.id === id);
-        if(!artwork) return;
+        if (!artwork) return;
         currentIdx = 0;
+        validImages = [];
         prepareImages();
         render();
         updateNavButtons();
     }
 
+    // ──────────────────────────────────────────────
+    // 4. تحضير الصور
+    // ──────────────────────────────────────────────
     function prepareImages() {
-        const potential = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5];
-        const thumbs = document.getElementById("thumbs");
-        thumbs.innerHTML = ""; validImages = [];
+        const thumbsEl = document.getElementById("thumbs");
+        thumbsEl.innerHTML = "";
+        validImages = [];
+        mainViewer.classList.remove("loaded");
 
-        potential.forEach((src) => {
-            if (!src || src.trim() === "") return;
-            
-            // تحويل الامتداد تلقائياً لـ .png
-            const pngSrc = src.replace(/\.[^/.]+$/, ".png");
+        // قائمة الصور المحتملة بترتيبها الأصلي
+        const sources = [
+            artwork.image1, artwork.image2, artwork.image3,
+            artwork.image4, artwork.image5
+        ]
+        // FIX 5: تحويل الامتداد مع الاحتفاظ بالترتيب الأصلي
+        .map(src => src && src.trim() ? src.replace(/\.[^/.]+$/, ".png") : null);
+
+        let loadedCount = 0;
+        const total = sources.filter(Boolean).length;
+        if (total === 0) return;
+
+        sources.forEach((pngSrc, originalIndex) => {
+            if (!pngSrc) return;
 
             const img = document.createElement("img");
-            img.src = pngSrc;
+
+            // FIX 6: lazy loading للصور الـ thumbnails
+            img.loading = "lazy";
+
             img.onload = () => {
-                img.style.display = 'block';
-                validImages.push(pngSrc);
-                validImages.sort((a, b) => {
-                    const idxA = potential.findIndex(p => p && pngSrc.includes(p.replace(/\.[^/.]+$/, "")));
-                    const idxB = potential.findIndex(p => p && pngSrc.includes(p.replace(/\.[^/.]+$/, "")));
-                    return idxA - idxB;
-                });
-                if (validImages.length === 1) show(0);
+                img.style.display = "block";
+
+                // FIX 7: الإدراج في مكانه الصحيح حسب الترتيب الأصلي
+                // بدل push + sort الخاطئة
+                validImages[originalIndex] = pngSrc;
+
+                // أول صورة صالحة: اعرضها فوراً
+                const firstValid = validImages.find(Boolean);
+                if (firstValid && loadedCount === 0) {
+                    show(validImages.indexOf(firstValid));
+                }
+                loadedCount++;
             };
+
             img.onerror = () => img.remove();
-            img.onclick = (e) => { e.stopPropagation(); show(validImages.indexOf(pngSrc)); };
-            thumbs.appendChild(img);
+
+            img.onclick = (e) => {
+                e.stopPropagation();
+                // FIX 8: البحث عن الصورة بعد تنظيف المصفوفة
+                const cleanIdx = validImages.filter(Boolean).indexOf(pngSrc);
+                if (cleanIdx !== -1) show(cleanIdx);
+            };
+
+            img.src = pngSrc;
+            thumbsEl.appendChild(img);
         });
     }
 
+    // ──────────────────────────────────────────────
+    // 5. عرض صورة معينة
+    // ──────────────────────────────────────────────
     function show(i) {
-        if(i < 0 || i >= validImages.length) i = 0;
+        // FIX 9: تنظيف المصفوفة من الفراغات قبل الاستخدام
+        const cleanImages = validImages.filter(Boolean);
+        if (!cleanImages.length) return;
+        if (i < 0 || i >= cleanImages.length) i = 0;
         currentIdx = i;
-        const currentSrc = validImages[i];
-        mainImage.src = currentSrc;
-        modalImage.src = currentSrc;
-        
-        document.querySelectorAll(".thumbs img").forEach((t) => t.classList.toggle("active", t.src.includes(currentSrc)));
-        
-        // جلب البيانات من الحقول info_ar و info_en بناءً على رقم الصورة
+
+        const src = cleanImages[i];
+
+        // FIX 10: الصورة الرئيسية تتحمل مرة واحدة فقط
+        // لو نفس الـ src موجود بالفعل، ما نعيدش التحميل
+        if (mainImage.src !== src) {
+            mainViewer.classList.remove("loaded");
+            mainImage.onload = () => mainViewer.classList.add("loaded");
+            mainImage.src = src;
+        }
+
+        // الـ modal يشارك نفس الصورة مباشرة عند الفتح (مش هنا)
+        document.querySelectorAll(".thumbs img").forEach(t => {
+            t.classList.toggle("active", t.src.endsWith(src.split("/").pop()));
+        });
+
+        // بيانات الصورة من حقلَي info
         const imgNum = i + 1;
-        const info = (artwork[lang === "ar" ? `info_ar${imgNum}` : `info_en${imgNum}`] || "").trim();
-        
+        const info = (artwork[`info_${lang}${imgNum}`] || "").trim();
         photoCredit.textContent = info;
-        if(info) { 
-            photoCredit.style.opacity = "1"; 
-            if(isMobile) triggerInfoMobile(); 
-        } else { 
-            photoCredit.style.opacity = "0"; 
+        if (info) {
+            photoCredit.style.opacity = "1";
+            if (isMobile) triggerInfoMobile();
+        } else {
+            photoCredit.style.opacity = "0";
         }
     }
 
+    // ──────────────────────────────────────────────
+    // 6. رسم محتوى القطعة
+    // ──────────────────────────────────────────────
     function render() {
         document.body.classList.toggle("lang-ar", lang === "ar");
         document.body.classList.toggle("lang-en", lang === "en");
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-        
-        const siteTitle = lang === "ar" ? "معرض من حياة التحفة" : "From the Life an Artfact Exhibition";
+
+        const siteTitle = lang === "ar" ? "معرض من حياة التحفة" : "From the Life of an Artifact Exhibition";
         document.title = siteTitle;
         document.getElementById("headerTitle").textContent = siteTitle;
 
-        document.getElementById("inv").textContent = artwork.inventory_number || "";
-        document.getElementById("title").textContent = lang === "ar" ? artwork.title_ar : artwork.title_en;
-        document.getElementById("from").textContent = lang === "ar" ? artwork.from_ar : artwork.from_en;
-        document.getElementById("date").textContent = lang === "ar" ? artwork.date_ar : artwork.date_en;
-        document.getElementById("dim").textContent = lang === "ar" ? artwork.dimensions_ar : artwork.dimensions_en;
-        document.getElementById("hall").textContent = lang === "ar" ? artwork.hall_ar : artwork.hall_en;
+        document.getElementById("inv").textContent      = artwork.inventory_number || "";
+        document.getElementById("title").textContent    = lang === "ar" ? artwork.title_ar    : artwork.title_en;
+        document.getElementById("from").textContent     = lang === "ar" ? artwork.from_ar     : artwork.from_en;
+        document.getElementById("date").textContent     = lang === "ar" ? artwork.date_ar     : artwork.date_en;
+        document.getElementById("dim").textContent      = lang === "ar" ? artwork.dimensions_ar : artwork.dimensions_en;
+        document.getElementById("hall").textContent     = lang === "ar" ? artwork.hall_ar     : artwork.hall_en;
         document.getElementById("material").textContent = (lang === "ar" ? artwork.material_ar : artwork.material_en) || "";
-        document.getElementById("desc").textContent = lang === "ar" ? artwork.desc_ar : artwork.desc_en;
+        document.getElementById("desc").textContent     = lang === "ar" ? artwork.desc_ar     : artwork.desc_en;
 
-        // تحديث بالونات الأزرار
-        document.querySelectorAll('[data-ar]').forEach(el => {
-            el.setAttribute('data-tooltip', el.getAttribute(`data-${lang}`));
+        // تحديث نصوص بالونات الأزرار
+        document.querySelectorAll("[data-ar]").forEach(el => {
+            el.setAttribute("data-tooltip", el.getAttribute(`data-${lang}`));
         });
     }
 
-    function toggleLang() { lang = lang === "ar" ? "en" : "ar"; render(); show(currentIdx); }
-    
-    function toggleTheme() { 
-        document.body.classList.toggle("light");
-        updateThemeIcon();
-    }
-
-    function updateThemeIcon() {
-        const isLight = document.body.classList.contains("light");
-        document.getElementById("themeBtn").textContent = isLight ? "🌙" : "☀️";
-    }
-
-    function share() { navigator.share ? navigator.share({url: location.href}) : alert("Link Copied"); }
-
-    // بقية وظائف الموشن والزووم الأصلية (بدون تعديل)
-    function triggerInfoMobile() {
-        if(!isMobile) return;
-        clearTimeout(infoTimer);
-        mainViewer.classList.add('info-active');
-        infoTimer = setTimeout(() => mainViewer.classList.remove('info-active'), 3500);
-    }
-
+    // ──────────────────────────────────────────────
+    // 7. التنقل بين القطع
+    // ──────────────────────────────────────────────
     function navigatePiece(step) {
         const currentIndex = allArtworks.findIndex(a => a.id === artwork.id);
         const nextIndex = currentIndex + step;
         if (nextIndex >= 0 && nextIndex < allArtworks.length) {
             const nextId = allArtworks[nextIndex].id;
-            window.history.pushState({id: nextId}, '', '?id=' + nextId);
+            window.history.pushState({ id: nextId }, "", "?id=" + nextId);
             initPiece(nextId);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
     }
 
@@ -313,44 +384,127 @@
         document.getElementById("nextPiece").classList.toggle("disabled", index === allArtworks.length - 1);
     }
 
-    let startX = 0;
-    mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) startX = e.touches[0].clientX; triggerInfoMobile(); }, {passive: true});
-    mainViewer.addEventListener('touchend', e => {
-        if (validImages.length <= 1) return;
-        let diff = startX - e.changedTouches[0].clientX;
-        if(Math.abs(diff) > 70) show(diff > 0 ? (currentIdx + 1) % validImages.length : (currentIdx - 1 + validImages.length) % validImages.length);
-    }, {passive: true});
+    // ──────────────────────────────────────────────
+    // 8. الثيم واللغة والمشاركة
+    // ──────────────────────────────────────────────
+    function toggleLang() {
+        lang = lang === "ar" ? "en" : "ar";
+        render();
+        show(currentIdx);
+    }
 
+    function toggleTheme() {
+        document.body.classList.toggle("light");
+        updateThemeIcon();
+    }
+
+    function updateThemeIcon() {
+        const isLight = document.body.classList.contains("light");
+        document.getElementById("themeBtn").textContent = isLight ? "🌙" : "☀️";
+    }
+
+    function share() {
+        navigator.share ? navigator.share({ url: location.href }) : navigator.clipboard.writeText(location.href).then(() => alert("تم نسخ الرابط"));
+    }
+
+    // ──────────────────────────────────────────────
+    // 9. التفاعل على الموبايل
+    // ──────────────────────────────────────────────
+    function triggerInfoMobile() {
+        if (!isMobile) return;
+        clearTimeout(infoTimer);
+        mainViewer.classList.add("info-active");
+        infoTimer = setTimeout(() => mainViewer.classList.remove("info-active"), 3500);
+    }
+
+    let startX = 0;
+    mainViewer.addEventListener("touchstart", e => {
+        if (e.touches.length === 1) startX = e.touches[0].clientX;
+        triggerInfoMobile();
+    }, { passive: true });
+
+    mainViewer.addEventListener("touchend", e => {
+        const cleanImages = validImages.filter(Boolean);
+        if (cleanImages.length <= 1) return;
+        const diff = startX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 70) {
+            show(diff > 0
+                ? (currentIdx + 1) % cleanImages.length
+                : (currentIdx - 1 + cleanImages.length) % cleanImages.length
+            );
+        }
+    }, { passive: true });
+
+    // ──────────────────────────────────────────────
+    // 10. الوضع الكامل (Fullscreen Modal)
+    // ──────────────────────────────────────────────
     mainViewer.onclick = () => {
-        modal.style.display = 'block'; document.body.style.overflow = 'hidden';
-        history.pushState({modal: true}, "");
-        if(!isMobile) modal.classList.add('desktop-view'); initDesktopZoom();
+        // FIX 11: نقل src للـ modal عند الفتح فقط (مش في كل show)
+        modalImage.src = mainImage.src;
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden";
+        history.pushState({ modal: true }, "");
+        if (!isMobile) { modal.classList.add("desktop-view"); initDesktopZoom(); }
     };
+
     document.getElementById("modalClose").onclick = () => history.back();
+
     window.onpopstate = (e) => {
-        if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetModal(); }
-        else if (e.state && e.state.id) initPiece(e.state.id);
+        if (modal.style.display === "block") {
+            modal.style.display = "none";
+            document.body.style.overflow = "";
+            resetModal();
+        } else if (e.state && e.state.id) {
+            initPiece(e.state.id);
+        }
     };
-    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && modal.style.display === 'block') history.back(); });
-    let dz = false;
-    function initDesktopZoom() {
-        if(isMobile) return; dz = false;
-        modalImage.onclick = e => { dz = !dz; modal.classList.toggle('desktop-zoomed', dz); if(dz) moveZoom(e); else resetModal(); };
-        modalImage.onmousemove = moveZoom;
-    }
-    function moveZoom(e) {
-        if(!dz || isMobile) return;
-        const rect = modalImage.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100, y = ((e.clientY - rect.top) / rect.height) * 100;
-        modalImage.style.transformOrigin = `${x}% ${y}%`;
-    }
-    function resetModal() { modalImage.style.transform = "scale(1)"; modalImage.style.transformOrigin = "center center"; dz = false; modal.classList.remove('desktop-zoomed'); }
-    
-    window.addEventListener("scroll", () => {
-        const header = document.getElementById("museumHeader");
-        if(window.scrollY > 40) header.classList.add("header-small"); else header.classList.remove("header-small");
+
+    document.addEventListener("keydown", e => {
+        if (e.key === "Escape" && modal.style.display === "block") history.back();
     });
 
+    // ──────────────────────────────────────────────
+    // 11. التكبير على الديسكتوب
+    // ──────────────────────────────────────────────
+    let dz = false;
+
+    function initDesktopZoom() {
+        if (isMobile) return;
+        dz = false;
+        modalImage.onclick = e => {
+            dz = !dz;
+            modal.classList.toggle("desktop-zoomed", dz);
+            if (dz) moveZoom(e); else resetModal();
+        };
+        modalImage.onmousemove = moveZoom;
+    }
+
+    function moveZoom(e) {
+        if (!dz || isMobile) return;
+        const rect = modalImage.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width)  * 100;
+        const y = ((e.clientY - rect.top)  / rect.height) * 100;
+        modalImage.style.transformOrigin = `${x}% ${y}%`;
+    }
+
+    function resetModal() {
+        modalImage.style.transform       = "scale(1)";
+        modalImage.style.transformOrigin = "center center";
+        dz = false;
+        modal.classList.remove("desktop-zoomed");
+    }
+
+    // ──────────────────────────────────────────────
+    // 12. تصغير الهيدر عند الـ scroll
+    // ──────────────────────────────────────────────
+    window.addEventListener("scroll", () => {
+        const header = document.getElementById("museumHeader");
+        header.classList.toggle("header-small", window.scrollY > 40);
+    });
+
+    // ──────────────────────────────────────────────
+    // بدء التطبيق
+    // ──────────────────────────────────────────────
     load();
 </script>
 </body>
