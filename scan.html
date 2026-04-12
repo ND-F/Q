@@ -66,7 +66,6 @@
         .meta { font-size: 17px; margin: 5px 0; opacity: 0.9; }
         .details { margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.7; }
 
-        /* اتجاهات النصوص */
         .lang-ar { direction: rtl; text-align: right; }
         .lang-en { direction: ltr; text-align: left; }
         .lang-ar .photo-credit { text-align: right; direction: rtl; }
@@ -87,7 +86,6 @@
             body.lang-en .info, body.lang-en .details { direction: ltr; text-align: left; }
         }
 
-        /* FULLSCREEN & ZOOM */
         #fullscreenModal { 
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
             background: rgba(0,0,0,0.98); z-index: 9999; overflow: auto; 
@@ -154,7 +152,7 @@
 
 <footer> Nadim Foundation © ® </footer>
 
-<>
+<script>
     let lang = navigator.language.startsWith("ar") ? "ar" : "en";
     let allArtworks = [], validImages = [], currentIdx = 0, artwork;
     const isMobile = window.innerWidth < 1100;
@@ -240,7 +238,6 @@
         document.getElementById("nextPiece").classList.toggle("disabled", index === allArtworks.length - 1);
     }
 
-    // Smart Swap & Swipe
     let startX = 0;
     mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) startX = e.touches[0].clientX; triggerInfoMobile(); }, {passive: true});
     mainViewer.addEventListener('touchend', e => {
@@ -257,18 +254,19 @@
         if(!isMobile) modal.classList.add('desktop-view'); initDesktopZoom();
     };
     document.getElementById("modalClose").onclick = () => history.back();
+    
     window.onpopstate = (e) => {
         if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetModal(); }
         else if (e.state && e.state.id) initPiece(e.state.id);
     };
-     // إضافة دعم لزر الـ Escape لإغلاق الزووم
+
+    // إضافة دعم لزر الـ Escape لإغلاق الزووم
     document.addEventListener('keydown', (e) => {
         if (e.key === "Escape" && modal.style.display === 'block') {
-            history.back(); // هيقفل المودال ويرجعك للصفحة
+            history.back(); 
         }
     });
 
-    load(); // السطر ده موجود أصلاً في نهاية الكود عندك       
     let dz = false;
     function initDesktopZoom() {
         if(isMobile) return;
@@ -283,9 +281,7 @@
     }
     function resetModal() { modalImage.style.transform = "scale(1)"; modalImage.style.transformOrigin = "center center"; dz = false; modal.classList.remove('desktop-zoomed'); }
 
-    // --- RENDER (التصحيح النهائي للثيم) ---
     function render() {
-        // إدارة كلاسات اللغة بدون مسح كلاس الـ light
         document.body.classList.toggle("lang-ar", lang === "ar");
         document.body.classList.toggle("lang-en", lang === "en");
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
@@ -317,7 +313,8 @@
         const header = document.getElementById("museumHeader");
         if(window.scrollY > 40) header.classList.add("header-small"); else header.classList.remove("header-small");
     });
+    
     load();
-</>
+</script>
 </body>
 </html>
