@@ -322,73 +322,82 @@
     // ════════════════════════════════════════════
     // 4. تحضير الصور
     // ════════════════════════════════════════════
-    function prepareImages() {
-        const thumbsEl = document.getElementById("thumbs");
-        thumbsEl.innerHTML = "";
-        mainViewer.classList.remove("loaded", "empty");
-        mainImage.removeAttribute("src");
+function prepareImages() {
 
-        const sources = [
-            artwork.image1, artwork.image2, artwork.image3,
-            artwork.image4, artwork.image5
-        ].map(src => (src && src.trim()) ? src.replace(/\.[^/.]+$/, ".png") : null);
+    const thumbsEl = document.getElementById("thumbs");
+    thumbsEl.innerHTML = "";
 
-        const validSources = sources.filter(Boolean);
+    mainViewer.classList.remove("loaded", "empty");
+    mainImage.removeAttribute("src");
 
-        // لو مفيش مصادر خالص → empty state فوراً
-        if (validSources.length === 0) {
-            mainViewer.classList.add("empty");
-            return;
-        }
+    const sources = [
+        artwork.image1,
+        artwork.image2,
+        artwork.image3,
+        artwork.image4,
+        artwork.image5
+    ].map(src => (src && src.trim()) ? src : null);
 
-        const pending    = new Array(5).fill(null);
-        const thumbEls   = new Array(5).fill(null);
-        let   firstShown = false;
-        let   errorCount = 0;
+    const validSources = sources.filter(Boolean);
 
-        sources.forEach((pngSrc, originalIndex) => {
-            if (!pngSrc) return;
-
-            // Thumbnail element (بدون src الآن)
-            const thumbImg = document.createElement("img");
-            thumbImg.onclick = (e) => {
-                e.stopPropagation();
-                const idx = validImages.indexOf(pngSrc);
-                if (idx !== -1) show(idx);
-            };
-            thumbsEl.appendChild(thumbImg);
-            thumbEls[originalIndex] = thumbImg;
-
-            // Probe منفصل — بيتحمل بغض النظر عن الـ viewport
-            const probe = new Image();
-
-            probe.onload = () => {
-                pending[originalIndex] = pngSrc;
-                validImages = pending.filter(Boolean);
-
-                // إظهار الـ thumbnail
-                thumbImg.setAttribute("src", pngSrc);
-                thumbImg.style.display = "block";
-
-                // أول صورة تتأكد → اعرضها
-                if (!firstShown) {
-                    firstShown = true;
-                    show(0);
-                }
-            };
-
-            probe.onerror = () => {
-                thumbImg.remove();
-                errorCount++;
-                // لو كل الصور فشلت → empty state
-                if (errorCount === validSources.length) {
-                    mainViewer.classList.add("empty");
-                }
-            };
-
-            probe.src = pngSrc;
-        });
+    if (validSources.length === 0) {
+        mainViewer.classList.add("empty");
+        return;
     }
+
+    const pending = new Array(5).fill(null);
+    const thumbEls = new Array(5).fill(null);
+    let errorCount = 0;
+
+    sources.forEach((src, originalIndex) => {
+
+        if (!src) return;
+
+        const thumbImg = document.createElement("img");
+
+        thumbImg.onclick = (e) => {
+            e.stopPropagation();
+            const idx = validImages.indexOf(src);
+            if (idx !== -1) show(idx);
+        };
+
+        thumbsEl.appendChild(thumbImg);
+        thumbEls[originalIndex] = thumbImg;
+
+        const probe = new Image();
+
+        probe.onload = () => {
+
+            pending[originalIndex] = src;
+
+            validImages = pending.filter(Boolean);
+
+            thumbImg.src = src;
+            thumbImg.style.display = "block";
+
+            // عرض الصورة الأولى فقط بعد التأكد منها
+            if (originalIndex === 0) {
+                show(0);
+            }
+
+        };
+
+        probe.onerror = () => {
+
+            thumbImg.remove();
+            errorCount++;
+
+            if (errorCount === validSources.length) {
+                mainViewer.classList.add("empty");
+            }
+
+        };
+
+        probe.src = src;
+
+    });
+
+}
 
     // ════════════════════════════════════════════
     // 5. عرض صورة
