@@ -61,7 +61,7 @@
             background-size: 200% 100%; animation: skeleton 1.5s infinite;
             border-radius: 12px; pointer-events: none; opacity: 1; transition: opacity 0.4s; z-index: 1;
         }
-        .viewer.loaded::before, .viewer.empty-piece::before { opacity: 0; }
+        .viewer.loaded::before { opacity: 0; }
         @keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
         .photo-credit { 
@@ -93,13 +93,12 @@
         .lang-ar .photo-credit { text-align: right; direction: rtl; }
         .lang-en .photo-credit { text-align: left; direction: ltr; }
 
-        /* TOOLTIPS (بالونات الأزرار) */
+        /* TOOLTIPS */
         [data-tooltip] { position: relative; }
         [data-tooltip]::before {
             content: attr(data-tooltip); position: absolute; bottom: 140%; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--light); color: var(--main); padding: 7px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
-            white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 9999; pointer-events: none;
+            white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 9999;
         }
         [data-tooltip]:hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
         .light [data-tooltip]::before { background: var(--main); color: var(--light); }
@@ -108,7 +107,7 @@
             .container { 
                 display: grid; grid-template-columns: 120px 1fr 450px; 
                 grid-template-areas: "thumb viewer info" "thumb details details";
-                gap: 50px; direction: ltr !important; 
+                gap: 50px; direction: ltr !important; /* تثبيت الثامنيلز شمال */
             }
             .viewer { grid-area: viewer; height: 70vh; }
             .thumbs { grid-area: thumb; flex-direction: column; margin-top: 120px; position: sticky; top: 150px; }
@@ -119,14 +118,14 @@
             body.lang-en .info, body.lang-en .details { direction: ltr; text-align: left; }
         }
 
-        /* SMART ZOOM MODAL */
-        #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); z-index: 10001; backdrop-filter: blur(5px); }
-        #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; overflow: hidden; }
-        #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; transition: transform 0.3s ease-out; }
+        /* FULLSCREEN MODAL */
+        #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--main); z-index: 10001; }
+        #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; }
+        #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; transition: transform 0.1s ease-out; }
+        #fullscreenModal.desktop-view { overflow: hidden; }
         #fullscreenModal.desktop-view #modalImage { cursor: zoom-in; }
-        #fullscreenModal.desktop-zoomed #modalImage { cursor: zoom-out; transform: scale(3); } 
-        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002; transition: 0.2s; }
-        #modalClose:hover { transform: scale(1.1); color: var(--gold); }
+        #fullscreenModal.desktop-zoomed #modalImage { cursor: grab; transform: scale(2.5); }
+        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002; }
 
         /* CONTROLS */
         .controls { 
@@ -137,9 +136,8 @@
             direction: ltr !important; 
         }
         .controls div { font-size: 24px; cursor: pointer; transition: 0.2s; color: white; display: flex; align-items: center; }
-        .controls div:not(.sep):hover { transform: scale(1.15); color: var(--gold); }
         .controls .nav-btn { color: var(--gold); font-size: 28px; }
-        .controls .nav-btn.disabled { opacity: 0.15; cursor: default; pointer-events: none; transform: none; }
+        .controls .nav-btn.disabled { opacity: 0.15; cursor: default; pointer-events: none; }
         .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3); }
 
         footer { text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
@@ -175,8 +173,8 @@
 <div class="controls">
     <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
     <div class="sep"></div>
-    <div onclick="toggleLang()" data-ar="تغيير اللغة" data-en="Language">🌐</div>
-    <div onclick="toggleTheme()" id="themeBtn" data-ar="تغيير المظهر" data-en="Theme">☀️</div>
+    <div onclick="toggleLang()" data-ar="تغيير اللغة" data-en="Change Language">🌐</div>
+    <div onclick="toggleTheme()" id="themeBtn" data-ar="تغيير المظهر" data-en="Change Theme">☀️</div>
     <div onclick="share()" data-ar="مشاركة" data-en="Share">🔗</div>
     <div class="sep"></div>
     <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn" data-ar="القطعة التالية" data-en="Next Piece">▶</div>
@@ -185,6 +183,7 @@
 <footer> Nadim Foundation © ® </footer>
 
 <script>
+    // 1. الإعدادات الأولية للذاكرة (Storage)
     const systemLang = navigator.language.startsWith("ar") ? "ar" : "en";
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     let lang = localStorage.getItem("nadim_lang") || systemLang;
@@ -196,23 +195,20 @@
 
     async function load() {
         try {
+            // تطبيق الثيم الأولي لمنع الوميض
             const savedTheme = localStorage.getItem("nadim_theme");
             if (savedTheme === "light" || (!savedTheme && !prefersDark)) document.body.classList.add("light");
             updateThemeIcon();
 
-            // رجعنا الـ Cache Buster عشان لو فيه أي تحديث يلقطه فوراً
-            const res = await fetch("data/artworks.json?t=" + new Date().getTime());
-            if (!res.ok) throw new Error("ملف JSON غير موجود أو به خطأ");
-            
+            const res = await fetch("data/artworks.json");
             allArtworks = await res.json();
-            const id = new URLSearchParams(location.search).get("id");
+            const id = newSearchParams(location.search).get("id");
             initPiece(id || allArtworks[0].id);
-        } catch(e) { 
-            console.error("Data Load Failed:", e); 
-            // إظهار رسالة صريحة إن العيب في الداتا مش في المتصفح
-            document.getElementById("title").innerHTML = "<span style='color: #E1A93E;'>⚠️ خطأ في تحميل البيانات</span>";
-            document.getElementById("desc").innerHTML = "حدث تعارض (Conflict) في ملف <b>artworks.json</b>. يرجى مراجعة الملف والتأكد أنه سليم.";
-        }
+        } catch(e) { console.error("Data Load Failed"); }
+    }
+
+    function newSearchParams(search) {
+        return new URLSearchParams(search);
     }
 
     function initPiece(id) {
@@ -232,7 +228,7 @@
         mainViewer.classList.remove("loaded");
         mainImage.src = "images/no-image.png";
         mainImage.onload = () => mainViewer.classList.add("loaded");
-        mainViewer.classList.add("empty-piece"); 
+        mainViewer.classList.add("empty-piece"); // لمنع فتحها في الفل سكرين
         photoCredit.style.opacity = "0";
     }
 
@@ -243,6 +239,7 @@
 
         const validSources = potential.filter(src => src && src.trim() !== "");
         
+        // استخدام صورة Repo كبديل في حال عدم وجود صور في الـ JSON
         if (validSources.length === 0) {
             setNoImageFallback();
             return;
@@ -259,23 +256,23 @@
                 return; 
             }
             
-            // الكود دلوقتي بيقرأ الصورة زي ما إنت كاتبها (PNG) بدون إجبار للـ WebP
-            const finalSrc = src.replace(/\.[^/.]+$/, ".png");
-            
+            // التعديل هنا: استبدال أوتوماتيكي بـ .webp بدلا من .png
+            const webpSrc = src.replace(/\.[^/.]+$/, ".webp");
             const img = document.createElement("img");
-            img.src = finalSrc;
+            img.src = webpSrc;
             
             img.onload = () => {
                 checkedCount++;
                 loadedCount++;
                 img.style.display = 'block';
-                validImages[index] = finalSrc;
+                validImages[index] = webpSrc;
                 if (!firstFound) { show(index); firstFound = true; }
             };
             
             img.onerror = () => {
                 checkedCount++;
                 img.remove();
+                // إذا فشلت كل الصور في التحميل، اعرض صورة no-image
                 if (checkedCount === potential.length && loadedCount === 0) setNoImageFallback();
             };
             
@@ -296,6 +293,7 @@
         
         document.querySelectorAll(".thumbs img").forEach(t => t.classList.toggle("active", t.src.includes(src)));
         
+        // تعديل 1: استخدام innerHTML لدعم التنسيق في البالونة
         const info = (artwork[`info_${lang}${i + 1}`] || "").trim();
         photoCredit.innerHTML = info;
         photoCredit.style.opacity = info ? "1" : "0";
@@ -308,6 +306,7 @@
         
         const ar = lang === "ar";
 
+        // تعديل 2 & 4: استخدام innerHTML + Safety Check
         document.getElementById("inv").innerHTML = artwork.inventory_number || "";
         document.getElementById("title").innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "";
         document.getElementById("from").innerHTML = (ar ? artwork.from_ar : artwork.from_en) || "";
@@ -316,6 +315,7 @@
         document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
         document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
         
+        // تعديل 3: معالجة Line breaks
         const descText = (ar ? artwork.desc_ar : artwork.desc_en) || "";
         document.getElementById("desc").innerHTML = descText.replace(/\n/g, '<br>');
 
@@ -343,4 +343,66 @@
     }
 
     function updateNavButtons() {
-        const idx = allArtworks.findIndex(
+        const idx = allArtworks.findIndex(a => a.id === artwork.id);
+        document.getElementById("prevPiece").classList.toggle("disabled", idx === 0);
+        document.getElementById("nextPiece").classList.toggle("disabled", idx === allArtworks.length - 1);
+    }
+
+    function triggerInfoMobile() {
+        if(!isMobile) return;
+        clearTimeout(infoTimer);
+        mainViewer.classList.add('info-active');
+        infoTimer = setTimeout(() => mainViewer.classList.remove('info-active'), 3500);
+    }
+
+    // إغلاق الفل سكرين عند ضغط ESC
+    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; } });
+
+    let startX = 0;
+    mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) startX = e.touches[0].clientX; triggerInfoMobile(); }, {passive: true});
+    mainViewer.addEventListener('touchend', e => {
+        if (validImages.filter(Boolean).length <= 1) return;
+        let diff = startX - e.changedTouches[0].clientX;
+        if(Math.abs(diff) > 70) {
+            const cleanImages = validImages.filter(Boolean);
+            const relativeIdx = cleanImages.indexOf(validImages[currentIdx]);
+            const nextRelative = diff > 0 ? (relativeIdx + 1) % cleanImages.length : (relativeIdx - 1 + cleanImages.length) % cleanImages.length;
+            show(validImages.indexOf(cleanImages[nextRelative]));
+        }
+    }, {passive: true});
+
+    mainViewer.onclick = () => {
+        if(!mainImage.src || mainViewer.classList.contains("empty-piece") || mainImage.src.includes("no-image.png")) return;
+        modal.style.display = 'block'; document.body.style.overflow = 'hidden'; modalImage.src = mainImage.src;
+        history.pushState({modal: true}, "");
+        if(!isMobile) { modal.classList.add('desktop-view'); initDesktopZoom(); }
+    };
+    document.getElementById("modalClose").onclick = () => history.back();
+    
+    window.onpopstate = (e) => {
+        if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetModal(); }
+        else if (e.state && e.state.id) initPiece(e.state.id);
+    };
+
+    let dz = false;
+    function initDesktopZoom() {
+        if(isMobile) return;
+        dz = false; modalImage.onclick = e => { dz = !dz; modal.classList.toggle('desktop-zoomed', dz); if(dz) moveZoom(e); else resetModal(); };
+        modalImage.onmousemove = moveZoom;
+    }
+    function moveZoom(e) {
+        if(!dz || isMobile) return;
+        const rect = modalImage.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100, y = ((e.clientY - rect.top) / rect.height) * 100;
+        modalImage.style.transformOrigin = `${x}% ${y}%`;
+    }
+    function resetModal() { modalImage.style.transform = "scale(1)"; modalImage.style.transformOrigin = "center center"; dz = false; modal.classList.remove('desktop-zoomed'); }
+
+    window.addEventListener("scroll", () => {
+        document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40);
+    }, { passive: true });
+
+    load();
+</script>
+</body>
+</html>
