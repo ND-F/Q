@@ -84,15 +84,17 @@
             .lang-en .info, .lang-en .details { text-align: left; direction: ltr; }
         }
 
-        /* CONTROLS */
+        /* CONTROLS (Updated) */
         .controls { 
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
-            background: rgba(10, 30, 35, 0.95); backdrop-filter: blur(15px);
+            background: rgba(10, 30, 35, 0.96); /* اللون المطلوب */
+            backdrop-filter: blur(15px);
             padding: 12px 30px; border-radius: 50px; display: flex; align-items: center; gap: 25px; 
-            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid rgba(225, 169, 62, 0.2);
+            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+            border: 1px solid var(--gold); /* الحافة الذهبية الكاملة المطلوب */
             direction: ltr !important;
         }
-        .controls div { font-size: 24px; cursor: pointer; color: white; transition: 0.2s; }
+        .controls div { font-size: 24px; cursor: pointer; color: white; transition: 0.2s; position: relative; } /* مهم لـ position الـ Tooltip */
         .controls .nav-btn { color: var(--gold); font-size: 28px; }
         .controls .nav-btn.disabled { opacity: 0.15; pointer-events: none; }
         .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3); }
@@ -107,6 +109,36 @@
         .viewer:hover .photo-credit, .viewer.info-active .photo-credit { opacity: 1 !important; }
 
         footer { text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
+
+        /* --- Tooltip Style (Copied from other code) --- */
+        /* نستثني الـ Separators */
+        .controls > div:not(.sep)::before {
+            content: attr(data-tooltip); /* الحصول على النص من الـ attributes الديناميكية */
+            position: absolute;
+            bottom: 125%; /* تظهر فوق الأيقونة */
+            left: 50%;
+            transform: translateX(-50%) translateY(10px); /* التأثير المبدئي */
+            background: rgba(6, 68, 76, 0.98); /* نفس اللون الأخضر الغامق الكود الآخر */
+            color: var(--light); /* النص فاتح */
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            white-space: nowrap; /* يمنع نزول النص سطر */
+            opacity: 0; /* مخفي افتراضياً */
+            visibility: hidden;
+            transition: 0.3s ease; /* أنيماشين الظهور */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            pointer-events: none; /* يمنع التفاعل مع بالونة المعلومات */
+            z-index: 10000; /* topmost */
+        }
+
+        /* أنيماشين الظهور عند تمرير الماوس */
+        .controls > div:not(.sep):hover::before {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0); /* أنيماشين التحرك لأعلى */
+        }
     </style>
 </head>
 
@@ -137,13 +169,13 @@
 </div>
 
 <div class="controls">
-    <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn">◀</div>
+    <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
     <div class="sep"></div>
-    <div onclick="toggleLang()">🌐</div>
-    <div onclick="toggleTheme()" id="themeBtn">☀️</div>
-    <div onclick="share()">🔗</div>
+    <div onclick="toggleLang()" data-ar="اللغة" data-en="Language">🌐</div>
+    <div onclick="toggleTheme()" id="themeBtn" data-ar="المظهر" data-en="Theme">☀️</div>
+    <div onclick="share()" data-ar="مشاركة" data-en="Share">🔗</div>
     <div class="sep"></div>
-    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn">▶</div>
+    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn" data-ar="القطعة التالية" data-en="Next Piece">▶</div>
 </div>
 
 <footer> Nadim Foundation © ® </footer>
@@ -270,6 +302,13 @@
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
         document.body.className = (lang === "ar" ? "lang-ar" : "lang-en") + (document.body.classList.contains("light") ? " light" : "");
         
+        // --- Populate dynamic tooltips (New logic integrated) ---
+        // تحديث بالونة المعلومات بناءً على بيانات الترجمة
+        document.querySelectorAll('[data-ar]').forEach(el => {
+            const label = el.getAttribute(`data-${lang}`);
+            el.setAttribute('data-tooltip', label || '');
+        });
+
         const ar = lang === "ar";
 
         document.getElementById("inv").innerHTML = artwork.inventory_number || "";
