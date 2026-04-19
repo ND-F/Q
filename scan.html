@@ -43,7 +43,8 @@
             width: 100%; height: 50vh; position: relative; 
             display: flex; align-items: center; justify-content: center; 
             margin-bottom: 15px; overflow: hidden; background: transparent; 
-            cursor: zoom-in;
+            /* تم إلغاء العدسة المكبرة واستخدام مؤشر اليد العادي */
+            cursor: pointer;
         }
         .viewer img { 
             max-width: 95%; max-height: 95%; object-fit: contain; 
@@ -87,57 +88,59 @@
         /* CONTROLS (Updated) */
         .controls { 
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
-            background: rgba(10, 30, 35, 0.96); /* اللون المطلوب */
+            background: rgba(10, 30, 35, 0.96); 
             backdrop-filter: blur(15px);
             padding: 12px 30px; border-radius: 50px; display: flex; align-items: center; gap: 25px; 
             z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
-            border: 1px solid var(--gold); /* الحافة الذهبية الكاملة المطلوب */
+            border: 1px solid var(--gold); 
             direction: ltr !important;
         }
-        .controls div { font-size: 24px; cursor: pointer; color: white; transition: 0.2s; position: relative; } /* مهم لـ position الـ Tooltip */
+        .controls div { font-size: 24px; cursor: pointer; color: white; transition: 0.2s; position: relative; } 
         .controls .nav-btn { color: var(--gold); font-size: 28px; }
         .controls .nav-btn.disabled { opacity: 0.15; pointer-events: none; }
         .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3); }
 
-        /* MODAL */
+        /* MODAL & ZOOM SPECIFICS */
         #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--main); z-index: 10001; }
-        #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; }
-        #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; }
-        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002; }
+        #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; overflow: hidden; }
+        #modalImage { 
+            max-width: 95%; max-height: 95%; object-fit: contain; 
+            /* إضافة مؤشر السحب وتسريع الأداء */
+            cursor: grab; transform-origin: 0 0; will-change: transform;
+        }
+        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002; background: rgba(0,0,0,0.3); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
 
         .photo-credit { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: white !important; padding: 35px 15px 15px; font-size: 13px; z-index: 10; opacity: 0; transition: 0.4s; pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
         .viewer:hover .photo-credit, .viewer.info-active .photo-credit { opacity: 1 !important; }
 
         footer { text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
 
-        /* --- Tooltip Style (Copied from other code) --- */
-        /* نستثني الـ Separators */
+        /* --- Tooltip Style --- */
         .controls > div:not(.sep)::before {
-            content: attr(data-tooltip); /* الحصول على النص من الـ attributes الديناميكية */
+            content: attr(data-tooltip); 
             position: absolute;
-            bottom: 125%; /* تظهر فوق الأيقونة */
+            bottom: 125%; 
             left: 50%;
-            transform: translateX(-50%) translateY(10px); /* التأثير المبدئي */
-            background: rgba(6, 68, 76, 0.98); /* نفس اللون الأخضر الغامق الكود الآخر */
-            color: var(--light); /* النص فاتح */
+            transform: translateX(-50%) translateY(10px); 
+            background: rgba(6, 68, 76, 0.98); 
+            color: var(--light); 
             padding: 8px 15px;
             border-radius: 12px;
             font-size: 14px;
             font-weight: 700;
-            white-space: nowrap; /* يمنع نزول النص سطر */
-            opacity: 0; /* مخفي افتراضياً */
+            white-space: nowrap; 
+            opacity: 0; 
             visibility: hidden;
-            transition: 0.3s ease; /* أنيماشين الظهور */
+            transition: 0.3s ease; 
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            pointer-events: none; /* يمنع التفاعل مع بالونة المعلومات */
-            z-index: 10000; /* topmost */
+            pointer-events: none; 
+            z-index: 10000; 
         }
 
-        /* أنيماشين الظهور عند تمرير الماوس */
         .controls > div:not(.sep):hover::before {
             opacity: 1;
             visibility: visible;
-            transform: translateX(-50%) translateY(0); /* أنيماشين التحرك لأعلى */
+            transform: translateX(-50%) translateY(0); 
         }
     </style>
 </head>
@@ -209,12 +212,9 @@
         currentIdx = 0;
         validImages = Array(5).fill(null);
         
-        // --- الحل الجذري لمنع ظهور الصورة القديمة ---
         mainImage.removeAttribute("src");
-        // حقن بيكسل شفاف لتفريغ الذاكرة البصرية فوراً
         mainImage.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
         modalImage.removeAttribute("src");
-        // --------------------------------------------
 
         mainViewer.classList.remove("loaded", "empty-piece");
         photoCredit.style.opacity = "0";
@@ -225,9 +225,9 @@
 
     function setNoImageFallback() {
         mainViewer.classList.remove("loaded");
-        // ربط الـ onload قبل تمرير مسار الصورة لضمان استجابة الكاش
         mainImage.onload = () => mainViewer.classList.add("loaded");
-        mainImage.src = "images/no-image.png";
+        // تم تغيير الصورة للصيغة الجديدة webp
+        mainImage.src = "images/no-image.webp";
         mainViewer.classList.add("empty-piece"); 
         photoCredit.style.opacity = "0";
     }
@@ -285,7 +285,6 @@
         currentIdx = i;
         mainViewer.classList.remove("loaded", "empty-piece");
         
-        // ربط الـ onload قبل السورس
         mainImage.onload = () => mainViewer.classList.add("loaded");
         mainImage.src = src;
         modalImage.src = src;
@@ -302,8 +301,6 @@
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
         document.body.className = (lang === "ar" ? "lang-ar" : "lang-en") + (document.body.classList.contains("light") ? " light" : "");
         
-        // --- Populate dynamic tooltips (New logic integrated) ---
-        // تحديث بالونة المعلومات بناءً على بيانات الترجمة
         document.querySelectorAll('[data-ar]').forEach(el => {
             const label = el.getAttribute(`data-${lang}`);
             el.setAttribute('data-tooltip', label || '');
@@ -348,19 +345,18 @@
     }
 
     function triggerInfoMobile() {
-        if(!isMobile) return;
+        if(window.innerWidth >= 1100) return; // تم إصلاح مشكلة عدم تعريف isMobile
         clearTimeout(infoTimer);
         mainViewer.classList.add('info-active');
         infoTimer = setTimeout(() => mainViewer.classList.remove('info-active'), 3500);
     }
 
-    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetModal(); } });
-
-    let startX = 0;
-    mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) startX = e.touches[0].clientX; triggerInfoMobile(); }, {passive: true});
+    // التنقل بين الصور في العرض العادي للسحب يمين وشمال
+    let mainStartX = 0;
+    mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) mainStartX = e.touches[0].clientX; triggerInfoMobile(); }, {passive: true});
     mainViewer.addEventListener('touchend', e => {
         if (validImages.filter(Boolean).length <= 1) return;
-        let diff = startX - e.changedTouches[0].clientX;
+        let diff = mainStartX - e.changedTouches[0].clientX;
         if(Math.abs(diff) > 70) {
             const cleanImages = validImages.filter(Boolean);
             const relativeIdx = cleanImages.indexOf(validImages[currentIdx]);
@@ -369,35 +365,155 @@
         }
     }, {passive: true});
 
+    // -------------------------------------------------------------
+    // --- منطق الزووم الاحترافي الجديد (Desktop & Mobile) ---
+    // -------------------------------------------------------------
+    
+    let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
+    let startDist = 0, initialScale = 1;
+
+    function setTransform() {
+        modalImage.style.transform = `translate3d(${pointX}px, ${pointY}px, 0) scale(${scale})`;
+    }
+
+    function resetZoom() {
+        scale = 1; pointX = 0; pointY = 0;
+        setTransform();
+    }
+
     mainViewer.onclick = () => {
-        if(!mainImage.src || mainViewer.classList.contains("empty-piece") || mainImage.src.includes("no-image.png")) return;
-        modal.style.display = 'block'; document.body.style.overflow = 'hidden'; modalImage.src = mainImage.src;
+        if(!mainImage.src || mainViewer.classList.contains("empty-piece") || mainImage.src.includes("no-image.webp")) return;
+        modal.style.display = 'block'; 
+        document.body.style.overflow = 'hidden'; 
+        modalImage.src = mainImage.src;
         history.pushState({modal: true}, "");
-        if(!isMobile) { modal.classList.add('desktop-view'); initDesktopZoom(); }
+        
+        // تظبيط مقاس الصورة المبدئي في النص
+        setTimeout(() => {
+            const rect = modalImage.getBoundingClientRect();
+            pointX = (window.innerWidth - rect.width) / 2;
+            pointY = (window.innerHeight - rect.height) / 2;
+            setTransform();
+        }, 10);
     };
+
+    // 1. Zoom بالماوس سكرول للديسكتوب (دقيق ويدخل جوه نقطة الماوس)
+    modal.addEventListener("wheel", (e) => {
+        if (modal.style.display !== 'block') return;
+        e.preventDefault();
+        
+        let xs = (e.clientX - pointX) / scale;
+        let ys = (e.clientY - pointY) / scale;
+        let delta = e.deltaY || -e.wheelDelta;
+        
+        delta > 0 ? (scale /= 1.15) : (scale *= 1.15); // سرعة الزووم
+        
+        if (scale < 1) scale = 1;
+        if (scale > 20) scale = 20; 
+        
+        pointX = e.clientX - xs * scale;
+        pointY = e.clientY - ys * scale;
+        
+        if (scale === 1) { 
+            const rect = modalImage.getBoundingClientRect();
+            pointX = (window.innerWidth - rect.width/scale) / 2;
+            pointY = (window.innerHeight - rect.height/scale) / 2;
+        }
+        setTransform();
+    }, { passive: false });
+
+    // 2. السحب بالماوس (Pan)
+    modalImage.addEventListener("mousedown", (e) => {
+        if (scale > 1) {
+            e.preventDefault();
+            startX = e.clientX - pointX;
+            startY = e.clientY - pointY;
+            panning = true;
+            modalImage.style.cursor = "grabbing";
+        }
+    });
+    window.addEventListener("mouseup", () => { panning = false; modalImage.style.cursor = "grab"; });
+    window.addEventListener("mousemove", (e) => {
+        if (!panning || scale === 1) return;
+        e.preventDefault();
+        pointX = e.clientX - startX;
+        pointY = e.clientY - startY;
+        setTransform();
+    });
+
+    // 3. Zoom بالموبايل (Pinch & Pan & Double Tap)
+    modal.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            startDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            initialScale = scale;
+        } else if (e.touches.length === 1 && scale > 1) {
+            startX = e.touches[0].clientX - pointX;
+            startY = e.touches[0].clientY - pointY;
+            panning = true;
+        }
+    }, {passive: false});
+
+    modal.addEventListener('touchmove', (e) => {
+        if (modal.style.display !== 'block') return;
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            let dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            scale = initialScale * (dist / startDist);
+            if (scale < 1) scale = 1;
+            if (scale > 20) scale = 20;
+            
+            if (scale === 1) { 
+                const rect = modalImage.getBoundingClientRect();
+                pointX = (window.innerWidth - rect.width/scale) / 2;
+                pointY = (window.innerHeight - rect.height/scale) / 2;
+            }
+            setTransform();
+        } else if (e.touches.length === 1 && panning && scale > 1) {
+            e.preventDefault();
+            pointX = e.touches[0].clientX - startX;
+            pointY = e.touches[0].clientY - startY;
+            setTransform();
+        }
+    }, {passive: false});
+
+    let lastTap = 0;
+    modal.addEventListener('touchend', (e) => {
+        panning = false;
+        // دبل كليك أو دبل تاب للموبايل عشان يعمل زووم سريع
+        let currentTime = new Date().getTime();
+        let tapLength = currentTime - lastTap;
+        if (tapLength < 300 && tapLength > 0 && e.touches.length === 0) {
+            if (scale > 1) { 
+                scale = 1; 
+                const rect = modalImage.getBoundingClientRect();
+                pointX = (window.innerWidth - rect.width/scale) / 2;
+                pointY = (window.innerHeight - rect.height/scale) / 2;
+                setTransform();
+            } else { 
+                scale = 3; // الزووم المبدئي مع النقر
+                setTransform(); 
+            }
+        }
+        lastTap = currentTime;
+    });
+
+    // -------------------------------------------------------------
+
+    document.addEventListener('keydown', (e) => { 
+        if (e.key === "Escape" && modal.style.display === 'block') { 
+            modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); 
+        } 
+    });
     
     document.getElementById("modalClose").onclick = () => {
-        modal.style.display = 'none'; document.body.style.overflow = ''; resetModal();
+        modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom();
     };
     
     window.onpopstate = (e) => {
-        if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetModal(); }
+        if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); }
         else if (e.state && e.state.id) initPiece(e.state.id);
     };
-
-    let dz = false;
-    function initDesktopZoom() {
-        if(isMobile) return;
-        dz = false; modalImage.onclick = e => { dz = !dz; modal.classList.toggle('desktop-zoomed', dz); if(dz) moveZoom(e); else resetModal(); };
-        modalImage.onmousemove = moveZoom;
-    }
-    function moveZoom(e) {
-        if(!dz || isMobile) return;
-        const rect = modalImage.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100, y = ((e.clientY - rect.top) / rect.height) * 100;
-        modalImage.style.transformOrigin = `${x}% ${y}%`;
-    }
-    function resetModal() { modalImage.style.transform = "scale(1)"; modalImage.style.transformOrigin = "center center"; dz = false; modal.classList.remove('desktop-zoomed'); }
 
     window.addEventListener("scroll", () => {
         document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40);
