@@ -105,8 +105,7 @@
         #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; overflow: hidden; }
         #modalImage { 
             max-width: 95%; max-height: 95%; object-fit: contain; 
-            /* إضافة مؤشر السحب وتسريع الأداء */
-            cursor: grab; transform-origin: 0 0; will-change: transform;
+            cursor: grab; will-change: transform; transform-origin: center center;
         }
         #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002; background: rgba(0,0,0,0.3); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
 
@@ -115,6 +114,7 @@
 
         footer { text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
 
+        
         /* --- Tooltip Style --- */
         .controls > div:not(.sep)::before {
             content: attr(data-tooltip); 
@@ -368,12 +368,13 @@
     // -------------------------------------------------------------
     // --- منطق الزووم الاحترافي الجديد (Desktop & Mobile) ---
     // -------------------------------------------------------------
+
     
     let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
     let startDist = 0, initialScale = 1;
 
     function setTransform() {
-        modalImage.style.transform = `translate3d(${pointX}px, ${pointY}px, 0) scale(${scale})`;
+        modalImage.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
     }
 
     function resetZoom() {
@@ -383,51 +384,46 @@
 
     mainViewer.onclick = () => {
         if(!mainImage.src || mainViewer.classList.contains("empty-piece") || mainImage.src.includes("no-image.webp")) return;
+        resetZoom(); // عشان نضمن إنها تفتح متسنترة بالظبط كل مرة
         modal.style.display = 'block'; 
         document.body.style.overflow = 'hidden'; 
         modalImage.src = mainImage.src;
         history.pushState({modal: true}, "");
-        
-        // تظبيط مقاس الصورة المبدئي في النص
-        setTimeout(() => {
-            const rect = modalImage.getBoundingClientRect();
-            pointX = (window.innerWidth - rect.width) / 2;
-            pointY = (window.innerHeight - rect.height) / 2;
-            setTransform();
-        }, 10);
     };
 
-    // 1. Zoom بالماوس سكرول للديسكتوب (دقيق ويدخل جوه نقطة الماوس)
+    // 1. Zoom بالماوس سكرول للديسكتوب (بدقة شديدة على نقطة الماوس)
     modal.addEventListener("wheel", (e) => {
         if (modal.style.display !== 'block') return;
         e.preventDefault();
         
-        let xs = (e.clientX - pointX) / scale;
-        let ys = (e.clientY - pointY) / scale;
-        let delta = e.deltaY || -e.wheelDelta;
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+        const delta = e.deltaY || -e.wheelDelta;
+        const zoomFactor = delta > 0 ? 0.85 : 1.15; // سرعة الزووم
         
-        delta > 0 ? (scale /= 1.15) : (scale *= 1.15); // سرعة الزووم
+        let newScale = scale * zoomFactor;
+        if (newScale < 1) newScale = 1;
+        if (newScale > 20) newScale = 20; 
         
-        if (scale < 1) scale = 1;
-        if (scale > 20) scale = 20; 
+        // معادلة الزووم الدقيق بناءً على منتصف الشاشة والماوس
+        const ratio = 1 - (newScale / scale);
+        const centerX = (window.innerWidth / 2) + pointX;
+        const centerY = (window.innerHeight / 2) + pointY;
         
-        pointX = e.clientX - xs * scale;
-        pointY = e.clientY - ys * scale;
+        pointX += (clientX - centerX) * ratio;
+        pointY += (clientY - centerY) * ratio;
+        scale = newScale;
         
-        if (scale === 1) { 
-            const rect = modalImage.getBoundingClientRect();
-            pointX = (window.innerWidth - rect.width/scale) / 2;
-            pointY = (window.innerHeight - rect.height/scale) / 2;
-        }
+        if (scale === 1) { pointX = 0; pointY = 0; }
         setTransform();
     }, { passive: false });
 
-    // 2. السحب بالماوس (Pan)
+    // 2. السحب بالماوس (Pan) للديسكتوب
     modalImage.addEventListener("mousedown", (e) => {
         if (scale > 1) {
             e.preventDefault();
-            startX = e.clientX - pointX;
-            startY = e.clientY - pointY;
+            startX = e.clientX;
+            startY = e.clientY;
             panning = true;
             modalImage.style.cursor = "grabbing";
         }
@@ -436,8 +432,10 @@
     window.addEventListener("mousemove", (e) => {
         if (!panning || scale === 1) return;
         e.preventDefault();
-        pointX = e.clientX - startX;
-        pointY = e.clientY - startY;
+        pointX += e.clientX - startX;
+        pointY += e.clientY - startY;
+        startX = e.clientX;
+        startY = e.clientY; // تحديث النقطة عشان السحب يكون ناعم
         setTransform();
     });
 
@@ -448,8 +446,8 @@
             startDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
             initialScale = scale;
         } else if (e.touches.length === 1 && scale > 1) {
-            startX = e.touches[0].clientX - pointX;
-            startY = e.touches[0].clientY - pointY;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
             panning = true;
         }
     }, {passive: false});
@@ -459,20 +457,30 @@
         if (e.touches.length === 2) {
             e.preventDefault();
             let dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-            scale = initialScale * (dist / startDist);
-            if (scale < 1) scale = 1;
-            if (scale > 20) scale = 20;
+            let newScale = initialScale * (dist / startDist);
+            if (newScale < 1) newScale = 1;
+            if (newScale > 20) newScale = 20;
             
-            if (scale === 1) { 
-                const rect = modalImage.getBoundingClientRect();
-                pointX = (window.innerWidth - rect.width/scale) / 2;
-                pointY = (window.innerHeight - rect.height/scale) / 2;
-            }
+            // الزووم دايماً بيكون بين الصابعين
+            const clientX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+            const clientY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+            
+            const ratio = 1 - (newScale / scale);
+            const centerX = (window.innerWidth / 2) + pointX;
+            const centerY = (window.innerHeight / 2) + pointY;
+            
+            pointX += (clientX - centerX) * ratio;
+            pointY += (clientY - centerY) * ratio;
+            scale = newScale;
+            
+            if (scale === 1) { pointX = 0; pointY = 0; }
             setTransform();
         } else if (e.touches.length === 1 && panning && scale > 1) {
             e.preventDefault();
-            pointX = e.touches[0].clientX - startX;
-            pointY = e.touches[0].clientY - startY;
+            pointX += e.touches[0].clientX - startX;
+            pointY += e.touches[0].clientY - startY;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
             setTransform();
         }
     }, {passive: false});
@@ -480,24 +488,18 @@
     let lastTap = 0;
     modal.addEventListener('touchend', (e) => {
         panning = false;
-        // دبل كليك أو دبل تاب للموبايل عشان يعمل زووم سريع
         let currentTime = new Date().getTime();
         let tapLength = currentTime - lastTap;
         if (tapLength < 300 && tapLength > 0 && e.touches.length === 0) {
             if (scale > 1) { 
-                scale = 1; 
-                const rect = modalImage.getBoundingClientRect();
-                pointX = (window.innerWidth - rect.width/scale) / 2;
-                pointY = (window.innerHeight - rect.height/scale) / 2;
-                setTransform();
+                resetZoom();
             } else { 
-                scale = 3; // الزووم المبدئي مع النقر
+                scale = 3; 
                 setTransform(); 
             }
         }
         lastTap = currentTime;
     });
-
     // -------------------------------------------------------------
 
     document.addEventListener('keydown', (e) => { 
