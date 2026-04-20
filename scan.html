@@ -9,9 +9,9 @@
     <meta name="theme-color" content="#06444C" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#EAE8D8" media="(prefers-color-scheme: light)">
     
-    <link rel="icon" type="image/svg+xml" href="images/icon-nadim-light.svg" media="(prefers-color-scheme: dark)">
-    <link rel="icon" type="image/svg+xml" href="images/icon-nadim.svg" media="(prefers-color-scheme: light)">
-    <link rel="apple-touch-icon" href="images/icon-nadim-light.svg">
+    <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim-light.svg?v=2" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2" media="(prefers-color-scheme: light)">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim-light.svg?v=2">
     
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -193,7 +193,6 @@
     
     let allArtworks = [], validImages = [], currentIdx = 0, artwork, infoTimer;
 
-    // تخزين عناصر الـ DOM في الذاكرة لتسريع الأداء (DOM Caching)
     const dom = {
         inv: document.getElementById("inv"),
         title: document.getElementById("title"),
@@ -222,8 +221,10 @@
     }
 
     function initPiece(id) {
-        artwork = allArtworks.find(a => a.id === id);
+        // تأمين قراءة الـ ID كنص عشان يطابق البيانات بدون أخطاء
+        artwork = allArtworks.find(a => String(a.id) === String(id));
         if(!artwork) return;
+        
         currentIdx = 0;
         validImages = Array(5).fill(null);
         
@@ -233,6 +234,8 @@
 
         mainViewer.classList.remove("loaded", "empty-piece");
         photoCredit.style.opacity = "0";
+        photoCredit.innerHTML = "";
+        
         prepareImages();
         render();
         updateNavButtons();
@@ -271,9 +274,8 @@
             
             const webpSrc = src.replace(/\.[^/.]+$/, ".webp");
             const img = document.createElement("img");
-            img.src = webpSrc;
-            img.loading = "lazy"; // تحميل ذكي للصور المصغرة
             
+            // تعريف الأحداث قبل وضع الـ src
             img.onload = () => {
                 checkedCount++;
                 loadedCount++;
@@ -289,6 +291,10 @@
             };
             
             img.onclick = (e) => { e.stopPropagation(); show(index); };
+            
+            // وضع الـ src بعد تأمين الأحداث
+            img.src = webpSrc;
+            
             thumbs.appendChild(img);
         });
     }
@@ -323,7 +329,6 @@
 
         const ar = lang === "ar";
 
-        // تحديث البيانات بسرعة عالية باستخدام الـ DOM Cache
         dom.inv.innerHTML = artwork.inventory_number || "";
         dom.title.innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "";
         dom.from.innerHTML = (ar ? artwork.from_ar : artwork.from_en) || "";
@@ -345,7 +350,7 @@
     }
 
     function navigatePiece(step) {
-        const idx = allArtworks.findIndex(a => a.id === artwork.id) + step;
+        const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
         if(idx >= 0 && idx < allArtworks.length) {
             const nextId = allArtworks[idx].id;
             window.history.pushState({id: nextId}, '', '?id=' + nextId);
@@ -355,7 +360,7 @@
     }
 
     function updateNavButtons() {
-        const idx = allArtworks.findIndex(a => a.id === artwork.id);
+        const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id));
         document.getElementById("prevPiece").classList.toggle("disabled", idx === 0);
         document.getElementById("nextPiece").classList.toggle("disabled", idx === allArtworks.length - 1);
     }
@@ -380,10 +385,6 @@
         }
     }, {passive: true});
 
-    // -------------------------------------------------------------
-    // --- منطق الزووم الاحترافي الجديد (Desktop & Mobile) ---
-    // -------------------------------------------------------------
-    
     let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
     let startDist = 0, initialScale = 1;
 
@@ -509,7 +510,6 @@
         }
         lastTap = currentTime;
     });
-    // -------------------------------------------------------------
 
     document.addEventListener('keydown', (e) => { 
         if (e.key === "Escape" && modal.style.display === 'block') { 
