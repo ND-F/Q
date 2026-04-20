@@ -6,8 +6,13 @@
     
     <title>NADIM in Museum of Islamic Arts - نديم في متحف الفن الإسلامي</title>
     
-    <link rel="icon" type="image/svg+xml" href="images/nadim-icon.svg">
-    <link rel="apple-touch-icon" href="images/nadim-icon.svg">
+    <meta name="theme-color" content="#06444C" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#EAE8D8" media="(prefers-color-scheme: light)">
+    
+    <link rel="icon" type="image/svg+xml" href="images/icon-nadim-light.svg" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/svg+xml" href="images/icon-nadim.svg" media="(prefers-color-scheme: light)">
+    <link rel="apple-touch-icon" href="images/icon-nadim-light.svg">
+    
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -43,7 +48,6 @@
             width: 100%; height: 50vh; position: relative; 
             display: flex; align-items: center; justify-content: center; 
             margin-bottom: 15px; overflow: hidden; background: transparent; 
-            /* تم إلغاء العدسة المكبرة واستخدام مؤشر اليد العادي */
             cursor: pointer;
         }
         .viewer img { 
@@ -85,7 +89,7 @@
             .lang-en .info, .lang-en .details { text-align: left; direction: ltr; }
         }
 
-        /* CONTROLS (Updated) */
+        /* CONTROLS */
         .controls { 
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
             background: rgba(10, 30, 35, 0.96); 
@@ -114,8 +118,7 @@
 
         footer { text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
 
-        
-        /* --- Tooltip Style --- */
+        /* Tooltip Style */
         .controls > div:not(.sep)::before {
             content: attr(data-tooltip); 
             position: absolute;
@@ -190,6 +193,18 @@
     
     let allArtworks = [], validImages = [], currentIdx = 0, artwork, infoTimer;
 
+    // تخزين عناصر الـ DOM في الذاكرة لتسريع الأداء (DOM Caching)
+    const dom = {
+        inv: document.getElementById("inv"),
+        title: document.getElementById("title"),
+        from: document.getElementById("from"),
+        date: document.getElementById("date"),
+        dim: document.getElementById("dim"),
+        hall: document.getElementById("hall"),
+        material: document.getElementById("material"),
+        desc: document.getElementById("desc")
+    };
+
     const mainViewer = document.getElementById("mainViewer"), mainImage = document.getElementById("mainImage");
     const photoCredit = document.getElementById("photoCredit"), modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
 
@@ -226,7 +241,6 @@
     function setNoImageFallback() {
         mainViewer.classList.remove("loaded");
         mainImage.onload = () => mainViewer.classList.add("loaded");
-        // تم تغيير الصورة للصيغة الجديدة webp
         mainImage.src = "images/no-image.webp";
         mainViewer.classList.add("empty-piece"); 
         photoCredit.style.opacity = "0";
@@ -258,6 +272,7 @@
             const webpSrc = src.replace(/\.[^/.]+$/, ".webp");
             const img = document.createElement("img");
             img.src = webpSrc;
+            img.loading = "lazy"; // تحميل ذكي للصور المصغرة
             
             img.onload = () => {
                 checkedCount++;
@@ -308,23 +323,24 @@
 
         const ar = lang === "ar";
 
-        document.getElementById("inv").innerHTML = artwork.inventory_number || "";
-        document.getElementById("title").innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "";
-        document.getElementById("from").innerHTML = (ar ? artwork.from_ar : artwork.from_en) || "";
-        document.getElementById("date").innerHTML = (ar ? artwork.date_ar : artwork.date_en) || "";
-        document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) || "";
-        document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
-        document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
+        // تحديث البيانات بسرعة عالية باستخدام الـ DOM Cache
+        dom.inv.innerHTML = artwork.inventory_number || "";
+        dom.title.innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "";
+        dom.from.innerHTML = (ar ? artwork.from_ar : artwork.from_en) || "";
+        dom.date.innerHTML = (ar ? artwork.date_ar : artwork.date_en) || "";
+        dom.dim.innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) || "";
+        dom.hall.innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
+        dom.material.innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
         
         const descText = (ar ? artwork.desc_ar : artwork.desc_en) || "";
-        document.getElementById("desc").innerHTML = descText.replace(/\n/g, '<br>');
+        dom.desc.innerHTML = descText.replace(/\n/g, '<br>');
     }
 
     function toggleLang() { lang = lang === "ar" ? "en" : "ar"; localStorage.setItem("nadim_lang", lang); render(); if(!mainViewer.classList.contains("empty-piece")) show(currentIdx); }
     function toggleTheme() { const isLight = document.body.classList.toggle("light"); localStorage.setItem("nadim_theme", isLight ? "light" : "dark"); updateThemeIcon(); }
     function updateThemeIcon() { document.getElementById("themeBtn").textContent = document.body.classList.contains("light") ? "🌙" : "☀️"; }
     function share() { 
-        if (navigator.share) { navigator.share({title: document.getElementById("title").innerText, url: location.href}); } 
+        if (navigator.share) { navigator.share({title: dom.title.innerText, url: location.href}); } 
         else { navigator.clipboard.writeText(location.href).then(() => alert(lang === 'ar' ? "تم نسخ الرابط!" : "Link Copied!")); }
     }
 
@@ -345,13 +361,12 @@
     }
 
     function triggerInfoMobile() {
-        if(window.innerWidth >= 1100) return; // تم إصلاح مشكلة عدم تعريف isMobile
+        if(window.innerWidth >= 1100) return; 
         clearTimeout(infoTimer);
         mainViewer.classList.add('info-active');
         infoTimer = setTimeout(() => mainViewer.classList.remove('info-active'), 3500);
     }
 
-    // التنقل بين الصور في العرض العادي للسحب يمين وشمال
     let mainStartX = 0;
     mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) mainStartX = e.touches[0].clientX; triggerInfoMobile(); }, {passive: true});
     mainViewer.addEventListener('touchend', e => {
@@ -368,7 +383,6 @@
     // -------------------------------------------------------------
     // --- منطق الزووم الاحترافي الجديد (Desktop & Mobile) ---
     // -------------------------------------------------------------
-
     
     let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
     let startDist = 0, initialScale = 1;
@@ -384,14 +398,13 @@
 
     mainViewer.onclick = () => {
         if(!mainImage.src || mainViewer.classList.contains("empty-piece") || mainImage.src.includes("no-image.webp")) return;
-        resetZoom(); // عشان نضمن إنها تفتح متسنترة بالظبط كل مرة
+        resetZoom();
         modal.style.display = 'block'; 
         document.body.style.overflow = 'hidden'; 
         modalImage.src = mainImage.src;
         history.pushState({modal: true}, "");
     };
 
-    // 1. Zoom بالماوس سكرول للديسكتوب (بدقة شديدة على نقطة الماوس)
     modal.addEventListener("wheel", (e) => {
         if (modal.style.display !== 'block') return;
         e.preventDefault();
@@ -399,13 +412,12 @@
         const clientX = e.clientX;
         const clientY = e.clientY;
         const delta = e.deltaY || -e.wheelDelta;
-        const zoomFactor = delta > 0 ? 0.85 : 1.15; // سرعة الزووم
+        const zoomFactor = delta > 0 ? 0.85 : 1.15; 
         
         let newScale = scale * zoomFactor;
         if (newScale < 1) newScale = 1;
         if (newScale > 20) newScale = 20; 
         
-        // معادلة الزووم الدقيق بناءً على منتصف الشاشة والماوس
         const ratio = 1 - (newScale / scale);
         const centerX = (window.innerWidth / 2) + pointX;
         const centerY = (window.innerHeight / 2) + pointY;
@@ -418,7 +430,6 @@
         setTransform();
     }, { passive: false });
 
-    // 2. السحب بالماوس (Pan) للديسكتوب
     modalImage.addEventListener("mousedown", (e) => {
         if (scale > 1) {
             e.preventDefault();
@@ -435,11 +446,10 @@
         pointX += e.clientX - startX;
         pointY += e.clientY - startY;
         startX = e.clientX;
-        startY = e.clientY; // تحديث النقطة عشان السحب يكون ناعم
+        startY = e.clientY; 
         setTransform();
     });
 
-    // 3. Zoom بالموبايل (Pinch & Pan & Double Tap)
     modal.addEventListener('touchstart', (e) => {
         if (e.touches.length === 2) {
             e.preventDefault();
@@ -461,7 +471,6 @@
             if (newScale < 1) newScale = 1;
             if (newScale > 20) newScale = 20;
             
-            // الزووم دايماً بيكون بين الصابعين
             const clientX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
             const clientY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
             
