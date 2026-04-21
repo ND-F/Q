@@ -27,21 +27,21 @@
         }
         .light { background: var(--light) !important; color: var(--main) !important; }
 
-        /* HEADER */
+        /* HEADER - عاد لطبيعته مع التمرير */
         #museumHeader { 
-            position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; background: var(--light) !important; 
+            position: sticky; top: 0; background: var(--light) !important; 
             padding: 15px 20px; display: flex; flex-direction: column; 
             align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
             border-radius: 0 0 40px 40px; transition: padding 0.3s ease;
         }
-        /* إجبار الهيدر على اتجاه اليمين لليسار دائماً لتثبيت اللوجوهات */
+        /* التثبيت هنا للترتيب فقط لعدم التأثر باللغة */
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; direction: rtl !important; }
         .logo { height: 45px; cursor: pointer; }
         .header-title { font-size: 16px; font-weight: 700; text-align: center; color: var(--main) !important; }
 
         /* LAYOUT - Forced LTR for Grid Stability */
         .container { 
-            max-width: 1400px; margin: 100px auto 0; padding: 20px; 
+            max-width: 1400px; margin: auto; padding: 20px; 
             display: flex; flex-direction: column; 
         }
 
@@ -212,7 +212,7 @@
     <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn" data-ar="القطعة التالية" data-en="Next Piece">▶</div>
 </div>
 
-<footer> Nadim Foundation © ® </footer>
+<footer> Nadim Foundation ©® 2018 </footer>
 
 <script>
     const systemLang = navigator.language.startsWith("ar") ? "ar" : "en";
@@ -559,6 +559,10 @@
         if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); }
         else if (e.state && e.state.id) initPiece(e.state.id);
     };
+
+    window.addEventListener("scroll", () => {
+        document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40);
+    }, { passive: true });
 
     load();
 </script>
