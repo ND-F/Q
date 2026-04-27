@@ -42,6 +42,7 @@
             display: flex; flex-direction: column; 
         }
 
+        /* تنسيق الفيديو ليكون في الأعلى دائمًا */
         .video-container {
             grid-area: video;
             position: relative;
@@ -84,12 +85,14 @@
         .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; }
         .details { grid-area: details; margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.8; }
 
+        /* تعديل المحاذاة لليسار تمامًا في حالة اللغة الإنجليزية */
         .lang-en { text-align: left !important; }
         .lang-en .info, .lang-en .details { text-align: left !important; direction: ltr !important; }
         
         .lang-ar { text-align: right; }
         .lang-ar .info, .lang-ar .details { text-align: right; direction: rtl; }
 
+        /* Layout for normal pieces with images */
         @media(min-width:1100px) {
             .container { 
                 display: grid; 
@@ -106,11 +109,12 @@
             .info { margin-top: 30px; }
         }
 
+        /* 🔴 وضع مخصص لصفحات الفيديو فقط (يُلغي الجريد ويفرد النص) 🔴 */
         @media(min-width:1100px) {
             .container.video-only-layout {
                 display: flex !important;
                 flex-direction: column;
-                max-width: 950px; 
+                max-width: 950px; /* عرض مريح للقراءة */
                 margin: 0 auto;
             }
             .container.video-only-layout .info,
@@ -258,17 +262,8 @@
         mainViewer.style.display = "flex"; 
         document.getElementById("thumbs").style.display = "flex";
         
-        // --- تحديد حالة اللاي أوت استباقياً قبل رسم الشاشة لمنع الارتعاش ---
-        const potentialImgs = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5];
-        const hasImgs = potentialImgs.some(src => src && src.trim() !== "");
-        const hasVid = artwork.video_url && artwork.video_url.trim() !== "";
-        
-        if (!hasImgs && hasVid) {
-            document.querySelector('.container').classList.add('video-only-layout');
-        } else {
-            document.querySelector('.container').classList.remove('video-only-layout');
-        }
-        // -------------------------------------------------------------------
+        // إزالة وضع الفيديو فقط في حالة القطع العادية
+        document.querySelector('.container').classList.remove('video-only-layout');
         
         photoCredit.innerHTML = "";
         
@@ -290,11 +285,12 @@
         thumbs.innerHTML = ""; 
         const validSources = potential.filter(src => src && src.trim() !== "");
         
+        // لو مفيش صور بس في فيديو، بنفعل وضع الفيديو فقط
         if (validSources.length === 0) {
             if (artwork.video_url && artwork.video_url.trim() !== "") {
                 mainViewer.style.display = "none";
                 thumbs.style.display = "none";
-                // تم إزالة إضافة الكلاس من هنا لمنع تكرار الإجراء والتسبب في الارتعاش
+                document.querySelector('.container').classList.add('video-only-layout'); // تفعيل وضع الفيديو
             } else {
                 setNoImageFallback();
             }
@@ -326,6 +322,7 @@
                     if (artwork.video_url && artwork.video_url.trim() !== "") { 
                         mainViewer.style.display = "none"; 
                         thumbs.style.display = "none"; 
+                        document.querySelector('.container').classList.add('video-only-layout'); // تفعيل وضع الفيديو
                     }
                     else setNoImageFallback();
                 }
@@ -364,6 +361,7 @@
         dom.material.innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
         dom.desc.innerHTML = ((ar ? artwork.desc_ar : artwork.desc_en) || "").replace(/\n/g, '<br>');
 
+        // فلترة ذكية لرابط الفيديو
         if (artwork.video_url && artwork.video_url.trim() !== "") {
             let rawVid = artwork.video_url.trim();
             let finalUrl = rawVid;
