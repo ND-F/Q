@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Loading...</title>
+  <script>
+    // هذه الخدعة تلتقط الرابط المكسور وتحوله لصفحة scan.html مع تمرير الـ ID في الخفاء
+    var path = window.location.pathname; 
+    var segment = path.split('/').filter(Boolean).pop(); // يجلب M01 أو V1
+    
+    if(segment && segment !== 'Q') {
+      window.location.replace('/Q/scan.html?id=' + segment);
+    } else {
+      window.location.replace('/Q/scan.html');
+    }
+  </script>
+</head>
+<body></body>
+</html>
