@@ -266,19 +266,36 @@
                 if (fileName && fileName !== "scan" && fileName !== "Q") id = fileName;
             }
             
+            // حماية 1: التأكد إن الملف مش فاضي
+            if (!allArtworks || allArtworks.length === 0) {
+                dom.title.innerHTML = "ملف البيانات قيد التحديث في السيرفر، يرجى الانتظار والمحاولة بعد قليل...";
+                return;
+            }
+
             const finalId = id || allArtworks[0].id;
             initPiece(finalId);
             
             if (window.location.search.includes("id=")) {
                 window.history.replaceState({id: finalId}, '', finalId);
             }
-        } catch(e) { console.error("Data Load Failed"); }
+        } catch(e) { 
+            console.error("Data Load Failed", e); 
+            dom.title.innerHTML = "حدث خطأ في قراءة البيانات، يرجى التأكد من التصدير في جوجل شيت.";
+        }
     }
 
     function initPiece(id) {
+        if (!allArtworks || allArtworks.length === 0) return;
+
         let targetId = String(id).trim().toLowerCase();
-        artwork = allArtworks.find(a => String(a.id).trim().toLowerCase() === targetId);
+        artwork = allArtworks.find(a => a.id && String(a.id).trim().toLowerCase() === targetId);
         if(!artwork) artwork = allArtworks[0];
+        
+        // حماية 2: لو القطعة مش موجودة خالص
+        if(!artwork) {
+            dom.title.innerHTML = "القطعة غير موجودة.";
+            return;
+        }
         
         currentIdx = 0;
         validImages = Array(5).fill(null);
@@ -317,10 +334,12 @@
         const potential = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5];
         const thumbs = document.getElementById("thumbs");
         thumbs.innerHTML = ""; 
-        const validSources = potential.filter(src => src && src.trim() !== "");
+        
+        // حماية 3: التأكد إن الصور بتتعامل كـ String علشان الـ trim() ميضربش
+        const validSources = potential.filter(src => src && String(src).trim() !== "");
         
         if (validSources.length === 0) {
-            if (artwork.video_url && artwork.video_url.trim() !== "") {
+            if (artwork.video_url && String(artwork.video_url).trim() !== "") {
                 mainViewer.style.display = "none";
                 thumbs.style.display = "none";
             } else {
@@ -334,8 +353,8 @@
         let loadedCount = 0;
 
         potential.forEach((src, index) => {
-            if (!src || src.trim() === "") { checkedCount++; return; }
-            const webpSrc = src.replace(/\.[^/.]+$/, ".webp");
+            if (!src || String(src).trim() === "") { checkedCount++; return; }
+            const webpSrc = String(src).replace(/\.[^/.]+$/, ".webp");
             const img = document.createElement("img");
             
             img.onload = () => {
@@ -351,7 +370,7 @@
             img.onerror = () => {
                 checkedCount++; img.remove();
                 if (checkedCount === potential.length && loadedCount === 0) {
-                    if (artwork.video_url && artwork.video_url.trim() !== "") { 
+                    if (artwork.video_url && String(artwork.video_url).trim() !== "") { 
                         mainViewer.style.display = "none"; 
                         thumbs.style.display = "none"; 
                         document.querySelector('.container').classList.add('video-only-layout');
@@ -380,6 +399,8 @@
     }
 
     function render() {
+        if (!artwork) return;
+        
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
         document.body.className = (lang === "ar" ? "lang-ar" : "lang-en") + (document.body.classList.contains("light") ? " light" : "");
         
@@ -414,8 +435,9 @@
         dom.material.innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
         dom.desc.innerHTML = ((ar ? artwork.desc_ar : artwork.desc_en) || "").replace(/\n/g, '<br>');
 
-        if (artwork.video_url && artwork.video_url.trim() !== "") {
-            let rawVid = artwork.video_url.trim();
+        // حماية 4: التأكد إن رابط الفيديو نص
+        if (artwork.video_url && String(artwork.video_url).trim() !== "") {
+            let rawVid = String(artwork.video_url).trim();
             let finalUrl = rawVid;
             if (rawVid.includes("<iframe") && rawVid.includes("src=")) {
                 let match = rawVid.match(/src="([^"]+)"/);
@@ -469,9 +491,6 @@
         }
     }, {passive: true});
 
-    /* ========================================================================= */
-    /* كود الـ Smart Zoom المحدث لمنع مشكلة تصغير الصورة فجأة على الموبايل        */
-    /* ========================================================================= */
     let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
     let startDist = 0, initialScale = 1;
     let isPinching = false;
@@ -565,4 +584,76 @@
             if (newScale > 20) newScale = 20;
             
             const clientX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-            const clientY = (e.touches[0].clientY + e.touches[1].clientY
+            const clientY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+            
+            const ratio = 1 - (newScale / scale);
+            const centerX = (window.innerWidth / 2) + pointX;
+            const centerY = (window.innerHeight / 2) + pointY;
+            
+            pointX += (clientX - centerX) * ratio;
+            pointY += (clientY - centerY) * ratio;
+            scale = newScale;
+            
+            if (scale === 1) { pointX = 0; pointY = 0; }
+            setTransform();
+        } else if (e.touches.length === 1 && panning && scale > 1) {
+            e.preventDefault();
+            pointX += e.touches[0].clientX - startX;
+            pointY += e.touches[0].clientY - startY;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            setTransform();
+        }
+    }, {passive: false});
+
+    let lastTap = 0;
+    modal.addEventListener('touchend', (e) => {
+        panning = false;
+        
+        if (e.touches.length === 0) {
+            if (isPinching) {
+                isPinching = false;
+                lastTap = 0;
+                return;
+            }
+
+            let moveDist = 0;
+            if (e.changedTouches && e.changedTouches.length > 0) {
+                moveDist = Math.hypot(e.changedTouches[0].clientX - tapStartX, e.changedTouches[0].clientY - tapStartY);
+            }
+            
+            if (moveDist < 10) { 
+                let currentTime = new Date().getTime();
+                let tapLength = currentTime - lastTap;
+                if (tapLength < 300 && tapLength > 0) {
+                    if (scale > 1) resetZoom();
+                    else { scale = 3; setTransform(); }
+                }
+                lastTap = currentTime;
+            }
+        }
+    });
+
+    document.addEventListener('keydown', (e) => { 
+        if (e.key === "Escape" && modal.style.display === 'block') { 
+            modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); 
+        } 
+    });
+    
+    document.getElementById("modalClose").onclick = () => {
+        modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom();
+    };
+    
+    window.onpopstate = (e) => {
+        if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); }
+        else if (e.state && e.state.id) initPiece(e.state.id);
+    };
+
+    window.addEventListener("scroll", () => {
+        document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40);
+    }, { passive: true });
+
+    load();
+</script>
+</body>
+</html>
