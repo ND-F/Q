@@ -255,7 +255,6 @@
             const res = await fetch("data/artworks.json?t=" + new Date().getTime());
             allArtworks = await res.json();
             
-            // قراءة الـ ID من الرابط (المسار) لو مفيش ?id=
             let id = new URLSearchParams(location.search).get("id");
             if (!id) {
                 let pathName = window.location.pathname.replace(/\/$/, "");
@@ -265,7 +264,14 @@
                 }
             }
             
-            initPiece(id || allArtworks[0].id);
+            const finalId = id || allArtworks[0].id;
+            initPiece(finalId);
+            
+            // هذا التعديل يمسح ?id= من الرابط ليظل شكله V1 أو M01 بمجرد التحميل
+            if (window.location.search.includes("id=")) {
+                window.history.replaceState({id: finalId}, '', finalId);
+            }
+            
         } catch(e) { console.error("Data Load Failed"); }
     }
 
