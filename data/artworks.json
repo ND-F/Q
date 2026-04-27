@@ -1020,7 +1020,7 @@
     "image5": "images/V5e.png"
   },
   {
-    "id": "V6",
+    "id": "VN1",
     "inventory_number": "",
     "title_en": "",
     "title_ar": "",
@@ -1047,11 +1047,11 @@
     "info_ar4": "",
     "info_ar5": "",
     "video_url": "",
-    "image1": "images/V6.png",
-    "image2": "images/V6b.png",
-    "image3": "images/V6c.png",
-    "image4": "images/V6d.png",
-    "image5": "images/V6e.png"
+    "image1": "images/VN1.png",
+    "image2": "images/VN1b.png",
+    "image3": "images/VN1c.png",
+    "image4": "images/VN1d.png",
+    "image5": "images/VN1e.png"
   },
   {
     "id": "V7",
