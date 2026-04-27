@@ -1,6 +1,6 @@
 [
   {
-    "id": "MIA-0001",
+    "id": "M01",
     "inventory_number": "Inv. no. 1066",
     "title_en": "DOOR FROM THE SHRINE OF SAYYIDA ZAYNAB",
     "title_ar": "باب من مشهد السيدة زينب",
@@ -27,11 +27,11 @@
     "info_ar4": "",
     "info_ar5": "",
     "video_url": "",
-    "image1": "images/MIA-0001.png",
-    "image2": "images/MIA-0001b.png",
-    "image3": "images/MIA-0001c.png",
-    "image4": "images/MIA-0001d.png",
-    "image5": "images/MIA-0001e.png"
+    "image1": "images/M01.png",
+    "image2": "images/M01b.png",
+    "image3": "images/M01c.png",
+    "image4": "images/M01d.png",
+    "image5": "images/M01e.png"
   },
   {
     "id": "MIA-0002",
