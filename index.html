@@ -9,10 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
     <script>
-        /* 1. نظام التحويل السريع */
+        /* 1. نظام التحويل السريع (تم تعديله ليتوافق مع الروابط النظيفة) */
         const query = window.location.search.substring(1);
         if (query && !isNaN(query) && query.length >= 1) {
-            window.location.replace("scan.html?id=MIA-" + query);
+            // سيقوم بتحويل ?0001 إلى رابط نظيف MIA-0001
+            window.location.replace("MIA-" + query);
         }
 
         /* 2. مزامنة الثيم قبل تحميل الصفحة لمنع الوميض */
@@ -196,18 +197,21 @@
         grid.innerHTML = "";
 
         list.forEach(a => {
-            const imgPath = a.image1 ? a.image1 : 'images/no-image.jpg';
+            // قراءة الصورة بصيغة webp لضمان التوافق وسرعة التحميل
+            let imgPath = a.image1 ? a.image1.replace(/\.[^/.]+$/, ".webp") : 'images/no-image.webp';
             
             const card = document.createElement("div");
             card.className = "card";
+            
+            // التعديل الأهم: توجيه المستخدم للرابط النظيف مباشرة بدلاً من scan.html
             card.onclick = () => {
-                location.href = "scan.html?id=" + a.id;
+                location.href = a.id; 
             };
 
             card.innerHTML = `
-                <img src="${imgPath}" onerror="this.src='images/no-image.jpg'">
+                <img src="${imgPath}" onerror="this.src='images/no-image.webp'">
                 <div class="card-body">
-                    <div class="card-title">${a.title_ar}</div>
+                    <div class="card-title">${a.title_ar || "قطعة بدون عنوان"}</div>
                     <div class="id-badge">${a.id}</div>
                 </div>
             `;
