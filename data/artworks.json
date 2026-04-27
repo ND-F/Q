@@ -825,7 +825,7 @@
     "image5": "images/MIA-0025e.png"
   },
   {
-    "id": "VID-0001",
+    "id": "V1",
     "inventory_number": "",
     "title_en": "",
     "title_ar": "",
@@ -851,11 +851,11 @@
     "info_ar3": "",
     "info_ar4": "",
     "info_ar5": "",
-    "image1": "images/VID-0001.png",
-    "image2": "images/VID-0001b.png",
-    "image3": "images/VID-0001c.png",
-    "image4": "images/VID-0001d.png",
-    "image5": "images/VID-0001e.png"
+    "image1": "images/V1.png",
+    "image2": "images/V1b.png",
+    "image3": "images/V1c.png",
+    "image4": "images/V1d.png",
+    "image5": "images/V1e.png"
   },
   {
     "id": "VID-0002",
