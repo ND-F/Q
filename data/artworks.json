@@ -858,7 +858,7 @@
     "image5": "images/V1e.png"
   },
   {
-    "id": "VID-0002",
+    "id": "V2",
     "inventory_number": "",
     "title_en": "",
     "title_ar": "",
@@ -884,14 +884,14 @@
     "info_ar3": "",
     "info_ar4": "",
     "info_ar5": "",
-    "image1": "images/VID-0002.png",
-    "image2": "images/VID-0002b.png",
-    "image3": "images/VID-0002c.png",
-    "image4": "images/VID-0002d.png",
-    "image5": "images/VID-0002e.png"
+    "image1": "images/V2.png",
+    "image2": "images/V2b.png",
+    "image3": "images/V2c.png",
+    "image4": "images/V2d.png",
+    "image5": "images/V2e.png"
   },
   {
-    "id": "VID-0003",
+    "id": "V3",
     "inventory_number": "",
     "title_en": "",
     "title_ar": "",
@@ -917,14 +917,14 @@
     "info_ar3": "",
     "info_ar4": "",
     "info_ar5": "",
-    "image1": "images/VID-0003.png",
-    "image2": "images/VID-0003b.png",
-    "image3": "images/VID-0003c.png",
-    "image4": "images/VID-0003d.png",
-    "image5": "images/VID-0003e.png"
+    "image1": "images/V3.png",
+    "image2": "images/V3b.png",
+    "image3": "images/V3c.png",
+    "image4": "images/V3d.png",
+    "image5": "images/V3e.png"
   },
   {
-    "id": "VID-0004",
+    "id": "V4",
     "inventory_number": "",
     "title_en": "",
     "title_ar": "",
@@ -950,14 +950,14 @@
     "info_ar3": "",
     "info_ar4": "",
     "info_ar5": "",
-    "image1": "images/VID-0004.png",
-    "image2": "images/VID-0004b.png",
-    "image3": "images/VID-0004c.png",
-    "image4": "images/VID-0004d.png",
-    "image5": "images/VID-0004e.png"
+    "image1": "images/V4.png",
+    "image2": "images/V4b.png",
+    "image3": "images/V4c.png",
+    "image4": "images/V4d.png",
+    "image5": "images/V4e.png"
   },
   {
-    "id": "VID-0005",
+    "id": "V5",
     "inventory_number": "",
     "title_en": "",
     "title_ar": "",
@@ -983,10 +983,10 @@
     "info_ar3": "",
     "info_ar4": "",
     "info_ar5": "",
-    "image1": "images/VID-0005.png",
-    "image2": "images/VID-0005b.png",
-    "image3": "images/VID-0005c.png",
-    "image4": "images/VID-0005d.png",
-    "image5": "images/VID-0005e.png"
+    "image1": "images/V5.png",
+    "image2": "images/V5b.png",
+    "image3": "images/V5c.png",
+    "image4": "images/V5d.png",
+    "image5": "images/V5e.png"
   }
 ]
