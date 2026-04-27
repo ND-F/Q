@@ -27,30 +27,42 @@
         }
         .light { background: var(--light) !important; color: var(--main) !important; }
 
-        /* HEADER - عاد لطبيعته مع التمرير */
         #museumHeader { 
             position: sticky; top: 0; background: var(--light) !important; 
             padding: 0px 20px; display: flex; flex-direction: column; 
             align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
             border-radius: 0 0 20px 20px; transition: padding 0.3s ease;
         }
-        /* التثبيت هنا للترتيب فقط لعدم التأثر باللغة */
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; direction: rtl !important; }
-        .logo { 
-                height: 70px; /* هنا بتحدد العرض اللي إنت عايزه */
-                width: auto; /* الطول هيظبط نفسه أوتوماتيك */
-                cursor: pointer; 
-              }
+        .logo { height: 70px; width: auto; cursor: pointer; }
         .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; }
 
-        /* LAYOUT - Forced LTR for Grid Stability */
         .container { 
             max-width: 1400px; margin: auto; padding: 20px; 
             display: flex; flex-direction: column; 
         }
 
+        /* تنسيق الفيديو ليكون في الأعلى دائمًا */
+        .video-container {
+            grid-area: video;
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; 
+            height: 0;
+            margin-bottom: 30px; 
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            border: 2px solid var(--gold); 
+            display: none; 
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; border: none;
+        }
+
         .viewer { 
-            width: 100%; height: 50vh; position: relative; 
+            grid-area: viewer; width: 100%; height: 50vh; position: relative; 
             display: flex; align-items: center; justify-content: center; 
             margin-bottom: 15px; overflow: hidden; background: transparent; 
             cursor: pointer;
@@ -61,8 +73,7 @@
         }
         .viewer.loaded img { opacity: 1; }
 
-        /* THUMBS */
-        .thumbs { display: flex; gap: 12px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
+        .thumbs { grid-area: thumb; display: flex; gap: 12px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
         .thumbs img { 
             width: 75px; height: 75px; object-fit: contain; border-radius: 15px; 
             cursor: pointer; opacity: .4; background: rgba(255,255,255,0.05); 
@@ -70,60 +81,38 @@
         }
         .thumbs img.active { border-color: var(--gold); opacity: 1; transform: scale(1.1); }
 
+        .info { grid-area: info; }
         .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; }
-        .details { margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.8; }
+        .details { grid-area: details; margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.8; }
 
-        /* Video Container */
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; 
-            height: 0;
-            margin-top: 30px; 
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-            border: 2px solid var(--gold); 
-            display: none; 
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Alignment Logic */
+        /* تعديل المحاذاة لليسار تمامًا في حالة اللغة الإنجليزية */
+        .lang-en { text-align: left !important; }
+        .lang-en .info, .lang-en .details { text-align: left !important; direction: ltr !important; }
+        
         .lang-ar { text-align: right; }
-        .lang-en { text-align: left; }
+        .lang-ar .info, .lang-ar .details { text-align: right; direction: rtl; }
 
         @media(min-width:1100px) {
             .container { 
                 display: grid; 
                 grid-template-columns: 120px 1fr 450px; 
-                grid-template-areas: "thumb viewer info" "thumb details details";
+                grid-template-areas: 
+                    "video video video"
+                    "thumb viewer info" 
+                    "thumb details details";
                 gap: 50px; 
                 direction: ltr !important; 
             }
-            .viewer { grid-area: viewer; height: 70vh; }
-            .thumbs { grid-area: thumb; flex-direction: column; position: sticky; top: 120px; margin-top: 30px; }
-            .info { grid-area: info; margin-top: 30px; }
-            .details { grid-area: details; }
-            
-            .lang-ar .info, .lang-ar .details { text-align: right; direction: rtl; }
-            .lang-en .info, .lang-en .details { text-align: left; direction: ltr; }
+            .viewer { height: 70vh; }
+            .thumbs { flex-direction: column; position: sticky; top: 120px; margin-top: 30px; }
+            .info { margin-top: 30px; }
         }
 
-        /* CONTROLS */
         .controls { 
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
-            background: rgba(10, 30, 35, 0.96); 
-            backdrop-filter: blur(15px);
+            background: rgba(10, 30, 35, 0.96); backdrop-filter: blur(15px);
             padding: 12px 30px; border-radius: 50px; display: flex; align-items: center; gap: 25px; 
-            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
-            border: 1px solid var(--gold); 
+            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid var(--gold); 
             direction: ltr !important;
         }
         .controls div { font-size: 24px; cursor: pointer; color: white; transition: 0.2s; position: relative; } 
@@ -131,47 +120,15 @@
         .controls .nav-btn.disabled { opacity: 0.15; pointer-events: none; }
         .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3); }
 
-        /* MODAL & ZOOM SPECIFICS */
         #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--main); z-index: 10001; }
         #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; overflow: hidden; }
-        #modalImage { 
-            max-width: 95%; max-height: 95%; object-fit: contain; 
-            cursor: grab; will-change: transform; transform-origin: center center;
-        }
+        #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; cursor: grab; transform-origin: center center; }
         #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002; background: rgba(0,0,0,0.3); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
 
         .photo-credit { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: white !important; padding: 35px 15px 15px; font-size: 13px; z-index: 10; opacity: 0; transition: 0.4s; pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
         .viewer:hover .photo-credit, .viewer.info-active .photo-credit { opacity: 1 !important; }
 
         footer { text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
-
-        /* Tooltip Style */
-        .controls > div:not(.sep)::before {
-            content: attr(data-tooltip); 
-            position: absolute;
-            bottom: 125%; 
-            left: 50%;
-            transform: translateX(-50%) translateY(10px); 
-            background: rgba(6, 68, 76, 0.98); 
-            color: var(--light); 
-            padding: 8px 15px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            white-space: nowrap; 
-            opacity: 0; 
-            visibility: hidden;
-            transition: 0.3s ease; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            pointer-events: none; 
-            z-index: 10000; 
-        }
-
-        .controls > div:not(.sep):hover::before {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0); 
-        }
     </style>
 </head>
 
@@ -182,31 +139,34 @@
 <header id="museumHeader">
     <div class="logo-row">
         <a href="https://nd-f.github.io/QR/">
-            <img src="images/logo-nadim.png" class="logo" style="height: 70px; width: auto;">
+            <img src="images/logo-nadim.png" class="logo">
         </a>
-        
         <div class="header-title" id="headerTitle">معرض من حياة التحفة - From the Life of an Artefact Exhibition</div>
-        
         <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank">
-            <img src="images/MIALOGO.png" class="logo" style="height: 70px; width: auto;">
+            <img src="images/MIALOGO.png" class="logo">
         </a>
     </div>
 </header>
 
 <div class="container">
-    <div class="viewer" id="mainViewer"><img id="mainImage" decoding="async"><div class="photo-credit" id="photoCredit"></div></div>
+    <div class="video-container" id="videoContainer"></div>
+    
+    <div class="viewer" id="mainViewer">
+        <img id="mainImage" decoding="async">
+        <div class="photo-credit" id="photoCredit"></div>
+    </div>
+    
     <div class="thumbs" id="thumbs"></div>
+    
     <div class="info">
         <div class="meta" id="inv"></div><h1 id="title"></h1>
         <div class="meta" id="from"></div><div class="meta" id="date"></div><div class="meta" id="dim"></div>
     </div>
+    
     <div class="details">
         <div class="meta" id="hall"></div>
         <div class="meta" id="material" style="font-weight: 600; color: var(--gold);"></div>
         <div id="desc"></div>
-        
-        <div class="video-container" id="videoContainer"></div>
-
     </div>
 </div>
 
@@ -259,9 +219,7 @@
             if (!id) {
                 let pathName = window.location.pathname.replace(/\/$/, "");
                 let fileName = pathName.split('/').pop().replace('.html', '');
-                if (fileName && fileName !== "scan" && fileName !== "Q") {
-                    id = fileName;
-                }
+                if (fileName && fileName !== "scan" && fileName !== "Q") id = fileName;
             }
             
             const finalId = id || allArtworks[0].id;
@@ -270,33 +228,23 @@
             if (window.location.search.includes("id=")) {
                 window.history.replaceState({id: finalId}, '', finalId);
             }
-            
         } catch(e) { console.error("Data Load Failed"); }
     }
 
     function initPiece(id) {
-        // بحث ذكي يتجاهل المسافات وحالة الحروف
         let targetId = String(id).trim().toLowerCase();
         artwork = allArtworks.find(a => String(a.id).trim().toLowerCase() === targetId);
-        
-        // لو ملقاش القطعة، يحمل أول قطعة في الملف بدل ما يسيب الشاشة فاضية
-        if(!artwork) {
-            console.warn("Artwork not found for ID:", id);
-            artwork = allArtworks[0];
-        }
+        if(!artwork) artwork = allArtworks[0];
         
         currentIdx = 0;
         validImages = Array(5).fill(null);
         
         mainImage.removeAttribute("src");
         mainImage.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-        modalImage.removeAttribute("src");
-
+        
         mainViewer.classList.remove("loaded", "empty-piece");
         mainViewer.style.display = "flex"; 
         document.getElementById("thumbs").style.display = "flex";
-
-        photoCredit.style.opacity = "0";
         photoCredit.innerHTML = "";
         
         prepareImages();
@@ -309,14 +257,12 @@
         mainImage.onload = () => mainViewer.classList.add("loaded");
         mainImage.src = "images/no-image.webp";
         mainViewer.classList.add("empty-piece"); 
-        photoCredit.style.opacity = "0";
     }
 
     function prepareImages() {
         const potential = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5];
         const thumbs = document.getElementById("thumbs");
         thumbs.innerHTML = ""; 
-
         const validSources = potential.filter(src => src && src.trim() !== "");
         
         if (validSources.length === 0) {
@@ -334,43 +280,27 @@
         let loadedCount = 0;
 
         potential.forEach((src, index) => {
-            if (!src || src.trim() === "") { 
-                checkedCount++; 
-                if (checkedCount === potential.length && loadedCount === 0) {
-                    if (artwork.video_url && artwork.video_url.trim() !== "") {
-                        mainViewer.style.display = "none";
-                        thumbs.style.display = "none";
-                    } else {
-                        setNoImageFallback();
-                    }
-                }
-                return; 
-            }
-            
+            if (!src || src.trim() === "") { checkedCount++; return; }
             const webpSrc = src.replace(/\.[^/.]+$/, ".webp");
             const img = document.createElement("img");
             
             img.onload = () => {
-                checkedCount++;
-                loadedCount++;
+                checkedCount++; loadedCount++;
                 img.style.display = 'block';
                 validImages[index] = webpSrc;
-                if (!firstFound) { show(index); firstFound = true; }
-            };
-            
-            img.onerror = () => {
-                checkedCount++;
-                img.remove();
-                if (checkedCount === potential.length && loadedCount === 0) {
-                    if (artwork.video_url && artwork.video_url.trim() !== "") {
-                        mainViewer.style.display = "none";
-                        thumbs.style.display = "none";
-                    } else {
-                        setNoImageFallback();
-                    }
+                if (index === 0) { show(0); firstFound = true; } 
+                else if (!firstFound && checkedCount === potential.length) {
+                    const firstAvailable = validImages.findIndex(v => v !== null);
+                    if (firstAvailable !== -1) { show(firstAvailable); firstFound = true; }
                 }
             };
-            
+            img.onerror = () => {
+                checkedCount++; img.remove();
+                if (checkedCount === potential.length && loadedCount === 0) {
+                    if (artwork.video_url) { mainViewer.style.display = "none"; thumbs.style.display = "none"; }
+                    else setNoImageFallback();
+                }
+            };
             img.onclick = (e) => { e.stopPropagation(); show(index); };
             img.src = webpSrc;
             thumbs.appendChild(img);
@@ -380,33 +310,22 @@
     function show(i) {
         const src = validImages[i];
         if(!src) return;
-        
         currentIdx = i;
         mainViewer.classList.remove("loaded", "empty-piece");
-        
         mainImage.onload = () => mainViewer.classList.add("loaded");
         mainImage.src = src;
         modalImage.src = src;
-        
         document.querySelectorAll(".thumbs img").forEach(t => t.classList.toggle("active", t.src.includes(src)));
-        
         const info = (artwork[`info_${lang}${i + 1}`] || "").trim();
         photoCredit.innerHTML = info;
         photoCredit.style.opacity = info ? "1" : "0";
-        if(info && window.innerWidth < 1100) triggerInfoMobile();
     }
 
     function render() {
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
         document.body.className = (lang === "ar" ? "lang-ar" : "lang-en") + (document.body.classList.contains("light") ? " light" : "");
         
-        document.querySelectorAll('[data-ar]').forEach(el => {
-            const label = el.getAttribute(`data-${lang}`);
-            el.setAttribute('data-tooltip', label || '');
-        });
-
         const ar = lang === "ar";
-
         dom.inv.innerHTML = artwork.inventory_number || "";
         dom.title.innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "";
         dom.from.innerHTML = (ar ? artwork.from_ar : artwork.from_en) || "";
@@ -414,26 +333,27 @@
         dom.dim.innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) || "";
         dom.hall.innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
         dom.material.innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
-        
-        const descText = (ar ? artwork.desc_ar : artwork.desc_en) || "";
-        dom.desc.innerHTML = descText.replace(/\n/g, '<br>');
+        dom.desc.innerHTML = ((ar ? artwork.desc_ar : artwork.desc_en) || "").replace(/\n/g, '<br>');
 
+        // فلترة ذكية لرابط الفيديو
         if (artwork.video_url && artwork.video_url.trim() !== "") {
+            let rawVid = artwork.video_url.trim();
+            let finalUrl = rawVid;
+            if (rawVid.includes("<iframe") && rawVid.includes("src=")) {
+                let match = rawVid.match(/src="([^"]+)"/);
+                if (match) finalUrl = match[1];
+            }
             dom.videoContainer.style.display = "block";
-            dom.videoContainer.innerHTML = `<iframe width="100%" height="100%" src="${artwork.video_url}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+            dom.videoContainer.innerHTML = `<iframe width="100%" height="100%" src="${finalUrl}" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
         } else {
             dom.videoContainer.style.display = "none";
-            dom.videoContainer.innerHTML = "";
         }
     }
 
-    function toggleLang() { lang = lang === "ar" ? "en" : "ar"; localStorage.setItem("nadim_lang", lang); render(); if(!mainViewer.classList.contains("empty-piece")) show(currentIdx); }
+    function toggleLang() { lang = lang === "ar" ? "en" : "ar"; localStorage.setItem("nadim_lang", lang); render(); if(validImages[currentIdx]) show(currentIdx); }
     function toggleTheme() { const isLight = document.body.classList.toggle("light"); localStorage.setItem("nadim_theme", isLight ? "light" : "dark"); updateThemeIcon(); }
     function updateThemeIcon() { document.getElementById("themeBtn").textContent = document.body.classList.contains("light") ? "🌙" : "☀️"; }
-    function share() { 
-        if (navigator.share) { navigator.share({title: dom.title.innerText, url: location.href}); } 
-        else { navigator.clipboard.writeText(location.href).then(() => alert(lang === 'ar' ? "تم نسخ الرابط!" : "Link Copied!")); }
-    }
+    function share() { if (navigator.share) navigator.share({title: dom.title.innerText, url: location.href}); }
 
     function navigatePiece(step) {
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
@@ -451,105 +371,14 @@
         document.getElementById("nextPiece").classList.toggle("disabled", idx === allArtworks.length - 1);
     }
 
-    function triggerInfoMobile() {
-        if(window.innerWidth >= 1100) return; 
-        clearTimeout(infoTimer);
-        mainViewer.classList.add('info-active');
-        infoTimer = setTimeout(() => mainViewer.classList.remove('info-active'), 3500);
-    }
-
-    let mainStartX = 0;
-    mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) mainStartX = e.touches[0].clientX; triggerInfoMobile(); }, {passive: true});
-    mainViewer.addEventListener('touchend', e => {
-        if (validImages.filter(Boolean).length <= 1) return;
-        let diff = mainStartX - e.changedTouches[0].clientX;
-        if(Math.abs(diff) > 70) {
-            const cleanImages = validImages.filter(Boolean);
-            const relativeIdx = cleanImages.indexOf(validImages[currentIdx]);
-            const nextRelative = diff > 0 ? (relativeIdx + 1) % cleanImages.length : (relativeIdx - 1 + cleanImages.length) % cleanImages.length;
-            show(validImages.indexOf(cleanImages[nextRelative]));
-        }
-    }, {passive: true});
-
-    let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
-    let startDist = 0, initialScale = 1;
-
-    function setTransform() { modalImage.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`; }
-    function resetZoom() { scale = 1; pointX = 0; pointY = 0; setTransform(); }
-
     mainViewer.onclick = () => {
-        if(!mainImage.src || mainViewer.classList.contains("empty-piece") || mainImage.src.includes("no-image.webp")) return;
-        resetZoom();
+        if(!mainImage.src || mainViewer.classList.contains("empty-piece")) return;
         modal.style.display = 'block'; 
         document.body.style.overflow = 'hidden'; 
         modalImage.src = mainImage.src;
-        history.pushState({modal: true}, "");
     };
 
-    modal.addEventListener("wheel", (e) => {
-        if (modal.style.display !== 'block') return;
-        e.preventDefault();
-        const clientX = e.clientX, clientY = e.clientY, delta = e.deltaY || -e.wheelDelta;
-        const zoomFactor = delta > 0 ? 0.85 : 1.15; 
-        let newScale = scale * zoomFactor;
-        if (newScale < 1) newScale = 1; if (newScale > 20) newScale = 20; 
-        const ratio = 1 - (newScale / scale);
-        const centerX = (window.innerWidth / 2) + pointX, centerY = (window.innerHeight / 2) + pointY;
-        pointX += (clientX - centerX) * ratio; pointY += (clientY - centerY) * ratio; scale = newScale;
-        if (scale === 1) { pointX = 0; pointY = 0; }
-        setTransform();
-    }, { passive: false });
-
-    modalImage.addEventListener("mousedown", (e) => {
-        if (scale > 1) { e.preventDefault(); startX = e.clientX; startY = e.clientY; panning = true; modalImage.style.cursor = "grabbing"; }
-    });
-    window.addEventListener("mouseup", () => { panning = false; modalImage.style.cursor = "grab"; });
-    window.addEventListener("mousemove", (e) => {
-        if (!panning || scale === 1) return;
-        e.preventDefault(); pointX += e.clientX - startX; pointY += e.clientY - startY; startX = e.clientX; startY = e.clientY; setTransform();
-    });
-
-    modal.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 2) {
-            e.preventDefault(); startDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); initialScale = scale;
-        } else if (e.touches.length === 1 && scale > 1) {
-            startX = e.touches[0].clientX; startY = e.touches[0].clientY; panning = true;
-        }
-    }, {passive: false});
-
-    modal.addEventListener('touchmove', (e) => {
-        if (modal.style.display !== 'block') return;
-        if (e.touches.length === 2) {
-            e.preventDefault();
-            let dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-            let newScale = initialScale * (dist / startDist);
-            if (newScale < 1) newScale = 1; if (newScale > 20) newScale = 20;
-            const clientX = (e.touches[0].clientX + e.touches[1].clientX) / 2, clientY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-            const ratio = 1 - (newScale / scale), centerX = (window.innerWidth / 2) + pointX, centerY = (window.innerHeight / 2) + pointY;
-            pointX += (clientX - centerX) * ratio; pointY += (clientY - centerY) * ratio; scale = newScale;
-            if (scale === 1) { pointX = 0; pointY = 0; }
-            setTransform();
-        } else if (e.touches.length === 1 && panning && scale > 1) {
-            e.preventDefault(); pointX += e.touches[0].clientX - startX; pointY += e.touches[0].clientY - startY; startX = e.touches[0].clientX; startY = e.touches[0].clientY; setTransform();
-        }
-    }, {passive: false});
-
-    let lastTap = 0;
-    modal.addEventListener('touchend', (e) => {
-        panning = false; let currentTime = new Date().getTime(), tapLength = currentTime - lastTap;
-        if (tapLength < 300 && tapLength > 0 && e.touches.length === 0) { if (scale > 1) resetZoom(); else { scale = 3; setTransform(); } }
-        lastTap = currentTime;
-    });
-
-    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); } });
-    document.getElementById("modalClose").onclick = () => { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); };
-    window.onpopstate = (e) => {
-        if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); }
-        else if (e.state && e.state.id) initPiece(e.state.id);
-    };
-
-    window.addEventListener("scroll", () => { document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); }, { passive: true });
-
+    document.getElementById("modalClose").onclick = () => { modal.style.display = 'none'; document.body.style.overflow = ''; };
     load();
 </script>
 </body>
