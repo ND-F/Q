@@ -851,7 +851,7 @@
   },
   {
     "id": "V1",
-    "inventory_number": "",
+    "inventory_number": "Video 001",
     "title_en": "Wood Workshop",
     "title_ar": "ورشة أخشاب",
     "from_en": "",
@@ -865,7 +865,7 @@
     "hall_en": "",
     "hall_ar": "",
     "material_en": "",
-    "material_ar": "",
+    "material_ar": "خشب",
     "info_en1": "",
     "info_en2": "",
     "info_en3": "",
