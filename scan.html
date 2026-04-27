@@ -42,7 +42,6 @@
             display: flex; flex-direction: column; 
         }
 
-        /* تنسيق صندوق الفيديو */
         .video-container {
             grid-area: video;
             position: relative;
@@ -84,11 +83,9 @@
         .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; }
         .details { grid-area: details; margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2); padding-top: 20px; line-height: 1.8; }
 
-        /* التحكم في اتجاه النص بناءً على اللغة (لجميع الحالات) */
         body.lang-en .info, body.lang-en .details { text-align: left !important; direction: ltr !important; }
         body.lang-ar .info, body.lang-ar .details { text-align: right !important; direction: rtl !important; }
 
-        /* وضع الصور العادي (يستخدم Grid ليضع النص على اليمين والصور على اليسار) */
         @media(min-width:1100px) {
             .container:not(.video-only-layout) { 
                 display: grid; 
@@ -104,14 +101,12 @@
             .container:not(.video-only-layout) .thumbs { flex-direction: column; position: sticky; top: 120px; margin-top: 30px; }
             .container:not(.video-only-layout) .info { margin-top: 30px; }
             
-            /* مقاس الفيديو لو وجد مع الصور */
             .container:not(.video-only-layout) .video-container {
                 max-width: 800px;
                 margin-left: auto; margin-right: auto;
             }
         }
 
-        /* 🔴 وضع الفيديو فقط 🔴 (يُلغي الجريد ويجمع الفيديو والنص في المنتصف) */
         @media(min-width:1100px) {
             .container.video-only-layout {
                 display: flex !important;
@@ -142,7 +137,6 @@
         .controls .nav-btn.disabled { opacity: 0.15; pointer-events: none; }
         .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3); }
 
-        /* Tooltip Style (البالونات التوضيحية تم استرجاعها) */
         .controls > div:not(.sep)::before {
             content: attr(data-tooltip); 
             position: absolute;
@@ -221,7 +215,7 @@
 </div>
 
 <div class="controls">
-    <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" data-ar="السابق" data-en="Previous">◀</div>
+    <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
     <div class="sep"></div>
     <div onclick="toggleLang()" data-ar="اللغة" data-en="Language">🌐</div>
     <div onclick="window.location.href='https://nd-f.github.io/QR/'" data-ar="اتصل بنا" data-en="Contact Us" style="display: flex; align-items: center; justify-content: center;">
@@ -229,7 +223,7 @@
     <div onclick="toggleTheme()" id="themeBtn" data-ar="المظهر" data-en="Theme">☀️</div>
     <div onclick="share()" data-ar="مشاركة" data-en="Share">🔗</div>
     <div class="sep"></div>
-    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn" data-ar="التالي" data-en="Next">▶</div>
+    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn" data-ar="القطعة التالية" data-en="Next Piece">▶</div>
 </div>
 
 <footer> Nadim Foundation ©® 2018 </footer>
@@ -389,7 +383,22 @@
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
         document.body.className = (lang === "ar" ? "lang-ar" : "lang-en") + (document.body.classList.contains("light") ? " light" : "");
         
-        // استرجاع تشغيل البالونات التوضيحية للزراير (Tooltips)
+        const isVideo = artwork.id && String(artwork.id).toLowerCase().startsWith('v');
+        const prevBtn = document.getElementById("prevPiece");
+        const nextBtn = document.getElementById("nextPiece");
+        
+        if (isVideo) {
+            prevBtn.setAttribute("data-ar", "الحرفة السابقة");
+            prevBtn.setAttribute("data-en", "Previous Craft");
+            nextBtn.setAttribute("data-ar", "الحرفة التالية");
+            nextBtn.setAttribute("data-en", "Next Craft");
+        } else {
+            prevBtn.setAttribute("data-ar", "القطعة السابقة");
+            prevBtn.setAttribute("data-en", "Previous Piece");
+            nextBtn.setAttribute("data-ar", "القطعة التالية");
+            nextBtn.setAttribute("data-en", "Next Piece");
+        }
+
         document.querySelectorAll('[data-ar]').forEach(el => {
             const label = el.getAttribute(`data-${lang}`);
             el.setAttribute('data-tooltip', label || '');
@@ -461,10 +470,12 @@
     }, {passive: true});
 
     /* ========================================================================= */
-    /* كود الـ Smart Zoom الأصلي بالكامل (بدون أي تعديل أو ضغط نهائياً)          */
+    /* كود الـ Smart Zoom المحدث لمنع مشكلة تصغير الصورة فجأة على الموبايل        */
     /* ========================================================================= */
     let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
     let startDist = 0, initialScale = 1;
+    let isPinching = false;
+    let tapStartX = 0, tapStartY = 0;
 
     function setTransform() {
         modalImage.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
@@ -532,12 +543,15 @@
     modal.addEventListener('touchstart', (e) => {
         if (e.touches.length === 2) {
             e.preventDefault();
+            isPinching = true;
             startDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
             initialScale = scale;
-        } else if (e.touches.length === 1 && scale > 1) {
+        } else if (e.touches.length === 1) {
+            if (scale > 1) panning = true;
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
-            panning = true;
+            tapStartX = e.touches[0].clientX;
+            tapStartY = e.touches[0].clientY;
         }
     }, {passive: false});
 
@@ -551,64 +565,4 @@
             if (newScale > 20) newScale = 20;
             
             const clientX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-            const clientY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-            
-            const ratio = 1 - (newScale / scale);
-            const centerX = (window.innerWidth / 2) + pointX;
-            const centerY = (window.innerHeight / 2) + pointY;
-            
-            pointX += (clientX - centerX) * ratio;
-            pointY += (clientY - centerY) * ratio;
-            scale = newScale;
-            
-            if (scale === 1) { pointX = 0; pointY = 0; }
-            setTransform();
-        } else if (e.touches.length === 1 && panning && scale > 1) {
-            e.preventDefault();
-            pointX += e.touches[0].clientX - startX;
-            pointY += e.touches[0].clientY - startY;
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-            setTransform();
-        }
-    }, {passive: false});
-
-    let lastTap = 0;
-    modal.addEventListener('touchend', (e) => {
-        panning = false;
-        let currentTime = new Date().getTime();
-        let tapLength = currentTime - lastTap;
-        if (tapLength < 300 && tapLength > 0 && e.touches.length === 0) {
-            if (scale > 1) { 
-                resetZoom();
-            } else { 
-                scale = 3; 
-                setTransform(); 
-            }
-        }
-        lastTap = currentTime;
-    });
-
-    document.addEventListener('keydown', (e) => { 
-        if (e.key === "Escape" && modal.style.display === 'block') { 
-            modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); 
-        } 
-    });
-    
-    document.getElementById("modalClose").onclick = () => {
-        modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom();
-    };
-    
-    window.onpopstate = (e) => {
-        if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); }
-        else if (e.state && e.state.id) initPiece(e.state.id);
-    };
-
-    window.addEventListener("scroll", () => {
-        document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40);
-    }, { passive: true });
-
-    load();
-</script>
-</body>
-</html>
+            const clientY = (e.touches[0].clientY + e.touches[1].clientY
