@@ -92,6 +92,7 @@
         .lang-ar { text-align: right; }
         .lang-ar .info, .lang-ar .details { text-align: right; direction: rtl; }
 
+        /* Layout for normal pieces with images */
         @media(min-width:1100px) {
             .container { 
                 display: grid; 
@@ -106,6 +107,21 @@
             .viewer { height: 70vh; }
             .thumbs { flex-direction: column; position: sticky; top: 120px; margin-top: 30px; }
             .info { margin-top: 30px; }
+        }
+
+        /* 🔴 وضع مخصص لصفحات الفيديو فقط (يُلغي الجريد ويفرد النص) 🔴 */
+        @media(min-width:1100px) {
+            .container.video-only-layout {
+                display: flex !important;
+                flex-direction: column;
+                max-width: 950px; /* عرض مريح للقراءة */
+                margin: 0 auto;
+            }
+            .container.video-only-layout .info,
+            .container.video-only-layout .details {
+                width: 100%;
+                margin-top: 15px;
+            }
         }
 
         .controls { 
@@ -245,6 +261,10 @@
         mainViewer.classList.remove("loaded", "empty-piece");
         mainViewer.style.display = "flex"; 
         document.getElementById("thumbs").style.display = "flex";
+        
+        // إزالة وضع الفيديو فقط في حالة القطع العادية
+        document.querySelector('.container').classList.remove('video-only-layout');
+        
         photoCredit.innerHTML = "";
         
         prepareImages();
@@ -265,10 +285,12 @@
         thumbs.innerHTML = ""; 
         const validSources = potential.filter(src => src && src.trim() !== "");
         
+        // لو مفيش صور بس في فيديو، بنفعل وضع الفيديو فقط
         if (validSources.length === 0) {
             if (artwork.video_url && artwork.video_url.trim() !== "") {
                 mainViewer.style.display = "none";
                 thumbs.style.display = "none";
+                document.querySelector('.container').classList.add('video-only-layout'); // تفعيل وضع الفيديو
             } else {
                 setNoImageFallback();
             }
@@ -297,7 +319,11 @@
             img.onerror = () => {
                 checkedCount++; img.remove();
                 if (checkedCount === potential.length && loadedCount === 0) {
-                    if (artwork.video_url) { mainViewer.style.display = "none"; thumbs.style.display = "none"; }
+                    if (artwork.video_url && artwork.video_url.trim() !== "") { 
+                        mainViewer.style.display = "none"; 
+                        thumbs.style.display = "none"; 
+                        document.querySelector('.container').classList.add('video-only-layout'); // تفعيل وضع الفيديو
+                    }
                     else setNoImageFallback();
                 }
             };
