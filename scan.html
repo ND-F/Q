@@ -116,8 +116,8 @@
             .container.video-only-layout {
                 display: flex !important;
                 flex-direction: column;
-                align-items: center; /* يوسّط المحتوى */
-                max-width: 800px; /* 👈 نفس عرض الفيديو علشان الإنجليزي يبدأ من حافة الفيديو تماماً */
+                align-items: center; 
+                max-width: 800px; 
                 margin: 0 auto;
             }
             .container.video-only-layout .video-container,
@@ -141,6 +141,34 @@
         .controls .nav-btn { color: var(--gold); font-size: 28px; }
         .controls .nav-btn.disabled { opacity: 0.15; pointer-events: none; }
         .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3); }
+
+        /* Tooltip Style (البالونات التوضيحية تم استرجاعها) */
+        .controls > div:not(.sep)::before {
+            content: attr(data-tooltip); 
+            position: absolute;
+            bottom: 125%; 
+            left: 50%;
+            transform: translateX(-50%) translateY(10px); 
+            background: rgba(6, 68, 76, 0.98); 
+            color: var(--light); 
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            white-space: nowrap; 
+            opacity: 0; 
+            visibility: hidden;
+            transition: 0.3s ease; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            pointer-events: none; 
+            z-index: 10000; 
+        }
+
+        .controls > div:not(.sep):hover::before {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0); 
+        }
 
         #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--main); z-index: 10001; }
         #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; overflow: hidden; }
@@ -268,9 +296,6 @@
         mainViewer.style.display = "flex"; 
         document.getElementById("thumbs").style.display = "flex";
         
-        // ---------------------------------------------------------
-        // الحل الذكي لمنع ارتعاشة الحجم ووضع النص في المكان الصحيح
-        // نتحقق إذا كان الـ ID يبدأ بحرف V لفرض وضع الفيديو مباشرة
         const container = document.querySelector('.container');
         const isVideoPiece = targetId.startsWith('v');
         
@@ -279,7 +304,6 @@
         } else {
             container.classList.remove('video-only-layout');
         }
-        // ---------------------------------------------------------
         
         photoCredit.innerHTML = "";
         
@@ -365,6 +389,12 @@
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
         document.body.className = (lang === "ar" ? "lang-ar" : "lang-en") + (document.body.classList.contains("light") ? " light" : "");
         
+        // استرجاع تشغيل البالونات التوضيحية للزراير (Tooltips)
+        document.querySelectorAll('[data-ar]').forEach(el => {
+            const label = el.getAttribute(`data-${lang}`);
+            el.setAttribute('data-tooltip', label || '');
+        });
+
         const ar = lang === "ar";
         dom.inv.innerHTML = artwork.inventory_number || "";
         dom.title.innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "";
