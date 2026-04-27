@@ -267,7 +267,6 @@
             const finalId = id || allArtworks[0].id;
             initPiece(finalId);
             
-            // هذا التعديل يمسح ?id= من الرابط ليظل شكله V1 أو M01 بمجرد التحميل
             if (window.location.search.includes("id=")) {
                 window.history.replaceState({id: finalId}, '', finalId);
             }
@@ -276,8 +275,15 @@
     }
 
     function initPiece(id) {
-        artwork = allArtworks.find(a => String(a.id) === String(id));
-        if(!artwork) return;
+        // بحث ذكي يتجاهل المسافات وحالة الحروف
+        let targetId = String(id).trim().toLowerCase();
+        artwork = allArtworks.find(a => String(a.id).trim().toLowerCase() === targetId);
+        
+        // لو ملقاش القطعة، يحمل أول قطعة في الملف بدل ما يسيب الشاشة فاضية
+        if(!artwork) {
+            console.warn("Artwork not found for ID:", id);
+            artwork = allArtworks[0];
+        }
         
         currentIdx = 0;
         validImages = Array(5).fill(null);
@@ -287,7 +293,6 @@
         modalImage.removeAttribute("src");
 
         mainViewer.classList.remove("loaded", "empty-piece");
-        // إعادة إظهار الصور في حالة الانتقال من فيديو إلى قطعة عادية
         mainViewer.style.display = "flex"; 
         document.getElementById("thumbs").style.display = "flex";
 
@@ -314,7 +319,6 @@
 
         const validSources = potential.filter(src => src && src.trim() !== "");
         
-        // إخفاء معرض الصور تماماً لو مفيش صور بس في رابط فيديو
         if (validSources.length === 0) {
             if (artwork.video_url && artwork.video_url.trim() !== "") {
                 mainViewer.style.display = "none";
@@ -368,9 +372,7 @@
             };
             
             img.onclick = (e) => { e.stopPropagation(); show(index); };
-            
             img.src = webpSrc;
-            
             thumbs.appendChild(img);
         });
     }
@@ -418,7 +420,7 @@
 
         if (artwork.video_url && artwork.video_url.trim() !== "") {
             dom.videoContainer.style.display = "block";
-            dom.videoContainer.innerHTML = `<iframe width="560" height="315" src="${artwork.video_url}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+            dom.videoContainer.innerHTML = `<iframe width="100%" height="100%" src="${artwork.video_url}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
         } else {
             dom.videoContainer.style.display = "none";
             dom.videoContainer.innerHTML = "";
@@ -437,7 +439,6 @@
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
         if(idx >= 0 && idx < allArtworks.length) {
             const nextId = allArtworks[idx].id;
-            // تعديل الرابط في المتصفح ليظهر بالشكل V1 بدلاً من ?id=V1
             window.history.pushState({id: nextId}, '', nextId);
             initPiece(nextId);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -473,14 +474,8 @@
     let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
     let startDist = 0, initialScale = 1;
 
-    function setTransform() {
-        modalImage.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
-    }
-
-    function resetZoom() {
-        scale = 1; pointX = 0; pointY = 0;
-        setTransform();
-    }
+    function setTransform() { modalImage.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`; }
+    function resetZoom() { scale = 1; pointX = 0; pointY = 0; setTransform(); }
 
     mainViewer.onclick = () => {
         if(!mainImage.src || mainViewer.classList.contains("empty-piece") || mainImage.src.includes("no-image.webp")) return;
@@ -494,57 +489,31 @@
     modal.addEventListener("wheel", (e) => {
         if (modal.style.display !== 'block') return;
         e.preventDefault();
-        
-        const clientX = e.clientX;
-        const clientY = e.clientY;
-        const delta = e.deltaY || -e.wheelDelta;
+        const clientX = e.clientX, clientY = e.clientY, delta = e.deltaY || -e.wheelDelta;
         const zoomFactor = delta > 0 ? 0.85 : 1.15; 
-        
         let newScale = scale * zoomFactor;
-        if (newScale < 1) newScale = 1;
-        if (newScale > 20) newScale = 20; 
-        
+        if (newScale < 1) newScale = 1; if (newScale > 20) newScale = 20; 
         const ratio = 1 - (newScale / scale);
-        const centerX = (window.innerWidth / 2) + pointX;
-        const centerY = (window.innerHeight / 2) + pointY;
-        
-        pointX += (clientX - centerX) * ratio;
-        pointY += (clientY - centerY) * ratio;
-        scale = newScale;
-        
+        const centerX = (window.innerWidth / 2) + pointX, centerY = (window.innerHeight / 2) + pointY;
+        pointX += (clientX - centerX) * ratio; pointY += (clientY - centerY) * ratio; scale = newScale;
         if (scale === 1) { pointX = 0; pointY = 0; }
         setTransform();
     }, { passive: false });
 
     modalImage.addEventListener("mousedown", (e) => {
-        if (scale > 1) {
-            e.preventDefault();
-            startX = e.clientX;
-            startY = e.clientY;
-            panning = true;
-            modalImage.style.cursor = "grabbing";
-        }
+        if (scale > 1) { e.preventDefault(); startX = e.clientX; startY = e.clientY; panning = true; modalImage.style.cursor = "grabbing"; }
     });
     window.addEventListener("mouseup", () => { panning = false; modalImage.style.cursor = "grab"; });
     window.addEventListener("mousemove", (e) => {
         if (!panning || scale === 1) return;
-        e.preventDefault();
-        pointX += e.clientX - startX;
-        pointY += e.clientY - startY;
-        startX = e.clientX;
-        startY = e.clientY; 
-        setTransform();
+        e.preventDefault(); pointX += e.clientX - startX; pointY += e.clientY - startY; startX = e.clientX; startY = e.clientY; setTransform();
     });
 
     modal.addEventListener('touchstart', (e) => {
         if (e.touches.length === 2) {
-            e.preventDefault();
-            startDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-            initialScale = scale;
+            e.preventDefault(); startDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); initialScale = scale;
         } else if (e.touches.length === 1 && scale > 1) {
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-            panning = true;
+            startX = e.touches[0].clientX; startY = e.touches[0].clientY; panning = true;
         }
     }, {passive: false});
 
@@ -554,66 +523,32 @@
             e.preventDefault();
             let dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
             let newScale = initialScale * (dist / startDist);
-            if (newScale < 1) newScale = 1;
-            if (newScale > 20) newScale = 20;
-            
-            const clientX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-            const clientY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-            
-            const ratio = 1 - (newScale / scale);
-            const centerX = (window.innerWidth / 2) + pointX;
-            const centerY = (window.innerHeight / 2) + pointY;
-            
-            pointX += (clientX - centerX) * ratio;
-            pointY += (clientY - centerY) * ratio;
-            scale = newScale;
-            
+            if (newScale < 1) newScale = 1; if (newScale > 20) newScale = 20;
+            const clientX = (e.touches[0].clientX + e.touches[1].clientX) / 2, clientY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+            const ratio = 1 - (newScale / scale), centerX = (window.innerWidth / 2) + pointX, centerY = (window.innerHeight / 2) + pointY;
+            pointX += (clientX - centerX) * ratio; pointY += (clientY - centerY) * ratio; scale = newScale;
             if (scale === 1) { pointX = 0; pointY = 0; }
             setTransform();
         } else if (e.touches.length === 1 && panning && scale > 1) {
-            e.preventDefault();
-            pointX += e.touches[0].clientX - startX;
-            pointY += e.touches[0].clientY - startY;
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-            setTransform();
+            e.preventDefault(); pointX += e.touches[0].clientX - startX; pointY += e.touches[0].clientY - startY; startX = e.touches[0].clientX; startY = e.touches[0].clientY; setTransform();
         }
     }, {passive: false});
 
     let lastTap = 0;
     modal.addEventListener('touchend', (e) => {
-        panning = false;
-        let currentTime = new Date().getTime();
-        let tapLength = currentTime - lastTap;
-        if (tapLength < 300 && tapLength > 0 && e.touches.length === 0) {
-            if (scale > 1) { 
-                resetZoom();
-            } else { 
-                scale = 3; 
-                setTransform(); 
-            }
-        }
+        panning = false; let currentTime = new Date().getTime(), tapLength = currentTime - lastTap;
+        if (tapLength < 300 && tapLength > 0 && e.touches.length === 0) { if (scale > 1) resetZoom(); else { scale = 3; setTransform(); } }
         lastTap = currentTime;
     });
 
-    document.addEventListener('keydown', (e) => { 
-        if (e.key === "Escape" && modal.style.display === 'block') { 
-            modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); 
-        } 
-    });
-    
-    document.getElementById("modalClose").onclick = () => {
-        modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom();
-    };
-    
+    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); } });
+    document.getElementById("modalClose").onclick = () => { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); };
     window.onpopstate = (e) => {
         if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); }
         else if (e.state && e.state.id) initPiece(e.state.id);
     };
 
-    window.addEventListener("scroll", () => {
-        document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40);
-    }, { passive: true });
+    window.addEventListener("scroll", () => { document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); }, { passive: true });
 
     load();
 </script>
