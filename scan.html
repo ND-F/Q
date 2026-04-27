@@ -254,7 +254,17 @@
 
             const res = await fetch("data/artworks.json?t=" + new Date().getTime());
             allArtworks = await res.json();
-            const id = new URLSearchParams(location.search).get("id");
+            
+            // قراءة الـ ID من الرابط (المسار) لو مفيش ?id=
+            let id = new URLSearchParams(location.search).get("id");
+            if (!id) {
+                let pathName = window.location.pathname.replace(/\/$/, "");
+                let fileName = pathName.split('/').pop().replace('.html', '');
+                if (fileName && fileName !== "scan" && fileName !== "Q") {
+                    id = fileName;
+                }
+            }
+            
             initPiece(id || allArtworks[0].id);
         } catch(e) { console.error("Data Load Failed"); }
     }
@@ -271,6 +281,10 @@
         modalImage.removeAttribute("src");
 
         mainViewer.classList.remove("loaded", "empty-piece");
+        // إعادة إظهار الصور في حالة الانتقال من فيديو إلى قطعة عادية
+        mainViewer.style.display = "flex"; 
+        document.getElementById("thumbs").style.display = "flex";
+
         photoCredit.style.opacity = "0";
         photoCredit.innerHTML = "";
         
@@ -294,8 +308,14 @@
 
         const validSources = potential.filter(src => src && src.trim() !== "");
         
+        // إخفاء معرض الصور تماماً لو مفيش صور بس في رابط فيديو
         if (validSources.length === 0) {
-            setNoImageFallback();
+            if (artwork.video_url && artwork.video_url.trim() !== "") {
+                mainViewer.style.display = "none";
+                thumbs.style.display = "none";
+            } else {
+                setNoImageFallback();
+            }
             return;
         }
 
@@ -306,7 +326,14 @@
         potential.forEach((src, index) => {
             if (!src || src.trim() === "") { 
                 checkedCount++; 
-                if (checkedCount === potential.length && loadedCount === 0) setNoImageFallback();
+                if (checkedCount === potential.length && loadedCount === 0) {
+                    if (artwork.video_url && artwork.video_url.trim() !== "") {
+                        mainViewer.style.display = "none";
+                        thumbs.style.display = "none";
+                    } else {
+                        setNoImageFallback();
+                    }
+                }
                 return; 
             }
             
@@ -324,7 +351,14 @@
             img.onerror = () => {
                 checkedCount++;
                 img.remove();
-                if (checkedCount === potential.length && loadedCount === 0) setNoImageFallback();
+                if (checkedCount === potential.length && loadedCount === 0) {
+                    if (artwork.video_url && artwork.video_url.trim() !== "") {
+                        mainViewer.style.display = "none";
+                        thumbs.style.display = "none";
+                    } else {
+                        setNoImageFallback();
+                    }
+                }
             };
             
             img.onclick = (e) => { e.stopPropagation(); show(index); };
@@ -397,7 +431,8 @@
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
         if(idx >= 0 && idx < allArtworks.length) {
             const nextId = allArtworks[idx].id;
-            window.history.pushState({id: nextId}, '', '?id=' + nextId);
+            // تعديل الرابط في المتصفح ليظهر بالشكل V1 بدلاً من ?id=V1
+            window.history.pushState({id: nextId}, '', nextId);
             initPiece(nextId);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
