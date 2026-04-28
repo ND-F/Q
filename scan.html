@@ -62,13 +62,24 @@
         .viewer { 
             grid-area: viewer; width: 100%; height: 50vh; position: relative; 
             display: flex; align-items: center; justify-content: center; 
-            margin-bottom: 15px; overflow: hidden; background: transparent; 
+            margin-bottom: 15px; overflow: hidden; 
             cursor: pointer;
+            
+            /* --- تأثير البوكس الزجاجي للصورة كلها --- */
+            border: 1px solid rgba(225, 169, 62, 0.3); /* خط دهبي شفاف خفيف يحيط بالصورة */
+            border-radius: 15px; /* دوران خفيف للحواف */
+            background: rgba(128, 128, 128, 0.05); /* خلفية زجاجية خفيفة جداً */
+            backdrop-filter: blur(8px); /* تأثير الزجاج (التغبيش) للمربع */
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* ظل ناعم يفصل البوكس عن الخلفية */
         }
+        
+        
         .viewer img { 
             max-width: 95%; max-height: 95%; object-fit: contain; 
             filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3)); opacity: 0; transition: opacity 0.3s;
         }
+        
         .viewer.loaded img { opacity: 1; }
 
         .thumbs { grid-area: thumb; display: flex; gap: 12px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
