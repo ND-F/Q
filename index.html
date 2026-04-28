@@ -9,11 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
     <script>
-        /* 1. نظام التحويل السريع (تم تعديله ليتوافق مع الروابط النظيفة) */
+        /* 1. نظام التحويل السريع (محدث للأرقام المجردة) */
         const query = window.location.search.substring(1);
-        if (query && !isNaN(query) && query.length >= 1) {
-            // سيقوم بتحويل ?0001 إلى رابط نظيف MIA-0001
-            window.location.replace("MIA-" + query);
+        if (query && query.length >= 1) {
+            // سيقوم بتحويل ?02 إلى رابط نظيف 02 مباشرة
+            window.location.replace(query);
         }
 
         /* 2. مزامنة الثيم قبل تحميل الصفحة لمنع الوميض */
