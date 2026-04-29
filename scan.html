@@ -24,7 +24,7 @@
       gtag('config', 'G-RWD0WHS7EV');
     </script>
     <style>
-        :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; }
+        :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; --accent: #ADCAC9; }
         
         body { 
             margin: 0; font-family: 'Tajawal', sans-serif; 
@@ -53,8 +53,8 @@
             transition: font-size 0.3s ease;
         }
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; direction: rtl !important; }
-        .logo { height: 70px; width: auto; cursor: pointer; }
-        .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; }
+        .logo { height: 70px; width: auto; cursor: pointer; transition: height 0.3s ease; }
+        .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; transition: font-size 0.3s ease; }
 
         .container { 
             max-width: 1400px; margin: auto; padding: 20px; 
@@ -138,7 +138,7 @@
             border-top: 1px solid rgba(225, 169, 62, 0.2); 
             padding-top: 20px; 
             line-height: 1.8; 
-            width: 95%; 
+            width: 100%; 
             margin-left: auto; 
             margin-right: auto; 
         }
@@ -153,7 +153,7 @@
                 grid-template-areas: 
                     "video video video"
                     "thumb viewer info" 
-                    "thumb details .";
+                    "thumb details details"; /* تعديل: الديسكريبشن يفرش بمحاذاة العنوان والصورة */
                 gap: 50px; 
                 direction: ltr !important; 
             }
@@ -229,7 +229,8 @@
         #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; cursor: grab; transform-origin: center center; }
         #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002; background: rgba(0,0,0,0.3); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
 
-        footer { text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
+        /* تعديل الفوتر عشان نضمن إنه يفضل تحت خالص وميطيرش فوق */
+        footer { display: block; width: 100%; clear: both; text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
 
         /* -- تظبيط اتجاه النص في شريط المعلومات حسب اللغة -- */
         body.lang-ar .photo-credit { text-align: right !important; direction: rtl !important; }
@@ -267,7 +268,7 @@
         <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank">
             <img src="images/MIALOGO.png" class="logo">
         </a>
-        <div class="header-title" id="headerTitle">من حياة التحفة<br>From the Life of an Artefact</div>
+        <div class="header-title" id="headerTitle">معرض من حياة التحفة<br>From the Life of an Artefact Exhibition</div>
         <a href="https://nd-f.github.io/QR/">
             <img src="images/logo-nadim.png" class="logo">
         </a>
@@ -284,18 +285,21 @@
     
     <div class="thumbs" id="thumbs"></div>
     
-<div class="info">
+    <div class="info">
         <h1 id="title"></h1>
         <div class="meta" id="from"></div>
         <div class="meta" id="date"></div>
-        <div class="meta" id="material"></div>
+        <div class="meta" id="material" style="font-weight: 600; color: var(--gold);"></div>
         <div class="meta" id="dim"></div>
-        <br> <div class="meta" id="inv" style="opacity: 0.7; font-size: 14px;"></div>
+        <br>
+        <div class="meta" id="inv" style="opacity: 0.7; font-size: 14px;"></div>
     </div>
     
     <div class="details">
-        <div class="meta" id="hall" style="display: none;"></div> <div id="desc"></div>
+        <div class="meta" id="hall" style="font-weight: 600; color: var(--accent); margin-bottom: 15px;"></div> 
+        <div id="desc"></div>
     </div>
+</div>
 
 <div class="controls">
     <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
@@ -845,4 +849,5 @@
 
     load();
 </script>
+</body>
 </html>
