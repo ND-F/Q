@@ -40,6 +40,18 @@
             align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
             border-radius: 0 0 20px 20px; transition: padding 0.3s ease;
         }
+        /* الكلاس ده هيتضاف أوتوماتيك لما اليوزر يعمل سكرول لتحت */
+        #museumHeader.header-small {
+            padding: 5px 20px !important; /* تقليل المسافة العلوية والسفلية */
+        }
+        #museumHeader.header-small .logo {
+            height: 40px !important; /* تصغير اللوجو */
+            transition: height 0.3s ease;
+        }
+        #museumHeader.header-small .header-title {
+            font-size: 14px !important; /* تصغير العنوان */
+            transition: font-size 0.3s ease;
+        }
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; direction: rtl !important; }
         .logo { height: 70px; width: auto; cursor: pointer; }
         .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; }
@@ -255,7 +267,7 @@
         <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank">
             <img src="images/MIALOGO.png" class="logo">
         </a>
-        <div class="header-title" id="headerTitle">معرض من حياة التحفة - From the Life of an Artefact Exhibition</div>
+        <div class="header-title" id="headerTitle">من حياة التحفة<br>From the Life of an Artefact</div>
         <a href="https://nd-f.github.io/QR/">
             <img src="images/logo-nadim.png" class="logo">
         </a>
@@ -272,17 +284,18 @@
     
     <div class="thumbs" id="thumbs"></div>
     
-    <div class="info">
-        <div class="meta" id="inv"></div><h1 id="title"></h1>
-        <div class="meta" id="from"></div><div class="meta" id="date"></div><div class="meta" id="dim"></div>
+<div class="info">
+        <h1 id="title"></h1>
+        <div class="meta" id="from"></div>
+        <div class="meta" id="date"></div>
+        <div class="meta" id="material"></div>
+        <div class="meta" id="dim"></div>
+        <br> <div class="meta" id="inv" style="opacity: 0.7; font-size: 14px;"></div>
     </div>
     
     <div class="details">
-        <div class="meta" id="hall"></div>
-        <div class="meta" id="material" style="font-weight: 600; color: var(--gold);"></div>
-        <div id="desc"></div>
+        <div class="meta" id="hall" style="display: none;"></div> <div id="desc"></div>
     </div>
-</div>
 
 <div class="controls">
     <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
