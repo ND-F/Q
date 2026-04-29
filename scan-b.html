@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     
-    <title>NADIM in Museum of Islamic Arts - نديم في متحف الفن الإسلامي</title>
+    <title>NADIM in Museum of Islamic Arts - Editorial View</title>
     
     <meta name="theme-color" content="#EAE8D8" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#06444C" media="(prefers-color-scheme: dark)">
@@ -26,68 +26,107 @@
     <style>
         :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; --accent: #ADCAC9; }
         
-        /* 1. التأسيس الأكاديمي (الخلفية فاتحة والنص غامق) */
+        /* 1. التأسيس الأكاديمي (الخلفية فاتحة والنص غامق كطبيعة) */
         body { 
             margin: 0; font-family: 'Tajawal', serif; 
             background: var(--light); color: var(--main); 
             transition: background 0.4s ease, color 0.4s ease; overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
+        
         body.dark { background: var(--main); color: var(--light); }
 
-        /* 2. الهيدر (الشريط العلوي) */
+        /* الهيدر النظيف المسطح */
         #museumHeader { 
             position: sticky; top: 0; background: var(--light); 
             padding: 15px 20px; display: flex; flex-direction: column; 
             align-items: center; z-index: 1000; 
-            border-bottom: 1px solid rgba(6, 68, 76, 0.15);
+            border-bottom: 1px solid rgba(6, 68, 76, 0.1);
             transition: all 0.3s ease;
         }
-        body.dark #museumHeader { background: var(--main); border-bottom-color: rgba(234, 232, 216, 0.15); }
+        body.dark #museumHeader { background: var(--main); border-bottom: 1px solid rgba(234, 232, 216, 0.1); }
         
-        /* تصغير الهيدر في الموبايل */
+        .logo-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; width: 100%; max-width: 1000px; direction: rtl !important; }
+        .logo { height: 50px; width: auto; cursor: pointer; transition: height 0.3s ease; }
+        .header-title { font-size: 16px; font-weight: 700; text-align: center; line-height: 1.4; }
+        
         @media (max-width: 800px) {
             #museumHeader { padding: 8px 15px; }
-            .logo { height: 40px; }
-            .header-title { font-size: 13px; line-height: 1.3; }
-            
-            #museumHeader.header-small { padding: 4px 10px !important; border-bottom: 1px solid rgba(6, 68, 76, 0.3); }
+            .logo { height: 35px; }
+            .header-title { font-size: 12px; }
+            #museumHeader.header-small { padding: 4px 10px !important; }
             #museumHeader.header-small .logo { height: 25px !important; }
-            #museumHeader.header-small .header-title { font-size: 11px !important; }
+            #museumHeader.header-small .header-title { font-size: 10px !important; }
         }
 
-        .logo-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; max-width: 1000px; direction: rtl !important; }
-        .logo { height: 60px; width: auto; cursor: pointer; transition: height 0.3s ease; }
-        .header-title { font-size: 18px; font-weight: 700; text-align: center; color: var(--main); transition: font-size 0.3s ease; }
-        body.dark .header-title { color: var(--light); }
-
-        /* 3. حاوية المقال (Article Container) */
         .container { 
-            max-width: 760px; /* مقاس القراءة المريح للعين */
-            margin: 40px auto 100px; padding: 0 20px; 
+            max-width: 800px; 
+            margin: 40px auto; padding: 0 20px; 
+            display: flex; flex-direction: column; 
             opacity: 0; transition: opacity 0.5s ease; 
         }
         .container.ready { opacity: 1; }
 
-        /* 4. تنسيق العنوان والبيانات */
-        .article-header { margin-bottom: 40px; text-align: center; }
-        body.lang-en .article-header { text-align: left; }
-        body.lang-ar .article-header { text-align: right; }
-
-        .article-header h1 { 
-            font-size: 34px; color: var(--main); margin: 0 0 20px 0; 
+        /* قسم العنوان والبيانات فوق */
+        .info { text-align: center; margin-bottom: 30px; }
+        body.lang-en .info { text-align: center; } 
+        
+        .info h1 { 
+            font-size: 32px; color: var(--main); margin: 0 0 15px 0; 
             font-weight: 800; line-height: 1.3;
         }
-        body.dark .article-header h1 { color: var(--gold); }
+        body.dark .info h1 { color: var(--gold); }
+        
+        .meta-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 15px; font-size: 15px; opacity: 0.85; }
+        .meta-item { display: inline-block; }
+        #material { font-weight: 700; color: #b38020; margin-top: 10px; width: 100%; font-size: 17px;} 
+        body.dark #material { color: var(--gold); }
+        #inv { width: 100%; margin-top: 10px; font-size: 13px; opacity: 0.6; font-family: sans-serif; }
 
-        .meta { font-size: 16px; margin-bottom: 8px; color: var(--main); opacity: 0.85; }
-        body.dark .meta { color: var(--light); }
-        .meta-material { font-weight: 700; color: #b38020; margin: 15px 0; font-size: 18px; }
-        body.dark .meta-material { color: var(--gold); }
-        .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
-        body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
+        /* الصورة الرئيسية والكريديت تحتها */
+        .main-figure { 
+            width: 100%; margin: 0 0 30px 0; padding: 0;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .viewer { 
+            width: 100%; max-height: 60vh; position: relative; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; background: transparent;
+        }
+        .viewer img { 
+            max-width: 100%; max-height: 60vh; object-fit: contain; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            border-radius: 4px; 
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        body.dark .viewer img { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .viewer.loaded img { opacity: 1; }
 
-        /* 5. تنسيق الصور وسط الكلام (Figures) */
+        .photo-credit { 
+            display: block !important; opacity: 1 !important; visibility: visible !important;
+            margin-top: 15px; font-size: 13px; color: #666; text-align: center;
+            font-style: italic; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; width: 80%;
+        }
+        body.dark .photo-credit { color: #aaa; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+        .video-container {
+            width: 100%; padding-bottom: 56.25%; height: 0;
+            margin-bottom: 30px; border-radius: 8px; overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15); display: none; position: relative;
+        }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        /* الشرح (الديسكريبشن) والصور المدمجة */
+        .details { line-height: 2; font-size: 18px; color: #222; text-align: justify; }
+        body.dark .details { color: #ddd; }
+        #hall { font-weight: 700; color: var(--main); margin-bottom: 10px; font-size: 16px; text-align: center;}
+        body.dark #hall { color: var(--accent); }
+        
+        .article-body p { font-size: 19px; line-height: 2.1; margin-bottom: 30px; color: #222; text-align: justify; }
+        body.dark .article-body p { color: #e0e0e0; }
+        body.lang-en .article-body { direction: ltr; }
+        body.lang-ar .article-body { direction: rtl; }
+
         figure { margin: 40px 0; padding: 0; display: block; width: 100%; text-align: center; }
         figure img { 
             max-width: 100%; height: auto; object-fit: contain; 
@@ -102,28 +141,10 @@
             font-style: italic; opacity: 0.9; line-height: 1.5;
         }
         body.dark figcaption { color: #aaa; }
-        
         body.lang-ar figcaption { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
         body.lang-en figcaption { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
 
-        /* 6. تنسيق الشرح (Paragraphs) */
-        .article-body p { 
-            font-size: 20px; line-height: 2.1; margin-bottom: 30px; 
-            color: #222; text-align: justify;
-        }
-        body.dark .article-body p { color: #e0e0e0; }
-        body.lang-en .article-body { direction: ltr; }
-        body.lang-ar .article-body { direction: rtl; }
-
-        /* 7. مربع الفيديو */
-        .video-container {
-            width: 100%; padding-bottom: 56.25%; height: 0;
-            margin-bottom: 40px; border-radius: 8px; overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15); display: none; position: relative;
-        }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-
-        /* 8. شريط التحكم الثابت بالأسفل */
+        /* عناصر التحكم والفوتر */
         .controls { 
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
             background: white; padding: 10px 25px; border-radius: 50px; 
@@ -140,7 +161,6 @@
         .controls .sep { width: 1px; height: 20px; background: rgba(0,0,0,0.1); }
         body.dark .controls .sep { background: rgba(255,255,255,0.2); }
 
-        /* التول تيبس */
         .controls > div:not(.sep)::before {
             content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%;
             transform: translateX(-50%) translateY(5px); background: var(--main); color: white; 
@@ -150,8 +170,7 @@
         body.dark .controls > div:not(.sep)::before { background: white; color: var(--main); }
         .controls > div:not(.sep):hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
 
-        /* نافذة الزووم (Fullscreen) */
-        #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255,255,255,0.98); z-index: 10001; }
+        #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255,255,255,0.95); z-index: 10001; }
         body.dark #fullscreenModal { background: rgba(6, 68, 76, 0.98); }
         #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; overflow: hidden; }
         #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; cursor: grab; transform-origin: center center; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2)); }
@@ -191,23 +210,26 @@
 <div class="container" id="mainContainer">
     <div class="article-header">
         <h1 id="title"></h1>
-        <div class="meta" id="from"></div>
-        <div class="meta" id="date"></div>
+        <div class="meta-group">
+            <div class="meta-item" id="from"></div>
+            <div class="meta-item" id="date"></div>
+            <div class="meta-item" id="dim"></div>
+        </div>
         <div class="meta-material" id="material"></div>
-        <div class="meta" id="dim"></div>
         <div class="meta" id="hall" style="font-weight: 700; color: var(--accent); margin-top: 15px;"></div>
         <div class="meta-inv" id="inv"></div>
     </div>
     
     <div class="video-container" id="videoContainer"></div>
 
-    <figure id="heroFigure">
-        <img id="heroImage" decoding="async">
-        <figcaption id="heroCaption"></figcaption>
+    <figure class="main-figure" id="heroFigure">
+        <div class="viewer" id="mainViewer">
+            <img id="heroImage" decoding="async">
+        </div>
+        <figcaption class="photo-credit" id="heroCaption"></figcaption>
     </figure>
 
-    <div class="article-body" id="articleBody">
-        </div>
+    <div class="article-body" id="articleBody"></div>
 </div>
 
 <div class="controls">
@@ -215,4 +237,329 @@
     <div class="sep"></div>
     <div onclick="toggleLang()" data-ar="اللغة" data-en="Language">🌐</div>
     <div onclick="window.location.href='https://nd-f.github.io/QR/'" data-ar="اتصل بنا" data-en="Contact Us" style="display: flex; align-items: center; justify-content: center;">
-        <img src
+        <img src="images/icon-nadim-light.png" id="contactIcon" style="width: 28px; height: 28px; object-fit: contain; filter: invert(1);"> 
+    </div>
+    <div onclick="toggleTheme()" id="themeBtn" data-ar="المظهر" data-en="Theme">☀️</div>
+    <div onclick="share()" data-ar="مشاركة" data-en="Share">🔗</div>
+    <div class="sep"></div>
+    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn" data-ar="القطعة التالية" data-en="Next Piece">▶</div>
+</div>
+
+<footer> Nadim Foundation ©® 2018 </footer>
+
+<script>
+    const systemLang = navigator.language.startsWith("ar") ? "ar" : "en";
+    let lang = localStorage.getItem("nadim_lang") || systemLang;
+    
+    let allArtworks = [], artwork;
+    
+    let zoomStartTime = 0;
+    let isZoomTracked = false;
+
+    const modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
+
+    async function load() {
+        try {
+            updateThemeIcon();
+            const res = await fetch("data/artworks.json?t=" + new Date().getTime());
+            allArtworks = await res.json();
+            
+            let id = new URLSearchParams(location.search).get("id");
+            if (!id) {
+                let pathName = window.location.pathname.replace(/\/$/, "");
+                let fileName = pathName.split('/').pop().replace('.html', '');
+                if (fileName && fileName !== "scan" && fileName !== "Q") id = fileName;
+            }
+            if (!allArtworks || allArtworks.length === 0) return;
+
+            const finalId = id || allArtworks[0].id;
+            initPiece(finalId);
+            
+            if (window.location.search.includes("id=")) {
+                window.history.replaceState({id: finalId}, '', finalId);
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    function initPiece(id) {
+        if (!allArtworks || allArtworks.length === 0) return;
+
+        let targetId = String(id).trim().toUpperCase(); 
+        artwork = allArtworks.find(a => a.id && String(a.id).trim().toUpperCase() === targetId);
+        if(!artwork) artwork = allArtworks[0];
+        if(!artwork) return;
+
+        if (typeof gtag === 'function') {
+            let actualId = String(artwork.id).toUpperCase();
+            if (!actualId.startsWith('VN')) {
+                if (actualId.startsWith('V')) {
+                    gtag('event', 'view_craft_video', { 'video_id': actualId, 'video_title': artwork.title_ar || artwork.title_en });
+                } else {
+                    gtag('event', 'view_artifact', { 'artifact_id': actualId, 'artifact_title': artwork.title_ar || artwork.title_en });
+                }
+            }
+        }
+        
+        renderArticle();
+        updateNavButtons();
+
+        setTimeout(() => { document.getElementById('mainContainer').classList.add('ready'); }, 50);
+    }
+
+    function renderArticle() {
+        const ar = lang === "ar";
+        document.documentElement.dir = ar ? "rtl" : "ltr";
+        document.body.className = (ar ? "lang-ar" : "lang-en") + (document.body.classList.contains("dark") ? " dark" : "");
+        
+        document.getElementById("title").innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "بدون عنوان";
+        document.getElementById("from").innerHTML = (ar ? artwork.from_ar : artwork.from_en) ? ((ar ? artwork.from_ar : artwork.from_en) + " | ") : "";
+        document.getElementById("date").innerHTML = (ar ? artwork.date_ar : artwork.date_en) || "";
+        document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) ? (" | " + (ar ? artwork.dimensions_ar : artwork.dimensions_en)) : "";
+        document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
+        document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
+        document.getElementById("inv").innerHTML = artwork.inventory_number ? (ar ? `رقم الجرد: ${artwork.inventory_number}` : `Inv. no. ${artwork.inventory_number}`) : "";
+
+        let vidContainer = document.getElementById("videoContainer");
+        if (artwork.video_url && String(artwork.video_url).trim() !== "") {
+            let rawVid = String(artwork.video_url).trim();
+            let finalUrl = rawVid;
+            if (rawVid.includes("<iframe") && rawVid.includes("src=")) {
+                let match = rawVid.match(/src="([^"]+)"/);
+                if (match) finalUrl = match[1];
+            }
+            vidContainer.style.display = "block";
+            vidContainer.innerHTML = `<iframe width="100%" height="100%" src="${finalUrl}" frameborder="0" allowfullscreen></iframe>`;
+        } else { vidContainer.style.display = "none"; }
+
+        let potentialImages = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5];
+        let images = potentialImages.map(src => src && String(src).trim() !== "" ? String(src).replace(/\.[^/.]+$/, ".webp") : null);
+
+        let heroFig = document.getElementById("heroFigure");
+        let heroImg = document.getElementById("heroImage");
+        let heroCap = document.getElementById("heroCaption");
+        let mainViewer = document.getElementById("mainViewer");
+        
+        if (images[0]) {
+            heroImg.src = images[0];
+            mainViewer.classList.remove("loaded", "empty-piece");
+            heroImg.onload = () => mainViewer.classList.add("loaded");
+            heroImg.onerror = function() { this.src = 'images/no-image.webp'; mainViewer.classList.add("empty-piece"); };
+            heroImg.onclick = () => openModal(heroImg.src);
+            let capText = (artwork[`info_${lang}1`] || "").trim();
+            heroCap.innerHTML = capText;
+            heroCap.style.display = capText ? "block" : "none";
+            heroFig.style.display = "block";
+        } else {
+            heroFig.style.display = "none";
+        }
+
+        let descRaw = (ar ? artwork.desc_ar : artwork.desc_en) || "";
+        let paragraphs = descRaw.split(/\n+/).filter(p => p.trim() !== "");
+        let articleBody = document.getElementById("articleBody");
+        articleBody.innerHTML = "";
+        
+        let imgIndex = 1; 
+        
+        paragraphs.forEach((pText) => {
+            let p = document.createElement("p");
+            p.innerHTML = pText;
+            articleBody.appendChild(p);
+            
+            if (imgIndex < 5 && images[imgIndex]) {
+                articleBody.appendChild(createInlineFigure(images[imgIndex], imgIndex));
+                imgIndex++;
+            }
+        });
+        
+        while (imgIndex < 5) {
+            if (images[imgIndex]) {
+                articleBody.appendChild(createInlineFigure(images[imgIndex], imgIndex));
+            }
+            imgIndex++;
+        }
+
+        let isVideo = String(artwork.id).toUpperCase().startsWith('V');
+        const prevBtn = document.getElementById("prevPiece"), nextBtn = document.getElementById("nextPiece");
+        if (isVideo) {
+            prevBtn.setAttribute("data-ar", "الحرفة السابقة"); prevBtn.setAttribute("data-en", "Previous Craft");
+            nextBtn.setAttribute("data-ar", "الحرفة التالية"); nextBtn.setAttribute("data-en", "Next Craft");
+        } else {
+            prevBtn.setAttribute("data-ar", "القطعة السابقة"); prevBtn.setAttribute("data-en", "Previous Piece");
+            nextBtn.setAttribute("data-ar", "القطعة التالية"); nextBtn.setAttribute("data-en", "Next Piece");
+        }
+        document.querySelectorAll('[data-ar]').forEach(el => { el.setAttribute('data-tooltip', el.getAttribute(`data-${lang}`) || ''); });
+    }
+
+    function createInlineFigure(src, idx) {
+        let fig = document.createElement("figure");
+        let img = document.createElement("img");
+        img.src = src;
+        img.onerror = function() { this.closest('figure').style.display = 'none'; }; 
+        img.onclick = () => openModal(src);
+        fig.appendChild(img);
+        
+        let infoStr = (artwork[`info_${lang}${idx + 1}`] || "").trim();
+        if (infoStr) {
+            let cap = document.createElement("figcaption");
+            cap.innerHTML = infoStr;
+            fig.appendChild(cap);
+        }
+        return fig;
+    }
+
+    function toggleLang() { 
+        lang = lang === "ar" ? "en" : "ar"; 
+        localStorage.setItem("nadim_lang", lang); 
+        renderArticle(); 
+        if (typeof gtag === 'function') gtag('event', 'toggle_language', { 'language_selected': lang });
+    }
+    
+    function toggleTheme() { 
+        const isDark = document.body.classList.toggle("dark"); 
+        localStorage.setItem("nadim_theme", isDark ? "dark" : "light"); 
+        updateThemeIcon(); 
+        if (typeof gtag === 'function') gtag('event', 'toggle_theme', { 'theme_selected': isDark ? 'dark' : 'light' });
+    }
+    
+    function updateThemeIcon() { 
+        let isDark = document.body.classList.contains("dark");
+        document.getElementById("themeBtn").textContent = isDark ? "☀️" : "🌙"; 
+        document.getElementById("nadimLogo").style.filter = isDark ? "invert(1)" : "none";
+        document.getElementById("contactIcon").style.filter = isDark ? "none" : "invert(1)";
+    }
+    
+    function share() { 
+        if (navigator.share) navigator.share({title: document.getElementById("title").innerText, url: location.href}); 
+        if (typeof gtag === 'function') gtag('event', 'share_click', { 'artifact_id': artwork ? artwork.id : 'unknown' });
+    }
+
+    function trackContactUs() {
+        if (typeof gtag === 'function') gtag('event', 'contact_us_click', { 'from_page_id': artwork ? artwork.id : 'unknown' });
+        setTimeout(() => { window.location.href = 'https://nd-f.github.io/QR/'; }, 150);
+    }
+    document.querySelector('[data-en="Contact Us"]').setAttribute("onclick", "trackContactUs()");
+
+    function navigatePiece(step) {
+        const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
+        if(idx >= 0 && idx < allArtworks.length) {
+            const nextId = allArtworks[idx].id;
+            window.history.pushState({id: nextId}, '', nextId);
+            initPiece(nextId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    function updateNavButtons() {
+        const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id));
+        document.getElementById("prevPiece").classList.toggle("disabled", idx === 0);
+        document.getElementById("nextPiece").classList.toggle("disabled", idx === allArtworks.length - 1);
+    }
+
+    let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0, startDist = 0, initialScale = 1, isPinching = false, tapStartX = 0, tapStartY = 0;
+
+    function setTransform() { modalImage.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`; }
+    function resetZoom() { scale = 1; pointX = 0; pointY = 0; setTransform(); }
+
+    function trackIntentionalInteraction() {
+        if (!isZoomTracked && artwork && typeof gtag === 'function') {
+            if (Date.now() - zoomStartTime > 1500) { 
+                gtag('event', 'intentional_zoom_or_pan', { 'artifact_id': artwork.id });
+                isZoomTracked = true; 
+            }
+        }
+    }
+
+    function openModal(src) {
+        resetZoom();
+        modal.style.display = 'block'; document.body.style.overflow = 'hidden'; 
+        modalImage.src = src; history.pushState({modal: true}, "");
+        zoomStartTime = Date.now(); isZoomTracked = false;
+    }
+
+    modal.addEventListener("wheel", (e) => {
+        if (modal.style.display !== 'block') return;
+        e.preventDefault();
+        const clientX = e.clientX, clientY = e.clientY, delta = e.deltaY || -e.wheelDelta;
+        let newScale = scale * (delta > 0 ? 0.85 : 1.15);
+        if (newScale < 1) newScale = 1; if (newScale > 20) newScale = 20; 
+        const ratio = 1 - (newScale / scale);
+        const centerX = (window.innerWidth / 2) + pointX, centerY = (window.innerHeight / 2) + pointY;
+        pointX += (clientX - centerX) * ratio; pointY += (clientY - centerY) * ratio;
+        scale = newScale; if (scale === 1) { pointX = 0; pointY = 0; }
+        setTransform();
+        if (scale > 1.1) trackIntentionalInteraction();
+    }, { passive: false });
+
+    modalImage.addEventListener("mousedown", (e) => {
+        if (scale > 1) { e.preventDefault(); startX = e.clientX; startY = e.clientY; panning = true; modalImage.style.cursor = "grabbing"; }
+    });
+    window.addEventListener("mouseup", () => { panning = false; modalImage.style.cursor = "grab"; });
+    window.addEventListener("mousemove", (e) => {
+        if (!panning || scale === 1) return; e.preventDefault();
+        pointX += e.clientX - startX; pointY += e.clientY - startY;
+        startX = e.clientX; startY = e.clientY; setTransform(); trackIntentionalInteraction();
+    });
+
+    modal.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault(); isPinching = true;
+            startDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            initialScale = scale;
+        } else if (e.touches.length === 1) {
+            if (scale > 1) panning = true;
+            startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+            tapStartX = e.touches[0].clientX; tapStartY = e.touches[0].clientY;
+        }
+    }, {passive: false});
+
+    modal.addEventListener('touchmove', (e) => {
+        if (modal.style.display !== 'block') return;
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            let dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            let newScale = initialScale * (dist / startDist);
+            if (newScale < 1) newScale = 1; if (newScale > 20) newScale = 20;
+            const ratio = 1 - (newScale / scale);
+            const centerX = (window.innerWidth / 2) + pointX, centerY = (window.innerHeight / 2) + pointY;
+            pointX += ((e.touches[0].clientX + e.touches[1].clientX) / 2 - centerX) * ratio; 
+            pointY += ((e.touches[0].clientY + e.touches[1].clientY) / 2 - centerY) * ratio;
+            scale = newScale; if (scale === 1) { pointX = 0; pointY = 0; }
+            setTransform(); if (scale > 1.1) trackIntentionalInteraction();
+        } else if (e.touches.length === 1 && panning && scale > 1) {
+            e.preventDefault();
+            pointX += e.touches[0].clientX - startX; pointY += e.touches[0].clientY - startY;
+            startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+            setTransform(); trackIntentionalInteraction();
+        }
+    }, {passive: false});
+
+    let lastTap = 0;
+    modal.addEventListener('touchend', (e) => {
+        panning = false;
+        if (e.touches.length === 0) {
+            if (isPinching) { isPinching = false; lastTap = 0; return; }
+            let moveDist = e.changedTouches ? Math.hypot(e.changedTouches[0].clientX - tapStartX, e.changedTouches[0].clientY - tapStartY) : 0;
+            if (moveDist < 10) { 
+                let currentTime = new Date().getTime(), tapLength = currentTime - lastTap;
+                if (tapLength < 300 && tapLength > 0) {
+                    if (scale > 1) resetZoom(); else { scale = 3; setTransform(); }
+                    trackIntentionalInteraction();
+                }
+                lastTap = currentTime;
+            }
+        }
+    });
+
+    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); } });
+    document.getElementById("modalClose").onclick = () => { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); };
+    window.onpopstate = (e) => {
+        if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); }
+        else if (e.state && e.state.id) initPiece(e.state.id);
+    };
+
+    window.addEventListener("scroll", () => { document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); }, { passive: true });
+
+    load();
+</script>
+</body>
+</html>
