@@ -84,13 +84,15 @@
             
             /* -- التعديل 3: مخفي طبيعي وبيظهر مع الحركة -- */
             opacity: 0; 
-            transition: opacity 0.4s ease; 
+            visibility: hidden;
+            transition: all 0.4s ease; 
             pointer-events: none; 
         }
         
         /* ده السطر اللي بيخليه يظهر لما الماوس ييجي على المربع */
         .viewer:hover .photo-credit, .viewer.info-active .photo-credit { 
             opacity: 1 !important; 
+            visibility: visible !important;
         }
         
         .viewer img { 
