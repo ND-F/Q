@@ -304,6 +304,10 @@
     let lang = localStorage.getItem("nadim_lang") || systemLang;
     
     let allArtworks = [], validImages = [], currentIdx = 0, artwork, infoTimer;
+    
+    // متغيرات لتتبع الزووم المتعمد
+    let zoomStartTime = 0;
+    let isZoomTracked = false;
 
     const dom = {
         inv: document.getElementById("inv"),
@@ -356,8 +360,8 @@
     function initPiece(id) {
         if (!allArtworks || allArtworks.length === 0) return;
 
-        let targetId = String(id).trim().toLowerCase();
-        artwork = allArtworks.find(a => a.id && String(a.id).trim().toLowerCase() === targetId);
+        let targetId = String(id).trim().toUpperCase(); 
+        artwork = allArtworks.find(a => a.id && String(a.id).trim().toUpperCase() === targetId);
         if(!artwork) artwork = allArtworks[0];
         
         if(!artwork) {
@@ -366,13 +370,32 @@
             return;
         }
 
-        // --- إضافة كود التتبع Analytics ---
+        // ==========================================
+        // اللوجيك العبقري لتصنيف الإحصائيات وفلترة الـ VN
+        // ==========================================
         if (typeof gtag === 'function') {
-            gtag('event', 'view_artifact', {
-                'artifact_id': artwork.id,
-                'artifact_title': artwork.title_ar || artwork.title_en
-            });
+            let actualId = String(artwork.id).toUpperCase();
+            
+            // لو هو VN (فيديو يوتيوب) -> تجاهله تماماً في الإحصائيات
+            if (!actualId.startsWith('VN')) {
+                
+                // لو بيبدأ بـ V (ومش VN) -> سجله كفيديو حرفة
+                if (actualId.startsWith('V')) {
+                    gtag('event', 'view_craft_video', {
+                        'video_id': actualId,
+                        'video_title': artwork.title_ar || artwork.title_en
+                    });
+                } 
+                // لو أرقام بس (مفيش V) -> سجله كقطعة أثرية
+                else {
+                    gtag('event', 'view_artifact', {
+                        'artifact_id': actualId,
+                        'artifact_title': artwork.title_ar || artwork.title_en
+                    });
+                }
+            }
         }
+        // ==========================================
         
         currentIdx = 0;
         validImages = Array(5).fill(null);
@@ -385,7 +408,7 @@
         document.getElementById("thumbs").style.display = "flex";
         
         const container = document.querySelector('.container');
-        const isVideoPiece = targetId.startsWith('v');
+        const isVideoPiece = targetId.startsWith('V');
         
         if (isVideoPiece) {
             container.classList.add('video-only-layout');
@@ -399,7 +422,6 @@
         render();
         updateNavButtons();
 
-        // إظهار المحتوى بنعومة بعد التنسيق
         setTimeout(() => {
             document.querySelector('.container').classList.add('ready');
         }, 50);
@@ -485,7 +507,9 @@
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
         document.body.className = (lang === "ar" ? "lang-ar" : "lang-en") + (document.body.classList.contains("light") ? " light" : "");
         
-        const isVideo = artwork.id && String(artwork.id).toLowerCase().startsWith('v');
+        let targetIdForText = String(artwork.id).toUpperCase();
+        const isVideo = targetIdForText.startsWith('V');
+        
         const prevBtn = document.getElementById("prevPiece");
         const nextBtn = document.getElementById("nextPiece");
         
@@ -536,11 +560,8 @@
         render(); 
         if(validImages[currentIdx]) show(currentIdx); 
         
-        // --- تتبع تغيير اللغة Analytics ---
         if (typeof gtag === 'function') {
-            gtag('event', 'toggle_language', {
-                'language_selected': lang
-            });
+            gtag('event', 'toggle_language', { 'language_selected': lang });
         }
     }
     
@@ -549,11 +570,8 @@
         localStorage.setItem("nadim_theme", isLight ? "light" : "dark"); 
         updateThemeIcon(); 
         
-        // --- تتبع تغيير المظهر Analytics ---
         if (typeof gtag === 'function') {
-            gtag('event', 'toggle_theme', {
-                'theme_selected': isLight ? 'light' : 'dark'
-            });
+            gtag('event', 'toggle_theme', { 'theme_selected': isLight ? 'light' : 'dark' });
         }
     }
     
@@ -562,13 +580,28 @@
     function share() { 
         if (navigator.share) navigator.share({title: dom.title.innerText, url: location.href}); 
         
-        // --- تتبع المشاركة Analytics ---
         if (typeof gtag === 'function') {
-            gtag('event', 'share_click', {
-                'artifact_id': artwork ? artwork.id : 'unknown'
-            });
+            gtag('event', 'share_click', { 'artifact_id': artwork ? artwork.id : 'unknown' });
         }
     }
+
+    // ==========================================
+    // تتبع زرار تواصل معنا (Nadim Contact)
+    // ==========================================
+    function trackContactUs() {
+        if (typeof gtag === 'function') {
+            gtag('event', 'contact_us_click', {
+                'from_page_id': artwork ? artwork.id : 'unknown'
+            });
+        }
+        setTimeout(() => {
+            window.location.href = 'https://nd-f.github.io/QR/';
+        }, 150);
+    }
+
+    // تعديل الزرار ليقوم بإرسال الحدث قبل النقل
+    document.querySelector('[data-en="Contact Us"]').setAttribute("onclick", "trackContactUs()");
+    // ==========================================
 
     function navigatePiece(step) {
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
@@ -620,6 +653,21 @@
         setTransform();
     }
 
+    // ==========================================
+    // تتبع الزووم المتعمد (Intentional Zoom)
+    // ==========================================
+    function trackIntentionalInteraction() {
+        if (!isZoomTracked && artwork && typeof gtag === 'function') {
+            let timeSpent = Date.now() - zoomStartTime;
+            if (timeSpent > 1500) { // ثانية ونص على الأقل عشان يتحسب زووم متعمد
+                gtag('event', 'intentional_zoom_or_pan', {
+                    'artifact_id': artwork.id
+                });
+                isZoomTracked = true; 
+            }
+        }
+    }
+
     mainViewer.onclick = () => {
         if(!mainImage.src || mainViewer.classList.contains("empty-piece") || mainImage.src.includes("no-image.webp")) return;
         resetZoom();
@@ -627,6 +675,9 @@
         document.body.style.overflow = 'hidden'; 
         modalImage.src = mainImage.src;
         history.pushState({modal: true}, "");
+        
+        zoomStartTime = Date.now();
+        isZoomTracked = false;
     };
 
     modal.addEventListener("wheel", (e) => {
@@ -652,6 +703,8 @@
         
         if (scale === 1) { pointX = 0; pointY = 0; }
         setTransform();
+
+        if (scale > 1.1) trackIntentionalInteraction();
     }, { passive: false });
 
     modalImage.addEventListener("mousedown", (e) => {
@@ -672,6 +725,8 @@
         startX = e.clientX;
         startY = e.clientY; 
         setTransform();
+
+        trackIntentionalInteraction();
     });
 
     modal.addEventListener('touchstart', (e) => {
@@ -711,6 +766,9 @@
             
             if (scale === 1) { pointX = 0; pointY = 0; }
             setTransform();
+
+            if (scale > 1.1) trackIntentionalInteraction();
+
         } else if (e.touches.length === 1 && panning && scale > 1) {
             e.preventDefault();
             pointX += e.touches[0].clientX - startX;
@@ -718,6 +776,8 @@
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
             setTransform();
+
+            trackIntentionalInteraction();
         }
     }, {passive: false});
 
@@ -743,6 +803,8 @@
                 if (tapLength < 300 && tapLength > 0) {
                     if (scale > 1) resetZoom();
                     else { scale = 3; setTransform(); }
+                    
+                    trackIntentionalInteraction();
                 }
                 lastTap = currentTime;
             }
@@ -769,7 +831,5 @@
     }, { passive: true });
 
     load();
-
 </script>
-</body>
 </html>
