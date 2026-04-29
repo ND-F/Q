@@ -239,6 +239,19 @@
         /* -- إظهار خلفية البوكس الزجاجي في الثيم الفاتح -- */
         body.light .viewer { background: rgba(0, 0, 0, 0.05); }
 
+        /* -- تعديلات الموبايل لتقليص حجم الهيدر بقوة -- */
+        @media (max-width: 800px) {
+            #museumHeader { padding: 5px 10px; }
+            .logo { height: 45px; } /* حجم اللوجو الافتراضي عالموبايل */
+            .header-title { font-size: 14px; line-height: 1.3; } /* حجم العنوان الافتراضي */
+            .logo-row { gap: 8px; }
+            
+            /* ده اللي هيحصل لما الزائر يعمل سكرول (تصغير أقصى درجة) */
+            #museumHeader.header-small { padding: 3px 10px !important; border-radius: 0 0 10px 10px; }
+            #museumHeader.header-small .logo { height: 25px !important; } /* اللوجو هيبقى صغير جداً */
+            #museumHeader.header-small .header-title { font-size: 10.5px !important; line-height: 1.1; } /* العنوان هيبقى مضغوط جداً */
+        }
+
     </style>
 </head>
 
