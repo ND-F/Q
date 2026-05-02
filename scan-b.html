@@ -364,21 +364,38 @@
         let articleBody = document.getElementById("articleBody");
         articleBody.innerHTML = "";
         
+        const splitDescParts = Array.from({ length: 5 }, (_, i) => {
+            return (ar ? artwork[`dsc_ar${i + 1}`] : artwork[`dsc_en${i + 1}`]) || "";
+        });
+
+        const hasSplitDesc = splitDescParts.some(text => text.trim() !== "");
         let mainDesc = (ar ? artwork.desc_ar : artwork.desc_en) || "";
-        if (mainDesc.trim() !== "") {
-            let pMain = document.createElement("p"); pMain.innerHTML = mainDesc.replace(/\n/g, '<br>'); articleBody.appendChild(pMain);
+
+        if (!hasSplitDesc && mainDesc.trim() !== "") {
+            let pMain = document.createElement("p");
+            pMain.innerHTML = mainDesc.replace(/\n/g, '<br>');
+            articleBody.appendChild(pMain);
         }
 
         for (let i = 0; i < 5; i++) {
-            let pText = (ar ? artwork[`dsc_ar${i+1}`] : artwork[`dsc_en${i+1}`]) || "";
+            let pText = splitDescParts[i] || "";
+
             if (i === 0) {
-                if (pText.trim() !== "") { let p = document.createElement("p"); p.innerHTML = pText.replace(/\n/g, '<br>'); articleBody.appendChild(p); }
+                if (hasSplitDesc && pText.trim() !== "") {
+                    let p = document.createElement("p");
+                    p.innerHTML = pText.replace(/\n/g, '<br>');
+                    articleBody.appendChild(p);
+                }
             } else {
-                if (images[i] || (vidSlot === i && finalVidUrl) || pText.trim() !== "") {
+                if (images[i] || (vidSlot === i && finalVidUrl) || (hasSplitDesc && pText.trim() !== "")) {
                     if (vidSlot === i && finalVidUrl) articleBody.appendChild(createInlineVideo(finalVidUrl, i));
                     else if (images[i]) articleBody.appendChild(createInlineFigure(images[i], i));
                     
-                    if (pText.trim() !== "") { let p = document.createElement("p"); p.innerHTML = pText.replace(/\n/g, '<br>'); articleBody.appendChild(p); }
+                    if (hasSplitDesc && pText.trim() !== "") {
+                        let p = document.createElement("p");
+                        p.innerHTML = pText.replace(/\n/g, '<br>');
+                        articleBody.appendChild(p);
+                    }
                 }
             }
         }
