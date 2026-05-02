@@ -40,18 +40,9 @@
             align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
             border-radius: 0 0 20px 20px; transition: padding 0.3s ease;
         }
-        /* الكلاس ده هيتضاف أوتوماتيك لما اليوزر يعمل سكرول لتحت */
-        #museumHeader.header-small {
-            padding: 5px 20px !important; /* تقليل المسافة العلوية والسفلية */
-        }
-        #museumHeader.header-small .logo {
-            height: 40px !important; /* تصغير اللوجو */
-            transition: height 0.3s ease;
-        }
-        #museumHeader.header-small .header-title {
-            font-size: 14px !important; /* تصغير العنوان */
-            transition: font-size 0.3s ease;
-        }
+        #museumHeader.header-small { padding: 5px 20px !important; }
+        #museumHeader.header-small .logo { height: 40px !important; transition: height 0.3s ease; }
+        #museumHeader.header-small .header-title { font-size: 14px !important; transition: font-size 0.3s ease; }
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; direction: rtl !important; }
         .logo { height: 70px; width: auto; cursor: pointer; transition: height 0.3s ease; }
         .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; transition: font-size 0.3s ease; }
@@ -59,67 +50,41 @@
         .container { 
             max-width: 1400px; margin: auto; padding: 20px; 
             display: flex; flex-direction: column; 
-            opacity: 0; /* الإخفاء التام قبل التحميل */
-            transition: opacity 0.5s ease; /* الظهور بنعومة */
+            opacity: 0; transition: opacity 0.5s ease; 
         }
-        .container.ready {
-            opacity: 1; 
-        }
+        .container.ready { opacity: 1; }
 
         .video-container {
-            grid-area: video;
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; 
-            height: 0;
-            margin-bottom: 30px; 
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-            border: 2px solid var(--gold); 
+            grid-area: video; position: relative; width: 100%; padding-bottom: 56.25%; 
+            height: 0; margin-bottom: 30px; border-radius: 15px; overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4); border: 2px solid var(--gold); 
             display: none; 
         }
-        .video-container iframe {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
-        }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
         .viewer { 
             grid-area: viewer; width: 100%; height: 50vh; position: relative; 
             display: flex; align-items: center; justify-content: center; 
-            margin-bottom: 15px; overflow: hidden; 
-            cursor: pointer;
-            
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.04); 
-            backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px);
-            border: none; 
-            box-shadow: none; 
+            margin-bottom: 15px; overflow: hidden; cursor: pointer;
+            border-radius: 15px; background: rgba(255, 255, 255, 0.04); 
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: none; box-shadow: none; 
         }
 
         .photo-credit { 
             position: absolute; bottom: 0; left: 0; right: 0; 
-            
             background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 60%, transparent 100%); 
             color: white !important; padding: 45px 20px 15px; font-size: 13px; z-index: 10; 
-            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
-            
-            opacity: 0; 
-            visibility: hidden;
-            transition: all 0.4s ease; 
-            pointer-events: none; 
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9); opacity: 0; visibility: hidden;
+            transition: all 0.4s ease; pointer-events: none; 
         }
         
-        .viewer:hover .photo-credit, .viewer.info-active .photo-credit { 
-            opacity: 1 !important; 
-            visibility: visible !important;
-        }
+        .viewer:hover .photo-credit, .viewer.info-active .photo-credit { opacity: 1 !important; visibility: visible !important; }
         
         .viewer img { 
             max-width: 95%; max-height: 95%; object-fit: contain; 
             filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3)); opacity: 0; transition: opacity 0.3s;
         }
-        
         .viewer.loaded img { opacity: 1; }
 
         .thumbs { grid-area: thumb; display: flex; gap: 12px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
@@ -133,14 +98,8 @@
         .info { grid-area: info; }
         .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; }
         .details { 
-            grid-area: details; 
-            margin-top: 25px; 
-            border-top: 1px solid rgba(225, 169, 62, 0.2); 
-            padding-top: 20px; 
-            line-height: 1.8; 
-            width: 100%; 
-            margin-left: auto; 
-            margin-right: auto; 
+            grid-area: details; margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2); 
+            padding-top: 20px; line-height: 1.8; width: 100%; margin-left: auto; margin-right: auto; 
         }
 
         body.lang-en .info, body.lang-en .details { text-align: left !important; direction: ltr !important; }
@@ -148,39 +107,19 @@
 
         @media(min-width:1100px) {
             .container:not(.video-only-layout) { 
-                display: grid; 
-                grid-template-columns: 350px 1fr 350px; 
-                grid-template-areas: 
-                    "video video video"
-                    "thumb viewer info" 
-                    "thumb details details"; /* تعديل: الديسكريبشن يفرش بمحاذاة العنوان والصورة */
-                gap: 50px; 
-                direction: ltr !important; 
+                display: grid; grid-template-columns: 350px 1fr 350px; 
+                grid-template-areas: "video video video" "thumb viewer info" "thumb details details"; 
+                gap: 50px; direction: ltr !important; 
             }
             .container:not(.video-only-layout) .viewer { height: 70vh; }
             .container:not(.video-only-layout) .thumbs { flex-direction: column; position: sticky; top: 120px; margin-top: 30px; align-items: flex-end; }
             .container:not(.video-only-layout) .info { margin-top: 30px; }
-            
-            .container:not(.video-only-layout) .video-container {
-                max-width: 800px;
-                margin-left: auto; margin-right: auto;
-            }
+            .container:not(.video-only-layout) .video-container { max-width: 800px; margin-left: auto; margin-right: auto; }
         }
 
         @media(min-width:1100px) {
-            .container.video-only-layout {
-                display: flex !important;
-                flex-direction: column;
-                align-items: center; 
-                max-width: 800px; 
-                margin: 0 auto;
-            }
-            .container.video-only-layout .video-container,
-            .container.video-only-layout .info,
-            .container.video-only-layout .details {
-                width: 100%;
-                margin-left: 0; margin-right: 0;
-            }
+            .container.video-only-layout { display: flex !important; flex-direction: column; align-items: center; max-width: 800px; margin: 0 auto; }
+            .container.video-only-layout .video-container, .container.video-only-layout .info, .container.video-only-layout .details { width: 100%; margin-left: 0; margin-right: 0; }
             .container.video-only-layout .video-container { margin-bottom: 0; }
             .container.video-only-layout .info { margin-top: 15px; }
         }
@@ -198,60 +137,35 @@
         .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3); }
 
         .controls > div:not(.sep)::before {
-            content: attr(data-tooltip); 
-            position: absolute;
-            bottom: 125%; 
-            left: 50%;
-            transform: translateX(-50%) translateY(10px); 
-            background: rgba(6, 68, 76, 0.98); 
-            color: var(--light); 
-            padding: 8px 15px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            white-space: nowrap; 
-            opacity: 0; 
-            visibility: hidden;
-            transition: 0.3s ease; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            pointer-events: none; 
-            z-index: 10000; 
+            content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%;
+            transform: translateX(-50%) translateY(10px); background: rgba(6, 68, 76, 0.98); color: var(--light); 
+            padding: 8px 15px; border-radius: 12px; font-size: 14px; font-weight: 700; white-space: nowrap; 
+            opacity: 0; visibility: hidden; transition: 0.3s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            pointer-events: none; z-index: 10000; 
         }
-
-        .controls > div:not(.sep):hover::before {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0); 
-        }
+        .controls > div:not(.sep):hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
 
         #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--main); z-index: 10001; }
         #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; overflow: hidden; }
         #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; cursor: grab; transform-origin: center center; }
         #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002; background: rgba(0,0,0,0.3); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
 
-        /* تعديل الفوتر عشان نضمن إنه يفضل تحت خالص وميطيرش فوق */
         footer { display: block; width: 100%; clear: both; text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
 
-        /* -- تظبيط اتجاه النص في شريط المعلومات حسب اللغة -- */
         body.lang-ar .photo-credit { text-align: right !important; direction: rtl !important; }
         body.lang-en .photo-credit { text-align: left !important; direction: ltr !important; }
 
-        /* -- إظهار خلفية البوكس الزجاجي في الثيم الفاتح -- */
         body.light .viewer { background: rgba(0, 0, 0, 0.05); }
 
-        /* -- تعديلات الموبايل لتقليص حجم الهيدر بقوة -- */
         @media (max-width: 800px) {
             #museumHeader { padding: 5px 10px; }
-            .logo { height: 45px; } /* حجم اللوجو الافتراضي عالموبايل */
-            .header-title { font-size: 14px; line-height: 1.3; } /* حجم العنوان الافتراضي */
+            .logo { height: 45px; } 
+            .header-title { font-size: 14px; line-height: 1.3; } 
             .logo-row { gap: 8px; }
-            
-            /* ده اللي هيحصل لما الزائر يعمل سكرول (تصغير أقصى درجة) */
             #museumHeader.header-small { padding: 3px 10px !important; border-radius: 0 0 10px 10px; }
-            #museumHeader.header-small .logo { height: 25px !important; } /* اللوجو هيبقى صغير جداً */
-            #museumHeader.header-small .header-title { font-size: 10.5px !important; line-height: 1.1; } /* العنوان هيبقى مضغوط جداً */
+            #museumHeader.header-small .logo { height: 25px !important; } 
+            #museumHeader.header-small .header-title { font-size: 10.5px !important; line-height: 1.1; } 
         }
-
     </style>
 </head>
 
@@ -335,9 +249,11 @@
     
     let allArtworks = [], validImages = [], currentIdx = 0, artwork, infoTimer;
     
-    // متغيرات لتتبع الزووم المتعمد
     let zoomStartTime = 0;
     let isZoomTracked = false;
+
+    let currentVidSlot = -1;
+    let currentVidUrl = "";
 
     const dom = {
         inv: document.getElementById("inv"),
@@ -400,38 +316,42 @@
             return;
         }
 
-        // ==========================================
-        // اللوجيك العبقري لتصنيف الإحصائيات وفلترة الـ VN
-        // ==========================================
         if (typeof gtag === 'function') {
             let actualId = String(artwork.id).toUpperCase();
-            
-            // لو هو VN (فيديو يوتيوب) -> تجاهله تماماً في الإحصائيات
             if (!actualId.startsWith('VN')) {
-                
-                // لو بيبدأ بـ V (ومش VN) -> سجله كفيديو حرفة
                 if (actualId.startsWith('V')) {
-                    gtag('event', 'view_craft_video', {
-                        'video_id': actualId,
-                        'video_title': artwork.title_ar || artwork.title_en
-                    });
-                } 
-                // لو أرقام بس (مفيش V) -> سجله كقطعة أثرية
-                else {
-                    gtag('event', 'view_artifact', {
-                        'artifact_id': actualId,
-                        'artifact_title': artwork.title_ar || artwork.title_en
-                    });
+                    gtag('event', 'view_craft_video', { 'video_id': actualId, 'video_title': artwork.title_ar || artwork.title_en });
+                } else {
+                    gtag('event', 'view_artifact', { 'artifact_id': actualId, 'artifact_title': artwork.title_ar || artwork.title_en });
                 }
             }
         }
-        // ==========================================
         
+        currentVidSlot = -1;
+        currentVidUrl = "";
+        let rawVid = String(artwork.video_url || "").trim();
+        if (rawVid !== "") {
+            let firstChar = rawVid.charAt(0).toLowerCase();
+            if (['a', 'b', 'c', 'd', 'e'].includes(firstChar) && rawVid.length > 1 && (rawVid.charAt(1) === 'h' || rawVid.charAt(1) === '<')) {
+                currentVidSlot = firstChar.charCodeAt(0) - 97;
+                rawVid = rawVid.substring(1).trim();
+            }
+            currentVidUrl = rawVid;
+            if (rawVid.includes("<iframe") && rawVid.includes("src=")) {
+                let match = rawVid.match(/src="([^"]+)"/);
+                if (match) currentVidUrl = match[1];
+            }
+        }
+
         currentIdx = 0;
         validImages = Array(5).fill(null);
         
+        let existingIframe = mainViewer.querySelector('.viewer-vid-iframe');
+        if (existingIframe) existingIframe.remove();
+
         mainImage.removeAttribute("src");
         mainImage.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+        mainImage.style.display = "block";
         
         mainViewer.classList.remove("loaded", "empty-piece");
         mainViewer.style.display = "flex"; 
@@ -469,10 +389,11 @@
         const thumbs = document.getElementById("thumbs");
         thumbs.innerHTML = ""; 
         
-        const validSources = potential.filter(src => src && String(src).trim() !== "");
+        let validSourcesCount = potential.filter(src => src && String(src).trim() !== "").length;
+        if (currentVidSlot !== -1 && currentVidUrl) validSourcesCount++;
         
-        if (validSources.length === 0) {
-            if (artwork.video_url && String(artwork.video_url).trim() !== "") {
+        if (validSourcesCount === 0) {
+            if (currentVidUrl && currentVidSlot === -1) {
                 mainViewer.style.display = "none";
                 thumbs.style.display = "none";
             } else {
@@ -486,7 +407,31 @@
         let loadedCount = 0;
 
         potential.forEach((src, index) => {
+            if (index === currentVidSlot && currentVidUrl) {
+                checkedCount++; loadedCount++;
+                let ytMatch = currentVidUrl.match(/embed\/([^?]+)/);
+                let ytThumb = ytMatch ? `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg` : 'images/logo-nadim.png';
+                
+                const img = document.createElement("img");
+                img.src = ytThumb;
+                img.style.display = 'block';
+                img.style.borderBottom = "3px solid var(--gold)"; 
+                
+                validImages[index] = "VIDEO:" + currentVidUrl;
+                
+                img.onclick = (e) => { e.stopPropagation(); show(index); };
+                thumbs.appendChild(img);
+                
+                if (index === 0) { show(0); firstFound = true; } 
+                else if (!firstFound && checkedCount === potential.length) {
+                    const firstAvailable = validImages.findIndex(v => v !== null);
+                    if (firstAvailable !== -1) { show(firstAvailable); firstFound = true; }
+                }
+                return;
+            }
+
             if (!src || String(src).trim() === "") { checkedCount++; return; }
+            
             const webpSrc = String(src).replace(/\.[^/.]+$/, ".webp");
             const img = document.createElement("img");
             
@@ -503,7 +448,7 @@
             img.onerror = () => {
                 checkedCount++; img.remove();
                 if (checkedCount === potential.length && loadedCount === 0) {
-                    if (artwork.video_url && String(artwork.video_url).trim() !== "") { 
+                    if (currentVidUrl && currentVidSlot === -1) { 
                         mainViewer.style.display = "none"; 
                         thumbs.style.display = "none"; 
                         document.querySelector('.container').classList.add('video-only-layout');
@@ -521,14 +466,43 @@
         const src = validImages[i];
         if(!src) return;
         currentIdx = i;
+        
+        let existingVideo = mainViewer.querySelector('.viewer-vid-iframe');
+        if (existingVideo) existingVideo.remove();
+        
         mainViewer.classList.remove("loaded", "empty-piece");
-        mainImage.onload = () => mainViewer.classList.add("loaded");
-        mainImage.src = src;
-        modalImage.src = src;
-        document.querySelectorAll(".thumbs img").forEach(t => t.classList.toggle("active", t.src.includes(src)));
+        
+        if (src.startsWith("VIDEO:")) {
+            mainImage.style.display = "none";
+            let iframe = document.createElement("iframe");
+            iframe.className = "viewer-vid-iframe";
+            iframe.src = src.substring(6);
+            iframe.style.position = "absolute";
+            iframe.style.top = "0";
+            iframe.style.left = "0";
+            iframe.style.width = "100%";
+            iframe.style.height = "100%";
+            iframe.style.border = "none";
+            iframe.style.borderRadius = "15px";
+            iframe.style.zIndex = "5";
+            iframe.allowFullscreen = true;
+            mainViewer.appendChild(iframe);
+            mainViewer.classList.add("loaded");
+        } else {
+            mainImage.style.display = "block";
+            mainImage.onload = () => mainViewer.classList.add("loaded");
+            mainImage.src = src;
+            modalImage.src = src;
+        }
+
+        document.querySelectorAll(".thumbs img").forEach((t, tIdx) => { 
+            t.classList.toggle("active", tIdx === i); 
+        });
+        
         const info = (artwork[`info_${lang}${i + 1}`] || "").trim();
         photoCredit.innerHTML = info;
         photoCredit.style.opacity = info ? "1" : "0";
+        photoCredit.style.zIndex = "10"; 
     }
 
     function render() {
@@ -570,17 +544,12 @@
         dom.material.innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
         dom.desc.innerHTML = ((ar ? artwork.desc_ar : artwork.desc_en) || "").replace(/\n/g, '<br>');
 
-        if (artwork.video_url && String(artwork.video_url).trim() !== "") {
-            let rawVid = String(artwork.video_url).trim();
-            let finalUrl = rawVid;
-            if (rawVid.includes("<iframe") && rawVid.includes("src=")) {
-                let match = rawVid.match(/src="([^"]+)"/);
-                if (match) finalUrl = match[1];
-            }
+        if (currentVidUrl && currentVidSlot === -1) {
             dom.videoContainer.style.display = "block";
-            dom.videoContainer.innerHTML = `<iframe width="100%" height="100%" src="${finalUrl}" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+            dom.videoContainer.innerHTML = `<iframe width="100%" height="100%" src="${currentVidUrl}" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
         } else {
             dom.videoContainer.style.display = "none";
+            dom.videoContainer.innerHTML = "";
         }
     }
 
@@ -615,9 +584,6 @@
         }
     }
 
-    // ==========================================
-    // تتبع زرار تواصل معنا (Nadim Contact)
-    // ==========================================
     function trackContactUs() {
         if (typeof gtag === 'function') {
             gtag('event', 'contact_us_click', {
@@ -629,9 +595,7 @@
         }, 150);
     }
 
-    // تعديل الزرار ليقوم بإرسال الحدث قبل النقل
     document.querySelector('[data-en="Contact Us"]').setAttribute("onclick", "trackContactUs()");
-    // ==========================================
 
     function navigatePiece(step) {
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
@@ -683,13 +647,10 @@
         setTransform();
     }
 
-    // ==========================================
-    // تتبع الزووم المتعمد (Intentional Zoom)
-    // ==========================================
     function trackIntentionalInteraction() {
         if (!isZoomTracked && artwork && typeof gtag === 'function') {
             let timeSpent = Date.now() - zoomStartTime;
-            if (timeSpent > 1500) { // ثانية ونص على الأقل عشان يتحسب زووم متعمد
+            if (timeSpent > 1500) { 
                 gtag('event', 'intentional_zoom_or_pan', {
                     'artifact_id': artwork.id
                 });
@@ -699,6 +660,8 @@
     }
 
     mainViewer.onclick = () => {
+        if (validImages[currentIdx] && validImages[currentIdx].startsWith("VIDEO:")) return;
+        
         if(!mainImage.src || mainViewer.classList.contains("empty-piece") || mainImage.src.includes("no-image.webp")) return;
         resetZoom();
         modal.style.display = 'block'; 
