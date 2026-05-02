@@ -45,7 +45,6 @@
         #museumHeader.header-small .logo { height: 40px !important; transition: height 0.3s ease; }
         #museumHeader.header-small .header-title { font-size: 14px !important; transition: font-size 0.3s ease; }
         
-        /* التعديل: اللوجوهات بتقلب أبيض في الدارك مود عشان تبان */
         body.dark #museumHeader .logo-row img { filter: brightness(0) invert(1); }
         
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; direction: rtl !important; }
@@ -152,6 +151,7 @@
         .viewer img { max-width: 100%; max-height: 60vh; object-fit: contain; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 4px; transition: opacity 0.4s ease; }
         body.dark .viewer img { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         
+        /* التعديل الجذري للمحاذاة الموحدة للكريديت */
         .photo-credit { 
             display: block !important; margin-top: 15px; font-size: 13px; color: #666; 
             font-style: italic; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; width: 100%; 
@@ -193,6 +193,7 @@
         body.dark #modalClose { color: white; }
 
         footer { display: block; width: 100%; clear: both; text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
+
     </style>
 </head>
 
