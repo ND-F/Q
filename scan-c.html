@@ -45,9 +45,12 @@
         #museumHeader.header-small .logo { height: 40px !important; transition: height 0.3s ease; }
         #museumHeader.header-small .header-title { font-size: 14px !important; transition: font-size 0.3s ease; }
         
+        body.dark #museumHeader .logo-row img { filter: brightness(0) invert(1); }
+        
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; direction: rtl !important; }
         .logo { height: 70px; width: auto; cursor: pointer; transition: height 0.3s ease; }
         .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; transition: font-size 0.3s ease; line-height: 1.4; }
+        body.dark .header-title { color: var(--light) !important; }
 
         @media (max-width: 800px) {
             #museumHeader { padding: 5px 10px; }
@@ -66,9 +69,7 @@
         }
         .cover-banner img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
 
-        /* ========================================== */
-        /* التخطيط الأكاديمي (المجلة) بالـ CSS Grid */
-        /* ========================================== */
+        /* التعديل الجذري: إلغاء التداخل والاعتماد على السايدبار */
         .container { 
             max-width: 1200px; 
             margin: 40px auto 100px; padding: 0 20px; 
@@ -103,13 +104,20 @@
             .meta-group { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 8px 15px; }
         }
 
-        .article-header h1 { font-size: 34px; color: var(--gold) !important; margin: 0 0 20px 0; font-weight: 800; line-height: 1.3; }
-        .meta-group { font-size: 16px; color: var(--main); opacity: 0.85; }
+        .article-header h1 { font-size: 38px; color: var(--gold) !important; margin: 0 0 15px 0; font-weight: 800; line-height: 1.2; }
+        
+        .title-separator { border: none; border-top: 3px solid rgba(225, 169, 62, 0.4); width: 50px; margin: 0 0 25px 0; }
+        body.lang-ar .title-separator { margin-left: auto; margin-right: 0; }
+        body.lang-en .title-separator { margin-left: 0; margin-right: auto; }
+        @media (max-width: 999px) { .title-separator { margin-left: auto !important; margin-right: auto !important; } }
+
+        .meta-group { font-size: 16px; color: var(--main); opacity: 0.85; line-height: 1.5; }
         body.dark .meta-group { color: var(--light); }
-        .meta-material { font-weight: 700; color: var(--gold); margin: 15px 0; font-size: 18px; }
-        #hall { font-weight: 700; color: var(--main); margin-top: 15px; font-size: 18px; }
+        .meta-item { display: block; }
+        .meta-material { font-weight: 700; color: var(--gold); margin-top: 5px; font-size: 18px; }
+        #hall { font-weight: 700; color: var(--main); font-size: 18px; margin-top: 5px; }
         body.dark #hall { color: var(--accent); }
-        .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
+        .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.6; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
         body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
 
         .image-pair-container { margin: 40px 0; width: 100%; text-align: center; display: block; }
@@ -132,7 +140,6 @@
         body.lang-ar figcaption { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
         body.lang-en figcaption { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
         
-        /* ضبط الكريديت للصورة الأولى عشان تحترم الديزاين */
         .photo-credit { 
             display: block !important; margin-top: 15px; font-size: 13px; color: #666; 
             font-style: italic; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; width: 100%; 
@@ -188,7 +195,6 @@
         body.dark #modalClose { color: white; }
 
         footer { display: block; width: 100%; clear: both; text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
-
     </style>
 </head>
 
@@ -229,21 +235,20 @@
     
     <aside class="article-header" id="articleHeader">
         <h1 id="title"></h1>
+        <hr class="title-separator">
         <div class="meta-group">
             <div class="meta-item" id="from"></div>
             <div class="meta-item" id="date"></div>
             <div class="meta-item" id="dim"></div>
+            <div class="meta-material" id="material"></div>
+            <div id="hall"></div> 
+            <div class="meta-inv" id="inv"></div>
         </div>
-        <div class="meta-material" id="material"></div>
-        <div id="hall"></div> 
-        <div class="meta-inv" id="inv"></div>
     </aside>
     
     <main class="article-content">
         <div class="video-container" id="videoContainer"></div>
-
         <div id="heroSection"></div>
-
         <div class="article-body" id="articleBody"></div>
     </main>
 
