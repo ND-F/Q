@@ -35,9 +35,6 @@
         }
         body.dark { background: var(--main); color: var(--light); }
 
-        /* ========================================== */
-        /* الهيدر (ثابت دائماً ألوانه لا تتأثر بالثيم) */
-        /* ========================================== */
         #museumHeader { 
             position: sticky; top: 0; background: var(--light) !important; 
             padding: 0px 20px; display: flex; flex-direction: column; 
@@ -76,19 +73,16 @@
         }
         .container.ready { opacity: 1; }
 
-        /* ========================================== */
-        /* زر إظهار المعلومات (الدرج المخفي) */
-        /* ========================================== */
         .info-toggle-btn {
             display: flex; position: fixed; top: 180px; 
-            right: 0; left: auto; /* ثابت في اليمين دائماً للذاكرة العضلية */
+            right: 0; left: auto;
             background: var(--gold); color: white; padding: 12px 15px;
             border-radius: 15px 0 0 15px; z-index: 990; cursor: pointer;
             box-shadow: -2px 2px 10px rgba(0,0,0,0.2); font-size: 20px;
-            transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            transform-origin: right center;
+            transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
         }
         
-        /* البالون التوضيحي لزر المعلومات */
         .info-toggle-btn::before {
             content: attr(data-tooltip); position: absolute; top: 50%; right: 120%; 
             transform: translateY(-50%) translateX(10px); background: rgba(6, 68, 76, 0.98); color: var(--light); 
@@ -97,10 +91,23 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.3); z-index: 1000;
         }
         
-        /* إظهار البالون عند التمرير أو بالكلاس المؤقت (للموبايل) */
         .info-toggle-btn:hover::before,
         .info-toggle-btn.show-tooltip::before { 
             opacity: 1; visibility: visible; transform: translateY(-50%) translateX(0); 
+        }
+
+        .info-toggle-btn.mini:not(.close) {
+            transform: scale(0.68);
+            opacity: 0.24;
+            background: rgba(225, 169, 62, 0.42);
+            box-shadow: -2px 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .info-toggle-btn.mini:not(.close):hover,
+        .info-toggle-btn.mini:not(.close):focus-within {
+            transform: scale(1);
+            opacity: 1;
+            background: var(--gold);
         }
 
         .info-toggle-btn.close {
@@ -111,6 +118,7 @@
             -webkit-backdrop-filter: blur(10px);
             z-index: 1002;
             transform: scale(1);
+            opacity: 1;
         }
 
         body.dark .info-toggle-btn.close {
@@ -136,13 +144,8 @@
         .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
         body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
 
-        /* ========================================== */
-        /* الشاشات الكبيرة: السايدبار الثابت */
-        /* ========================================== */
         @media (min-width: 1000px) {
             .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; } 
-            
-            /* السايدبار يمين دائماً: Row للغة العربية (لأنها RTL)، Row-Reverse للغة الإنجليزية (لأنها LTR) */
             body.lang-ar .container { flex-direction: row; } 
             body.lang-en .container { flex-direction: row-reverse; } 
 
@@ -157,38 +160,26 @@
             
             body.lang-ar .meta-group { align-items: flex-start; } 
             .article-content { flex-grow: 1; min-width: 0; max-width: 800px; margin: 0 auto; } 
-            
-            /* إخفاء الزر الجانبي في الديسكتوب تماماً */
             .info-toggle-btn { display: none !important; }
         }
 
-        /* ========================================== */
-        /* الموبايل: الدرج المخفي الجانبي */
-        /* ========================================== */
         @media (max-width: 999px) {
             .container { display: block; max-width: 800px; padding-top: 20px; }
             
             .article-header { 
                 position: fixed; top: 0; 
-                right: -100%; left: auto; /* مخفي بره الشاشة يمين */
+                right: -100%; left: auto;
                 width: 80%; max-width: 350px; height: 100vh; overflow-y: auto;
                 background: var(--light); z-index: 999; 
                 padding: 100px 30px 40px; box-shadow: -5px 0 25px rgba(0,0,0,0.2);
                 transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
             }
             body.dark .article-header { background: var(--main); box-shadow: -5px 0 25px rgba(0,0,0,0.8); }
-            
             body.lang-ar .article-header { text-align: right; }
             body.lang-en .article-header { text-align: left; }
-
-            /* كلاس الفتح للموبايل (يطلع من اليمين) */
             .article-header.open { right: 0; }
-            
-            /* الكلاس القديم متروك احتياطياً، لكنه لم يعد مستخدماً */
             .info-toggle-btn.hide { transform: scale(0); }
         }
-
-        /* ========================================== */
 
         .image-pair-container { margin: 40px 0; width: 100%; text-align: center; display: block; }
         .image-pair-wrapper { display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap; width: 100%; }
@@ -237,7 +228,7 @@
             background: rgba(10, 30, 35, 0.96) !important; backdrop-filter: blur(15px);
             padding: 12px 30px; border-radius: 50px; display: flex; align-items: center; gap: 25px; 
             z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid var(--gold) !important; 
-            direction: ltr !important; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            direction: ltr !important; transition: transform 0.35s ease, opacity 0.35s ease, bottom 0.35s ease, background 0.35s ease, box-shadow 0.35s ease;
         }
         .controls div { font-size: 24px; cursor: pointer; color: white !important; transition: 0.2s; position: relative; } 
         .controls .nav-btn { color: var(--gold) !important; font-size: 28px; }
@@ -252,8 +243,25 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
         .controls > div:not(.sep):hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-        
-        @media (max-width: 800px) { .controls.controls-mini { transform: translateX(-50%) scale(0.75); opacity: 0.55; bottom: 15px; } }
+
+        .controls.controls-mini {
+            transform: translateX(-50%) scale(0.58);
+            opacity: 0.16;
+            bottom: 10px;
+            background: rgba(10, 30, 35, 0.38) !important;
+            border-color: rgba(225, 169, 62, 0.22) !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        .controls.controls-mini:hover,
+        .controls.controls-mini:focus-within {
+            transform: translateX(-50%) scale(1);
+            opacity: 1;
+            bottom: 25px;
+            background: rgba(10, 30, 35, 0.96) !important;
+            border-color: var(--gold) !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
 
         #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255,255,255,0.98); z-index: 10001; }
         body.dark #fullscreenModal { background: rgba(6, 68, 76, 0.98); }
@@ -340,59 +348,86 @@
     let controlsTimer;
     const controlsEl = document.querySelector('.controls');
 
-    function resetControlsTimer() {
-        if(window.innerWidth > 800) return;
+    function expandControls() {
         controlsEl.classList.remove('controls-mini');
         clearTimeout(controlsTimer);
+    }
+
+    function resetControlsTimer() {
+        expandControls();
         controlsTimer = setTimeout(() => { controlsEl.classList.add('controls-mini'); }, 2500); 
     }
+
     window.addEventListener('scroll', resetControlsTimer, { passive: true });
     window.addEventListener('touchstart', resetControlsTimer, { passive: true });
-    controlsEl.addEventListener('touchstart', () => { controlsEl.classList.remove('controls-mini'); clearTimeout(controlsTimer); }, { passive: true });
+    controlsEl.addEventListener('mouseenter', expandControls);
+    controlsEl.addEventListener('mouseleave', resetControlsTimer);
+    controlsEl.addEventListener('touchstart', resetControlsTimer, { passive: true });
     resetControlsTimer(); 
 
-    // منطق الدرج المخفي للموبايل
     const sidebar = document.getElementById("articleHeader");
     const infoBtn = document.getElementById("infoToggleBtn");
     let peekTimer;
-    
+    let infoMiniTimer;
+
+    function expandInfoButton() {
+        infoBtn.classList.remove("mini");
+        clearTimeout(infoMiniTimer);
+    }
+
+    function resetInfoButtonTimer() {
+        if (window.innerWidth >= 1000 || infoBtn.classList.contains("close")) return;
+        expandInfoButton();
+        infoMiniTimer = setTimeout(() => {
+            if (!sidebar.classList.contains("open")) {
+                infoBtn.classList.add("mini");
+            }
+        }, 2500);
+    }
+
     function setInfoDrawer(open) {
         sidebar.classList.toggle("open", open);
         infoBtn.classList.toggle("close", open);
-        infoBtn.classList.remove("show-tooltip");
+        infoBtn.classList.remove("show-tooltip", "mini");
         infoBtn.innerHTML = open ? '<i class="fas fa-times"></i>' : '<i class="fas fa-info-circle"></i>';
+
+        if (open) clearTimeout(infoMiniTimer);
+        else resetInfoButtonTimer();
     }
 
     infoBtn.onclick = () => {
         setInfoDrawer(!sidebar.classList.contains("open"));
     };
 
+    infoBtn.addEventListener("mouseenter", expandInfoButton);
+    infoBtn.addEventListener("mouseleave", resetInfoButtonTimer);
+    infoBtn.addEventListener("touchstart", resetInfoButtonTimer, { passive: true });
+    window.addEventListener("scroll", resetInfoButtonTimer, { passive: true });
+    resetInfoButtonTimer();
+
     window.addEventListener("scroll", () => { 
         document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); 
-        // قفل الدرج أوتوماتيك مع السكرول
         if(sidebar.classList.contains("open") && window.scrollY > 50) {
             setInfoDrawer(false);
             clearTimeout(peekTimer);
         }
     }, { passive: true });
 
-    // حركة الغمزة (Auto-peek) للموبايل أول ما الصفحة تفتح
     function triggerMobilePeek() {
-        if(window.innerWidth >= 1000) return; // للديسكتوب ملوش لازمة
+        if(window.innerWidth >= 1000) return;
         
         clearTimeout(peekTimer);
         setInfoDrawer(true);
         
-        // يقفل بعد ثانيتين ونص
         peekTimer = setTimeout(() => {
             if(sidebar.classList.contains("open")) {
                 setInfoDrawer(false);
                 
-                // إظهار البالون التوضيحي لفترة قصيرة بعد قفل الدرج
                 setTimeout(() => {
                     infoBtn.classList.add("show-tooltip");
                     setTimeout(() => {
                         infoBtn.classList.remove("show-tooltip");
+                        resetInfoButtonTimer();
                     }, 3000);
                 }, 600);
             }
@@ -435,7 +470,6 @@
             }
         }
         
-        // نقفل الدرج لو كان مفتوح عشان الغمزة تشتغل بنظافة
         if(sidebar.classList.contains("open")) setInfoDrawer(false);
 
         renderArticle();
@@ -443,7 +477,7 @@
         
         setTimeout(() => { 
             document.getElementById('mainContainer').classList.add('ready'); 
-            triggerMobilePeek(); // تشغيل الغمزة بعد ظهور المحتوى
+            triggerMobilePeek();
         }, 50);
     }
 
