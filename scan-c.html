@@ -69,7 +69,6 @@
         }
         .cover-banner img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
 
-        /* التعديل الجذري: إلغاء التداخل والاعتماد على السايدبار */
         .container { 
             max-width: 1200px; 
             margin: 40px auto 100px; padding: 0 20px; 
@@ -140,6 +139,7 @@
         body.lang-ar figcaption { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
         body.lang-en figcaption { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
         
+        /* التعديل الجذري للمحاذاة الموحدة للكريديت */
         .photo-credit { 
             display: block !important; margin-top: 15px; font-size: 13px; color: #666; 
             font-style: italic; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; width: 100%; 
@@ -349,18 +349,32 @@
         
         let coverBanner = document.getElementById("coverBanner");
         let coverImg = document.getElementById("coverImage");
+        let articleHeader = document.getElementById("articleHeader");
         
         coverBanner.style.display = "none";
+        articleHeader.classList.remove("has-cover");
 
         coverImg.src = "images/" + artwork.id + "_cover.webp";
-        coverImg.onload = () => { coverBanner.style.display = "block"; };
+        coverImg.onload = () => { 
+            coverBanner.style.display = "block"; 
+            articleHeader.classList.add("has-cover");
+        };
         coverImg.onerror = () => {
             coverImg.src = "images/" + artwork.id + "_cover.jpg";
-            coverImg.onload = () => { coverBanner.style.display = "block"; };
+            coverImg.onload = () => { 
+                coverBanner.style.display = "block"; 
+                articleHeader.classList.add("has-cover");
+            };
             coverImg.onerror = () => {
                  coverImg.src = "images/" + artwork.id + "_cover.png";
-                 coverImg.onload = () => { coverBanner.style.display = "block"; };
-                 coverImg.onerror = () => { coverBanner.style.display = "none"; }
+                 coverImg.onload = () => { 
+                     coverBanner.style.display = "block"; 
+                     articleHeader.classList.add("has-cover");
+                 };
+                 coverImg.onerror = () => { 
+                     coverBanner.style.display = "none"; 
+                     articleHeader.classList.remove("has-cover");
+                 }
             }
         };
 
