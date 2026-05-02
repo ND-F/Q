@@ -36,7 +36,7 @@
         body.dark { background: var(--main); color: var(--light); }
 
         /* ========================================== */
-        /* الهيدر القديم بالظبط زي ما طلبت */
+        /* الهيدر القديم بالظبط زي scan.html */
         /* ========================================== */
         #museumHeader { 
             position: sticky; top: 0; background: var(--light) !important; 
@@ -44,10 +44,17 @@
             align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
             border-radius: 0 0 20px 20px; transition: padding 0.3s ease;
         }
-        #museumHeader.header-small { padding: 5px 20px !important; }
-        #museumHeader.header-small .logo { height: 40px !important; transition: height 0.3s ease; }
-        #museumHeader.header-small .header-title { font-size: 14px !important; transition: font-size 0.3s ease; }
-        
+        #museumHeader.header-small {
+            padding: 5px 20px !important; 
+        }
+        #museumHeader.header-small .logo {
+            height: 40px !important; 
+            transition: height 0.3s ease;
+        }
+        #museumHeader.header-small .header-title {
+            font-size: 14px !important; 
+            transition: font-size 0.3s ease;
+        }
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; direction: rtl !important; }
         .logo { height: 70px; width: auto; cursor: pointer; transition: height 0.3s ease; }
         .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; transition: font-size 0.3s ease; }
@@ -57,6 +64,7 @@
             .logo { height: 45px; } 
             .header-title { font-size: 14px; line-height: 1.3; } 
             .logo-row { gap: 8px; }
+            
             #museumHeader.header-small { padding: 3px 10px !important; border-radius: 0 0 10px 10px; }
             #museumHeader.header-small .logo { height: 25px !important; } 
             #museumHeader.header-small .header-title { font-size: 10.5px !important; line-height: 1.1; } 
@@ -76,15 +84,14 @@
         body.lang-ar .article-header { text-align: right; }
 
         .article-header h1 { 
-            font-size: 34px; color: var(--main); margin: 0 0 20px 0; 
+            font-size: 34px; color: var(--gold); margin: 0 0 20px 0; 
             font-weight: 800; line-height: 1.3;
         }
-        body.dark .article-header h1 { color: var(--gold); }
 
         .meta { font-size: 16px; margin-bottom: 8px; color: var(--main); opacity: 0.85; }
         body.dark .meta { color: var(--light); }
-        .meta-material { font-weight: 700; color: #b38020; margin: 15px 0; font-size: 18px; }
-        body.dark .meta-material { color: var(--gold); }
+        .meta-material { font-weight: 700; color: var(--gold); margin: 15px 0; font-size: 18px; }
+        
         .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
         body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
 
@@ -141,8 +148,7 @@
         body.dark .controls { background: var(--main); border-color: rgba(255,255,255,0.1); box-shadow: 0 5px 25px rgba(0,0,0,0.5); }
         .controls div { font-size: 20px; cursor: pointer; color: var(--main); transition: 0.2s; position: relative; } 
         body.dark .controls div { color: var(--light); }
-        .controls .nav-btn { color: #b38020; font-size: 24px; }
-        body.dark .controls .nav-btn { color: var(--gold); }
+        .controls .nav-btn { color: var(--gold); font-size: 24px; }
         .controls .nav-btn.disabled { opacity: 0.2; pointer-events: none; }
         .controls .sep { width: 1px; height: 20px; background: rgba(0,0,0,0.1); }
         body.dark .controls .sep { background: rgba(255,255,255,0.2); }
@@ -187,9 +193,13 @@
 
 <header id="museumHeader">
     <div class="logo-row">
-        <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank"><img src="images/MIALOGO.png" class="logo"></a>
-        <div class="header-title">معرض من حياة التحفة<br>From the Life of an Artefact Exhibition</div>
-        <a href="https://nd-f.github.io/QR/"><img src="images/logo-nadim.png" class="logo"></a>
+        <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank">
+            <img src="images/MIALOGO.png" class="logo">
+        </a>
+        <div class="header-title" id="headerTitle">من حياة التحفة<br>From the Life of an Artefact</div>
+        <a href="https://nd-f.github.io/QR/">
+            <img src="images/logo-nadim.png" class="logo">
+        </a>
     </div>
 </header>
 
@@ -255,7 +265,6 @@
             initPiece(finalId);
             
             if (window.location.search.includes("id=")) {
-                // التعديل السحري عشان الـ Q متهربش في الريلوود
                 window.history.replaceState({id: finalId}, '', 'Q' + finalId);
             }
         } catch(e) { console.error(e); }
@@ -363,7 +372,7 @@
             heroSection.appendChild(heroFig);
         }
 
-        // دمج النصوص (dsc) مع الصور/الفيديوهات (Explicit Mapping)
+        // دمج النصوص (dsc) مع الصور/الفيديوهات
         let articleBody = document.getElementById("articleBody");
         articleBody.innerHTML = "";
         
@@ -461,7 +470,6 @@
     function updateThemeIcon() { 
         let isDark = document.body.classList.contains("dark");
         document.getElementById("themeBtn").textContent = isDark ? "☀️" : "🌙"; 
-        // تم إلغاء الفلتر بناءً على طلبك لتعود الأيقونة لأصلها
     }
     
     function share() { 
@@ -479,7 +487,6 @@
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
         if(idx >= 0 && idx < allArtworks.length) {
             const nextId = allArtworks[idx].id;
-            // التعديل عشان الـ Q متهربش وإنت بتتنقل بين القطع
             window.history.pushState({id: nextId}, '', 'Q' + nextId);
             initPiece(nextId);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -527,52 +534,4 @@
         pointX += e.clientX - startX; pointY += e.clientY - startY; startX = e.clientX; startY = e.clientY; setTransform(); trackIntentionalInteraction();
     });
 
-    modal.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 2) {
-            e.preventDefault(); isPinching = true; startDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); initialScale = scale;
-        } else if (e.touches.length === 1) {
-            if (scale > 1) panning = true;
-            startX = e.touches[0].clientX; startY = e.touches[0].clientY; tapStartX = e.touches[0].clientX; tapStartY = e.touches[0].clientY;
-        }
-    }, {passive: false});
-
-    modal.addEventListener('touchmove', (e) => {
-        if (modal.style.display !== 'block') return;
-        if (e.touches.length === 2) {
-            e.preventDefault();
-            let dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-            let newScale = initialScale * (dist / startDist); if (newScale < 1) newScale = 1; if (newScale > 20) newScale = 20;
-            const ratio = 1 - (newScale / scale), centerX = (window.innerWidth / 2) + pointX, centerY = (window.innerHeight / 2) + pointY;
-            pointX += ((e.touches[0].clientX + e.touches[1].clientX) / 2 - centerX) * ratio; pointY += ((e.touches[0].clientY + e.touches[1].clientY) / 2 - centerY) * ratio;
-            scale = newScale; if (scale === 1) { pointX = 0; pointY = 0; }
-            setTransform(); if (scale > 1.1) trackIntentionalInteraction();
-        } else if (e.touches.length === 1 && panning && scale > 1) {
-            e.preventDefault(); pointX += e.touches[0].clientX - startX; pointY += e.touches[0].clientY - startY; startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-            setTransform(); trackIntentionalInteraction();
-        }
-    }, {passive: false});
-
-    let lastTap = 0;
-    modal.addEventListener('touchend', (e) => {
-        panning = false;
-        if (e.touches.length === 0) {
-            if (isPinching) { isPinching = false; lastTap = 0; return; }
-            let moveDist = e.changedTouches ? Math.hypot(e.changedTouches[0].clientX - tapStartX, e.changedTouches[0].clientY - tapStartY) : 0;
-            if (moveDist < 10) { 
-                let currentTime = new Date().getTime(), tapLength = currentTime - lastTap;
-                if (tapLength < 300 && tapLength > 0) { if (scale > 1) resetZoom(); else { scale = 3; setTransform(); } trackIntentionalInteraction(); }
-                lastTap = currentTime;
-            }
-        }
-    });
-
-    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); } });
-    document.getElementById("modalClose").onclick = () => { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); };
-    window.onpopstate = (e) => { if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); } else if (e.state && e.state.id) initPiece(e.state.id); };
-
-    window.addEventListener("scroll", () => { document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); }, { passive: true });
-
-    load();
-</script>
-</body>
-</html>
+    modal.addEventListener('touchstart
