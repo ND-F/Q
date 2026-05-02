@@ -35,7 +35,6 @@
         }
         body.dark { background: var(--main); color: var(--light); }
 
-        /* توحيد الهيدر */
         #museumHeader { 
             position: sticky; top: 0; background: var(--light) !important; 
             padding: 0px 20px; display: flex; flex-direction: column; 
@@ -74,10 +73,6 @@
         }
         .container.ready { opacity: 1; }
 
-        /* ========================================== */
-        /* تنسيقات الديسكتوب والموبايل (الدرج المخفي) */
-        /* ========================================== */
-        
         .info-toggle-btn {
             display: none; position: fixed; top: 180px; left: 0;
             background: var(--gold); color: white; padding: 12px 15px;
@@ -87,9 +82,8 @@
         }
         body.lang-en .info-toggle-btn { left: auto; right: 0; border-radius: 15px 0 0 15px; }
         
-        /* البالون التوضيحي للزر في الديسكتوب */
         @media (min-width: 1000px) {
-            .info-toggle-btn { display: flex; } /* إظهار الزرار في الديسكتوب */
+            .info-toggle-btn { display: flex; } 
             .info-toggle-btn::before {
                 content: attr(data-tooltip); position: absolute; top: 125%; left: 50%;
                 transform: translateX(-50%) translateY(10px); background: rgba(6, 68, 76, 0.98); color: var(--light); 
@@ -114,10 +108,9 @@
         .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
         body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
 
-        /* الشاشات الكبيرة: السايدبار المخفي الذي يظهر بضغطة زر */
         @media (min-width: 1000px) {
-            .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; } /* توسيط المحتوى */
-            body.lang-ar .container { flex-direction: row; } /* إصلاح اتجاه النص العربي */
+            .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; } 
+            body.lang-ar .container { flex-direction: row; } 
             body.lang-en .container { flex-direction: row-reverse; } 
 
             .article-header {
@@ -133,39 +126,33 @@
             .article-header.open { left: 0; }
             body.lang-en .article-header.open { right: 0; left: auto; }
             
-            body.lang-ar .meta-group { align-items: flex-start; } /* ضبط محاذاة العناصر الداخلية */
-            .article-content { flex-grow: 1; min-width: 0; max-width: 800px; margin: 0 auto; } /* توسيط المقال عند إخفاء السايدبار */
+            body.lang-ar .meta-group { align-items: flex-start; } 
+            .article-content { flex-grow: 1; min-width: 0; max-width: 800px; margin: 0 auto; } 
         }
 
-        /* الموبايل: الدرج المخفي الجانبي */
         @media (max-width: 999px) {
             .container { display: block; max-width: 800px; padding-top: 20px; }
             
-            .info-toggle-btn { display: flex; } /* إظهار الزرار */
+            .info-toggle-btn { display: flex; } 
 
             .article-header { 
-                position: fixed; top: 0; left: -100%; /* مخفي بره الشاشة يسار */
+                position: fixed; top: 0; left: -100%; 
                 width: 80%; max-width: 350px; height: 100vh; overflow-y: auto;
-                background: var(--light); z-index: 999; /* تحت الهيدر بشعرة */
+                background: var(--light); z-index: 999; 
                 padding: 100px 30px 40px; box-shadow: 5px 0 25px rgba(0,0,0,0.2);
                 transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                 text-align: right;
             }
             body.dark .article-header { background: var(--main); box-shadow: 5px 0 25px rgba(0,0,0,0.8); }
             
-            /* لو الصفحة إنجليزي يفتح من اليمين */
             body.lang-en .article-header { left: auto; right: -100%; text-align: left; box-shadow: -5px 0 25px rgba(0,0,0,0.2); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
             body.dark.lang-en .article-header { box-shadow: -5px 0 25px rgba(0,0,0,0.8); }
 
-            /* كلاس الفتح */
             .article-header.open { left: 0; }
             body.lang-en .article-header.open { right: 0; left: auto; }
             
-            /* إخفاء الزرار لما الدرج يفتح */
             .info-toggle-btn.hide { transform: scale(0); }
         }
-
-        /* ========================================== */
 
         .image-pair-container { margin: 40px 0; width: 100%; text-align: center; display: block; }
         .image-pair-wrapper { display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap; width: 100%; }
@@ -328,7 +315,6 @@
     controlsEl.addEventListener('touchstart', () => { controlsEl.classList.remove('controls-mini'); clearTimeout(controlsTimer); }, { passive: true });
     resetControlsTimer(); 
 
-    // منطق الدرج المخفي
     const sidebar = document.getElementById("articleHeader");
     const infoBtn = document.getElementById("infoToggleBtn");
     
@@ -339,7 +325,6 @@
 
     window.addEventListener("scroll", () => { 
         document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); 
-        // قفل الدرج أوتوماتيك مع السكرول
         if(sidebar.classList.contains("open") && window.scrollY > 50) {
             sidebar.classList.remove("open");
             infoBtn.classList.remove("hide");
@@ -351,7 +336,7 @@
             updateThemeIcon();
             const res = await fetch("data/artworks.json?t=" + new Date().getTime());
             allArtworks = await res.json();
-            let id = newSearchParams(location.search).get("id");
+            let id = new URLSearchParams(location.search).get("id");
             if (!id) {
                 let pathName = window.location.pathname.replace(/\/$/, "");
                 let fileName = pathName.split('/').pop().replace('.html', '');
@@ -382,7 +367,6 @@
             }
         }
         
-        // لو الدرج مفتوح اقفله لما ينقل لقطعة تانية
         if(sidebar.classList.contains("open")) { sidebar.classList.remove("open"); infoBtn.classList.remove("hide"); }
 
         renderArticle();
@@ -397,7 +381,6 @@
         
         let coverBanner = document.getElementById("coverBanner");
         let coverImg = document.getElementById("coverImage");
-        let articleHeader = document.getElementById("articleHeader");
         
         coverBanner.style.display = "none";
         
@@ -499,7 +482,6 @@
         else { prevBtn.setAttribute("data-ar", "القطعة السابقة"); prevBtn.setAttribute("data-en", "Previous Piece"); nextBtn.setAttribute("data-ar", "القطعة التالية"); nextBtn.setAttribute("data-en", "Next Piece"); }
         document.querySelectorAll('[data-ar]').forEach(el => { el.setAttribute('data-tooltip', el.getAttribute(`data-${lang}`) || ''); });
         
-        // تحديث البالون التوضيحي للزر
         const infoBtnEl = document.getElementById("infoToggleBtn");
         infoBtnEl.setAttribute('data-tooltip', infoBtnEl.getAttribute(`data-${lang}`) || '');
     }
