@@ -246,8 +246,8 @@
             const finalId = id || allArtworks[0].id;
             initPiece(finalId);
             
-            if (window.location.search.includes("id=")) {
-                window.history.replaceState({id: finalId}, '', finalId);
+    if (window.location.search.includes("id=")) {
+                window.history.replaceState({id: finalId}, '', 'Q' + finalId); // ضفنا حرف الـ Q هنا
             }
         } catch(e) { console.error(e); }
     }
@@ -495,7 +495,7 @@
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
         if(idx >= 0 && idx < allArtworks.length) {
             const nextId = allArtworks[idx].id;
-            window.history.pushState({id: nextId}, '', nextId);
+            window.history.pushState({id: nextId}, '', 'Q' + nextId); // ضفنا حرف الـ Q هنا كمان
             initPiece(nextId);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
