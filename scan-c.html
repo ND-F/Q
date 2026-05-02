@@ -35,7 +35,6 @@
         }
         body.dark { background: var(--main); color: var(--light); }
 
-        /* الهيدر الأصلي السليم (بدون فتي) */
         #museumHeader { 
             position: sticky; top: 0; background: var(--light) !important; 
             padding: 0px 20px; display: flex; flex-direction: column; 
@@ -45,9 +44,13 @@
         #museumHeader.header-small { padding: 5px 20px !important; }
         #museumHeader.header-small .logo { height: 40px !important; transition: height 0.3s ease; }
         #museumHeader.header-small .header-title { font-size: 14px !important; transition: font-size 0.3s ease; }
+        
+        body.dark #museumHeader .logo-row img { filter: brightness(0) invert(1); }
+        
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; direction: rtl !important; }
         .logo { height: 70px; width: auto; cursor: pointer; transition: height 0.3s ease; }
         .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; transition: font-size 0.3s ease; line-height: 1.4; }
+        body.dark .header-title { color: var(--light) !important; }
 
         @media (max-width: 800px) {
             #museumHeader { padding: 5px 10px; }
@@ -73,69 +76,105 @@
         }
         .container.ready { opacity: 1; }
 
+        /* ========================================== */
+        /* تنسيقات الديسكتوب والموبايل (الدرج المخفي) */
+        /* ========================================== */
+        
+        /* زر إظهار المعلومات للموبايل (مخفي في الديسكتوب) */
+        .info-toggle-btn {
+            display: none; position: fixed; top: 180px; left: 0;
+            background: var(--gold); color: white; padding: 12px 15px;
+            border-radius: 0 15px 15px 0; z-index: 990; cursor: pointer;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2); font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+        body.lang-en .info-toggle-btn { left: auto; right: 0; border-radius: 15px 0 0 15px; }
+        
+        .article-header h1 { font-size: 32px; color: var(--gold) !important; margin: 0 0 10px 0; font-weight: 800; line-height: 1.4; }
+        .title-separator { border: none; border-top: 2px solid rgba(225, 169, 62, 0.5); width: 40px; margin: 0 0 20px 0; }
+        body.lang-ar .title-separator { margin-left: auto; margin-right: 0; }
+        body.lang-en .title-separator { margin-left: 0; margin-right: auto; }
+
+        .meta-group { display: flex; flex-direction: column; gap: 12px; font-size: 16px; color: var(--main); opacity: 0.9; line-height: 1.6; }
+        body.dark .meta-group { color: var(--light); }
+        .meta-item { display: block; }
+        .meta-material { font-weight: 700; color: var(--gold); margin-top: 5px; font-size: 18px; }
+        #hall { font-weight: 700; color: var(--main); font-size: 18px; margin-top: 5px; }
+        body.dark #hall { color: var(--accent); }
+        .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
+        body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
+
+        /* الشاشات الكبيرة: السايدبار الثابت */
         @media (min-width: 1000px) {
             .container { display: flex; align-items: flex-start; gap: 60px; }
             body.lang-ar .container { flex-direction: row-reverse; } 
             body.lang-en .container { flex-direction: row; } 
 
             .article-header {
-                width: 300px; flex-shrink: 0; position: sticky; top: 120px; text-align: inherit;
+                width: 320px; flex-shrink: 0; position: sticky; top: 120px; text-align: inherit;
                 background: transparent !important; padding: 0 !important; margin-bottom: 0 !important;
             }
             body.lang-ar .article-header { text-align: right; }
             body.lang-en .article-header { text-align: left; }
             
-            .meta-group { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
             body.lang-ar .meta-group { align-items: flex-end; }
-
             .article-content { flex-grow: 1; min-width: 0; }
         }
 
-        /* كارت المعلومات عالموبايل: راكب عالصورة ومنظم عمودياً */
+        /* الموبايل: الدرج المخفي الجانبي */
         @media (max-width: 999px) {
-            .container { display: block; max-width: 800px; }
-            .article-header { 
-                margin: -60px 20px 40px; text-align: inherit; 
-                background: var(--light); padding: 30px 20px; border-radius: 12px; 
-                box-shadow: 0 15px 40px rgba(0,0,0,0.12); position: relative; z-index: 10;
-            }
-            body.dark .article-header { background: var(--main); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
-            body.lang-en .article-header { text-align: left; }
-            body.lang-ar .article-header { text-align: right; }
+            .container { display: block; max-width: 800px; padding-top: 20px; }
             
-            .meta-group { display: flex; flex-direction: column; gap: 8px; }
-            .title-separator { margin: 15px 0 !important; width: 60px; }
-            body.lang-ar .title-separator { margin-left: auto !important; margin-right: 0 !important; }
-            body.lang-en .title-separator { margin-left: 0 !important; margin-right: auto !important; }
+            .info-toggle-btn { display: flex; } /* إظهار الزرار */
+
+            .article-header { 
+                position: fixed; top: 0; left: -100%; /* مخفي بره الشاشة يسار */
+                width: 80%; max-width: 350px; height: 100vh; overflow-y: auto;
+                background: var(--light); z-index: 999; /* تحت الهيدر بشعرة */
+                padding: 100px 30px 40px; box-shadow: 5px 0 25px rgba(0,0,0,0.2);
+                transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                text-align: right;
+            }
+            body.dark .article-header { background: var(--main); box-shadow: 5px 0 25px rgba(0,0,0,0.8); }
+            
+            /* لو الصفحة إنجليزي يفتح من اليمين */
+            body.lang-en .article-header { left: auto; right: -100%; text-align: left; box-shadow: -5px 0 25px rgba(0,0,0,0.2); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+            body.dark.lang-en .article-header { box-shadow: -5px 0 25px rgba(0,0,0,0.8); }
+
+            /* كلاس الفتح */
+            .article-header.open { left: 0; }
+            body.lang-en .article-header.open { right: 0; left: auto; }
+            
+            /* إخفاء الزرار لما الدرج يفتح */
+            .info-toggle-btn.hide { transform: scale(0); }
         }
 
-        .article-header h1 { font-size: 38px; color: var(--gold) !important; margin: 0 0 15px 0; font-weight: 800; line-height: 1.2; }
-        .title-separator { border: none; border-top: 3px solid rgba(225, 169, 62, 0.4); width: 50px; margin: 0 0 25px 0; }
-        body.lang-ar .title-separator { margin-left: auto; margin-right: 0; }
-        body.lang-en .title-separator { margin-left: 0; margin-right: auto; }
-
-        .meta-group { font-size: 16px; color: var(--main); opacity: 0.85; line-height: 1.6; }
-        body.dark .meta-group { color: var(--light); }
-        .meta-item { display: block; }
-        .meta-material { font-weight: 700; color: var(--gold); margin-top: 10px; font-size: 18px; }
-        #hall { font-weight: 700; color: var(--main); font-size: 18px; margin-top: 5px; margin-bottom: 5px; }
-        body.dark #hall { color: var(--accent); }
-        .meta-inv { margin-top: 20px; font-size: 14px; opacity: 0.6; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
-        body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
+        /* ========================================== */
 
         .image-pair-container { margin: 40px 0; width: 100%; text-align: center; display: block; }
         .image-pair-wrapper { display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap; width: 100%; }
-        .image-pair-wrapper img { width: auto; max-width: 100%; height: auto; max-height: 65vh; object-fit: contain; border-radius: 4px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); cursor: zoom-in; transition: transform 0.3s; }
+        
+        .image-pair-wrapper img { 
+            width: auto; max-width: 100%; height: auto; max-height: 65vh; object-fit: contain; 
+            border-radius: 4px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); 
+            cursor: zoom-in; transition: transform 0.3s;
+        }
         body.dark .image-pair-wrapper img { box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
         .image-pair-wrapper img:hover { transform: scale(1.02); }
-        @media (min-width: 600px) { .image-pair-wrapper.has-double img { max-width: calc(50% - 10px); } }
+        
+        @media (min-width: 600px) {
+            .image-pair-wrapper.has-double img { max-width: calc(50% - 10px); }
+        }
 
         figcaption { margin-top: 15px; font-size: 14px; color: #555; font-style: italic; opacity: 0.9; line-height: 1.5; }
         body.dark figcaption { color: #aaa; }
         body.lang-ar figcaption { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
         body.lang-en figcaption { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
         
-        .photo-credit { display: block !important; margin-top: 15px; font-size: 13px; color: #666; font-style: italic; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; width: 100%; }
+        .photo-credit { 
+            display: block !important; margin-top: 15px; font-size: 13px; color: #666; 
+            font-style: italic; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; width: 100%; 
+        }
         body.dark .photo-credit { color: #aaa; border-bottom: 1px solid rgba(255,255,255,0.1); }
         body.lang-ar .photo-credit { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
         body.lang-en .photo-credit { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
@@ -214,6 +253,8 @@
 
 <div id="coverBanner" class="cover-banner"><img id="coverImage" src="" alt=""></div>
 
+<div id="infoToggleBtn" class="info-toggle-btn"><i class="fas fa-info-circle"></i></div>
+
 <div class="container" id="mainContainer">
     
     <aside class="article-header" id="articleHeader">
@@ -271,6 +312,24 @@
     controlsEl.addEventListener('touchstart', () => { controlsEl.classList.remove('controls-mini'); clearTimeout(controlsTimer); }, { passive: true });
     resetControlsTimer(); 
 
+    // منطق الدرج المخفي للموبايل
+    const sidebar = document.getElementById("articleHeader");
+    const infoBtn = document.getElementById("infoToggleBtn");
+    
+    infoBtn.onclick = () => { 
+        sidebar.classList.toggle("open"); 
+        infoBtn.classList.toggle("hide");
+    };
+
+    window.addEventListener("scroll", () => { 
+        document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); 
+        // قفل الدرج أوتوماتيك مع السكرول
+        if(sidebar.classList.contains("open") && window.scrollY > 50) {
+            sidebar.classList.remove("open");
+            infoBtn.classList.remove("hide");
+        }
+    }, { passive: true });
+
     async function load() {
         try {
             updateThemeIcon();
@@ -306,6 +365,10 @@
                 else gtag('event', 'view_artifact', { 'artifact_id': actualId, 'artifact_title': artwork.title_ar || artwork.title_en });
             }
         }
+        
+        // لو الدرج مفتوح اقفله لما ينقل لقطعة تانية
+        if(sidebar.classList.contains("open")) { sidebar.classList.remove("open"); infoBtn.classList.remove("hide"); }
+
         renderArticle();
         updateNavButtons();
         setTimeout(() => { document.getElementById('mainContainer').classList.add('ready'); }, 50);
@@ -321,17 +384,16 @@
         let articleHeader = document.getElementById("articleHeader");
         
         coverBanner.style.display = "none";
-        articleHeader.classList.remove("has-cover");
-
+        
         coverImg.src = "images/" + artwork.id + "_cover.webp";
-        coverImg.onload = () => { coverBanner.style.display = "block"; articleHeader.classList.add("has-cover"); };
+        coverImg.onload = () => { coverBanner.style.display = "block"; };
         coverImg.onerror = () => {
             coverImg.src = "images/" + artwork.id + "_cover.jpg";
-            coverImg.onload = () => { coverBanner.style.display = "block"; articleHeader.classList.add("has-cover"); };
+            coverImg.onload = () => { coverBanner.style.display = "block"; };
             coverImg.onerror = () => {
                  coverImg.src = "images/" + artwork.id + "_cover.png";
-                 coverImg.onload = () => { coverBanner.style.display = "block"; articleHeader.classList.add("has-cover"); };
-                 coverImg.onerror = () => { coverBanner.style.display = "none"; articleHeader.classList.remove("has-cover"); }
+                 coverImg.onload = () => { coverBanner.style.display = "block"; };
+                 coverImg.onerror = () => { coverBanner.style.display = "none"; }
             }
         };
 
