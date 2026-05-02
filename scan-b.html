@@ -44,20 +44,13 @@
             align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
             border-radius: 0 0 20px 20px; transition: padding 0.3s ease;
         }
-        #museumHeader.header-small {
-            padding: 5px 20px !important; 
-        }
-        #museumHeader.header-small .logo {
-            height: 40px !important; 
-            transition: height 0.3s ease;
-        }
-        #museumHeader.header-small .header-title {
-            font-size: 14px !important; 
-            transition: font-size 0.3s ease;
-        }
+        #museumHeader.header-small { padding: 5px 20px !important; }
+        #museumHeader.header-small .logo { height: 40px !important; transition: height 0.3s ease; }
+        #museumHeader.header-small .header-title { font-size: 14px !important; transition: font-size 0.3s ease; }
+        
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; direction: rtl !important; }
         .logo { height: 70px; width: auto; cursor: pointer; transition: height 0.3s ease; }
-        .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; transition: font-size 0.3s ease; }
+        .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; transition: font-size 0.3s ease; line-height: 1.4; }
 
         @media (max-width: 800px) {
             #museumHeader { padding: 5px 10px; }
@@ -83,13 +76,15 @@
         body.lang-en .article-header { text-align: left; }
         body.lang-ar .article-header { text-align: right; }
 
+        /* العنوان الرئيسي ثابت باللون الذهبي دايما */
         .article-header h1 { 
-            font-size: 34px; color: var(--gold); margin: 0 0 20px 0; 
+            font-size: 34px; color: var(--gold) !important; margin: 0 0 20px 0; 
             font-weight: 800; line-height: 1.3;
         }
 
         .meta { font-size: 16px; margin-bottom: 8px; color: var(--main); opacity: 0.85; }
         body.dark .meta { color: var(--light); }
+        
         .meta-material { font-weight: 700; color: var(--gold); margin: 15px 0; font-size: 18px; }
         
         .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
@@ -113,7 +108,10 @@
         body.lang-ar figcaption { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
         body.lang-en figcaption { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
 
-        /* تنسيق فقرات الشرح */
+        /* القاعة والديسكريبشن */
+        #hall { font-weight: 700; color: var(--main); margin-bottom: 15px; font-size: 18px; text-align: center; }
+        body.dark #hall { color: var(--accent); }
+        
         .article-body p { 
             font-size: 20px; line-height: 2.1; margin-bottom: 30px; 
             color: #222; text-align: justify;
@@ -137,30 +135,39 @@
         .photo-credit { display: block !important; margin-top: 15px; font-size: 13px; color: #666; text-align: center; font-style: italic; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; width: 80%; }
         body.dark .photo-credit { color: #aaa; border-bottom: 1px solid rgba(255,255,255,0.1); }
 
-        /* عناصر التحكم والفوتر */
+        /* ========================================== */
+        /* شريط الكنترولز الأصلي (ثابت مبيتغيرش لونه) */
+        /* ========================================== */
         .controls { 
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
-            background: white; padding: 10px 25px; border-radius: 50px; 
-            display: flex; align-items: center; gap: 20px; z-index: 2000; 
-            box-shadow: 0 5px 25px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.05);
-            direction: ltr !important;
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
+            background: rgba(10, 30, 35, 0.96) !important; backdrop-filter: blur(15px);
+            padding: 12px 30px; border-radius: 50px; display: flex; align-items: center; gap: 25px; 
+            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid var(--gold) !important; 
+            direction: ltr !important; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
         }
-        body.dark .controls { background: var(--main); border-color: rgba(255,255,255,0.1); box-shadow: 0 5px 25px rgba(0,0,0,0.5); }
-        .controls div { font-size: 20px; cursor: pointer; color: var(--main); transition: 0.2s; position: relative; } 
-        body.dark .controls div { color: var(--light); }
-        .controls .nav-btn { color: var(--gold); font-size: 24px; }
-        .controls .nav-btn.disabled { opacity: 0.2; pointer-events: none; }
-        .controls .sep { width: 1px; height: 20px; background: rgba(0,0,0,0.1); }
-        body.dark .controls .sep { background: rgba(255,255,255,0.2); }
+        .controls div { font-size: 24px; cursor: pointer; color: white !important; transition: 0.2s; position: relative; } 
+        .controls .nav-btn { color: var(--gold) !important; font-size: 28px; }
+        .controls .nav-btn.disabled { opacity: 0.15; pointer-events: none; }
+        .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3) !important; }
 
         .controls > div:not(.sep)::before {
-            content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%;
-            transform: translateX(-50%) translateY(5px); background: var(--main); color: white; 
-            padding: 6px 12px; border-radius: 6px; font-size: 12px; white-space: nowrap; 
+            content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%;
+            transform: translateX(-50%) translateY(10px); background: rgba(6, 68, 76, 0.98); color: var(--light); 
+            padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 700;
             opacity: 0; visibility: hidden; transition: 0.3s; pointer-events: none; font-family: 'Tajawal', sans-serif;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
-        body.dark .controls > div:not(.sep)::before { background: white; color: var(--main); }
         .controls > div:not(.sep):hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        
+        /* تأثير التصغير للشريط في الموبايل */
+        @media (max-width: 800px) {
+            .controls.controls-mini {
+                transform: translateX(-50%) scale(0.75);
+                opacity: 0.55;
+                bottom: 15px;
+            }
+        }
+        /* ========================================== */
 
         #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255,255,255,0.98); z-index: 10001; }
         body.dark #fullscreenModal { background: rgba(6, 68, 76, 0.98); }
@@ -212,13 +219,14 @@
             <div class="meta-item" id="dim"></div>
         </div>
         <div class="meta-material" id="material"></div>
-        <div class="meta" id="hall" style="font-weight: 700; color: var(--accent); margin-top: 15px;"></div>
         <div class="meta-inv" id="inv"></div>
     </div>
     
     <div class="video-container" id="videoContainer"></div>
 
     <div id="heroSection"></div>
+
+    <div id="hall"></div>
 
     <div class="article-body" id="articleBody"></div>
 </div>
@@ -228,7 +236,7 @@
     <div class="sep"></div>
     <div onclick="toggleLang()" data-ar="اللغة" data-en="Language">🌐</div>
     <div onclick="window.location.href='https://nd-f.github.io/QR/'" data-ar="اتصل بنا" data-en="Contact Us" style="display: flex; align-items: center; justify-content: center;">
-        <img src="images/icon-nadim-light.png" id="contactIcon" style="width: 35px; height: 35px; object-fit: contain;"> 
+        <img src="images/icon-nadim-light.png" style="width: 35px; height: 35px; object-fit: contain;"> 
     </div>
     <div onclick="toggleTheme()" id="themeBtn" data-ar="المظهر" data-en="Theme">☀️</div>
     <div onclick="share()" data-ar="مشاركة" data-en="Share">🔗</div>
@@ -246,6 +254,31 @@
     let zoomStartTime = 0, isZoomTracked = false;
 
     const modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
+
+    // ==========================================
+    // لوجيك تصغير الأزرار في الموبايل
+    // ==========================================
+    let controlsTimer;
+    const controlsEl = document.querySelector('.controls');
+
+    function resetControlsTimer() {
+        if(window.innerWidth > 800) return; // للديسكتوب مبيصغرش
+        controlsEl.classList.remove('controls-mini');
+        clearTimeout(controlsTimer);
+        controlsTimer = setTimeout(() => {
+            controlsEl.classList.add('controls-mini');
+        }, 2500); // يصغر بعد ثانيتين ونص من عدم الاستخدام
+    }
+
+    window.addEventListener('scroll', resetControlsTimer, { passive: true });
+    window.addEventListener('touchstart', resetControlsTimer, { passive: true });
+    controlsEl.addEventListener('touchstart', () => {
+         controlsEl.classList.remove('controls-mini');
+         clearTimeout(controlsTimer);
+    }, { passive: true });
+
+    resetControlsTimer(); // تشغيل أولي
+    // ==========================================
 
     async function load() {
         try {
@@ -534,4 +567,52 @@
         pointX += e.clientX - startX; pointY += e.clientY - startY; startX = e.clientX; startY = e.clientY; setTransform(); trackIntentionalInteraction();
     });
 
-    modal.addEventListener('touchstart
+    modal.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault(); isPinching = true; startDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); initialScale = scale;
+        } else if (e.touches.length === 1) {
+            if (scale > 1) panning = true;
+            startX = e.touches[0].clientX; startY = e.touches[0].clientY; tapStartX = e.touches[0].clientX; tapStartY = e.touches[0].clientY;
+        }
+    }, {passive: false});
+
+    modal.addEventListener('touchmove', (e) => {
+        if (modal.style.display !== 'block') return;
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            let dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            let newScale = initialScale * (dist / startDist); if (newScale < 1) newScale = 1; if (newScale > 20) newScale = 20;
+            const ratio = 1 - (newScale / scale), centerX = (window.innerWidth / 2) + pointX, centerY = (window.innerHeight / 2) + pointY;
+            pointX += ((e.touches[0].clientX + e.touches[1].clientX) / 2 - centerX) * ratio; pointY += ((e.touches[0].clientY + e.touches[1].clientY) / 2 - centerY) * ratio;
+            scale = newScale; if (scale === 1) { pointX = 0; pointY = 0; }
+            setTransform(); if (scale > 1.1) trackIntentionalInteraction();
+        } else if (e.touches.length === 1 && panning && scale > 1) {
+            e.preventDefault(); pointX += e.touches[0].clientX - startX; pointY += e.touches[0].clientY - startY; startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+            setTransform(); trackIntentionalInteraction();
+        }
+    }, {passive: false});
+
+    let lastTap = 0;
+    modal.addEventListener('touchend', (e) => {
+        panning = false;
+        if (e.touches.length === 0) {
+            if (isPinching) { isPinching = false; lastTap = 0; return; }
+            let moveDist = e.changedTouches ? Math.hypot(e.changedTouches[0].clientX - tapStartX, e.changedTouches[0].clientY - tapStartY) : 0;
+            if (moveDist < 10) { 
+                let currentTime = new Date().getTime(), tapLength = currentTime - lastTap;
+                if (tapLength < 300 && tapLength > 0) { if (scale > 1) resetZoom(); else { scale = 3; setTransform(); } trackIntentionalInteraction(); }
+                lastTap = currentTime;
+            }
+        }
+    });
+
+    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); } });
+    document.getElementById("modalClose").onclick = () => { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); };
+    window.onpopstate = (e) => { if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); } else if (e.state && e.state.id) initPiece(e.state.id); };
+
+    window.addEventListener("scroll", () => { document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); }, { passive: true });
+
+    load();
+</script>
+</body>
+</html>
