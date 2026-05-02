@@ -85,7 +85,7 @@
             background: var(--gold); color: white; padding: 12px 15px;
             border-radius: 15px 0 0 15px; z-index: 990; cursor: pointer;
             box-shadow: -2px 2px 10px rgba(0,0,0,0.2); font-size: 20px;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
         }
         
         /* البالون التوضيحي لزر المعلومات */
@@ -101,6 +101,25 @@
         .info-toggle-btn:hover::before,
         .info-toggle-btn.show-tooltip::before { 
             opacity: 1; visibility: visible; transform: translateY(-50%) translateX(0); 
+        }
+
+        .info-toggle-btn.close {
+            background: rgba(6, 68, 76, 0.22);
+            color: rgba(255,255,255,0.92);
+            box-shadow: -2px 2px 10px rgba(0,0,0,0.12);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1002;
+            transform: scale(1);
+        }
+
+        body.dark .info-toggle-btn.close {
+            background: rgba(234, 232, 216, 0.16);
+            color: var(--light);
+        }
+
+        .info-toggle-btn.close::before {
+            display: none;
         }
         
         .article-header h1 { font-size: 32px; color: var(--gold) !important; margin: 0 0 10px 0; font-weight: 800; line-height: 1.4; }
@@ -165,7 +184,7 @@
             /* كلاس الفتح للموبايل (يطلع من اليمين) */
             .article-header.open { right: 0; }
             
-            /* إخفاء الزرار لما الدرج يفتح */
+            /* الكلاس القديم متروك احتياطياً، لكنه لم يعد مستخدماً */
             .info-toggle-btn.hide { transform: scale(0); }
         }
 
@@ -337,17 +356,22 @@
     const infoBtn = document.getElementById("infoToggleBtn");
     let peekTimer;
     
-    infoBtn.onclick = () => { 
-        sidebar.classList.toggle("open"); 
-        infoBtn.classList.toggle("hide");
+    function setInfoDrawer(open) {
+        sidebar.classList.toggle("open", open);
+        infoBtn.classList.toggle("close", open);
+        infoBtn.classList.remove("show-tooltip");
+        infoBtn.innerHTML = open ? '<i class="fas fa-times"></i>' : '<i class="fas fa-info-circle"></i>';
+    }
+
+    infoBtn.onclick = () => {
+        setInfoDrawer(!sidebar.classList.contains("open"));
     };
 
     window.addEventListener("scroll", () => { 
         document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); 
         // قفل الدرج أوتوماتيك مع السكرول
         if(sidebar.classList.contains("open") && window.scrollY > 50) {
-            sidebar.classList.remove("open");
-            infoBtn.classList.remove("hide");
+            setInfoDrawer(false);
             clearTimeout(peekTimer);
         }
     }, { passive: true });
@@ -357,14 +381,12 @@
         if(window.innerWidth >= 1000) return; // للديسكتوب ملوش لازمة
         
         clearTimeout(peekTimer);
-        sidebar.classList.add("open");
-        infoBtn.classList.add("hide");
+        setInfoDrawer(true);
         
         // يقفل بعد ثانيتين ونص
         peekTimer = setTimeout(() => {
             if(sidebar.classList.contains("open")) {
-                sidebar.classList.remove("open");
-                infoBtn.classList.remove("hide");
+                setInfoDrawer(false);
                 
                 // إظهار البالون التوضيحي لفترة قصيرة بعد قفل الدرج
                 setTimeout(() => {
@@ -414,7 +436,7 @@
         }
         
         // نقفل الدرج لو كان مفتوح عشان الغمزة تشتغل بنظافة
-        if(sidebar.classList.contains("open")) { sidebar.classList.remove("open"); infoBtn.classList.remove("hide"); }
+        if(sidebar.classList.contains("open")) setInfoDrawer(false);
 
         renderArticle();
         updateNavButtons();
@@ -508,21 +530,38 @@
         let articleBody = document.getElementById("articleBody");
         articleBody.innerHTML = "";
         
+        const splitDescParts = Array.from({ length: 5 }, (_, i) => {
+            return (ar ? artwork[`dsc_ar${i + 1}`] : artwork[`dsc_en${i + 1}`]) || "";
+        });
+
+        const hasSplitDesc = splitDescParts.some(text => text.trim() !== "");
         let mainDesc = (ar ? artwork.desc_ar : artwork.desc_en) || "";
-        if (mainDesc.trim() !== "") {
-            let pMain = document.createElement("p"); pMain.innerHTML = mainDesc.replace(/\n/g, '<br>'); articleBody.appendChild(pMain);
+
+        if (!hasSplitDesc && mainDesc.trim() !== "") {
+            let pMain = document.createElement("p");
+            pMain.innerHTML = mainDesc.replace(/\n/g, '<br>');
+            articleBody.appendChild(pMain);
         }
 
         for (let i = 0; i < 5; i++) {
-            let pText = (ar ? artwork[`dsc_ar${i+1}`] : artwork[`dsc_en${i+1}`]) || "";
+            let pText = splitDescParts[i] || "";
+
             if (i === 0) {
-                if (pText.trim() !== "") { let p = document.createElement("p"); p.innerHTML = pText.replace(/\n/g, '<br>'); articleBody.appendChild(p); }
+                if (hasSplitDesc && pText.trim() !== "") {
+                    let p = document.createElement("p");
+                    p.innerHTML = pText.replace(/\n/g, '<br>');
+                    articleBody.appendChild(p);
+                }
             } else {
-                if (images[i] || (vidSlot === i && finalVidUrl) || pText.trim() !== "") {
+                if (images[i] || (vidSlot === i && finalVidUrl) || (hasSplitDesc && pText.trim() !== "")) {
                     if (vidSlot === i && finalVidUrl) articleBody.appendChild(createInlineVideo(finalVidUrl, i));
                     else if (images[i]) articleBody.appendChild(createInlineFigure(images[i], i));
                     
-                    if (pText.trim() !== "") { let p = document.createElement("p"); p.innerHTML = pText.replace(/\n/g, '<br>'); articleBody.appendChild(p); }
+                    if (hasSplitDesc && pText.trim() !== "") {
+                        let p = document.createElement("p");
+                        p.innerHTML = pText.replace(/\n/g, '<br>');
+                        articleBody.appendChild(p);
+                    }
                 }
             }
         }
