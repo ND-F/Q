@@ -207,7 +207,7 @@
         </a>
         <div class="header-title" id="headerTitle">من حياة التحفة<br>From the Life of an Artefact</div>
         <a href="https://nd-f.github.io/QR/">
-            <img src="images/logo-nadim.png" class="logo">
+            <img src="images/logo-nadim.png" class="logo" id="headerNadimLogo">
         </a>
     </div>
 </header>
@@ -289,7 +289,7 @@
             if (!id) {
                 let pathName = window.location.pathname.replace(/\/$/, "");
                 let fileName = pathName.split('/').pop().replace('.html', '');
-                if (fileName && fileName !== "scan-b" && fileName !== "Q") id = fileName;
+                if (fileName && fileName !== "scan-c" && fileName !== "Q") id = fileName;
             }
             if (!allArtworks || allArtworks.length === 0) return;
 
@@ -297,10 +297,7 @@
             initPiece(finalId);
             
             if (window.location.search.includes("id=")) {
-                // ===============================================
-                // التعديل الذكي لروابط VQ و Q وقت فتح الصفحة
-                // ===============================================
-                let urlPath = String(finalId).toUpperCase().startsWith('V') ? 'VQ' + String(finalId).substring(1) : 'Q' + finalId;
+                let urlPath = String(finalId).toUpperCase().startsWith('V') ? 'MV' + String(finalId).substring(1) : 'M' + finalId;
                 window.history.replaceState({id: finalId}, '', urlPath);
             }
         } catch(e) { console.error(e); }
@@ -539,6 +536,8 @@
     function updateThemeIcon() { 
         let isDark = document.body.classList.contains("dark");
         document.getElementById("themeBtn").textContent = isDark ? "☀️" : "🌙"; 
+        const logoEl = document.getElementById("headerNadimLogo");
+        if (logoEl) logoEl.src = isDark ? "images/icon-nadim-light.svg" : "images/icon-nadim.svg";
     }
     
     function share() { 
@@ -556,10 +555,7 @@
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
         if(idx >= 0 && idx < allArtworks.length) {
             const nextId = allArtworks[idx].id;
-            // ===============================================
-            // التعديل الذكي لروابط VQ و Q وقت التنقل بالأسهم
-            // ===============================================
-            let urlPath = String(nextId).toUpperCase().startsWith('V') ? 'VQ' + String(nextId).substring(1) : 'Q' + nextId;
+            let urlPath = String(nextId).toUpperCase().startsWith('V') ? 'MV' + String(nextId).substring(1) : 'M' + nextId;
             window.history.pushState({id: nextId}, '', urlPath);
             initPiece(nextId);
             window.scrollTo({ top: 0, behavior: 'smooth' });
