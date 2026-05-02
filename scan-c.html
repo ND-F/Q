@@ -35,6 +35,9 @@
         }
         body.dark { background: var(--main); color: var(--light); }
 
+        /* ========================================== */
+        /* الهيدر */
+        /* ========================================== */
         #museumHeader { 
             position: sticky; top: 0; background: var(--light) !important; 
             padding: 0px 20px; display: flex; flex-direction: column; 
@@ -45,9 +48,12 @@
         #museumHeader.header-small .logo { height: 40px !important; transition: height 0.3s ease; }
         #museumHeader.header-small .header-title { font-size: 14px !important; transition: font-size 0.3s ease; }
         
+        body.dark #museumHeader .logo-row img { filter: brightness(0) invert(1); }
+        
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; direction: rtl !important; }
         .logo { height: 70px; width: auto; cursor: pointer; transition: height 0.3s ease; }
         .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; transition: font-size 0.3s ease; line-height: 1.4; }
+        body.dark .header-title { color: var(--light) !important; }
 
         @media (max-width: 800px) {
             #museumHeader { padding: 5px 10px; }
@@ -73,27 +79,20 @@
         }
         .container.ready { opacity: 1; }
 
+        /* ========================================== */
+        /* الذاكرة العضلية: الزر والدرج ثابتين يمين دائماً */
+        /* ========================================== */
+        
+        /* زر إظهار المعلومات للموبايل */
         .info-toggle-btn {
-            display: none; position: fixed; top: 180px; left: 0;
+            display: none; position: fixed; top: 180px; 
+            right: 0; left: auto; /* ثابت في اليمين دائماً */
             background: var(--gold); color: white; padding: 12px 15px;
-            border-radius: 0 15px 15px 0; z-index: 990; cursor: pointer;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.2); font-size: 20px;
+            border-radius: 15px 0 0 15px; z-index: 990; cursor: pointer;
+            box-shadow: -2px 2px 10px rgba(0,0,0,0.2); font-size: 20px;
             transition: transform 0.3s ease;
         }
-        body.lang-en .info-toggle-btn { left: auto; right: 0; border-radius: 15px 0 0 15px; }
         
-        @media (min-width: 1000px) {
-            .info-toggle-btn { display: flex; } 
-            .info-toggle-btn::before {
-                content: attr(data-tooltip); position: absolute; top: 125%; left: 50%;
-                transform: translateX(-50%) translateY(10px); background: rgba(6, 68, 76, 0.98); color: var(--light); 
-                padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 700;
-                opacity: 0; visibility: hidden; transition: 0.3s; pointer-events: none; font-family: 'Tajawal', sans-serif;
-                box-shadow: 0 8px 20px rgba(0,0,0,0.3); z-index: 1000;
-            }
-            .info-toggle-btn:hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-        }
-
         .article-header h1 { font-size: 32px; color: var(--gold) !important; margin: 0 0 10px 0; font-weight: 800; line-height: 1.4; }
         .title-separator { border: none; border-top: 2px solid rgba(225, 169, 62, 0.5); width: 40px; margin: 0 0 20px 0; }
         body.lang-ar .title-separator { margin-left: auto; margin-right: 0; }
@@ -108,51 +107,54 @@
         .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
         body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
 
+        /* الشاشات الكبيرة: السايدبار الثابت (وضعه التلقائي) */
         @media (min-width: 1000px) {
             .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; } 
             body.lang-ar .container { flex-direction: row; } 
             body.lang-en .container { flex-direction: row-reverse; } 
 
             .article-header {
-                width: 320px; flex-shrink: 0; position: fixed; top: 0; left: -100%; height: 100vh; overflow-y: auto; text-align: inherit;
-                background: var(--light); padding: 100px 30px 40px !important; margin-bottom: 0 !important; z-index: 999;
-                box-shadow: 5px 0 25px rgba(0,0,0,0.2); transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                width: 320px; flex-shrink: 0; position: sticky; top: 120px; text-align: inherit;
+                background: transparent !important; padding: 0 !important; margin-bottom: 0 !important; z-index: 10;
+                box-shadow: none; transition: none; left: auto !important; right: auto !important;
             }
-            body.dark .article-header { background: var(--main); box-shadow: 5px 0 25px rgba(0,0,0,0.8); }
             body.lang-ar .article-header { text-align: right; }
-            body.lang-en .article-header { left: auto; right: -100%; text-align: left; box-shadow: -5px 0 25px rgba(0,0,0,0.2); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-            body.dark.lang-en .article-header { box-shadow: -5px 0 25px rgba(0,0,0,0.8); }
-            
-            .article-header.open { left: 0; }
-            body.lang-en .article-header.open { right: 0; left: auto; }
+            body.lang-en .article-header { text-align: left; }
             
             body.lang-ar .meta-group { align-items: flex-start; } 
             .article-content { flex-grow: 1; min-width: 0; max-width: 800px; margin: 0 auto; } 
+            
+            /* إخفاء الزر الجانبي في الديسكتوب تماماً */
+            .info-toggle-btn { display: none !important; }
         }
 
+        /* الموبايل: الدرج المخفي الجانبي (من اليمين دائماً) */
         @media (max-width: 999px) {
             .container { display: block; max-width: 800px; padding-top: 20px; }
             
             .info-toggle-btn { display: flex; } 
 
             .article-header { 
-                position: fixed; top: 0; left: -100%; 
+                position: fixed; top: 0; 
+                right: -100%; left: auto; /* مخفي بره الشاشة يمين */
                 width: 80%; max-width: 350px; height: 100vh; overflow-y: auto;
                 background: var(--light); z-index: 999; 
-                padding: 100px 30px 40px; box-shadow: 5px 0 25px rgba(0,0,0,0.2);
-                transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                text-align: right;
+                padding: 100px 30px 40px; box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+                transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* حركة ناعمة جداً */
             }
-            body.dark .article-header { background: var(--main); box-shadow: 5px 0 25px rgba(0,0,0,0.8); }
+            body.dark .article-header { background: var(--main); box-shadow: -5px 0 25px rgba(0,0,0,0.8); }
             
-            body.lang-en .article-header { left: auto; right: -100%; text-align: left; box-shadow: -5px 0 25px rgba(0,0,0,0.2); transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-            body.dark.lang-en .article-header { box-shadow: -5px 0 25px rgba(0,0,0,0.8); }
+            body.lang-ar .article-header { text-align: right; }
+            body.lang-en .article-header { text-align: left; }
 
-            .article-header.open { left: 0; }
-            body.lang-en .article-header.open { right: 0; left: auto; }
+            /* كلاس الفتح للموبايل (يطلع من اليمين) */
+            .article-header.open { right: 0; }
             
+            /* إخفاء الزرار لما الدرج يفتح */
             .info-toggle-btn.hide { transform: scale(0); }
         }
+
+        /* ========================================== */
 
         .image-pair-container { margin: 40px 0; width: 100%; text-align: center; display: block; }
         .image-pair-wrapper { display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap; width: 100%; }
@@ -256,7 +258,7 @@
 
 <div id="coverBanner" class="cover-banner"><img id="coverImage" src="" alt=""></div>
 
-<div id="infoToggleBtn" class="info-toggle-btn" data-ar="معلومات الأثر" data-en="Object Info"><i class="fas fa-info-circle"></i></div>
+<div id="infoToggleBtn" class="info-toggle-btn" data-ar="معلومات القطعة" data-en="Piece Info"><i class="fas fa-info-circle"></i></div>
 
 <div class="container" id="mainContainer">
     
@@ -315,8 +317,10 @@
     controlsEl.addEventListener('touchstart', () => { controlsEl.classList.remove('controls-mini'); clearTimeout(controlsTimer); }, { passive: true });
     resetControlsTimer(); 
 
+    // منطق الدرج المخفي للموبايل
     const sidebar = document.getElementById("articleHeader");
     const infoBtn = document.getElementById("infoToggleBtn");
+    let peekTimer;
     
     infoBtn.onclick = () => { 
         sidebar.classList.toggle("open"); 
@@ -325,11 +329,30 @@
 
     window.addEventListener("scroll", () => { 
         document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); 
+        // قفل الدرج أوتوماتيك مع السكرول
         if(sidebar.classList.contains("open") && window.scrollY > 50) {
             sidebar.classList.remove("open");
             infoBtn.classList.remove("hide");
+            clearTimeout(peekTimer);
         }
     }, { passive: true });
+
+    // حركة الغمزة (Auto-peek) للموبايل أول ما الصفحة تفتح
+    function triggerMobilePeek() {
+        if(window.innerWidth >= 1000) return; // للديسكتوب ملوش لازمة
+        
+        clearTimeout(peekTimer);
+        sidebar.classList.add("open");
+        infoBtn.classList.add("hide");
+        
+        // يقفل بعد ثانيتين ونص
+        peekTimer = setTimeout(() => {
+            if(sidebar.classList.contains("open")) {
+                sidebar.classList.remove("open");
+                infoBtn.classList.remove("hide");
+            }
+        }, 2500); 
+    }
 
     async function load() {
         try {
@@ -367,11 +390,16 @@
             }
         }
         
+        // نقفل الدرج لو كان مفتوح عشان الغمزة تشتغل بنظافة
         if(sidebar.classList.contains("open")) { sidebar.classList.remove("open"); infoBtn.classList.remove("hide"); }
 
         renderArticle();
         updateNavButtons();
-        setTimeout(() => { document.getElementById('mainContainer').classList.add('ready'); }, 50);
+        
+        setTimeout(() => { 
+            document.getElementById('mainContainer').classList.add('ready'); 
+            triggerMobilePeek(); // تشغيل الغمزة بعد ظهور المحتوى
+        }, 50);
     }
 
     function renderArticle() {
