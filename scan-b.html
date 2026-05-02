@@ -76,8 +76,9 @@
         }
         .container.ready { opacity: 1; }
 
+        /* التعديل الجذري لبوكس المعلومات والمحاذاة */
         .article-header { 
-            margin-bottom: 40px; text-align: center; 
+            margin-bottom: 40px;
             background: var(--light); 
             padding: 30px 20px; border-radius: 8px;
             position: relative; z-index: 10;
@@ -93,22 +94,32 @@
             font-weight: 800; line-height: 1.3;
         }
 
-        .meta { font-size: 16px; margin-bottom: 8px; color: var(--main); opacity: 0.85; }
-        body.dark .meta { color: var(--light); }
+        /* المحاذاة مع الديسكريبشن بدل السنترة */
+        .meta-group { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 8px 15px; font-size: 16px; color: var(--main); opacity: 0.85; }
+        body.dark .meta-group { color: var(--light); }
         
         .meta-material { font-weight: 700; color: var(--gold); margin: 15px 0; font-size: 18px; }
         
         .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
         body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
 
-        figure { margin: 40px 0; padding: 0; display: block; width: 100%; text-align: center; }
-        figure img { 
-            max-width: 100%; height: auto; max-height: 60vh; object-fit: contain; 
+        /* ========================================== */
+        /* تنسيقات الصور الفردية والمزدوجة (تمت إضافتها) */
+        /* ========================================== */
+        .image-pair-container { margin: 40px 0; width: 100%; text-align: center; display: block; }
+        .image-pair-wrapper { display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap; width: 100%; }
+        
+        .image-pair-wrapper img { 
+            width: auto; max-width: 100%; height: auto; max-height: 60vh; object-fit: contain; 
             border-radius: 4px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); 
             cursor: zoom-in; transition: transform 0.3s;
         }
-        body.dark figure img { box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
-        figure img:hover { transform: scale(1.02); }
+        body.dark .image-pair-wrapper img { box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        .image-pair-wrapper img:hover { transform: scale(1.02); }
+        
+        @media (min-width: 600px) {
+            .image-pair-wrapper.has-double img { max-width: calc(50% - 10px); }
+        }
 
         figcaption { 
             margin-top: 12px; font-size: 14px; color: #555; 
@@ -225,14 +236,13 @@
             <div class="meta-item" id="dim"></div>
         </div>
         <div class="meta-material" id="material"></div>
+        <div id="hall"></div>
         <div class="meta-inv" id="inv"></div>
     </div>
     
     <div class="video-container" id="videoContainer"></div>
 
     <div id="heroSection"></div>
-
-    <div id="hall"></div>
 
     <div class="article-body" id="articleBody"></div>
 </div>
@@ -297,9 +307,6 @@
             initPiece(finalId);
             
             if (window.location.search.includes("id=")) {
-                // ===============================================
-                // التعديل الذكي لروابط VQ و Q وقت فتح الصفحة
-                // ===============================================
                 let urlPath = String(finalId).toUpperCase().startsWith('V') ? 'VQ' + String(finalId).substring(1) : 'Q' + finalId;
                 window.history.replaceState({id: finalId}, '', urlPath);
             }
@@ -467,6 +474,7 @@
                         articleBody.appendChild(createInlineVideo(finalVidUrl, i));
                     } 
                     else if (images[i]) {
+                        // استدعاء دالة الصورة الفردية/المزدوجة
                         articleBody.appendChild(createInlineFigure(images[i], i));
                     }
                     
@@ -491,13 +499,34 @@
         document.querySelectorAll('[data-ar]').forEach(el => { el.setAttribute('data-tooltip', el.getAttribute(`data-${lang}`) || ''); });
     }
 
+    // الدالة الذكية لزرع الصورة وتفقد وجود وجه آخر
     function createInlineFigure(src, idx) {
         let fig = document.createElement("figure");
-        let img = document.createElement("img");
-        img.src = src;
-        img.onerror = function() { this.closest('figure').style.display = 'none'; }; 
-        img.onclick = () => openModal(src);
-        fig.appendChild(img);
+        fig.className = "image-pair-container";
+        
+        let wrapper = document.createElement("div");
+        wrapper.className = "image-pair-wrapper";
+        fig.appendChild(wrapper);
+
+        let img1 = document.createElement("img");
+        img1.src = src;
+        img1.onerror = function() { this.style.display = 'none'; }; 
+        img1.onclick = () => openModal(src);
+        wrapper.appendChild(img1);
+        
+        let doubleChar = String.fromCharCode(97 + idx); 
+        let doubleSrc = src.replace(/\.webp$/, "") + doubleChar + ".webp"; 
+        
+        let img2 = document.createElement("img");
+        img2.src = doubleSrc;
+        img2.style.display = "none"; 
+        img2.onload = function() { 
+            this.style.display = "block"; 
+            wrapper.classList.add("has-double"); 
+        };
+        img2.onerror = function() { this.remove(); };
+        img2.onclick = () => openModal(doubleSrc);
+        wrapper.appendChild(img2);
         
         let infoStr = (artwork[`info_${lang}${idx + 1}`] || "").trim();
         if (infoStr) {
@@ -556,9 +585,6 @@
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
         if(idx >= 0 && idx < allArtworks.length) {
             const nextId = allArtworks[idx].id;
-            // ===============================================
-            // التعديل الذكي لروابط VQ و Q وقت التنقل بالأسهم
-            // ===============================================
             let urlPath = String(nextId).toUpperCase().startsWith('V') ? 'VQ' + String(nextId).substring(1) : 'Q' + nextId;
             window.history.pushState({id: nextId}, '', urlPath);
             initPiece(nextId);
