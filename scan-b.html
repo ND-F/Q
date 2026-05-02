@@ -154,7 +154,7 @@
             box-shadow: 0 4px 16px rgba(0,0,0,0.12);
         }
 
-        .controls.controls-mini:hover,
+        .controls.controls-mini.is-hovering,
         .controls.controls-mini:focus-within {
             transform: translateX(-50%) scale(1);
             opacity: 1;
@@ -244,20 +244,30 @@
 
     function expandControls() {
         controlsEl.classList.remove('controls-mini');
+        controlsEl.classList.add('is-hovering');
         clearTimeout(controlsTimer);
     }
 
-    function resetControlsTimer() {
-        expandControls();
-        controlsTimer = setTimeout(() => { controlsEl.classList.add('controls-mini'); }, 2500); 
+    function scheduleControlsMini() {
+        clearTimeout(controlsTimer);
+        controlsTimer = setTimeout(() => {
+            controlsEl.classList.remove('is-hovering');
+            controlsEl.classList.add('controls-mini');
+        }, 2500);
     }
 
-    window.addEventListener('scroll', resetControlsTimer, { passive: true });
-    window.addEventListener('touchstart', resetControlsTimer, { passive: true });
+    function wakeControls() {
+        controlsEl.classList.remove('controls-mini');
+        controlsEl.classList.add('is-hovering');
+        scheduleControlsMini();
+    }
+
+    window.addEventListener('scroll', wakeControls, { passive: true });
+    window.addEventListener('touchstart', wakeControls, { passive: true });
     controlsEl.addEventListener('mouseenter', expandControls);
-    controlsEl.addEventListener('mouseleave', resetControlsTimer);
-    controlsEl.addEventListener('touchstart', resetControlsTimer, { passive: true });
-    resetControlsTimer(); 
+    controlsEl.addEventListener('mouseleave', scheduleControlsMini);
+    controlsEl.addEventListener('touchstart', wakeControls, { passive: true });
+    scheduleControlsMini();
 
     async function load() {
         try {
