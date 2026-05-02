@@ -382,7 +382,7 @@
         document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) ? (" | " + (ar ? artwork.dimensions_ar : artwork.dimensions_en)) : "";
         document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
         document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
-        document.getElementById("inv").innerHTML = artwork.inventory_number ? (ar ? `رقم الجرد: ${artwork.inventory_number}` : `Inv. no. ${artwork.inventory_number}`) : "";
+        document.getElementById("inv").innerHTML = artwork.inventory_number || "";
 
         let rawVid = String(artwork.video_url || "").trim();
         let vidSlot = -1; 
