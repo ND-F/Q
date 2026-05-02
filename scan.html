@@ -144,7 +144,7 @@
             pointer-events: none; z-index: 10000; 
         }
         .controls > div:not(.sep):hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-        
+
         @media (max-width: 800px) {
             .controls.controls-mini { transform: translateX(-50%) scale(0.75); opacity: 0.55; bottom: 15px; }
         }
@@ -199,7 +199,7 @@
         <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank">
             <img src="images/MIALOGO.png" class="logo">
         </a>
-        <div class="header-title" id="headerTitle">من حياة التحفة<br>From the Life of an Artefact Exhibition</div>
+        <div class="header-title" id="headerTitle">من حياة التحفة<br>From the Life of an Artefact</div>
         <a href="https://nd-f.github.io/QR/">
             <img src="images/logo-nadim.png" class="logo">
         </a>
@@ -437,7 +437,7 @@
                 const img = document.createElement("img");
                 img.src = ytThumb;
                 img.style.display = 'block';
-                img.style.borderBottom = "3px solid var(--gold)"; 
+                img.setAttribute('data-idx', index); // تخزين الاندكس للمقارنة بدقة
                 
                 validImages[index] = "VIDEO:" + currentVidUrl;
                 
@@ -456,6 +456,7 @@
             
             const webpSrc = String(src).replace(/\.[^/.]+$/, ".webp");
             const img = document.createElement("img");
+            img.setAttribute('data-idx', index); // تخزين الاندكس للمقارنة بدقة
             
             img.onload = () => {
                 checkedCount++; loadedCount++;
@@ -517,8 +518,9 @@
             modalImage.src = src;
         }
 
-        document.querySelectorAll(".thumbs img").forEach((t, tIdx) => { 
-            t.classList.toggle("active", tIdx === i); 
+        // التعديل الذكي لتوحيد البرواز الذهبي بدقة
+        document.querySelectorAll(".thumbs img").forEach((t) => { 
+            t.classList.toggle("active", parseInt(t.getAttribute('data-idx')) === i); 
         });
         
         const info = (artwork[`info_${lang}${i + 1}`] || "").trim();
