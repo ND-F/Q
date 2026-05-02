@@ -297,7 +297,7 @@
             initPiece(finalId);
             
             if (window.location.search.includes("id=")) {
-                let urlPath = String(finalId).toUpperCase().startsWith('V') ? 'MV' + String(finalId).substring(1) : 'M' + finalId;
+                let urlPath = String(finalId).toUpperCase().startsWith('V') ? 'VM' + String(finalId).substring(1) : 'M' + finalId;
                 window.history.replaceState({id: finalId}, '', urlPath);
             }
         } catch(e) { console.error(e); }
@@ -555,7 +555,7 @@
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
         if(idx >= 0 && idx < allArtworks.length) {
             const nextId = allArtworks[idx].id;
-            let urlPath = String(nextId).toUpperCase().startsWith('V') ? 'MV' + String(nextId).substring(1) : 'M' + nextId;
+            let urlPath = String(nextId).toUpperCase().startsWith('V') ? 'VM' + String(nextId).substring(1) : 'M' + nextId;
             window.history.pushState({id: nextId}, '', urlPath);
             initPiece(nextId);
             window.scrollTo({ top: 0, behavior: 'smooth' });
