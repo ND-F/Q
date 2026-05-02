@@ -5,15 +5,23 @@
   <title>Loading...</title>
   <script>
     var path = window.location.pathname; 
-    var segment = path.split('/').filter(Boolean).pop(); // يجلب 1 أو Q1 أو MIA-001
+    var segment = path.split('/').filter(Boolean).pop(); // يجلب 1 أو Q1 أو V1 أو VQ1
     
     if (segment && segment !== 'Q') {
-      // التحقق إذا كان الرابط يبدأ بحرف Q (لتحويله للنسخة B)
-      if (segment.charAt(0).toUpperCase() === 'Q' && segment.length > 1) {
-        var realId = segment.substring(1); // بنحذف حرف الـ Q عشان نبعت الـ ID الصافي
+      var upperSeg = segment.toUpperCase();
+      
+      // 1. لو الرابط بيبدأ بـ VQ (فيديوهات الحرف في التصميم الأكاديمي)
+      if (upperSeg.startsWith('VQ')) {
+        var realId = 'V' + segment.substring(2); // بنشيل VQ ونحط V (VQ1 -> V1)
         window.location.replace('/Q/scan-b.html?id=' + realId);
-      } else {
-        // الروابط العادية تذهب للنسخة الأساسية A
+      } 
+      // 2. لو الرابط بيبدأ بـ Q (القطع الأثرية في التصميم الأكاديمي)
+      else if (upperSeg.startsWith('Q')) {
+        var realId = segment.substring(1); // بنشيل Q (Q1 -> 1)
+        window.location.replace('/Q/scan-b.html?id=' + realId);
+      } 
+      // 3. لو رابط عادي (التصميم الزجاجي القديم)
+      else {
         window.location.replace('/Q/scan.html?id=' + segment);
       }
     } else {
