@@ -129,7 +129,7 @@
             background: rgba(10, 30, 35, 0.96); backdrop-filter: blur(15px);
             padding: 12px 30px; border-radius: 50px; display: flex; align-items: center; gap: 25px; 
             z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid var(--gold); 
-            direction: ltr !important;
+            direction: ltr !important; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
         }
         .controls div { font-size: 24px; cursor: pointer; color: white; transition: 0.2s; position: relative; } 
         .controls .nav-btn { color: var(--gold); font-size: 28px; }
@@ -144,6 +144,10 @@
             pointer-events: none; z-index: 10000; 
         }
         .controls > div:not(.sep):hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        
+        @media (max-width: 800px) {
+            .controls.controls-mini { transform: translateX(-50%) scale(0.75); opacity: 0.55; bottom: 15px; }
+        }
 
         #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--main); z-index: 10001; }
         #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; overflow: hidden; }
@@ -269,6 +273,24 @@
 
     const mainViewer = document.getElementById("mainViewer"), mainImage = document.getElementById("mainImage");
     const photoCredit = document.getElementById("photoCredit"), modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
+
+    let controlsTimer;
+    const controlsEl = document.querySelector('.controls');
+
+    function resetControlsTimer() {
+        if(window.innerWidth > 800) return;
+        controlsEl.classList.remove('controls-mini');
+        clearTimeout(controlsTimer);
+        controlsTimer = setTimeout(() => { controlsEl.classList.add('controls-mini'); }, 2500); 
+    }
+
+    window.addEventListener('scroll', resetControlsTimer, { passive: true });
+    window.addEventListener('touchstart', resetControlsTimer, { passive: true });
+    controlsEl.addEventListener('touchstart', () => {
+         controlsEl.classList.remove('controls-mini');
+         clearTimeout(controlsTimer);
+    }, { passive: true });
+    resetControlsTimer();
 
     async function load() {
         try {
