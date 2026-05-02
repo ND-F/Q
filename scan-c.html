@@ -35,6 +35,9 @@
         }
         body.dark { background: var(--main); color: var(--light); }
 
+        /* ========================================== */
+        /* الهيدر */
+        /* ========================================== */
         #museumHeader { 
             position: sticky; top: 0; background: var(--light) !important; 
             padding: 0px 20px; display: flex; flex-direction: column; 
@@ -54,56 +57,93 @@
             .logo { height: 45px; } 
             .header-title { font-size: 14px; line-height: 1.3; } 
             .logo-row { gap: 8px; }
-            
             #museumHeader.header-small { padding: 3px 10px !important; border-radius: 0 0 10px 10px; }
             #museumHeader.header-small .logo { height: 25px !important; } 
             #museumHeader.header-small .header-title { font-size: 10.5px !important; line-height: 1.1; } 
         }
 
+        /* ========================================== */
+        /* صورة الغلاف (Cover Banner) */
+        /* ========================================== */
         .cover-banner {
             width: 100%; height: 35vh; min-height: 250px; 
             overflow: hidden; position: relative; display: none;
             background: var(--main);
         }
-        .cover-banner img {
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.9;
-        }
+        .cover-banner img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
 
+        /* ========================================== */
+        /* التخطيط الأكاديمي الجديد (Magazine / doaks.org Layout) */
+        /* ========================================== */
         .container { 
-            max-width: 760px; 
+            max-width: 800px; 
             margin: 40px auto 100px; padding: 0 20px; 
             opacity: 0; transition: opacity 0.5s ease; position: relative;
         }
         .container.ready { opacity: 1; }
 
         .article-header { 
-            margin-bottom: 40px; text-align: center; 
+            text-align: center; 
             background: var(--light); 
             padding: 30px 20px; border-radius: 8px;
             position: relative; z-index: 10;
             transition: all 0.3s ease;
+            margin-bottom: 40px;
         }
         body.dark .article-header { background: var(--main); }
         
-        body.lang-en .article-header { text-align: left; }
-        body.lang-ar .article-header { text-align: right; }
+        /* تداخل الصندوق مع الكوڤر برمجياً */
+        .article-header.has-cover { margin-top: -50px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        body.dark .article-header.has-cover { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        .article-header h1 { 
-            font-size: 34px; color: var(--gold) !important; margin: 0 0 20px 0; 
-            font-weight: 800; line-height: 1.3;
-        }
-
-        .meta { font-size: 16px; margin-bottom: 8px; color: var(--main); opacity: 0.85; }
-        body.dark .meta { color: var(--light); }
-        
+        .article-header h1 { font-size: 34px; color: var(--gold) !important; margin: 0 0 20px 0; font-weight: 800; line-height: 1.3; }
+        .meta-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 15px; font-size: 16px; color: var(--main); opacity: 0.85; }
+        body.dark .meta-group { color: var(--light); }
         .meta-material { font-weight: 700; color: var(--gold); margin: 15px 0; font-size: 18px; }
-        
+        #hall { font-weight: 700; color: var(--main); margin-top: 15px; font-size: 18px; }
+        body.dark #hall { color: var(--accent); }
         .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
         body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
 
+        /* شاشات الديسكتوب (هنا بيظهر السايدبار الثابت) */
+        @media (min-width: 1000px) {
+            .container {
+                max-width: 1200px; /* تعريض الصفحة عشان تاخد العمودين */
+                display: flex;
+                align-items: flex-start;
+                gap: 50px;
+            }
+            body.lang-ar .container { flex-direction: row-reverse; } /* السايدبار يمين */
+            body.lang-en .container { flex-direction: row; } /* السايدبار شمال */
+
+            .article-header {
+                width: 350px;
+                flex-shrink: 0;
+                position: sticky;
+                top: 100px; /* يفضل ثابت وإنت بتنزل */
+                text-align: inherit;
+            }
+            body.lang-ar .article-header { text-align: right; }
+            body.lang-en .article-header { text-align: left; }
+            
+            .article-header.has-cover { margin-top: -100px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+            body.dark .article-header.has-cover { box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+
+            .meta-group { flex-direction: column; gap: 5px; align-items: flex-start; }
+            body.lang-ar .meta-group { align-items: flex-end; }
+
+            .article-content {
+                flex-grow: 1;
+                min-width: 0;
+            }
+        }
+
+        /* ========================================== */
+        /* محتوى المقال (الصور والفيديو والنصوص) */
+        /* ========================================== */
         figure { margin: 40px 0; padding: 0; display: block; width: 100%; text-align: center; }
         figure img { 
-            max-width: 100%; height: auto; max-height: 60vh; object-fit: contain; 
+            max-width: 100%; height: auto; max-height: 65vh; object-fit: contain; 
             border-radius: 4px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); 
             cursor: zoom-in; transition: transform 0.3s;
         }
@@ -118,11 +158,6 @@
         body.lang-ar figcaption { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
         body.lang-en figcaption { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
 
-        #hall { font-weight: 700; color: var(--main); margin-bottom: 15px; font-size: 18px; }
-        body.dark #hall { color: var(--accent); }
-        body.lang-en #hall { text-align: left; direction: ltr; }
-        body.lang-ar #hall { text-align: right; direction: rtl; }
-        
         .article-body p { 
             font-size: 20px; line-height: 2.1; margin-bottom: 30px; 
             color: #222; text-align: justify;
@@ -140,12 +175,15 @@
         .inline-video { margin-bottom: 0 !important; border-radius: 4px !important; }
 
         .main-figure { width: 100%; margin: 0 0 30px 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        .viewer { width: 100%; max-height: 60vh; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; background: transparent; }
-        .viewer img { max-width: 100%; max-height: 60vh; object-fit: contain; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 4px; transition: opacity 0.4s ease; }
+        .viewer { width: 100%; max-height: 65vh; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; background: transparent; }
+        .viewer img { max-width: 100%; max-height: 65vh; object-fit: contain; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 4px; transition: opacity 0.4s ease; }
         body.dark .viewer img { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .photo-credit { display: block !important; margin-top: 15px; font-size: 13px; color: #666; text-align: center; font-style: italic; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; width: 80%; }
         body.dark .photo-credit { color: #aaa; border-bottom: 1px solid rgba(255,255,255,0.1); }
 
+        /* ========================================== */
+        /* شريط الكنترولز */
+        /* ========================================== */
         .controls { 
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
             background: rgba(10, 30, 35, 0.96) !important; backdrop-filter: blur(15px);
@@ -207,7 +245,7 @@
         </a>
         <div class="header-title" id="headerTitle">من حياة التحفة<br>From the Life of an Artefact</div>
         <a href="https://nd-f.github.io/QR/">
-            <img src="images/logo-nadim.png" class="logo" id="headerNadimLogo">
+            <img src="images/logo-nadim.png" class="logo">
         </a>
     </div>
 </header>
@@ -217,6 +255,7 @@
 </div>
 
 <div class="container" id="mainContainer">
+    
     <div class="article-header" id="articleHeader">
         <h1 id="title"></h1>
         <div class="meta-group">
@@ -225,16 +264,17 @@
             <div class="meta-item" id="dim"></div>
         </div>
         <div class="meta-material" id="material"></div>
-        <div class="meta-inv" id="inv"></div>
+        <div id="hall"></div> <div class="meta-inv" id="inv"></div>
     </div>
     
-    <div class="video-container" id="videoContainer"></div>
+    <div class="article-content">
+        <div class="video-container" id="videoContainer"></div>
 
-    <div id="heroSection"></div>
+        <div id="heroSection"></div>
 
-    <div id="hall"></div>
+        <div class="article-body" id="articleBody"></div>
+    </div>
 
-    <div class="article-body" id="articleBody"></div>
 </div>
 
 <div class="controls">
@@ -335,41 +375,36 @@
         let articleHeader = document.getElementById("articleHeader");
         
         coverBanner.style.display = "none";
-        articleHeader.style.marginTop = "0";
-        articleHeader.style.boxShadow = "none";
+        articleHeader.classList.remove("has-cover");
 
         coverImg.src = "images/" + artwork.id + "_cover.webp";
         coverImg.onload = () => { 
             coverBanner.style.display = "block"; 
-            articleHeader.style.marginTop = "-50px"; 
-            articleHeader.style.boxShadow = "0 10px 30px rgba(0,0,0,0.05)";
+            articleHeader.classList.add("has-cover");
         };
         coverImg.onerror = () => {
             coverImg.src = "images/" + artwork.id + "_cover.jpg";
             coverImg.onload = () => { 
                 coverBanner.style.display = "block"; 
-                articleHeader.style.marginTop = "-50px";
-                articleHeader.style.boxShadow = "0 10px 30px rgba(0,0,0,0.05)";
+                articleHeader.classList.add("has-cover");
             };
             coverImg.onerror = () => {
                  coverImg.src = "images/" + artwork.id + "_cover.png";
                  coverImg.onload = () => { 
                      coverBanner.style.display = "block"; 
-                     articleHeader.style.marginTop = "-50px";
-                     articleHeader.style.boxShadow = "0 10px 30px rgba(0,0,0,0.05)";
+                     articleHeader.classList.add("has-cover");
                  };
                  coverImg.onerror = () => { 
                      coverBanner.style.display = "none"; 
-                     articleHeader.style.marginTop = "0";
-                     articleHeader.style.boxShadow = "none";
+                     articleHeader.classList.remove("has-cover");
                  }
             }
         };
 
         document.getElementById("title").innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "بدون عنوان";
-        document.getElementById("from").innerHTML = (ar ? artwork.from_ar : artwork.from_en) ? ((ar ? artwork.from_ar : artwork.from_en) + " | ") : "";
+        document.getElementById("from").innerHTML = (ar ? artwork.from_ar : artwork.from_en) ? ((ar ? artwork.from_ar : artwork.from_en)) : "";
         document.getElementById("date").innerHTML = (ar ? artwork.date_ar : artwork.date_en) || "";
-        document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) ? (" | " + (ar ? artwork.dimensions_ar : artwork.dimensions_en)) : "";
+        document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) ? ((ar ? artwork.dimensions_ar : artwork.dimensions_en)) : "";
         document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
         document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
         document.getElementById("inv").innerHTML = artwork.inventory_number ? (ar ? `رقم الجرد: ${artwork.inventory_number}` : `Inv. no. ${artwork.inventory_number}`) : "";
@@ -536,8 +571,6 @@
     function updateThemeIcon() { 
         let isDark = document.body.classList.contains("dark");
         document.getElementById("themeBtn").textContent = isDark ? "☀️" : "🌙"; 
-        const logoEl = document.getElementById("headerNadimLogo");
-        if (logoEl) logoEl.src = isDark ? "images/icon-nadim-light.svg" : "images/icon-nadim.svg";
     }
     
     function share() { 
