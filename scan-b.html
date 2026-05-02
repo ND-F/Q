@@ -45,9 +45,13 @@
         #museumHeader.header-small .logo { height: 40px !important; transition: height 0.3s ease; }
         #museumHeader.header-small .header-title { font-size: 14px !important; transition: font-size 0.3s ease; }
         
+        /* التعديل: اللوجوهات بتقلب أبيض في الدارك مود عشان تبان */
+        body.dark #museumHeader .logo-row img { filter: brightness(0) invert(1); }
+        
         .logo-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; direction: rtl !important; }
         .logo { height: 70px; width: auto; cursor: pointer; transition: height 0.3s ease; }
         .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; transition: font-size 0.3s ease; line-height: 1.4; }
+        body.dark .header-title { color: var(--light) !important; }
 
         @media (max-width: 800px) {
             #museumHeader { padding: 5px 10px; }
@@ -65,9 +69,7 @@
             overflow: hidden; position: relative; display: none;
             background: var(--main);
         }
-        .cover-banner img {
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.9;
-        }
+        .cover-banner img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
 
         .container { 
             max-width: 760px; 
@@ -150,7 +152,6 @@
         .viewer img { max-width: 100%; max-height: 60vh; object-fit: contain; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 4px; transition: opacity 0.4s ease; }
         body.dark .viewer img { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         
-        /* تعديل الكريديت للصورة الأولى */
         .photo-credit { 
             display: block !important; margin-top: 15px; font-size: 13px; color: #666; 
             font-style: italic; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; width: 100%; 
@@ -192,7 +193,6 @@
         body.dark #modalClose { color: white; }
 
         footer { display: block; width: 100%; clear: both; text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
-
     </style>
 </head>
 
@@ -342,10 +342,46 @@
         document.documentElement.dir = ar ? "rtl" : "ltr";
         document.body.className = (ar ? "lang-ar" : "lang-en") + (document.body.classList.contains("dark") ? " dark" : "");
         
+        let coverBanner = document.getElementById("coverBanner");
+        let coverImg = document.getElementById("coverImage");
+        let articleHeader = document.getElementById("articleHeader");
+        
+        coverBanner.style.display = "none";
+        articleHeader.style.marginTop = "0";
+        articleHeader.style.boxShadow = "none";
+
+        coverImg.src = "images/" + artwork.id + "_cover.webp";
+        coverImg.onload = () => { 
+            coverBanner.style.display = "block"; 
+            articleHeader.style.marginTop = "-50px"; 
+            articleHeader.style.boxShadow = "0 10px 30px rgba(0,0,0,0.05)";
+        };
+        coverImg.onerror = () => {
+            coverImg.src = "images/" + artwork.id + "_cover.jpg";
+            coverImg.onload = () => { 
+                coverBanner.style.display = "block"; 
+                articleHeader.style.marginTop = "-50px";
+                articleHeader.style.boxShadow = "0 10px 30px rgba(0,0,0,0.05)";
+            };
+            coverImg.onerror = () => {
+                 coverImg.src = "images/" + artwork.id + "_cover.png";
+                 coverImg.onload = () => { 
+                     coverBanner.style.display = "block"; 
+                     articleHeader.style.marginTop = "-50px";
+                     articleHeader.style.boxShadow = "0 10px 30px rgba(0,0,0,0.05)";
+                 };
+                 coverImg.onerror = () => { 
+                     coverBanner.style.display = "none"; 
+                     articleHeader.style.marginTop = "0";
+                     articleHeader.style.boxShadow = "none";
+                 }
+            }
+        };
+
         document.getElementById("title").innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "بدون عنوان";
-        document.getElementById("from").innerHTML = (ar ? artwork.from_ar : artwork.from_en) ? ((ar ? artwork.from_ar : artwork.from_en) + " | ") : "";
+        document.getElementById("from").innerHTML = (ar ? artwork.from_ar : artwork.from_en) ? ((ar ? artwork.from_ar : artwork.from_en)) : "";
         document.getElementById("date").innerHTML = (ar ? artwork.date_ar : artwork.date_en) || "";
-        document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) ? (" | " + (ar ? artwork.dimensions_ar : artwork.dimensions_en)) : "";
+        document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) ? ((ar ? artwork.dimensions_ar : artwork.dimensions_en)) : "";
         document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
         document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
         document.getElementById("inv").innerHTML = artwork.inventory_number || "";
