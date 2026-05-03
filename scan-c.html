@@ -32,6 +32,7 @@
             background: var(--light); color: var(--main); 
             transition: background 0.4s ease, color 0.4s ease; overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            padding-top: 100px; /* التعديل هنا: إضافة مساحة علوية تساوي ارتفاع الهيدر تقريباً */
         }
         body.dark { background: var(--main); color: var(--light); }
     
@@ -39,7 +40,8 @@
         /* الهيدر المطور (مفرود ومتوازن) */
         /* ========================================== */
         #museumHeader { 
-            position: sticky; top: 0; background: #EAE8D8 !important; 
+            position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; /* التعديل هنا: تحويله لـ fixed وضبط العرض */
+            background: #EAE8D8 !important; 
             padding: 10px 40px; display: flex; flex-direction: column; 
             align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
             border-radius: 0; transition: all 0.3s ease;
@@ -67,6 +69,7 @@
         }
 
         @media (max-width: 800px) {
+            body { padding-top: 66px; } /* التعديل هنا: تقليل المساحة لتناسب هيدر الموبايل */  
             #museumHeader { padding: 8px 15px; }
             .logo { height: 50px; } 
             .header-title { font-size: 16px; margin: 0 10px; } 
