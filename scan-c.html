@@ -462,7 +462,7 @@
     async function load() {
         try {
             updateThemeIcon();
-            const res = await fetch("data/artworks.json?t=" + new Date().getTime());
+            const res = await fetch("data/artworks.json", { cache: "default" });
             allArtworks = await res.json();
             let id = new URLSearchParams(location.search).get("id");
             if (!id) {
@@ -499,11 +499,18 @@
 
         renderArticle();
         updateNavButtons();
-        
-        setTimeout(() => { 
-            document.getElementById('mainContainer').classList.add('ready'); 
-            triggerMobilePeek();
-        }, 50);
+        document.getElementById('mainContainer').classList.add('ready');
+
+        if (window.innerWidth < 1000) {
+            const firstImg = document.querySelector('#heroSection img');
+            if (firstImg && !firstImg.complete) {
+                const onLoad = () => { triggerMobilePeek(); firstImg.removeEventListener('load', onLoad); };
+                firstImg.addEventListener('load', onLoad);
+                setTimeout(() => { firstImg.removeEventListener('load', onLoad); triggerMobilePeek(); }, 2000);
+            } else {
+                setTimeout(triggerMobilePeek, 300);
+            }
+        }
     }
 
     function renderArticle() {
