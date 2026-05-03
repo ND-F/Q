@@ -53,8 +53,9 @@
         
         .logo-row { 
             display: flex; align-items: center; 
-            justify-content: space-between; /* ده اللي هيساوي المسافات ويحط العنوان في النص بالظبط */
-            width: 100%; max-width: 1300px; /* لضمان عدم تباعد اللوجوهات بزيادة في الشاشات الضخمة */
+            justify-content: center; /* عشان نلمهم في النص */
+            gap: 50px; /* دي المسافة الثابتة والشيك بين اللوجوهات والعنوان في الديسكتوب */
+            width: 100%; max-width: 900px; /* لمينا العرض الأقصى عشان ميفردش بزيادة */
             direction: rtl !important; 
         }
         .logo { height: 80px; width: auto; cursor: pointer; transition: all 0.3s ease; }
@@ -63,16 +64,18 @@
         .header-title { 
             font-size: 28px; /* تم تكبير الخط */
             font-weight: 800; text-align: center; 
-            color: var(--main) !important; flex-grow: 1; 
+            color: var(--main) !important; 
+            /* شلنا flex-grow عشان ميزقش اللوجوهات لبره */
             line-height: 1.2; transition: all 0.3s ease; 
-            margin: 0 20px;
+            margin: 0;
         }
 
         @media (max-width: 800px) {
             body { padding-top: 66px; } /* التعديل هنا: تقليل المساحة لتناسب هيدر الموبايل */  
             #museumHeader { padding: 8px 15px; }
             .logo { height: 50px; } 
-            .header-title { font-size: 16px; margin: 0 10px; } 
+            .logo-row { gap: 12px; } /* مسافة صغيرة تناسب شاشة الموبايل */
+            .header-title { font-size: 16px; margin: 0; } 
             #museumHeader.header-small .logo { height: 35px !important; } 
             #museumHeader.header-small .header-title { font-size: 13px !important; } 
         }
