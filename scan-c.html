@@ -25,7 +25,7 @@
     </script>
 
     <style>
-        :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; --accent: #ADCAC9; }
+        :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; --accent: #ADCAC9; --darkred: #4A121C; }
         
         body { 
             margin: 0; font-family: 'Tajawal', serif; 
@@ -52,25 +52,39 @@
         #museumHeader.header-small .header-title { font-size: 18px !important; }
         
         .logo-row { 
-            display: flex; align-items: center; 
-            justify-content: space-between; /* ده اللي هيساوي المسافات ويحط العنوان في النص بالظبط */
-            width: 100%; max-width: 1300px; /* لضمان عدم تباعد اللوجوهات بزيادة في الشاشات الضخمة */
+            display: flex; align-items: center; justify-content: space-between; 
+            width: 100%; 
+            max-width: 800px; /* ده اللي بيكبر المسافة: لو عايزهم يبعدوا أكتر خليه 1200px أو 1300px */
+            margin: 0 auto; /* بيوسطن الهيدر بالكامل في الشاشات الكبيرة */
             direction: rtl !important; 
         }
+        
+        /* السحر هنا: بندي اللوجوهات يمين وشمال نفس المساحة بالظبط، فالنص بيتسمر في النص وميتحركش ملي مع تغيير اللغة */
+        .logo-row > a {
+            flex: 1; 
+            display: flex;
+        }
+        /* بنخلي لوجو المتحف يلزق في اليمين */
+        .logo-row > a:first-child { justify-content: flex-start; }
+        /* بنخلي لوجو نديم يلزق في الشمال */
+        .logo-row > a:last-child { justify-content: flex-end; }
+
         .logo { height: 80px; width: auto; cursor: pointer; transition: all 0.3s ease; }
         
         /* تكبير الخط وتظبيطه */
         .header-title { 
-            font-size: 28px; /* تم تكبير الخط */
+            font-size: 28px; 
             font-weight: 800; text-align: center; 
-            color: var(--main) !important; flex-grow: 1; 
+            color: var(--darkred) !important; 
             line-height: 1.2; transition: all 0.3s ease; 
-            margin: 0 20px;
+            margin: 0 20px; /* مسافة أمان حول الكلمة */
+            flex: 0 0 auto; /* بيمنع النص يفرش ويزق اللوجوهات */
+            min-width: 250px; /* ضمان مساحة ثابتة للنص لمنع اهتزاز اللوجوهات */
         }
 
         @media (max-width: 800px) {
-            body { padding-top: 66px; } /* التعديل هنا: تقليل المساحة لتناسب هيدر الموبايل */  
             #museumHeader { padding: 8px 15px; }
+            .logo-row { max-width: 100%; }
             .logo { height: 50px; } 
             .header-title { font-size: 16px; margin: 0 10px; } 
             #museumHeader.header-small .logo { height: 35px !important; } 
@@ -155,7 +169,7 @@
             display: none;
         }
         
-        .article-header h1 { font-size: 32px; color: var(--gold) !important; margin: 0 0 10px 0; font-weight: 800; line-height: 1.4; }
+        .article-header h1 { font-size: 32px; color: var(--darkred) !important; margin: 0 0 10px 0; font-weight: 800; line-height: 1.4; }
         .title-separator { border: none; border-top: 2px solid rgba(225, 169, 62, 0.5); width: 40px; margin: 0 0 20px 0; }
         body.lang-ar .title-separator { margin-left: auto; margin-right: 0; }
         body.lang-en .title-separator { margin-left: 0; margin-right: auto; }
@@ -163,7 +177,7 @@
         .meta-group { display: flex; flex-direction: column; gap: 12px; font-size: 16px; color: var(--main); opacity: 0.9; line-height: 1.6; }
         body.dark .meta-group { color: var(--light); }
         .meta-item { display: block; }
-        .meta-material { font-weight: 700; color: var(--gold); margin-top: 5px; font-size: 18px; }
+        .meta-material { font-weight: 700; color: var(--darkred); margin-top: 5px; font-size: 18px; }
         #hall { font-weight: 700; color: var(--main); font-size: 18px; margin-top: 5px; }
         body.dark #hall { color: var(--accent); }
         .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
@@ -207,14 +221,20 @@
         }
 
         .image-pair-container { margin: 40px 0; width: 100%; text-align: center; display: block; }
-        .image-pair-wrapper { display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap; width: 100%; background: rgba(6, 68, 76, 0.06); border-radius: 8px; padding: 12px; box-sizing: border-box; }
+        .image-pair-wrapper { display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap; width: 100%; }
         
         .image-pair-wrapper img { 
             width: auto; max-width: 100%; height: auto; max-height: 65vh; object-fit: contain; 
-            border-radius: 4px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); 
-            cursor: zoom-in; transition: transform 0.3s;
+            border-radius: 4px; 
+            /* أغمق سنة (0.2) ومنتشر أكتر (40px) عشان يبان مطفي */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); 
+            cursor: zoom-in; transition: transform 0.3s, box-shadow 0.3s;
         }
-        body.dark .image-pair-wrapper img { box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        body.dark .image-pair-wrapper img { 
+            /* أثقل ومطفي تماماً للدارك مود */
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.65); 
+            border: none;
+        }
         .image-pair-wrapper img:hover { transform: scale(1.02); }
         
         @media (min-width: 600px) {
@@ -244,10 +264,18 @@
         .inline-video { margin-bottom: 0 !important; border-radius: 4px !important; }
 
         .main-figure { width: 100%; margin: 0 0 30px 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        .viewer { width: 100%; max-height: 65vh; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; background: rgba(6, 68, 76, 0.06); border-radius: 8px; padding: 12px; }
-        .viewer img { max-width: 100%; max-height: 65vh; object-fit: contain; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 4px; transition: opacity 0.4s ease; }
-        body.dark .viewer img { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .viewer { width: 100%; max-height: 65vh; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; background: transparent; }
+        .viewer img { 
+            max-width: 100%; max-height: 65vh; object-fit: contain; 
+            /* ظل أعمق (0.22) للصورة الرئيسية */
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22); 
+            border-radius: 4px; transition: opacity 0.4s ease; 
+        }
+        body.dark .viewer img { 
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7); 
+        }
 
+        
         .controls { 
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
             background: rgba(10, 30, 35, 0.96) !important; backdrop-filter: blur(15px);
@@ -659,10 +687,24 @@
         return fig;
     }
 
-    function createInlineVideo(url, idx) {
-        let fig = document.createElement("figure"); let vWrap = document.createElement("div"); vWrap.className = "video-container inline-video"; vWrap.style.display = "block"; vWrap.style.marginBottom = "15px"; vWrap.innerHTML = `<iframe width="100%" height="100%" src="${url}" frameborder="0" allowfullscreen></iframe>`; fig.appendChild(vWrap);
+        function createInlineVideo(url, idx) {
+        let fig = document.createElement("figure"); 
+        fig.className = "image-pair-container"; 
+
+        let vWrap = document.createElement("div"); 
+        vWrap.className = "video-container inline-video"; 
+        vWrap.style.display = "block"; 
+        vWrap.style.marginBottom = "0"; 
+        vWrap.innerHTML = `<iframe width="100%" height="100%" src="${url}" frameborder="0" allowfullscreen></iframe>`; 
+        fig.appendChild(vWrap);
+
         let infoStr = (artwork[`info_${lang}${idx + 1}`] || "").trim();
-        if (infoStr) { let cap = document.createElement("figcaption"); cap.className = "photo-credit"; cap.innerHTML = infoStr; fig.appendChild(cap); }
+        if (infoStr) { 
+            let cap = document.createElement("figcaption"); 
+            cap.className = "photo-credit"; 
+            cap.innerHTML = infoStr; 
+            fig.appendChild(cap); 
+        }
         return fig;
     }
 
