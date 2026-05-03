@@ -52,30 +52,40 @@
         #museumHeader.header-small .header-title { font-size: 18px !important; }
         
         .logo-row { 
-            display: flex; align-items: center; 
-            justify-content: center; /* عشان نلمهم في النص */
-            gap: 50px; /* دي المسافة الثابتة والشيك بين اللوجوهات والعنوان في الديسكتوب */
-            width: 100%; max-width: 900px; /* لمينا العرض الأقصى عشان ميفردش بزيادة */
+            display: flex; align-items: center; justify-content: space-between; 
+            width: 100%; 
+            max-width: 1100px; /* ده اللي بيكبر المسافة: لو عايزهم يبعدوا أكتر خليه 1200px أو 1300px */
+            margin: 0 auto; /* بيوسطن الهيدر بالكامل في الشاشات الكبيرة */
             direction: rtl !important; 
         }
+        
+        /* السحر هنا: بندي اللوجوهات يمين وشمال نفس المساحة بالظبط، فالنص بيتسمر في النص وميتحركش ملي مع تغيير اللغة */
+        .logo-row > a {
+            flex: 1; 
+            display: flex;
+        }
+        /* بنخلي لوجو المتحف يلزق في اليمين */
+        .logo-row > a:first-child { justify-content: flex-start; }
+        /* بنخلي لوجو نديم يلزق في الشمال */
+        .logo-row > a:last-child { justify-content: flex-end; }
+
         .logo { height: 80px; width: auto; cursor: pointer; transition: all 0.3s ease; }
         
         /* تكبير الخط وتظبيطه */
         .header-title { 
-            font-size: 28px; /* تم تكبير الخط */
+            font-size: 28px; 
             font-weight: 800; text-align: center; 
             color: var(--main) !important; 
-            /* شلنا flex-grow عشان ميزقش اللوجوهات لبره */
             line-height: 1.2; transition: all 0.3s ease; 
-            margin: 0;
+            margin: 0 30px; /* مسافة أمان حول الكلمة */
+            flex: 0 0 auto; /* بيمنع النص يفرش ويزق اللوجوهات */
         }
 
         @media (max-width: 800px) {
-            body { padding-top: 66px; } /* التعديل هنا: تقليل المساحة لتناسب هيدر الموبايل */  
             #museumHeader { padding: 8px 15px; }
+            .logo-row { max-width: 100%; }
             .logo { height: 50px; } 
-            .logo-row { gap: 12px; } /* مسافة صغيرة تناسب شاشة الموبايل */
-            .header-title { font-size: 16px; margin: 0; } 
+            .header-title { font-size: 16px; margin: 0 10px; } 
             #museumHeader.header-small .logo { height: 35px !important; } 
             #museumHeader.header-small .header-title { font-size: 13px !important; } 
         }
