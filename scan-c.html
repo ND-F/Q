@@ -35,60 +35,82 @@
             padding-top: 100px; /* التعديل هنا: إضافة مساحة علوية تساوي ارتفاع الهيدر تقريباً */
         }
         body.dark { background: var(--main); color: var(--light); }
-    
+      
         /* ========================================== */
-        /* الهيدر المطور (مفرود ومتوازن) */
+        /* الهيدر المطور (نقش، خط ذهبي، وتوزيع ذكي) */
         /* ========================================== */
         #museumHeader { 
-            position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; /* التعديل هنا: تحويله لـ fixed وضبط العرض */
+            position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; 
             background: #EAE8D8 !important; 
-            padding: 10px 40px; display: flex; flex-direction: column; 
+            padding: 15px 40px; display: flex; flex-direction: column; 
             align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
-            border-radius: 0; transition: all 0.3s ease;
+            border-bottom: 1px solid var(--gold); /* خط ذهبي نحيف يفصل الهيدر */
+            transition: all 0.3s ease;
+            overflow: hidden; /* عشان النقش ميكملش برا الهيدر */
         }
-        /* تصغير الهيدر عند السكرول مع الحفاظ على التوازن */
-        #museumHeader.header-small { padding: 5px 40px !important; }
-        #museumHeader.header-small .logo { height: 45px !important; }
-        #museumHeader.header-small .header-title { font-size: 18px !important; }
-        
-        .logo-row { 
+
+        /* نقش إسلامي خفيف جداً (Watermark) */
+        .header-pattern {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            /* نقش هندسي بشفافية 3% فقط ليكون باهت كأنه خامة ورقية */
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234A121C' fill-opacity='0.03'%3E%3Cpath d='M30 0l14.5 14.5L60 30 44.5 44.5 30 60 15.5 44.5 0 30 15.5 15.5z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none; z-index: 0;
+        }
+
+        .header-inner {
+            position: relative; z-index: 1;
             display: flex; align-items: center; justify-content: space-between; 
-            width: 100%; 
-            max-width: 800px; /* ده اللي بيكبر المسافة: لو عايزهم يبعدوا أكتر خليه 1200px أو 1300px */
-            margin: 0 auto; /* بيوسطن الهيدر بالكامل في الشاشات الكبيرة */
-            direction: rtl !important; 
+            width: 100%; max-width: 1200px; margin: 0 auto;
         }
-        
-        /* السحر هنا: بندي اللوجوهات يمين وشمال نفس المساحة بالظبط، فالنص بيتسمر في النص وميتحركش ملي مع تغيير اللغة */
-        .logo-row > a {
-            flex: 1; 
-            display: flex;
+        /* تثبيت اللوجوهات يسار والعنوان يمين في النسخة الإنجليزية */
+        @media (min-width: 801px) {
+            body.lang-en .header-inner {
+                flex-direction: row-reverse;
+            }
+            body.lang-en .header-title {
+                text-align: right;
+            }
         }
-        /* بنخلي لوجو المتحف يلزق في اليمين */
-        .logo-row > a:first-child { justify-content: flex-start; }
-        /* بنخلي لوجو نديم يلزق في الشمال */
-        .logo-row > a:last-child { justify-content: flex-end; }
 
-        .logo { height: 80px; width: auto; cursor: pointer; transition: all 0.3s ease; }
-        
-        /* تكبير الخط وتظبيطه */
+        /* تجميع اللوجوهات جنباً إلى جنب */
+        .logos-group {
+            display: flex; align-items: center; gap: 20px;
+        }
+
+        /* تقليل الحجم بنسبة 15% (من 80px إلى 65px) لزيادة المساحة البيضاء */
+        .logo { height: 65px; width: auto; cursor: pointer; transition: all 0.3s ease; }
+
         .header-title { 
-            font-size: 28px; 
-            font-weight: 800; text-align: center; 
-            color: var(--darkred) !important; 
-            line-height: 1.2; transition: all 0.3s ease; 
-            margin: 0 20px; /* مسافة أمان حول الكلمة */
-            flex: 0 0 auto; /* بيمنع النص يفرش ويزق اللوجوهات */
-            min-width: 250px; /* ضمان مساحة ثابتة للنص لمنع اهتزاز اللوجوهات */
+            font-size: 28px; font-weight: 800;
+            color: var(--darkred) !important; line-height: 1.2; 
+            transition: all 0.3s ease; margin: 0;
         }
 
+        /* حالة السكرول (تصغير هادئ وهما في نفس السطر) */
+        #museumHeader.header-small { padding: 8px 40px !important; }
+        #museumHeader.header-small .logo { height: 40px !important; }
+        #museumHeader.header-small .header-title { font-size: 22px !important; }
+
+        /* شاشات الموبايل */
         @media (max-width: 800px) {
-            #museumHeader { padding: 8px 15px; }
-            .logo-row { max-width: 100%; }
-            .logo { height: 50px; } 
-            .header-title { font-size: 16px; margin: 0 10px; } 
-            #museumHeader.header-small .logo { height: 35px !important; } 
-            #museumHeader.header-small .header-title { font-size: 13px !important; } 
+            #museumHeader { padding: 45px 15px 10px; } /* مساحة علوية عشان اللوجوهات */
+            .header-inner { justify-content: center; }
+            .header-title { font-size: 20px; text-align: center; }
+            
+            /* فصل اللوجوهات لتصبح صغيرة في الزوايا العلوية */
+            .logos-group {
+                position: absolute; top: 12px; left: 15px; right: 15px; 
+                width: calc(100% - 30px);
+                justify-content: space-between; /* ده اللي بيرميهم في الزوايا */
+                direction: ltr;
+            }
+            .logo { height: 32px; }
+            
+            /* السكرول في الموبايل */
+            #museumHeader.header-small { padding: 35px 15px 8px !important; }
+            #museumHeader.header-small .logo { height: 24px !important; }
+            #museumHeader.header-small .logos-group { top: 8px; }
+            #museumHeader.header-small .header-title { font-size: 16px !important; }
         }
 
         .cover-banner {
@@ -359,10 +381,19 @@
 <div id="fullscreenModal"><div id="modalClose">×</div><div id="modalContent"><img id="modalImage"></div></div>
 
 <header id="museumHeader">
-    <div class="logo-row">
-        <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank"><img src="images/MIALOGO.png" class="logo"></a>
-        <div class="header-title" id="headerTitle">من حياة التحفة<br>From the Life of an Artefact</div>
-        <a href="https://nd-f.github.io/QR/"><img src="images/logo-nadim.png" class="logo"></a>
+    <div class="header-pattern"></div>
+    
+    <div class="header-inner">
+        <div class="header-title" id="headerTitle">من حياة التحفة</div>
+        
+        <div class="logos-group">
+            <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank">
+                <img src="images/MIALOGO.png" class="logo">
+            </a>
+            <a href="https://nd-f.github.io/QR/">
+                <img src="images/logo-nadim.png" class="logo">
+            </a>
+        </div>
     </div>
 </header>
 
