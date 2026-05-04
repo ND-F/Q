@@ -32,7 +32,7 @@
             background: var(--light); color: var(--main); 
             transition: background 0.4s ease, color 0.4s ease; overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            padding-top: 95px; /* تم التعديل لتطابق الهيدر وتلغي الفراغ */
+            padding-top: 95px; /* مقاس الهيدر في الديسكتوب */
         }
         body.dark { background: var(--main); color: var(--light); }
         
@@ -42,50 +42,45 @@
         /* ========================================== */
         body::before {
             content: "";
-            position: fixed; /* بنثبت النقش عشان المحتوى يسكرول فوقه بشياكة */
+            position: fixed; 
             top: 0; left: 0;
             width: 100vw; height: 100vh;
             
-            /* بنستدعي اللوجو الغامق للنسخة الفاتحة */
             background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2');
-            background-size: 80px 80px; /* كبرناه سِنة عن الهيدر عشان العين ترتاح في المساحات الكبيرة */
+            background-size: 80px 80px; 
             background-position: center;
             
-            opacity: 0.03; /* شفافية هادية جداً كأنه مطبوع على الورق */
-            pointer-events: none; /* مهم جداً عشان الماوس ميحسش بيه وتقدر تدوس على أي حاجة تحته */
-            z-index: -1; /* بنرميه ورا كل العناصر */
+            opacity: 0.03; 
+            pointer-events: none; 
+            z-index: -1; 
             transition: background-image 0.4s ease, opacity 0.4s ease;
         }
 
         body.dark::before {
-            /* بنستدعي اللوجو الفاتح للنسخة الغامقة */
             background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim-light.svg?v=2');
-            opacity: 0.02; /* الشفافية أقل في الدارك عشان اللون الفاتح بينور بسرعة */
+            opacity: 0.02; 
         }
         
        
         /* ========================================== */
-        /* الهيدر المطور (نقش، خط ذهبي، وتوزيع ذكي) */
+        /* الهيدر المطور */
         /* ========================================== */
         #museumHeader { 
             position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; 
             background: #EAE8D8 !important; 
             padding: 15px 40px; display: flex; flex-direction: column; 
             align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
-            border-bottom: 1px solid var(--gold); /* خط ذهبي نحيف يفصل الهيدر */
+            border-bottom: 1px solid var(--gold); 
             transition: all 0.3s ease;
-            overflow: hidden; /* عشان النقش ميكملش برا الهيدر */
+            overflow: hidden; 
         }
 
-        /* نقش العلامة المائية مبني على لوجو "نديم" (Monogram Pattern) */
-        /* نقش العلامة المائية - رصة منتظمة ونظيفة بدون أي تداخل */
         .header-pattern {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            /* بنستدعي اللوجو مرة واحدة بس */
             background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2');
-            background-size: 60px 60px; /* حجم معقول للوجو */
+            background-size: 60px 60px; 
             background-position: center; 
-            opacity: 0.04; /* شفافية هادية */
+            opacity: 0.04; 
             pointer-events: none; z-index: 0;
         }
 
@@ -95,30 +90,23 @@
             width: 100%; max-width: 1200px; margin: 0 auto;
         }
 
-        /* تجميع اللوجوهات جنباً إلى جنب */
         .logos-group {
             display: flex; align-items: center; gap: 20px;
+            flex-shrink: 0; /* يمنع الانكماش والركوب على العنوان */
         }
 
-        /* ========================================== */
-        /* ستايل اللوجو (مع منع البكسلة أثناء التكبير) */
-        /* ========================================== */
         .logo { 
             height: 65px; 
             width: auto; 
             cursor: pointer; 
-            /* دول أهم 3 سطور لمنع البكسلة والاهتزاز أثناء الحركة */
             backface-visibility: hidden;
             transform: translateZ(0);
             will-change: transform;
-            /* حركة مرنة وناعمة */
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease; 
         }
 
         .logo:hover {
-            /* بيكبر للأمام كأنه بينبض من مكانه بثبات تام */
             transform: translateZ(0) scale(1.08); 
-            /* ظل ناعم وغامق (مش توهج) بيدي إحساس بالبروز (3D) */
             filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.15)); 
         }
 
@@ -126,16 +114,18 @@
             font-size: 28px; font-weight: 800;
             color: var(--main) !important; line-height: 1.2; 
             transition: all 0.3s ease; margin: 0;
+            flex: 1 1 auto;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
 
-        /* حالة السكرول (تصغير هادئ وهما في نفس السطر) */
+        /* حالة السكرول للهيدر */
         #museumHeader.header-small { padding: 8px 40px !important; }
         #museumHeader.header-small .logo { height: 40px !important; }
         #museumHeader.header-small .header-title { font-size: 22px !important; }
 
-/* شاشات الموبايل - نفس ترتيب الديسكتوب بالظبط بس بحجم أصغر */
+        /* شاشات الموبايل */
         @media (max-width: 800px) {
-            body { padding-top: 60px; } /* تظبيط مسافة البودي للموبايل */
+            body { padding-top: 62px; } /* مسافة البودي للموبايل */
             
             #museumHeader { padding: 10px 15px; } 
             
@@ -144,53 +134,49 @@
                 flex-direction: row; 
                 align-items: center; 
                 justify-content: space-between; 
+                gap: 10px;
             }
             
             .header-title { 
                 font-size: 17px; 
                 text-align: right; 
                 margin: 0; 
-                flex: 1; /* عشان العنوان ياخد مساحته براحته */
+                flex: 1; 
             }
             
-            /* بنلغي الأماكن الغريبة للوجوهات ونرجعها جنب بعض */
             .logos-group {
-                position: relative; top: auto; left: auto; right: auto; width: auto;
-                display: flex; 
-                gap: 12px; 
+                position: static; width: auto;
+                display: flex; flex-direction: row; justify-content: flex-end;
+                gap: 10px; flex-shrink: 0;
             }
             
             .logo { height: 42px; }
             
-            /* السكرول في الموبايل */
             #museumHeader.header-small { padding: 6px 15px !important; }
             #museumHeader.header-small .logo { height: 32px !important; }
             #museumHeader.header-small .header-title { font-size: 14px !important; }
 
-            /* تظبيط حركة ومقاس الكافر في الموبايل */
+            /* مقاسات الكافر في الموبايل */
             .cover-banner { 
-                top: 60px; 
-                height: 220px; 
+                top: 62px !important; 
+                height: 250px !important; 
             }
             .cover-banner.cover-small { 
-                top: 44px; 
-                height: 45px; 
+                top: 44px !important; 
+                height: 50px !important; 
             }
             body.has-cover .container { 
-                margin-top: 240px; 
+                margin-top: 270px !important; 
             }
         }
 
         /* ========================================== */
-        /* تثبيت صورة الكافر وتصغيرها مع السكرول */
+        /* الكافر (Cover Banner) الثابت وتأثير السكرول */
         /* ========================================== */
         .cover-banner {
-            width: 100%; height: 380px; 
-            overflow: hidden; 
-            position: fixed; 
-            top: 95px; 
-            left: 0;
-            z-index: 990; 
+            width: 100%; height: 400px; 
+            overflow: hidden; position: fixed; 
+            top: 95px; left: 0; z-index: 990;
             display: none;
             background: transparent; margin: 0; padding: 0;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -215,9 +201,10 @@
             margin: 40px auto 100px; padding: 0 20px; 
             opacity: 0; transition: opacity 0.5s ease; position: relative;
         }
-        
+
+        /* دفع المحتوى للأسفل عند وجود صورة كافر */
         body.has-cover .container {
-            margin-top: 420px; 
+            margin-top: 440px; 
         }
         
         .container.ready { opacity: 1; }
@@ -280,7 +267,6 @@
         }
         
         .article-header h1 { font-size: 32px; color: var(--darkred) !important; margin: 0 0 10px 0; font-weight: 800; line-height: 1.4; }
-        /* التعديل: النبيتي يتحول لذهبي في الدارك مود فقط */
         body.dark .article-header h1 { color: var(--gold) !important; }
         .title-separator { border: none; border-top: 2px solid rgba(225, 169, 62, 0.5); width: 40px; margin: 0 0 20px 0; }
         body.lang-ar .title-separator { margin-left: auto; margin-right: 0; }
@@ -290,7 +276,6 @@
         body.dark .meta-group { color: var(--light); }
         .meta-item { display: block; }
         .meta-material { font-weight: 700; color: var(--darkred); margin-top: 5px; font-size: 18px; }
-        /* التعديل: يتحول لذهبي في الدارك مود */
         body.dark .meta-material { color: var(--gold) !important; }
         #hall { font-weight: 700; color: var(--main); font-size: 18px; margin-top: 5px; }
         body.dark #hall { color: var(--accent); }
@@ -376,7 +361,6 @@
             overflow: hidden; 
             position: relative; 
             display: none; 
-            /* التعديلات المطلوبة للحواف الذهبية والظل */
             border: 2px solid var(--gold); 
             box-shadow: 0 8px 30px rgba(0,0,0,0.5); 
         }
@@ -413,26 +397,19 @@
         .controls .nav-btn.disabled { opacity: 0.15; pointer-events: none; }
         .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3) !important; }
         
-        /* ========================================== */
-        /* شريط الكنترول (حركة نظيفة بدون توهج مزعج) */
-        /* ========================================== */
+        /* شريط الكنترول */
         .controls div:not(.sep) {
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            /* منع بكسلة الأيقونات وهي بتكبر */
             backface-visibility: hidden;
             transform: translateZ(0);
         }
 
         .controls div:not(.sep):hover {
-            /* بيكبر بنعومة للأمام */
             transform: translateZ(0) scale(1.15); 
-            /* لونه بيبقى ذهبي شيك */
             color: var(--gold) !important; 
-            /* ظل أسود خفيف جداً يبرزه لبره، بدون أي توهج أصفر */
             filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3)); 
         }
 
-        /* علشان أيقونة "اتصل بنا" تبرز بـ ظل طبيعي مش ملون */
         .controls div:not(.sep):hover img {
             filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3));
         }
