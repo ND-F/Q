@@ -117,6 +117,8 @@
             flex: 1 1 auto;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
+        body.lang-ar .header-title { text-align: right; }
+        body.lang-en .header-title { text-align: left; }
 
         /* حالة السكرول للهيدر */
         #museumHeader.header-small { padding: 8px 40px !important; }
@@ -139,7 +141,6 @@
             
             .header-title { 
                 font-size: 17px; 
-                text-align: right; 
                 margin: 0; 
                 flex: 1; 
             }
@@ -167,10 +168,10 @@
             }
             /* شد المحتوى لفوق في الموبايل */
             body.has-cover .container { 
-                margin-top: 300px !important; 
+                margin-top: 332px !important; 
             }
             body.has-cover.is-scrolled .container { 
-                margin-top: 124px !important; /* المحتوى بيطلع يقفل الفراغ */
+                margin-top: 114px !important; /* المحتوى بيطلع يقفل الفراغ */
             }
         }
 
@@ -178,7 +179,7 @@
         /* الكافر (Cover Banner) وتثبيت أبعاده بقوة */
         /* ========================================== */
         .cover-banner {
-            width: 100%; /* 100% لمنع الفراغات الجانبية وسكرول العرض */
+            width: 100vw; /* إجبار بعرض الشاشة بالكامل لمنع الفراغات الجانبية */
             height: 400px; /* تثبيت الارتفاع مهما كان حجم الصورة */
             overflow: hidden; position: fixed; 
             top: 95px; left: 0; z-index: 990;
@@ -211,12 +212,12 @@
 
         /* الحالة الافتراضية: الكافر كبير */
         body.has-cover .container {
-            margin-top: 480px; /* مساحة الهيدر + الكافر */
+            margin-top: 515px; /* مساحة الهيدر + الكافر + 20 بيكسل فراغ */
         }
         
         /* الحالة الجديدة: الكافر صغير (المحتوى هيتشفط لفوق) */
         body.has-cover.is-scrolled .container {
-            margin-top: 156px; /* مساحة الهيدر الصغير + الكافر الصغير */
+            margin-top: 136px; /* مساحة الهيدر الصغير + الكافر الصغير + 20 بيكسل فراغ */
         }
         
         .container.ready { opacity: 1; }
@@ -608,7 +609,7 @@
 
     window.addEventListener("scroll", () => { 
         let isScrolled = window.scrollY > 40;
-        document.body.classList.toggle("is-scrolled", isScrolled); // السطر اللي هيشد المحتوى لفوق
+        document.body.classList.toggle("is-scrolled", isScrolled); 
         document.getElementById("museumHeader").classList.toggle("header-small", isScrolled); 
         document.getElementById("coverBanner").classList.toggle("cover-small", isScrolled); 
         
@@ -698,7 +699,7 @@
         const ar = lang === "ar";
         document.documentElement.dir = ar ? "rtl" : "ltr";
         document.body.className = (ar ? "lang-ar" : "lang-en") + (document.body.classList.contains("dark") ? " dark" : "");
-        // السطر الجديد اللي هيغير عنوان الهيدر حسب اللغة
+        
         document.getElementById("headerTitle").innerHTML = ar ? "من حياة التحفة" : "From the Life of an Artefact";
         
         let coverBanner = document.getElementById("coverBanner");
