@@ -35,6 +35,34 @@
             padding-top: 100px; /* التعديل هنا: إضافة مساحة علوية تساوي ارتفاع الهيدر تقريباً */
         }
         body.dark { background: var(--main); color: var(--light); }
+        
+        
+        /* ========================================== */
+        /* نقش الخلفية لكامل الشاشة (اللايت والدارك) */
+        /* ========================================== */
+        body::before {
+            content: "";
+            position: fixed; /* بنثبت النقش عشان المحتوى يسكرول فوقه بشياكة */
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            
+            /* بنستدعي اللوجو الغامق للنسخة الفاتحة */
+            background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2');
+            background-size: 80px 80px; /* كبرناه سِنة عن الهيدر عشان العين ترتاح في المساحات الكبيرة */
+            background-position: center;
+            
+            opacity: 0.03; /* شفافية هادية جداً كأنه مطبوع على الورق */
+            pointer-events: none; /* مهم جداً عشان الماوس ميحسش بيه وتقدر تدوس على أي حاجة تحته */
+            z-index: -1; /* بنرميه ورا كل العناصر */
+            transition: background-image 0.4s ease, opacity 0.4s ease;
+        }
+
+        body.dark::before {
+            /* بنستدعي اللوجو الفاتح للنسخة الغامقة */
+            background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim-light.svg?v=2');
+            opacity: 0.02; /* الشفافية أقل في الدارك عشان اللون الفاتح بينور بسرعة */
+        }
+        
       
         /* ========================================== */
         /* الهيدر المطور (نقش، خط ذهبي، وتوزيع ذكي) */
