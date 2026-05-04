@@ -49,21 +49,22 @@
             overflow: hidden; /* عشان النقش ميكملش برا الهيدر */
         }
 
-        /* نقش العلامة المائية مبني على لوجو "نديم" (Monogram Pattern) */
+       /* نقش العلامة المائية مبني على لوجو "نديم" (Monogram Pattern) */
         .header-pattern {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             
-            /* بنستدعي لوجو نديم الأساسي ونكرره مرتين */
             background-image: 
                 url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2'), 
                 url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2');
             
-            background-size: 70px 70px; /* حجم اللوجو في النقش */
+            background-size: 60px 60px; /* صغرناه سنة علشان النقشة تبان أدق */
+            background-position: 0 0, 30px 30px; 
             
-            /* بنعمل إزاحة للصف الثاني عشان اللوجوهات تعشق في بعضها (زي خلية النحل) */
-            background-position: 0 0, 35px 35px; 
+            /* التعديل السحري هنا يا حج */
+            opacity: 0.02; /* شفافية 2% بس علشان يادوب العين تلمحه */
+            filter: grayscale(100%); /* نشيل منه أي لون عشان يبان كأنه ظل أو حفر خفيف */
+            mix-blend-mode: multiply; /* علشان يتشرب لون الخلفية الكريمي ويبان كأنه جزء منها */
             
-            opacity: 0.05; /* شفافية هادية جداً علشان يفضل مجرد إيحاء في الخلفية */
             pointer-events: none; z-index: 0;
         }
 
