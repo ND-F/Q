@@ -116,12 +116,11 @@
 
         /*Hover state for the logo*/
         .logo:hover {
-            /*Move up effect on hover*/
-            transform: translateY(-5px); 
-            /*Maintain full opacity on hover*/
+            /* بيكبر للأمام كأنه بينبض من مكانه بدون ما يترفع لفوق */
+            transform: scale(1.08); 
             opacity: 1; 
-            /*Maintain no shadows on hover*/
-            filter: none; 
+            /* ظل ناعم بيدي إحساس بالبروز (3D) */
+            filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.15)); 
         }
 
         .header-title { 
@@ -379,6 +378,30 @@
         .controls .nav-btn { color: var(--gold) !important; font-size: 28px; }
         .controls .nav-btn.disabled { opacity: 0.15; pointer-events: none; }
         .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3) !important; }
+        
+        /* ========================================== */
+        /* تأثيرات النبض والتوهج لأيقونات الكنترول */
+        /* ========================================== */
+        .controls div:not(.sep) {
+            /* حركة مرنة زي السوستة */
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            border-radius: 12px;
+            padding: 2px 5px; /* مساحة صغيرة عشان التوهج يبان براحته */
+        }
+
+        .controls div:not(.sep):hover {
+            /* بيكبر للأمام بنسبة 15% */
+            transform: scale(1.15); 
+            /* بيتحول للون الذهبي */
+            color: var(--gold) !important; 
+            /* بيعمل هالة (Glow) ذهبية زي المربعات اللي في الفيديو */
+            filter: drop-shadow(0 0 12px rgba(225, 169, 62, 0.8)); 
+        }
+
+        /* علشان أيقونة "اتصل بنا" عبارة عن صورة مش إيموجي، نديها ستايل خاص بيها تتوهج بس */
+        .controls div:not(.sep):hover img {
+            filter: drop-shadow(0 0 10px rgba(225, 169, 62, 0.9));
+        }
 
         .controls > div:not(.sep)::before {
             content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%;
