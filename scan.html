@@ -6,14 +6,14 @@
     
     <title>NADIM in Museum of Islamic Arts - نديم في متحف الفن الإسلامي</title>
     
-    <meta name="theme-color" content="#EAE8D8" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#06444C" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#EAE8D8" media="(prefers-color-scheme: light)">
     
     <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim-light.svg?v=2" media="(prefers-color-scheme: dark)">
     <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2" media="(prefers-color-scheme: light)">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim-light.svg?v=2">
     
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWD0WHS7EV"></script>
@@ -23,297 +23,153 @@
       gtag('js', new Date());
       gtag('config', 'G-RWD0WHS7EV');
     </script>
-
     <style>
-        :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; --accent: #ADCAC9; --darkred: #4A121C; }
+        :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; --accent: #ADCAC9; }
         
         body { 
-            margin: 0; font-family: 'Tajawal', serif; 
-            background: var(--light); color: var(--main); 
-            transition: background 0.4s ease, color 0.4s ease; overflow-x: hidden;
+            margin: 0; font-family: 'Tajawal', sans-serif; 
+            background: var(--main); color: var(--light); 
+            transition: background 0.4s ease; overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            padding-top: 100px; /* التعديل هنا: إضافة مساحة علوية تساوي ارتفاع الهيدر تقريباً */
         }
-        body.dark { background: var(--main); color: var(--light); }
-    
-        /* ========================================== */
-        /* الهيدر المطور (مفرود ومتوازن) */
-        /* ========================================== */
+        .light { background: var(--light) !important; color: var(--main) !important; }
+
         #museumHeader { 
-            position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; /* التعديل هنا: تحويله لـ fixed وضبط العرض */
-            background: #EAE8D8 !important; 
-            padding: 10px 40px; display: flex; flex-direction: column; 
+            position: sticky; top: 0; background: var(--light) !important; 
+            padding: 0px 20px; display: flex; flex-direction: column; 
             align-items: center; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
-            border-radius: 0; transition: all 0.3s ease;
+            border-radius: 0 0 20px 20px; transition: padding 0.3s ease;
         }
-        /* تصغير الهيدر عند السكرول مع الحفاظ على التوازن */
-        #museumHeader.header-small { padding: 5px 40px !important; }
-        #museumHeader.header-small .logo { height: 45px !important; }
-        #museumHeader.header-small .header-title { font-size: 18px !important; }
-        
-        .logo-row { 
-            display: flex; align-items: center; justify-content: space-between; 
-            width: 100%; 
-            max-width: 800px; /* ده اللي بيكبر المسافة: لو عايزهم يبعدوا أكتر خليه 1200px أو 1300px */
-            margin: 0 auto; /* بيوسطن الهيدر بالكامل في الشاشات الكبيرة */
-            direction: rtl !important; 
-        }
-        
-        /* السحر هنا: بندي اللوجوهات يمين وشمال نفس المساحة بالظبط، فالنص بيتسمر في النص وميتحركش ملي مع تغيير اللغة */
-        .logo-row > a {
-            flex: 1; 
-            display: flex;
-        }
-        /* بنخلي لوجو المتحف يلزق في اليمين */
-        .logo-row > a:first-child { justify-content: flex-start; }
-        /* بنخلي لوجو نديم يلزق في الشمال */
-        .logo-row > a:last-child { justify-content: flex-end; }
-
-        .logo { height: 80px; width: auto; cursor: pointer; transition: all 0.3s ease; }
-        
-        /* تكبير الخط وتظبيطه */
-        .header-title { 
-            font-size: 28px; 
-            font-weight: 800; text-align: center; 
-            color: var(--darkred) !important; 
-            line-height: 1.2; transition: all 0.3s ease; 
-            margin: 0 20px; /* مسافة أمان حول الكلمة */
-            flex: 0 0 auto; /* بيمنع النص يفرش ويزق اللوجوهات */
-            min-width: 250px; /* ضمان مساحة ثابتة للنص لمنع اهتزاز اللوجوهات */
-        }
-
-        @media (max-width: 800px) {
-            #museumHeader { padding: 8px 15px; }
-            .logo-row { max-width: 100%; }
-            .logo { height: 50px; } 
-            .header-title { font-size: 16px; margin: 0 10px; } 
-            #museumHeader.header-small .logo { height: 35px !important; } 
-            #museumHeader.header-small .header-title { font-size: 13px !important; } 
-        }
-
-        .cover-banner {
-            width: 100%; height: 35vh; min-height: 250px; 
-            overflow: hidden; position: relative; display: none;
-            background: transparent; /* مسحنا الخلفية الخضرا نهائياً */
-            margin: 0; padding: 0;
-        }
-        .cover-banner img { 
-            width: 100%; height: 100%; 
-            object-fit: cover !important; /* إجبار الصورة تتفرد وتملى الشاشة بالكامل */
-            object-position: center; /* توسيط الصورة */
-            display: block; 
-            opacity: 1; /* شلنا الشفافية عشان متسحبش أي لون من تحتها */
-        }
+        #museumHeader.header-small { padding: 5px 20px !important; }
+        #museumHeader.header-small .logo { height: 40px !important; transition: height 0.3s ease; }
+        #museumHeader.header-small .header-title { font-size: 14px !important; transition: font-size 0.3s ease; }
+        .logo-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; direction: rtl !important; }
+        .logo { height: 70px; width: auto; cursor: pointer; transition: height 0.3s ease; }
+        .header-title { font-size: 21px; font-weight: 700; text-align: center; color: var(--main) !important; transition: font-size 0.3s ease; }
 
         .container { 
-            max-width: 1200px; 
-            margin: 40px auto 100px; padding: 0 20px; 
-            opacity: 0; transition: opacity 0.5s ease; position: relative;
+            max-width: 1400px; margin: auto; padding: 20px; 
+            display: flex; flex-direction: column; 
+            opacity: 0; transition: opacity 0.5s ease; 
         }
         .container.ready { opacity: 1; }
 
-        .info-toggle-btn {
-            display: flex; position: fixed; top: 180px; 
-            right: 0; left: auto;
-            background: var(--gold); color: white; padding: 12px 15px;
-            border-radius: 15px 0 0 15px; z-index: 990; cursor: pointer;
-            box-shadow: -2px 2px 10px rgba(0,0,0,0.2); font-size: 20px;
-            transform-origin: right center;
-            transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        .video-container {
+            grid-area: video; position: relative; width: 100%; padding-bottom: 56.25%; 
+            height: 0; margin-bottom: 30px; border-radius: 15px; overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4); border: 2px solid var(--gold); 
+            display: none; 
         }
-        
-        .info-toggle-btn::before {
-            content: attr(data-tooltip); position: absolute; top: 50%; right: 120%; 
-            transform: translateY(-50%) translateX(10px); background: rgba(6, 68, 76, 0.98); color: var(--light); 
-            padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 700;
-            opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; font-family: 'Tajawal', sans-serif;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3); z-index: 1000;
-        }
-        
-        .info-toggle-btn:hover::before,
-        .info-toggle-btn.show-tooltip::before { 
-            opacity: 1; visibility: visible; transform: translateY(-50%) translateX(0); 
-        }
-
-        .info-toggle-btn.mini:not(.close) {
-            transform: scale(0.68);
-            opacity: 0.24;
-            background: rgba(225, 169, 62, 0.42);
-            box-shadow: -2px 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .info-toggle-btn.mini:not(.close):hover,
-        .info-toggle-btn.mini:not(.close):focus-within {
-            transform: scale(1);
-            opacity: 1;
-            background: var(--gold);
-        }
-
-        .info-toggle-btn.close {
-            background: rgba(6, 68, 76, 0.22);
-            color: rgba(255,255,255,0.92);
-            box-shadow: -2px 2px 10px rgba(0,0,0,0.12);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            z-index: 1002;
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        body.dark .info-toggle-btn.close {
-            background: rgba(234, 232, 216, 0.16);
-            color: var(--light);
-        }
-
-        .info-toggle-btn.close::before {
-            display: none;
-        }
-        
-        .article-header h1 { font-size: 32px; color: var(--darkred) !important; margin: 0 0 10px 0; font-weight: 800; line-height: 1.4; }
-        .title-separator { border: none; border-top: 2px solid rgba(225, 169, 62, 0.5); width: 40px; margin: 0 0 20px 0; }
-        body.lang-ar .title-separator { margin-left: auto; margin-right: 0; }
-        body.lang-en .title-separator { margin-left: 0; margin-right: auto; }
-
-        .meta-group { display: flex; flex-direction: column; gap: 12px; font-size: 16px; color: var(--main); opacity: 0.9; line-height: 1.6; }
-        body.dark .meta-group { color: var(--light); }
-        .meta-item { display: block; }
-        .meta-material { font-weight: 700; color: var(--darkred); margin-top: 5px; font-size: 18px; }
-        #hall { font-weight: 700; color: var(--main); font-size: 18px; margin-top: 5px; }
-        body.dark #hall { color: var(--accent); }
-        .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
-        body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
-
-        @media (min-width: 1000px) {
-            .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; } 
-            body.lang-ar .container { flex-direction: row; } 
-            body.lang-en .container { flex-direction: row-reverse; } 
-
-            .article-header {
-                width: 320px; flex-shrink: 0; position: sticky; top: 120px; text-align: inherit;
-                background: transparent !important; padding: 0 !important; margin-bottom: 0 !important; z-index: 10;
-                box-shadow: none; transition: none; left: auto !important; right: auto !important;
-                height: auto; overflow-y: visible; 
-            }
-            body.lang-ar .article-header { text-align: right; }
-            body.lang-en .article-header { text-align: left; }
-            
-            body.lang-ar .meta-group { align-items: flex-start; } 
-            .article-content { flex-grow: 1; min-width: 0; max-width: 800px; margin: 0 auto; } 
-            .info-toggle-btn { display: none !important; }
-        }
-
-        @media (max-width: 999px) {
-            .container { display: block; max-width: 800px; padding-top: 20px; }
-            
-            .article-header { 
-                position: fixed; top: 0; 
-                right: -100%; left: auto;
-                width: 80%; max-width: 350px; height: 100vh; overflow-y: auto;
-                background: var(--light); z-index: 999; 
-                padding: 100px 30px 40px; box-shadow: -5px 0 25px rgba(0,0,0,0.2);
-                transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
-            }
-            body.dark .article-header { background: var(--main); box-shadow: -5px 0 25px rgba(0,0,0,0.8); }
-            body.lang-ar .article-header { text-align: right; }
-            body.lang-en .article-header { text-align: left; }
-            .article-header.open { right: 0; }
-            .info-toggle-btn.hide { transform: scale(0); }
-        }
-
-        .image-pair-container { margin: 40px 0; width: 100%; text-align: center; display: block; }
-        .image-pair-wrapper { display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap; width: 100%; }
-        
-        .image-pair-wrapper img { 
-            width: auto; max-width: 100%; height: auto; max-height: 65vh; object-fit: contain; 
-            border-radius: 4px; box-shadow: none; border: none;
-            cursor: zoom-in; transition: transform 0.3s;
-        }
-        body.dark .image-pair-wrapper img { box-shadow: none; border: none; }
-        .image-pair-wrapper img:hover { transform: scale(1.02); }
-        
-        @media (min-width: 600px) {
-            .image-pair-wrapper.has-double img { max-width: calc(50% - 10px); }
-        }
-
-        figcaption { margin-top: 15px; font-size: 14px; color: #555; font-style: italic; opacity: 0.9; line-height: 1.5; }
-        body.dark figcaption { color: #aaa; }
-        body.lang-ar figcaption { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
-        body.lang-en figcaption { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
-        
-        .photo-credit { 
-            display: block !important; margin-top: 15px; font-size: 13px; color: #666; 
-            font-style: italic; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; width: 100%; 
-        }
-        body.dark .photo-credit { color: #aaa; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        body.lang-ar .photo-credit { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
-        body.lang-en .photo-credit { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
-
-        .article-body p { font-size: 20px; line-height: 2.1; margin-bottom: 30px; color: #222; text-align: justify; }
-        body.dark .article-body p { color: #e0e0e0; }
-        body.lang-en .article-body { direction: ltr; }
-        body.lang-ar .article-body { direction: rtl; }
-
-        .video-container { width: 100%; padding-bottom: 56.25%; height: 0; margin-bottom: 40px; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.15); display: none; position: relative; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        .inline-video { margin-bottom: 0 !important; border-radius: 4px !important; }
 
-        .main-figure { width: 100%; margin: 0 0 30px 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        .viewer { width: 100%; max-height: 65vh; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; background: transparent; }
-        .viewer img { 
-            max-width: 100%; max-height: 65vh; object-fit: contain; 
-            box-shadow: none; border: none;
-            border-radius: 4px; transition: opacity 0.4s ease; 
+        .viewer { 
+            grid-area: viewer; width: 100%; height: 50vh; position: relative; 
+            display: flex; align-items: center; justify-content: center; 
+            margin-bottom: 15px; overflow: hidden; cursor: pointer;
+            border-radius: 15px; background: rgba(255, 255, 255, 0.04); 
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: none; box-shadow: none; 
         }
-        body.dark .viewer img { box-shadow: none; border: none; }
 
+        .photo-credit { 
+            position: absolute; bottom: 0; left: 0; right: 0; 
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 60%, transparent 100%); 
+            color: white !important; padding: 45px 20px 15px; font-size: 13px; z-index: 10; 
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9); opacity: 0; visibility: hidden;
+            transition: all 0.4s ease; pointer-events: none; 
+        }
         
+        .viewer:hover .photo-credit, .viewer.info-active .photo-credit { opacity: 1 !important; visibility: visible !important; }
+        
+        .viewer img { 
+            max-width: 95%; max-height: 95%; object-fit: contain; 
+            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3)); opacity: 0; transition: opacity 0.3s;
+        }
+        .viewer.loaded img { opacity: 1; }
+
+        .thumbs { grid-area: thumb; display: flex; gap: 12px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
+        .thumbs img { 
+            width: 75px; height: 75px; object-fit: contain; border-radius: 15px; 
+            cursor: pointer; opacity: .4; background: rgba(255,255,255,0.05); 
+            border: 2px solid transparent; display: none; transition: 0.3s;
+        }
+        .thumbs img.active { border-color: var(--gold); opacity: 1; transform: scale(1.1); }
+
+        .info { grid-area: info; }
+        .info h1 { font-size: 26px; color: var(--gold); margin: 0 0 10px 0; }
+        .details { 
+            grid-area: details; margin-top: 25px; border-top: 1px solid rgba(225, 169, 62, 0.2); 
+            padding-top: 20px; line-height: 1.8; width: 100%; margin-left: auto; margin-right: auto; 
+        }
+
+        body.lang-en .info, body.lang-en .details { text-align: left !important; direction: ltr !important; }
+        body.lang-ar .info, body.lang-ar .details { text-align: right !important; direction: rtl !important; }
+
+        @media(min-width:1100px) {
+            .container:not(.video-only-layout) { 
+                display: grid; grid-template-columns: 350px 1fr 350px; 
+                grid-template-areas: "video video video" "thumb viewer info" "thumb details details"; 
+                gap: 50px; direction: ltr !important; 
+            }
+            .container:not(.video-only-layout) .viewer { height: 70vh; }
+            .container:not(.video-only-layout) .thumbs { flex-direction: column; position: sticky; top: 120px; margin-top: 30px; align-items: flex-end; }
+            .container:not(.video-only-layout) .info { margin-top: 30px; }
+            .container:not(.video-only-layout) .video-container { max-width: 800px; margin-left: auto; margin-right: auto; }
+        }
+
+        @media(min-width:1100px) {
+            .container.video-only-layout { display: flex !important; flex-direction: column; align-items: center; max-width: 800px; margin: 0 auto; }
+            .container.video-only-layout .video-container, .container.video-only-layout .info, .container.video-only-layout .details { width: 100%; margin-left: 0; margin-right: 0; }
+            .container.video-only-layout .video-container { margin-bottom: 0; }
+            .container.video-only-layout .info { margin-top: 15px; }
+        }
+
         .controls { 
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
-            background: rgba(10, 30, 35, 0.96) !important; backdrop-filter: blur(15px);
+            background: rgba(10, 30, 35, 0.96); backdrop-filter: blur(15px);
             padding: 12px 30px; border-radius: 50px; display: flex; align-items: center; gap: 25px; 
-            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid var(--gold) !important; 
-            direction: ltr !important; transition: transform 0.35s ease, opacity 0.35s ease, bottom 0.35s ease, background 0.35s ease, box-shadow 0.35s ease;
+            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid var(--gold); 
+            direction: ltr !important; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
         }
-        .controls div { font-size: 24px; cursor: pointer; color: white !important; transition: 0.2s; position: relative; } 
-        .controls .nav-btn { color: var(--gold) !important; font-size: 28px; }
+        .controls div { font-size: 24px; cursor: pointer; color: white; transition: 0.2s; position: relative; } 
+        .controls .nav-btn { color: var(--gold); font-size: 28px; }
         .controls .nav-btn.disabled { opacity: 0.15; pointer-events: none; }
-        .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3) !important; }
+        .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3); }
 
         .controls > div:not(.sep)::before {
             content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%;
             transform: translateX(-50%) translateY(10px); background: rgba(6, 68, 76, 0.98); color: var(--light); 
-            padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 700;
-            opacity: 0; visibility: hidden; transition: 0.3s; pointer-events: none; font-family: 'Tajawal', sans-serif;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            padding: 8px 15px; border-radius: 12px; font-size: 14px; font-weight: 700; white-space: nowrap; 
+            opacity: 0; visibility: hidden; transition: 0.3s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            pointer-events: none; z-index: 10000; 
         }
         .controls > div:not(.sep):hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
 
-        .controls.controls-mini {
-            transform: translateX(-50%) scale(0.58);
-            opacity: 0.16;
-            bottom: 10px;
-            background: rgba(10, 30, 35, 0.38) !important;
-            border-color: rgba(225, 169, 62, 0.22) !important;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        @media (max-width: 800px) {
+            .controls.controls-mini { transform: translateX(-50%) scale(0.75); opacity: 0.55; bottom: 15px; }
         }
 
-        .controls.controls-mini:hover,
-        .controls.controls-mini:focus-within {
-            transform: translateX(-50%) scale(1);
-            opacity: 1;
-            bottom: 25px;
-            background: rgba(10, 30, 35, 0.96) !important;
-            border-color: var(--gold) !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        }
-
-        #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255,255,255,0.98); z-index: 10001; }
-        body.dark #fullscreenModal { background: rgba(6, 68, 76, 0.98); }
+        #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--main); z-index: 10001; }
         #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; overflow: hidden; }
-        #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; cursor: grab; transform-origin: center center; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2)); }
-        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--main); cursor: pointer; z-index: 10002; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
-        body.dark #modalClose { color: white; }
+        #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; cursor: grab; transform-origin: center center; }
+        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--light); cursor: pointer; z-index: 10002; background: rgba(0,0,0,0.3); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
+
         footer { display: block; width: 100%; clear: both; text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
+
+        body.lang-ar .photo-credit { text-align: right !important; direction: rtl !important; }
+        body.lang-en .photo-credit { text-align: left !important; direction: ltr !important; }
+
+        body.light .viewer { background: rgba(0, 0, 0, 0.05); }
+
+        @media (max-width: 800px) {
+            #museumHeader { padding: 5px 10px; }
+            .logo { height: 45px; } 
+            .header-title { font-size: 14px; line-height: 1.3; } 
+            .logo-row { gap: 8px; }
+            #museumHeader.header-small { padding: 3px 10px !important; border-radius: 0 0 10px 10px; }
+            #museumHeader.header-small .logo { height: 25px !important; } 
+            #museumHeader.header-small .header-title { font-size: 10.5px !important; line-height: 1.1; } 
+        }
     </style>
 </head>
 
@@ -323,12 +179,16 @@
     (function() {
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const savedTheme = localStorage.getItem("nadim_theme");
-        if (savedTheme === "dark") document.body.classList.add("dark");
-        else if (savedTheme === "light") document.body.classList.remove("dark");
+        if (savedTheme === "light" || (!savedTheme && !prefersDark)) {
+            document.body.classList.add("light");
+        }
         
         const systemLang = navigator.language.startsWith("ar") ? "ar" : "en";
         const savedLang = localStorage.getItem("nadim_lang") || systemLang;
-        if (savedLang === "en") { document.body.classList.replace("lang-ar", "lang-en"); document.documentElement.dir = "ltr"; }
+        if (savedLang === "en") {
+            document.body.classList.replace("lang-ar", "lang-en");
+            document.documentElement.dir = "ltr";
+        }
     })();
 </script>
 
@@ -336,44 +196,48 @@
 
 <header id="museumHeader">
     <div class="logo-row">
-        <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank"><img src="images/MIALOGO.png" class="logo"></a>
-        <div class="header-title" id="headerTitle">من حياة التحفة<br>From the Life of an Artefact</div>
-        <a href="https://nd-f.github.io/QR/"><img src="images/logo-nadim.png" class="logo"></a>
+        <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank">
+            <img src="images/MIALOGO.png" class="logo">
+        </a>
+        <div class="header-title" id="headerTitle">من حياة التحفة<br>From the Life of an Artefact Exhibition</div>
+        <a href="https://nd-f.github.io/QR/">
+            <img src="images/logo-nadim.png" class="logo">
+        </a>
     </div>
 </header>
 
-<div id="coverBanner" class="cover-banner"><img id="coverImage" src="" alt=""></div>
-
-<div id="infoToggleBtn" class="info-toggle-btn" data-ar="معلومات القطعة" data-en="Piece Info"><i class="fas fa-info-circle"></i></div>
-
-<div class="container" id="mainContainer">
+<div class="container">
+    <div class="video-container" id="videoContainer"></div>
     
-    <aside class="article-header" id="articleHeader">
+    <div class="viewer" id="mainViewer">
+        <img id="mainImage" decoding="async">
+        <div class="photo-credit" id="photoCredit"></div>
+    </div>
+    
+    <div class="thumbs" id="thumbs"></div>
+    
+    <div class="info">
         <h1 id="title"></h1>
-        <hr class="title-separator">
-        <div class="meta-group">
-            <div class="meta-item" id="from"></div>
-            <div class="meta-item" id="date"></div>
-            <div class="meta-item" id="dim"></div>
-            <div class="meta-material" id="material"></div>
-            <div id="hall"></div> 
-            <div class="meta-inv" id="inv"></div>
-        </div>
-    </aside>
+        <div class="meta" id="from"></div>
+        <div class="meta" id="date"></div>
+        <div class="meta" id="material" style="font-weight: 600; color: var(--gold);"></div>
+        <div class="meta" id="dim"></div>
+        <br>
+        <div class="meta" id="inv" style="opacity: 0.7; font-size: 14px;"></div>
+    </div>
     
-    <main class="article-content">
-        <div class="video-container" id="videoContainer"></div>
-        <div id="heroSection"></div>
-        <div class="article-body" id="articleBody"></div>
-    </main>
-
+    <div class="details">
+        <div class="meta" id="hall" style="font-weight: 600; color: var(--accent); margin-bottom: 15px;"></div> 
+        <div id="desc"></div>
+    </div>
 </div>
 
 <div class="controls">
     <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
     <div class="sep"></div>
     <div onclick="toggleLang()" data-ar="اللغة" data-en="Language">🌐</div>
-    <div onclick="window.location.href='https://nd-f.github.io/QR/'" data-ar="اتصل بنا" data-en="Contact Us" style="display: flex; align-items: center; justify-content: center;"><img src="images/icon-nadim-light.png" style="width: 35px; height: 35px; object-fit: contain;"></div>
+    <div onclick="window.location.href='https://nd-f.github.io/QR/'" data-ar="اتصل بنا" data-en="Contact Us" style="display: flex; align-items: center; justify-content: center;">
+        <img src="images/icon-nadim-light.png" style="width: 35px; height: 35px; object-fit: contain;"> </div>
     <div onclick="toggleTheme()" id="themeBtn" data-ar="المظهر" data-en="Theme">☀️</div>
     <div onclick="share()" data-ar="مشاركة" data-en="Share">🔗</div>
     <div class="sep"></div>
@@ -384,363 +248,605 @@
 
 <script>
     const systemLang = navigator.language.startsWith("ar") ? "ar" : "en";
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     let lang = localStorage.getItem("nadim_lang") || systemLang;
-    let allArtworks = [], artwork;
-    let zoomStartTime = 0, isZoomTracked = false;
+    
+    let allArtworks = [], validImages = [], currentIdx = 0, artwork, infoTimer;
+    
+    let zoomStartTime = 0;
+    let isZoomTracked = false;
 
-    const modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
+    let currentVidSlot = -1;
+    let currentVidUrl = "";
+
+    const dom = {
+        inv: document.getElementById("inv"),
+        title: document.getElementById("title"),
+        from: document.getElementById("from"),
+        date: document.getElementById("date"),
+        dim: document.getElementById("dim"),
+        hall: document.getElementById("hall"),
+        material: document.getElementById("material"),
+        desc: document.getElementById("desc"),
+        videoContainer: document.getElementById("videoContainer")
+    };
+
+    const mainViewer = document.getElementById("mainViewer"), mainImage = document.getElementById("mainImage");
+    const photoCredit = document.getElementById("photoCredit"), modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
+
     let controlsTimer;
     const controlsEl = document.querySelector('.controls');
 
-    function expandControls() {
+    function resetControlsTimer() {
+        if(window.innerWidth > 800) return;
         controlsEl.classList.remove('controls-mini');
         clearTimeout(controlsTimer);
-    }
-
-    function resetControlsTimer() {
-        expandControls();
         controlsTimer = setTimeout(() => { controlsEl.classList.add('controls-mini'); }, 2500); 
     }
 
     window.addEventListener('scroll', resetControlsTimer, { passive: true });
     window.addEventListener('touchstart', resetControlsTimer, { passive: true });
-    controlsEl.addEventListener('mouseenter', expandControls);
-    controlsEl.addEventListener('mouseleave', resetControlsTimer);
-    controlsEl.addEventListener('touchstart', resetControlsTimer, { passive: true });
-    resetControlsTimer(); 
-
-    const sidebar = document.getElementById("articleHeader");
-    const infoBtn = document.getElementById("infoToggleBtn");
-    let peekTimer;
-    let infoMiniTimer;
-
-    function expandInfoButton() {
-        infoBtn.classList.remove("mini");
-        clearTimeout(infoMiniTimer);
-    }
-
-    function resetInfoButtonTimer() {
-        if (window.innerWidth >= 1000 || infoBtn.classList.contains("close")) return;
-        expandInfoButton();
-        infoMiniTimer = setTimeout(() => {
-            if (!sidebar.classList.contains("open")) {
-                infoBtn.classList.add("mini");
-            }
-        }, 2500);
-    }
-
-    function setInfoDrawer(open) {
-        sidebar.classList.toggle("open", open);
-        infoBtn.classList.toggle("close", open);
-        infoBtn.classList.remove("show-tooltip", "mini");
-        infoBtn.innerHTML = open ? '<i class="fas fa-times"></i>' : '<i class="fas fa-info-circle"></i>';
-
-        if (open) clearTimeout(infoMiniTimer);
-        else resetInfoButtonTimer();
-    }
-
-    infoBtn.onclick = () => {
-        setInfoDrawer(!sidebar.classList.contains("open"));
-    };
-
-    infoBtn.addEventListener("mouseenter", expandInfoButton);
-    infoBtn.addEventListener("mouseleave", resetInfoButtonTimer);
-    infoBtn.addEventListener("touchstart", resetInfoButtonTimer, { passive: true });
-    window.addEventListener("scroll", resetInfoButtonTimer, { passive: true });
-    resetInfoButtonTimer();
-
-    window.addEventListener("scroll", () => { 
-        document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); 
-        if(sidebar.classList.contains("open") && window.scrollY > 50) {
-            setInfoDrawer(false);
-            clearTimeout(peekTimer);
-        }
+    controlsEl.addEventListener('touchstart', () => {
+         controlsEl.classList.remove('controls-mini');
+         clearTimeout(controlsTimer);
     }, { passive: true });
-
-    function triggerMobilePeek() {
-        if(window.innerWidth >= 1000) return;
-        
-        clearTimeout(peekTimer);
-        setInfoDrawer(true);
-        
-        peekTimer = setTimeout(() => {
-            if(sidebar.classList.contains("open")) {
-                setInfoDrawer(false);
-                
-                setTimeout(() => {
-                    infoBtn.classList.add("show-tooltip");
-                    setTimeout(() => {
-                        infoBtn.classList.remove("show-tooltip");
-                        resetInfoButtonTimer();
-                    }, 3000);
-                }, 600);
-            }
-        }, 2500); 
-    }
+    resetControlsTimer();
 
     async function load() {
         try {
             updateThemeIcon();
-            const res = await fetch("data/artworks.json", { cache: "default" });
+
+            const res = await fetch("data/artworks.json?t=" + new Date().getTime());
             allArtworks = await res.json();
+            
             let id = new URLSearchParams(location.search).get("id");
             if (!id) {
                 let pathName = window.location.pathname.replace(/\/$/, "");
                 let fileName = pathName.split('/').pop().replace('.html', '');
-                if (fileName && fileName !== "scan-c" && fileName !== "Q") id = fileName;
+                if (fileName && fileName !== "scan" && fileName !== "Q") id = fileName;
             }
-            if (!allArtworks || allArtworks.length === 0) return;
+            
+            if (!allArtworks || allArtworks.length === 0) {
+                dom.title.innerHTML = "ملف البيانات قيد التحديث في السيرفر، يرجى الانتظار والمحاولة بعد قليل...";
+                document.querySelector('.container').classList.add('ready');
+                return;
+            }
+
             const finalId = id || allArtworks[0].id;
             initPiece(finalId);
+            
             if (window.location.search.includes("id=")) {
-                let urlPath = String(finalId).toUpperCase().startsWith('V') ? 'VM' + String(finalId).substring(1) : 'M' + finalId;
-                window.history.replaceState({id: finalId}, '', urlPath);
+                window.history.replaceState({id: finalId}, '', finalId);
             }
-        } catch(e) { console.error(e); }
+        } catch(e) { 
+            console.error("Data Load Failed", e); 
+            dom.title.innerHTML = "حدث خطأ في قراءة البيانات، يرجى التأكد من التصدير في جوجل شيت.";
+            document.querySelector('.container').classList.add('ready');
+        }
     }
 
     function initPiece(id) {
         if (!allArtworks || allArtworks.length === 0) return;
+
         let targetId = String(id).trim().toUpperCase(); 
         artwork = allArtworks.find(a => a.id && String(a.id).trim().toUpperCase() === targetId);
         if(!artwork) artwork = allArtworks[0];
-        if(!artwork) return;
+        
+        if(!artwork) {
+            dom.title.innerHTML = "القطعة غير موجودة.";
+            document.querySelector('.container').classList.add('ready');
+            return;
+        }
 
         if (typeof gtag === 'function') {
             let actualId = String(artwork.id).toUpperCase();
             if (!actualId.startsWith('VN')) {
-                if (actualId.startsWith('V')) gtag('event', 'view_craft_video', { 'video_id': actualId, 'video_title': artwork.title_ar || artwork.title_en });
-                else gtag('event', 'view_artifact', { 'artifact_id': actualId, 'artifact_title': artwork.title_ar || artwork.title_en });
+                if (actualId.startsWith('V')) {
+                    gtag('event', 'view_craft_video', { 'video_id': actualId, 'video_title': artwork.title_ar || artwork.title_en });
+                } else {
+                    gtag('event', 'view_artifact', { 'artifact_id': actualId, 'artifact_title': artwork.title_ar || artwork.title_en });
+                }
             }
         }
         
-        if(sidebar.classList.contains("open")) setInfoDrawer(false);
-
-        renderArticle();
-        updateNavButtons();
-        document.getElementById('mainContainer').classList.add('ready');
-
-        if (window.innerWidth < 1000) {
-            const firstImg = document.querySelector('#heroSection img');
-            if (firstImg && !firstImg.complete) {
-                const onLoad = () => { triggerMobilePeek(); firstImg.removeEventListener('load', onLoad); };
-                firstImg.addEventListener('load', onLoad);
-                setTimeout(() => { firstImg.removeEventListener('load', onLoad); triggerMobilePeek(); }, 2000);
-            } else {
-                setTimeout(triggerMobilePeek, 300);
-            }
-        }
-    }
-
-    function renderArticle() {
-        const ar = lang === "ar";
-        document.documentElement.dir = ar ? "rtl" : "ltr";
-        document.body.className = (ar ? "lang-ar" : "lang-en") + (document.body.classList.contains("dark") ? " dark" : "");
-        // السطر الجديد اللي هيغير عنوان الهيدر حسب اللغة
-        document.getElementById("headerTitle").innerHTML = ar ? "من حياة التحفة" : "From the Life of an Artefact";
-        
-        let coverBanner = document.getElementById("coverBanner");
-        let coverImg = document.getElementById("coverImage");
-        
-        coverBanner.style.display = "none";
-        
-        coverImg.src = "images/" + artwork.id + "_cover.webp";
-        coverImg.onload = () => { coverBanner.style.display = "block"; };
-        coverImg.onerror = () => {
-            coverImg.src = "images/" + artwork.id + "_cover.jpg";
-            coverImg.onload = () => { coverBanner.style.display = "block"; };
-            coverImg.onerror = () => {
-                 coverImg.src = "images/" + artwork.id + "_cover.png";
-                 coverImg.onload = () => { coverBanner.style.display = "block"; };
-                 coverImg.onerror = () => { coverBanner.style.display = "none"; }
-            }
-        };
-
-        document.getElementById("title").innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "بدون عنوان";
-        document.getElementById("from").innerHTML = (ar ? artwork.from_ar : artwork.from_en) || "";
-        document.getElementById("date").innerHTML = (ar ? artwork.date_ar : artwork.date_en) || "";
-        document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) || "";
-        document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
-        document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
-        document.getElementById("inv").innerHTML = artwork.inventory_number || "";
-
+        currentVidSlot = -1;
+        currentVidUrl = "";
         let rawVid = String(artwork.video_url || "").trim();
-        let vidSlot = -1; let finalVidUrl = "";
         if (rawVid !== "") {
             let firstChar = rawVid.charAt(0).toLowerCase();
             if (['a', 'b', 'c', 'd', 'e'].includes(firstChar) && rawVid.length > 1 && (rawVid.charAt(1) === 'h' || rawVid.charAt(1) === '<')) {
-                vidSlot = firstChar.charCodeAt(0) - 97; rawVid = rawVid.substring(1).trim(); 
+                currentVidSlot = firstChar.charCodeAt(0) - 97;
+                rawVid = rawVid.substring(1).trim();
             }
-            finalVidUrl = rawVid;
+            currentVidUrl = rawVid;
             if (rawVid.includes("<iframe") && rawVid.includes("src=")) {
                 let match = rawVid.match(/src="([^"]+)"/);
-                if (match) finalVidUrl = match[1];
+                if (match) currentVidUrl = match[1];
             }
         }
 
-        let vidContainer = document.getElementById("videoContainer");
-        if (finalVidUrl && vidSlot === -1) {
-            vidContainer.style.display = "block";
-            vidContainer.innerHTML = `<iframe width="100%" height="100%" src="${finalVidUrl}" frameborder="0" allowfullscreen></iframe>`;
-        } else { vidContainer.style.display = "none"; }
-
-        let potentialImages = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5];
-        let images = potentialImages.map(src => src && String(src).trim() !== "" ? String(src).replace(/\.[^/.]+$/, ".webp") : null);
-
-        let heroSection = document.getElementById("heroSection");
-        heroSection.innerHTML = "";
+        currentIdx = 0;
+        validImages = Array(5).fill(null);
         
-        if (images[0] || (vidSlot === 0 && finalVidUrl)) {
-            let heroFig = document.createElement("figure");
-            heroFig.className = "main-figure";
-            if (vidSlot === 0 && finalVidUrl) {
-                let vWrap = document.createElement("div"); vWrap.className = "video-container inline-video"; vWrap.style.display = "block"; vWrap.style.width = "100%";
-                vWrap.innerHTML = `<iframe width="100%" height="100%" src="${finalVidUrl}" frameborder="0" allowfullscreen></iframe>`;
-                heroFig.appendChild(vWrap);
-            } else if (images[0]) {
-                let viewer = document.createElement("div"); viewer.className = "viewer";
-                let img = document.createElement("img"); img.src = images[0];
-                img.onerror = function() { this.closest('.viewer').style.display = 'none'; };
-                img.onclick = () => openModal(img.src);
-                viewer.appendChild(img);
-                setTimeout(() => { img.style.opacity = 1; }, 50);
-                heroFig.appendChild(viewer);
+        let existingIframe = mainViewer.querySelector('.viewer-vid-iframe');
+        if (existingIframe) existingIframe.remove();
+
+        mainImage.removeAttribute("src");
+        mainImage.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+        mainImage.style.display = "block";
+        
+        mainViewer.classList.remove("loaded", "empty-piece");
+        mainViewer.style.display = "flex"; 
+        document.getElementById("thumbs").style.display = "flex";
+        
+        const container = document.querySelector('.container');
+        const isVideoPiece = targetId.startsWith('V');
+        
+        if (isVideoPiece) {
+            container.classList.add('video-only-layout');
+        } else {
+            container.classList.remove('video-only-layout');
+        }
+        
+        photoCredit.innerHTML = "";
+        
+        prepareImages();
+        render();
+        updateNavButtons();
+
+        setTimeout(() => {
+            document.querySelector('.container').classList.add('ready');
+        }, 50);
+    }
+
+    function setNoImageFallback() {
+        mainViewer.classList.remove("loaded");
+        mainImage.onload = () => mainViewer.classList.add("loaded");
+        mainImage.src = "images/no-image.webp";
+        mainViewer.classList.add("empty-piece"); 
+    }
+
+    function prepareImages() {
+        const potential = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5];
+        const thumbs = document.getElementById("thumbs");
+        thumbs.innerHTML = ""; 
+        
+        let validSourcesCount = potential.filter(src => src && String(src).trim() !== "").length;
+        if (currentVidSlot !== -1 && currentVidUrl) validSourcesCount++;
+        
+        if (validSourcesCount === 0) {
+            if (currentVidUrl && currentVidSlot === -1) {
+                mainViewer.style.display = "none";
+                thumbs.style.display = "none";
+            } else {
+                setNoImageFallback();
             }
-            let capText = (artwork[`info_${lang}1`] || "").trim();
-            if (capText) {
-                let cap = document.createElement("figcaption"); cap.className = "photo-credit"; cap.innerHTML = capText;
-                heroFig.appendChild(cap);
-            }
-            heroSection.appendChild(heroFig);
+            return;
         }
 
-        let articleBody = document.getElementById("articleBody");
-        articleBody.innerHTML = "";
+        let firstFound = false;
+        let checkedCount = 0;
+        let loadedCount = 0;
+
+        potential.forEach((src, index) => {
+            if (index === currentVidSlot && currentVidUrl) {
+                checkedCount++; loadedCount++;
+                let ytMatch = currentVidUrl.match(/embed\/([^?]+)/);
+                let ytThumb = ytMatch ? `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg` : 'images/logo-nadim.png';
+                
+                const img = document.createElement("img");
+                img.src = ytThumb;
+                img.style.display = 'block';
+                img.setAttribute('data-idx', index); 
+                
+                validImages[index] = "VIDEO:" + currentVidUrl;
+                
+                img.onclick = (e) => { e.stopPropagation(); show(index); };
+                thumbs.appendChild(img);
+                
+                if (index === 0) { show(0); firstFound = true; } 
+                else if (!firstFound && checkedCount === potential.length) {
+                    const firstAvailable = validImages.findIndex(v => v !== null);
+                    if (firstAvailable !== -1) { show(firstAvailable); firstFound = true; }
+                }
+                return;
+            }
+
+            if (!src || String(src).trim() === "") { checkedCount++; return; }
+            
+            const webpSrc = String(src).replace(/\.[^/.]+$/, ".webp");
+            const img = document.createElement("img");
+            img.setAttribute('data-idx', index); 
+            
+            img.onload = () => {
+                checkedCount++; loadedCount++;
+                img.style.display = 'block';
+                validImages[index] = webpSrc;
+                if (index === 0) { show(0); firstFound = true; } 
+                else if (!firstFound && checkedCount === potential.length) {
+                    const firstAvailable = validImages.findIndex(v => v !== null);
+                    if (firstAvailable !== -1) { show(firstAvailable); firstFound = true; }
+                }
+            };
+            img.onerror = () => {
+                checkedCount++; img.remove();
+                if (checkedCount === potential.length && loadedCount === 0) {
+                    if (currentVidUrl && currentVidSlot === -1) { 
+                        mainViewer.style.display = "none"; 
+                        thumbs.style.display = "none"; 
+                        document.querySelector('.container').classList.add('video-only-layout');
+                    }
+                    else setNoImageFallback();
+                }
+            };
+            img.onclick = (e) => { e.stopPropagation(); show(index); };
+            img.src = webpSrc;
+            thumbs.appendChild(img);
+        });
+    }
+
+    function show(i) {
+        const src = validImages[i];
+        if(!src) return;
+        currentIdx = i;
         
-        const splitDescParts = Array.from({ length: 5 }, (_, i) => {
-            return (ar ? artwork[`dsc_ar${i + 1}`] : artwork[`dsc_en${i + 1}`]) || "";
+        let existingVideo = mainViewer.querySelector('.viewer-vid-iframe');
+        if (existingVideo) existingVideo.remove();
+        
+        mainViewer.classList.remove("loaded", "empty-piece");
+        
+        if (src.startsWith("VIDEO:")) {
+            mainImage.style.display = "none";
+            let iframe = document.createElement("iframe");
+            iframe.className = "viewer-vid-iframe";
+            iframe.src = src.substring(6);
+            iframe.style.position = "absolute";
+            iframe.style.top = "0";
+            iframe.style.left = "0";
+            iframe.style.width = "100%";
+            iframe.style.height = "100%";
+            iframe.style.border = "none";
+            iframe.style.borderRadius = "15px";
+            iframe.style.zIndex = "5";
+            iframe.allowFullscreen = true;
+            mainViewer.appendChild(iframe);
+            mainViewer.classList.add("loaded");
+        } else {
+            mainImage.style.display = "block";
+            mainImage.onload = () => mainViewer.classList.add("loaded");
+            mainImage.src = src;
+            modalImage.src = src;
+        }
+
+        document.querySelectorAll(".thumbs img").forEach((t) => { 
+            t.classList.toggle("active", parseInt(t.getAttribute('data-idx')) === i); 
+        });
+        
+        const info = (artwork[`info_${lang}${i + 1}`] || "").trim();
+        photoCredit.innerHTML = info;
+        photoCredit.style.opacity = info ? "1" : "0";
+        photoCredit.style.zIndex = "10"; 
+    }
+
+    function render() {
+        if (!artwork) return;
+        
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+        document.body.className = (lang === "ar" ? "lang-ar" : "lang-en") + (document.body.classList.contains("light") ? " light" : "");
+        
+        let targetIdForText = String(artwork.id).toUpperCase();
+        const isVideo = targetIdForText.startsWith('V');
+        
+        const prevBtn = document.getElementById("prevPiece");
+        const nextBtn = document.getElementById("nextPiece");
+        
+        if (isVideo) {
+            prevBtn.setAttribute("data-ar", "الحرفة السابقة");
+            prevBtn.setAttribute("data-en", "Previous Craft");
+            nextBtn.setAttribute("data-ar", "الحرفة التالية");
+            nextBtn.setAttribute("data-en", "Next Craft");
+        } else {
+            prevBtn.setAttribute("data-ar", "القطعة السابقة");
+            prevBtn.setAttribute("data-en", "Previous Piece");
+            nextBtn.setAttribute("data-ar", "القطعة التالية");
+            nextBtn.setAttribute("data-en", "Next Piece");
+        }
+
+        document.querySelectorAll('[data-ar]').forEach(el => {
+            const label = el.getAttribute(`data-${lang}`);
+            el.setAttribute('data-tooltip', label || '');
         });
 
-        const hasSplitDesc = splitDescParts.some(text => text.trim() !== "");
-        let mainDesc = (ar ? artwork.desc_ar : artwork.desc_en) || "";
+        const ar = lang === "ar";
+        dom.inv.innerHTML = artwork.inventory_number || "";
+        dom.title.innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "";
+        dom.from.innerHTML = (ar ? artwork.from_ar : artwork.from_en) || "";
+        dom.date.innerHTML = (ar ? artwork.date_ar : artwork.date_en) || "";
+        dom.dim.innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) || "";
+        dom.hall.innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
+        dom.material.innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
+        dom.desc.innerHTML = ((ar ? artwork.desc_ar : artwork.desc_en) || "").replace(/\n/g, '<br>');
 
-        if (!hasSplitDesc && mainDesc.trim() !== "") {
-            let pMain = document.createElement("p");
-            pMain.innerHTML = mainDesc.replace(/\n/g, '<br>');
-            articleBody.appendChild(pMain);
+        if (currentVidUrl && currentVidSlot === -1) {
+            dom.videoContainer.style.display = "block";
+            dom.videoContainer.innerHTML = `<iframe width="100%" height="100%" src="${currentVidUrl}" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+        } else {
+            dom.videoContainer.style.display = "none";
+            dom.videoContainer.innerHTML = "";
         }
-
-        for (let i = 0; i < 5; i++) {
-            let pText = splitDescParts[i] || "";
-
-            if (i === 0) {
-                if (hasSplitDesc && pText.trim() !== "") {
-                    let p = document.createElement("p");
-                    p.innerHTML = pText.replace(/\n/g, '<br>');
-                    articleBody.appendChild(p);
-                }
-            } else {
-                if (images[i] || (vidSlot === i && finalVidUrl) || (hasSplitDesc && pText.trim() !== "")) {
-                    if (vidSlot === i && finalVidUrl) articleBody.appendChild(createInlineVideo(finalVidUrl, i));
-                    else if (images[i]) articleBody.appendChild(createInlineFigure(images[i], i));
-                    
-                    if (hasSplitDesc && pText.trim() !== "") {
-                        let p = document.createElement("p");
-                        p.innerHTML = pText.replace(/\n/g, '<br>');
-                        articleBody.appendChild(p);
-                    }
-                }
-            }
-        }
-
-        let isVideo = String(artwork.id).toUpperCase().startsWith('V');
-        const prevBtn = document.getElementById("prevPiece"), nextBtn = document.getElementById("nextPiece");
-        if (isVideo) { prevBtn.setAttribute("data-ar", "الحرفة السابقة"); prevBtn.setAttribute("data-en", "Previous Craft"); nextBtn.setAttribute("data-ar", "الحرفة التالية"); nextBtn.setAttribute("data-en", "Next Craft"); } 
-        else { prevBtn.setAttribute("data-ar", "القطعة السابقة"); prevBtn.setAttribute("data-en", "Previous Piece"); nextBtn.setAttribute("data-ar", "القطعة التالية"); nextBtn.setAttribute("data-en", "Next Piece"); }
-        document.querySelectorAll('[data-ar]').forEach(el => { el.setAttribute('data-tooltip', el.getAttribute(`data-${lang}`) || ''); });
-        
-        const infoBtnEl = document.getElementById("infoToggleBtn");
-        if(infoBtnEl) infoBtnEl.setAttribute('data-tooltip', infoBtnEl.getAttribute(`data-${lang}`) || '');
     }
 
-    function createInlineFigure(src, idx) {
-        let fig = document.createElement("figure"); fig.className = "image-pair-container";
-        let wrapper = document.createElement("div"); wrapper.className = "image-pair-wrapper"; fig.appendChild(wrapper);
-        let img1 = document.createElement("img"); img1.src = src; img1.onerror = function() { this.style.display = 'none'; }; img1.onclick = () => openModal(src); wrapper.appendChild(img1);
+    function toggleLang() { 
+        lang = lang === "ar" ? "en" : "ar"; 
+        localStorage.setItem("nadim_lang", lang); 
+        render(); 
+        if(validImages[currentIdx]) show(currentIdx); 
         
-        let doubleChar = String.fromCharCode(97 + idx); let doubleSrc = src.replace(/\.webp$/, "") + doubleChar + ".webp"; 
-        let img2 = document.createElement("img"); img2.src = doubleSrc; img2.style.display = "none"; 
-        img2.onload = function() { this.style.display = "block"; wrapper.classList.add("has-double"); };
-        img2.onerror = function() { this.remove(); }; img2.onclick = () => openModal(doubleSrc); wrapper.appendChild(img2);
-        
-        let infoStr = (artwork[`info_${lang}${idx + 1}`] || "").trim();
-        if (infoStr) { let cap = document.createElement("figcaption"); cap.className = "photo-credit"; cap.innerHTML = infoStr; fig.appendChild(cap); }
-        return fig;
-    }
-
-        function createInlineVideo(url, idx) {
-        let fig = document.createElement("figure"); 
-        fig.className = "image-pair-container"; 
-
-        let vWrap = document.createElement("div"); 
-        vWrap.className = "video-container inline-video"; 
-        vWrap.style.display = "block"; 
-        vWrap.style.marginBottom = "0"; 
-        vWrap.innerHTML = `<iframe width="100%" height="100%" src="${url}" frameborder="0" allowfullscreen></iframe>`; 
-        fig.appendChild(vWrap);
-
-        let infoStr = (artwork[`info_${lang}${idx + 1}`] || "").trim();
-        if (infoStr) { 
-            let cap = document.createElement("figcaption"); 
-            cap.className = "photo-credit"; 
-            cap.innerHTML = infoStr; 
-            fig.appendChild(cap); 
+        if (typeof gtag === 'function') {
+            gtag('event', 'toggle_language', { 'language_selected': lang });
         }
-        return fig;
+    }
+    
+    function toggleTheme() { 
+        const isLight = document.body.classList.toggle("light"); 
+        localStorage.setItem("nadim_theme", isLight ? "light" : "dark"); 
+        updateThemeIcon(); 
+        
+        if (typeof gtag === 'function') {
+            gtag('event', 'toggle_theme', { 'theme_selected': isLight ? 'light' : 'dark' });
+        }
+    }
+    
+    function updateThemeIcon() { document.getElementById("themeBtn").textContent = document.body.classList.contains("light") ? "🌙" : "☀️"; }
+    
+    function share() { 
+        if (navigator.share) navigator.share({title: dom.title.innerText, url: location.href}); 
+        
+        if (typeof gtag === 'function') {
+            gtag('event', 'share_click', { 'artifact_id': artwork ? artwork.id : 'unknown' });
+        }
     }
 
-    function toggleLang() { lang = lang === "ar" ? "en" : "ar"; localStorage.setItem("nadim_lang", lang); renderArticle(); if (typeof gtag === 'function') gtag('event', 'toggle_language', { 'language_selected': lang }); }
-    function toggleTheme() { const isDark = document.body.classList.toggle("dark"); localStorage.setItem("nadim_theme", isDark ? "dark" : "light"); updateThemeIcon(); if (typeof gtag === 'function') gtag('event', 'toggle_theme', { 'theme_selected': isDark ? 'dark' : 'light' }); }
-    function updateThemeIcon() { let isDark = document.body.classList.contains("dark"); document.getElementById("themeBtn").textContent = isDark ? "☀️" : "🌙"; }
-    function share() { if (navigator.share) navigator.share({title: document.getElementById("title").innerText, url: location.href}); if (typeof gtag === 'function') gtag('event', 'share_click', { 'artifact_id': artwork ? artwork.id : 'unknown' }); }
-    function trackContactUs() { if (typeof gtag === 'function') gtag('event', 'contact_us_click', { 'from_page_id': artwork ? artwork.id : 'unknown' }); setTimeout(() => { window.location.href = 'https://nd-f.github.io/QR/'; }, 150); }
+    function trackContactUs() {
+        if (typeof gtag === 'function') {
+            gtag('event', 'contact_us_click', {
+                'from_page_id': artwork ? artwork.id : 'unknown'
+            });
+        }
+        setTimeout(() => {
+            window.location.href = 'https://nd-f.github.io/QR/';
+        }, 150);
+    }
+
     document.querySelector('[data-en="Contact Us"]').setAttribute("onclick", "trackContactUs()");
 
     function navigatePiece(step) {
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
         if(idx >= 0 && idx < allArtworks.length) {
             const nextId = allArtworks[idx].id;
-            let urlPath = String(nextId).toUpperCase().startsWith('V') ? 'VM' + String(nextId).substring(1) : 'M' + nextId;
-            window.history.pushState({id: nextId}, '', urlPath); initPiece(nextId); window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.history.pushState({id: nextId}, '', nextId);
+            initPiece(nextId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
 
     function updateNavButtons() {
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id));
-        document.getElementById("prevPiece").classList.toggle("disabled", idx === 0); document.getElementById("nextPiece").classList.toggle("disabled", idx === allArtworks.length - 1);
+        document.getElementById("prevPiece").classList.toggle("disabled", idx === 0);
+        document.getElementById("nextPiece").classList.toggle("disabled", idx === allArtworks.length - 1);
     }
 
-    let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0, startDist = 0, initialScale = 1, isPinching = false, tapStartX = 0, tapStartY = 0;
-    function setTransform() { modalImage.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`; }
-    function resetZoom() { scale = 1; pointX = 0; pointY = 0; setTransform(); }
-    function trackIntentionalInteraction() { if (!isZoomTracked && artwork && typeof gtag === 'function') { if (Date.now() - zoomStartTime > 1500) { gtag('event', 'intentional_zoom_or_pan', { 'artifact_id': artwork.id }); isZoomTracked = true; } } }
+    function triggerInfoMobile() {
+        if(window.innerWidth >= 1100) return; 
+        clearTimeout(infoTimer);
+        mainViewer.classList.add('info-active');
+        infoTimer = setTimeout(() => mainViewer.classList.remove('info-active'), 3500);
+    }
 
-    function openModal(src) { resetZoom(); modal.style.display = 'block'; document.body.style.overflow = 'hidden'; modalImage.src = src; history.pushState({modal: true}, ""); zoomStartTime = Date.now(); isZoomTracked = false; }
+    let mainStartX = 0;
+    mainViewer.addEventListener('touchstart', e => { if (e.touches.length === 1) mainStartX = e.touches[0].clientX; triggerInfoMobile(); }, {passive: true});
+    mainViewer.addEventListener('touchend', e => {
+        if (validImages.filter(Boolean).length <= 1) return;
+        let diff = mainStartX - e.changedTouches[0].clientX;
+        if(Math.abs(diff) > 70) {
+            const cleanImages = validImages.filter(Boolean);
+            const relativeIdx = cleanImages.indexOf(validImages[currentIdx]);
+            const nextRelative = diff > 0 ? (relativeIdx + 1) % cleanImages.length : (relativeIdx - 1 + cleanImages.length) % cleanImages.length;
+            show(validImages.indexOf(cleanImages[nextRelative]));
+        }
+    }, {passive: true});
 
-    modal.addEventListener("wheel", (e) => { if (modal.style.display !== 'block') return; e.preventDefault(); const clientX = e.clientX, clientY = e.clientY, delta = e.deltaY || -e.wheelDelta; let newScale = scale * (delta > 0 ? 0.85 : 1.15); if (newScale < 1) newScale = 1; if (newScale > 20) newScale = 20; const ratio = 1 - (newScale / scale), centerX = (window.innerWidth / 2) + pointX, centerY = (window.innerHeight / 2) + pointY; pointX += (clientX - centerX) * ratio; pointY += (clientY - centerY) * ratio; scale = newScale; if (scale === 1) { pointX = 0; pointY = 0; } setTransform(); if (scale > 1.1) trackIntentionalInteraction(); }, { passive: false });
-    modalImage.addEventListener("mousedown", (e) => { if (scale > 1) { e.preventDefault(); startX = e.clientX; startY = e.clientY; panning = true; modalImage.style.cursor = "grabbing"; } });
+    let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
+    let startDist = 0, initialScale = 1;
+    let isPinching = false;
+    let tapStartX = 0, tapStartY = 0;
+
+    function setTransform() {
+        modalImage.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+    }
+
+    function resetZoom() {
+        scale = 1; pointX = 0; pointY = 0;
+        setTransform();
+    }
+
+    function trackIntentionalInteraction() {
+        if (!isZoomTracked && artwork && typeof gtag === 'function') {
+            let timeSpent = Date.now() - zoomStartTime;
+            if (timeSpent > 1500) { 
+                gtag('event', 'intentional_zoom_or_pan', {
+                    'artifact_id': artwork.id
+                });
+                isZoomTracked = true; 
+            }
+        }
+    }
+
+    mainViewer.onclick = () => {
+        if (validImages[currentIdx] && validImages[currentIdx].startsWith("VIDEO:")) return;
+        
+        if(!mainImage.src || mainViewer.classList.contains("empty-piece") || mainImage.src.includes("no-image.webp")) return;
+        resetZoom();
+        modal.style.display = 'block'; 
+        document.body.style.overflow = 'hidden'; 
+        modalImage.src = mainImage.src;
+        history.pushState({modal: true}, "");
+        
+        zoomStartTime = Date.now();
+        isZoomTracked = false;
+    };
+
+    modal.addEventListener("wheel", (e) => {
+        if (modal.style.display !== 'block') return;
+        e.preventDefault();
+        
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+        const delta = e.deltaY || -e.wheelDelta;
+        const zoomFactor = delta > 0 ? 0.85 : 1.15; 
+        
+        let newScale = scale * zoomFactor;
+        if (newScale < 1) newScale = 1;
+        if (newScale > 20) newScale = 20; 
+        
+        const ratio = 1 - (newScale / scale);
+        const centerX = (window.innerWidth / 2) + pointX;
+        const centerY = (window.innerHeight / 2) + pointY;
+        
+        pointX += (clientX - centerX) * ratio;
+        pointY += (clientY - centerY) * ratio;
+        scale = newScale;
+        
+        if (scale === 1) { pointX = 0; pointY = 0; }
+        setTransform();
+
+        if (scale > 1.1) trackIntentionalInteraction();
+    }, { passive: false });
+
+    modalImage.addEventListener("mousedown", (e) => {
+        if (scale > 1) {
+            e.preventDefault();
+            startX = e.clientX;
+            startY = e.clientY;
+            panning = true;
+            modalImage.style.cursor = "grabbing";
+        }
+    });
     window.addEventListener("mouseup", () => { panning = false; modalImage.style.cursor = "grab"; });
-    window.addEventListener("mousemove", (e) => { if (!panning || scale === 1) return; e.preventDefault(); pointX += e.clientX - startX; pointY += e.clientY - startY; startX = e.clientX; startY = e.clientY; setTransform(); trackIntentionalInteraction(); });
-    modal.addEventListener('touchstart', (e) => { if (e.touches.length === 2) { e.preventDefault(); isPinching = true; startDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); initialScale = scale; } else if (e.touches.length === 1) { if (scale > 1) panning = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY; tapStartX = e.touches[0].clientX; tapStartY = e.touches[0].clientY; } }, {passive: false});
-    modal.addEventListener('touchmove', (e) => { if (modal.style.display !== 'block') return; if (e.touches.length === 2) { e.preventDefault(); let dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); let newScale = initialScale * (dist / startDist); if (newScale < 1) newScale = 1; if (newScale > 20) newScale = 20; const ratio = 1 - (newScale / scale), centerX = (window.innerWidth / 2) + pointX, centerY = (window.innerHeight / 2) + pointY; pointX += ((e.touches[0].clientX + e.touches[1].clientX) / 2 - centerX) * ratio; pointY += ((e.touches[0].clientY + e.touches[1].clientY) / 2 - centerY) * ratio; scale = newScale; if (scale === 1) { pointX = 0; pointY = 0; } setTransform(); if (scale > 1.1) trackIntentionalInteraction(); } else if (e.touches.length === 1 && panning && scale > 1) { e.preventDefault(); pointX += e.touches[0].clientX - startX; pointY += e.touches[0].clientY - startY; startX = e.touches[0].clientX; startY = e.touches[0].clientY; setTransform(); trackIntentionalInteraction(); } }, {passive: false});
-    let lastTap = 0; modal.addEventListener('touchend', (e) => { panning = false; if (e.touches.length === 0) { if (isPinching) { isPinching = false; lastTap = 0; return; } let moveDist = e.changedTouches ? Math.hypot(e.changedTouches[0].clientX - tapStartX, e.changedTouches[0].clientY - tapStartY) : 0; if (moveDist < 10) { let currentTime = new Date().getTime(), tapLength = currentTime - lastTap; if (tapLength < 300 && tapLength > 0) { if (scale > 1) resetZoom(); else { scale = 3; setTransform(); } trackIntentionalInteraction(); } lastTap = currentTime; } } });
-    document.addEventListener('keydown', (e) => { if (e.key === "Escape" && modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); } });
-    document.getElementById("modalClose").onclick = () => { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); };
-    window.onpopstate = (e) => { if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); } else if (e.state && e.state.id) initPiece(e.state.id); };
-    window.addEventListener("scroll", () => { document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); }, { passive: true });
+    window.addEventListener("mousemove", (e) => {
+        if (!panning || scale === 1) return;
+        e.preventDefault();
+        pointX += e.clientX - startX;
+        pointY += e.clientY - startY;
+        startX = e.clientX;
+        startY = e.clientY; 
+        setTransform();
+
+        trackIntentionalInteraction();
+    });
+
+    modal.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            isPinching = true;
+            startDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            initialScale = scale;
+        } else if (e.touches.length === 1) {
+            if (scale > 1) panning = true;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            tapStartX = e.touches[0].clientX;
+            tapStartY = e.touches[0].clientY;
+        }
+    }, {passive: false});
+
+    modal.addEventListener('touchmove', (e) => {
+        if (modal.style.display !== 'block') return;
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            let dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            let newScale = initialScale * (dist / startDist);
+            if (newScale < 1) newScale = 1;
+            if (newScale > 20) newScale = 20;
+            
+            const clientX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+            const clientY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+            
+            const ratio = 1 - (newScale / scale);
+            const centerX = (window.innerWidth / 2) + pointX;
+            const centerY = (window.innerHeight / 2) + pointY;
+            
+            pointX += (clientX - centerX) * ratio;
+            pointY += (clientY - centerY) * ratio;
+            scale = newScale;
+            
+            if (scale === 1) { pointX = 0; pointY = 0; }
+            setTransform();
+
+            if (scale > 1.1) trackIntentionalInteraction();
+
+        } else if (e.touches.length === 1 && panning && scale > 1) {
+            e.preventDefault();
+            pointX += e.touches[0].clientX - startX;
+            pointY += e.touches[0].clientY - startY;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            setTransform();
+
+            trackIntentionalInteraction();
+        }
+    }, {passive: false});
+
+    let lastTap = 0;
+    modal.addEventListener('touchend', (e) => {
+        panning = false;
+        
+        if (e.touches.length === 0) {
+            if (isPinching) {
+                isPinching = false;
+                lastTap = 0;
+                return;
+            }
+
+            let moveDist = 0;
+            if (e.changedTouches && e.changedTouches.length > 0) {
+                moveDist = Math.hypot(e.changedTouches[0].clientX - tapStartX, e.changedTouches[0].clientY - tapStartY);
+            }
+            
+            if (moveDist < 10) { 
+                let currentTime = new Date().getTime();
+                let tapLength = currentTime - lastTap;
+                if (tapLength < 300 && tapLength > 0) {
+                    if (scale > 1) resetZoom();
+                    else { scale = 3; setTransform(); }
+                    
+                    trackIntentionalInteraction();
+                }
+                lastTap = currentTime;
+            }
+        }
+    });
+
+    document.addEventListener('keydown', (e) => { 
+        if (e.key === "Escape" && modal.style.display === 'block') { 
+            modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); 
+        } 
+    });
+    
+    document.getElementById("modalClose").onclick = () => {
+        modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom();
+    };
+    
+    window.onpopstate = (e) => {
+        if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); }
+        else if (e.state && e.state.id) initPiece(e.state.id);
+    };
+
+    window.addEventListener("scroll", () => {
+        document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40);
+    }, { passive: true });
 
     load();
 </script>
 </body>
 </html>
-
