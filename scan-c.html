@@ -164,20 +164,21 @@
             .cover-banner.cover-small { 
                 top: 44px !important; 
                 height: 50px !important; 
-           }
+            }
             /* شد المحتوى لفوق في الموبايل */
             body.has-cover .container { 
-                margin-top: 280px !important; 
+                margin-top: 342px !important; 
             }
             body.has-cover.is-scrolled .container { 
-                margin-top: 110px !important; /* المحتوى بيطلع يقفل الفراغ */
+                margin-top: 124px !important; /* المحتوى بيطلع يقفل الفراغ */
             }
+        }
 
        /* ========================================== */
         /* الكافر (Cover Banner) وتثبيت أبعاده بقوة */
         /* ========================================== */
         .cover-banner {
-            width: 100vw; /* إجبار بعرض الشاشة بالكامل لمنع الفراغات الجانبية */
+            width: 100%; /* 100% لمنع الفراغات الجانبية وسكرول العرض */
             height: 400px; /* تثبيت الارتفاع مهما كان حجم الصورة */
             overflow: hidden; position: fixed; 
             top: 95px; left: 0; z-index: 990;
@@ -210,12 +211,12 @@
 
         /* الحالة الافتراضية: الكافر كبير */
         body.has-cover .container {
-            margin-top: 450px; /* مساحة الهيدر + الكافر */
+            margin-top: 535px; /* مساحة الهيدر + الكافر */
         }
         
         /* الحالة الجديدة: الكافر صغير (المحتوى هيتشفط لفوق) */
         body.has-cover.is-scrolled .container {
-            margin-top: 140px; /* مساحة الهيدر الصغير + الكافر الصغير */
+            margin-top: 156px; /* مساحة الهيدر الصغير + الكافر الصغير */
         }
         
         .container.ready { opacity: 1; }
