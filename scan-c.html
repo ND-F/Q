@@ -166,12 +166,12 @@
                 top: 44px !important; 
                 height: 50px !important; 
             }
-            /* شد المحتوى لفوق في الموبايل */
+            /* شد المحتوى لفوق في الموبايل بالمللي بدون فراغ */
             body.has-cover .container { 
-                margin-top: 315px !important; 
+                margin-top: 250px !important; /* الكافر 250 (لأن البودي واخد 62) */
             }
             body.has-cover.is-scrolled .container { 
-                margin-top: 96px !important; /* المحتوى بيطلع يقفل الفراغ */
+                margin-top: 32px !important; /* الهيدر الصغير 44 + الكافر الصغير 50 - بادينج البودي 62 = 32 */
             }
         }
 
@@ -212,12 +212,12 @@
 
         /* الحالة الافتراضية: الكافر كبير */
         body.has-cover .container {
-            margin-top: 500px; /* مساحة الهيدر + الكافر + 20 بيكسل فراغ */
+            margin-top: 400px; /* ارتفاع الكافر فقط لأن البودي واخد بادينج الهيدر 95 */
         }
         
         /* الحالة الجديدة: الكافر صغير (المحتوى هيتشفط لفوق) */
         body.has-cover.is-scrolled .container {
-            margin-top: 118px; /* مساحة الهيدر الصغير + الكافر الصغير + 20 بيكسل فراغ */
+            margin-top: 21px; /* الهيدر الصغير 56 + الكافر الصغير 60 - بادينج البودي 95 = 21 */
         }
         
         .container.ready { opacity: 1; }
