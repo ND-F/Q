@@ -164,21 +164,25 @@
             .cover-banner.cover-small { 
                 top: 44px !important; 
                 height: 50px !important; 
-            }
+           }
+            /* شد المحتوى لفوق في الموبايل */
             body.has-cover .container { 
-                margin-top: 270px !important; 
+                margin-top: 280px !important; 
             }
-        }
+            body.has-cover.is-scrolled .container { 
+                margin-top: 110px !important; /* المحتوى بيطلع يقفل الفراغ */
+            }
 
-        /* ========================================== */
-        /* الكافر (Cover Banner) الثابت وتأثير السكرول */
+       /* ========================================== */
+        /* الكافر (Cover Banner) وتثبيت أبعاده بقوة */
         /* ========================================== */
         .cover-banner {
-            width: 100%; height: 400px; 
+            width: 100vw; /* إجبار بعرض الشاشة بالكامل لمنع الفراغات الجانبية */
+            height: 400px; /* تثبيت الارتفاع مهما كان حجم الصورة */
             overflow: hidden; position: fixed; 
             top: 95px; left: 0; z-index: 990;
             display: none;
-            background: transparent; margin: 0; padding: 0;
+            background: var(--main); margin: 0; padding: 0;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
@@ -191,7 +195,7 @@
 
         .cover-banner img { 
             width: 100%; height: 100%; 
-            object-fit: cover !important; 
+            object-fit: cover !important; /* السطر ده بيملى الفراغات ويقص الزيادة */
             object-position: center; 
             display: block; opacity: 1; 
         }
@@ -199,12 +203,19 @@
         .container { 
             max-width: 1200px; 
             margin: 40px auto 100px; padding: 0 20px; 
-            opacity: 0; transition: opacity 0.5s ease; position: relative;
+            opacity: 0; position: relative;
+            /* أضفنا انتقال للمسافة العلوية عشان المحتوى يتشد لفوق بنعومة */
+            transition: opacity 0.5s ease, margin-top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
-        /* دفع المحتوى للأسفل عند وجود صورة كافر */
+        /* الحالة الافتراضية: الكافر كبير */
         body.has-cover .container {
-            margin-top: 440px; 
+            margin-top: 450px; /* مساحة الهيدر + الكافر */
+        }
+        
+        /* الحالة الجديدة: الكافر صغير (المحتوى هيتشفط لفوق) */
+        body.has-cover.is-scrolled .container {
+            margin-top: 140px; /* مساحة الهيدر الصغير + الكافر الصغير */
         }
         
         .container.ready { opacity: 1; }
@@ -595,14 +606,18 @@
     resetInfoButtonTimer();
 
     window.addEventListener("scroll", () => { 
-        document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); 
-        document.getElementById("coverBanner").classList.toggle("cover-small", window.scrollY > 40); 
+        let isScrolled = window.scrollY > 40;
+        document.body.classList.toggle("is-scrolled", isScrolled); // السطر اللي هيشد المحتوى لفوق
+        document.getElementById("museumHeader").classList.toggle("header-small", isScrolled); 
+        document.getElementById("coverBanner").classList.toggle("cover-small", isScrolled); 
+        
         if(sidebar.classList.contains("open") && window.scrollY > 50) {
             setInfoDrawer(false);
             clearTimeout(peekTimer);
         }
     }, { passive: true });
 
+    
     function triggerMobilePeek() {
         if(window.innerWidth >= 1000) return;
         
