@@ -100,26 +100,25 @@
             display: flex; align-items: center; gap: 20px;
         }
 
-        /*Selector for the logo image*/
+        /* ========================================== */
+        /* ستايل اللوجو (مع منع البكسلة أثناء التكبير) */
+        /* ========================================== */
         .logo { 
-            /*Height adjustment for white space*/
             height: 65px; 
             width: auto; 
             cursor: pointer; 
-            /*Smooth transition effect*/
-            transition: transform 0.3s ease; 
-            /*Full opacity, no fading*/
-            opacity: 1; 
-            /*No shadows*/
-            filter: none; 
+            /* دول أهم 3 سطور لمنع البكسلة والاهتزاز أثناء الحركة */
+            backface-visibility: hidden;
+            transform: translateZ(0);
+            will-change: transform;
+            /* حركة مرنة وناعمة */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease; 
         }
 
-        /*Hover state for the logo*/
         .logo:hover {
-            /* بيكبر للأمام كأنه بينبض من مكانه بدون ما يترفع لفوق */
-            transform: scale(1.08); 
-            opacity: 1; 
-            /* ظل ناعم بيدي إحساس بالبروز (3D) */
+            /* بيكبر للأمام كأنه بينبض من مكانه بثبات تام */
+            transform: translateZ(0) scale(1.08); 
+            /* ظل ناعم وغامق (مش توهج) بيدي إحساس بالبروز (3D) */
             filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.15)); 
         }
 
@@ -380,27 +379,27 @@
         .controls .sep { width: 1px; height: 20px; background: rgba(225, 169, 62, 0.3) !important; }
         
         /* ========================================== */
-        /* تأثيرات النبض والتوهج لأيقونات الكنترول */
+        /* شريط الكنترول (حركة نظيفة بدون توهج مزعج) */
         /* ========================================== */
         .controls div:not(.sep) {
-            /* حركة مرنة زي السوستة */
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            border-radius: 12px;
-            padding: 2px 5px; /* مساحة صغيرة عشان التوهج يبان براحته */
+            /* منع بكسلة الأيقونات وهي بتكبر */
+            backface-visibility: hidden;
+            transform: translateZ(0);
         }
 
         .controls div:not(.sep):hover {
-            /* بيكبر للأمام بنسبة 15% */
-            transform: scale(1.15); 
-            /* بيتحول للون الذهبي */
+            /* بيكبر بنعومة للأمام */
+            transform: translateZ(0) scale(1.15); 
+            /* لونه بيبقى ذهبي شيك */
             color: var(--gold) !important; 
-            /* بيعمل هالة (Glow) ذهبية زي المربعات اللي في الفيديو */
-            filter: drop-shadow(0 0 12px rgba(225, 169, 62, 0.8)); 
+            /* ظل أسود خفيف جداً يبرزه لبره، بدون أي توهج أصفر */
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3)); 
         }
 
-        /* علشان أيقونة "اتصل بنا" عبارة عن صورة مش إيموجي، نديها ستايل خاص بيها تتوهج بس */
+        /* علشان أيقونة "اتصل بنا" تبرز بـ ظل طبيعي مش ملون */
         .controls div:not(.sep):hover img {
-            filter: drop-shadow(0 0 10px rgba(225, 169, 62, 0.9));
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3));
         }
 
         .controls > div:not(.sep)::before {
