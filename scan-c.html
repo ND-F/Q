@@ -110,16 +110,6 @@
             filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.15)); 
         }
 
-
-
-        /* حالة السكرول للهيدر */
-        #museumHeader.header-small { padding: 8px 40px !important; }
-        #museumHeader.header-small .logo { height: 40px !important; }
-        #museumHeader.header-small .header-title { font-size: 22px !important; }
-
-        /* ========================================== */
-        /* تظبيط اتجاه العنوان حسب اللغة (عربي/إنجليزي) */
-        /* ========================================== */
         .header-title { 
             font-size: 28px; font-weight: 800;
             color: var(--main) !important; line-height: 1.2; 
@@ -127,11 +117,12 @@
             flex: 1 1 auto;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        
-        body.lang-ar .header-title { text-align: right; }
-        body.lang-en .header-title { text-align: left; }
 
-        
+        /* حالة السكرول للهيدر */
+        #museumHeader.header-small { padding: 8px 40px !important; }
+        #museumHeader.header-small .logo { height: 40px !important; }
+        #museumHeader.header-small .header-title { font-size: 22px !important; }
+
         /* شاشات الموبايل */
         @media (max-width: 800px) {
             body { padding-top: 62px; } /* مسافة البودي للموبايل */
@@ -146,7 +137,12 @@
                 gap: 10px;
             }
             
-
+            .header-title { 
+                font-size: 17px; 
+                text-align: right; 
+                margin: 0; 
+                flex: 1; 
+            }
             
             .logos-group {
                 position: static; width: auto;
@@ -171,7 +167,7 @@
             }
             /* شد المحتوى لفوق في الموبايل */
             body.has-cover .container { 
-                margin-top: 325px !important; 
+                margin-top: 300px !important; 
             }
             body.has-cover.is-scrolled .container { 
                 margin-top: 124px !important; /* المحتوى بيطلع يقفل الفراغ */
@@ -215,7 +211,7 @@
 
         /* الحالة الافتراضية: الكافر كبير */
         body.has-cover .container {
-            margin-top: 515px; /* مساحة الهيدر + الكافر */
+            margin-top: 480px; /* مساحة الهيدر + الكافر */
         }
         
         /* الحالة الجديدة: الكافر صغير (المحتوى هيتشفط لفوق) */
