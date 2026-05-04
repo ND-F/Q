@@ -69,7 +69,37 @@
         }
 
         /* تقليل الحجم بنسبة 15% (من 80px إلى 65px) لزيادة المساحة البيضاء */
-        .logo { height: 65px; width: auto; cursor: pointer; transition: all 0.3s ease; }
+        /* 1. تأثير الحفر النظيف (اللايت مود) */
+        .logo { 
+            height: 80px; 
+            width: auto; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            /* شفافية تخليه يتشرب لون الخلفية بهدوء */
+            opacity: 0.6; 
+            /* ظل أبيض حاد (بدون تمويه) من الأسفل بيدي إيحاء إن ده حافة الحفر اللي ضارب فيها النور */
+            filter: drop-shadow(0px 1px 0px rgba(255, 255, 255, 1));
+        }
+
+        /* 2. تأثير الحفر (الدارك مود) */
+        body.dark .logo {
+            opacity: 0.6;
+            /* ظل أسود من أعلى (العمق) وظل أبيض خفيف جداً من أسفل (الإضاءة) */
+            filter: drop-shadow(0px -1px 0px rgba(0, 0, 0, 0.8)) drop-shadow(0px 1px 0px rgba(255, 255, 255, 0.15));
+        }
+
+        /* 3. تأثير اختياري: لما تقف بالماوس يبرز لبره ويرجع للونه الكامل */
+        .logo:hover {
+            opacity: 1;
+            filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.15));
+            transform: translateY(-2px);
+        }
+        
+        body.dark .logo:hover {
+            opacity: 1;
+            filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.5));
+            transform: translateY(-2px);
+        }
 
         .header-title { 
             font-size: 28px; font-weight: 800;
