@@ -49,11 +49,11 @@
             overflow: hidden; /* عشان النقش ميكملش برا الهيدر */
         }
 
-        /* نقش هندسي إسلامي (أرابيسك النجمة الثمانية) يعكس روح النجارة العربية */
+        /* نقش أرابيسك أصيل (النجمة الثمانية المتداخلة) */
         .header-pattern {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            /* تم استخدام خطوط متداخلة مع شفافية 8% لتعطي إيحاء الحفر على الخشب */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%234A121C' stroke-width='1.5' stroke-opacity='0.08'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3Cpath d='M10 20l10-10h20l10 10v20l-10 10H20L10 40z'/%3E%3Cpath d='M20 10l10 10-10 10-10-10zM40 10l10 10-10 10-10-10zM20 40l10 10-10 10-10-10zM40 40l10 10-10 10-10-10z'/%3E%3C/g%3E%3C/svg%3E");
+            /* نقش هندسي معقد يطابق تعاشيق النجارة الإسلامية، بشفافية 10% ليكون Watermark أنيق */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg stroke='%234A121C' stroke-width='1.5' stroke-opacity='0.10' fill='none'%3E%3Cpath d='M50 0L65 15H85V35L100 50L85 65V85H65L50 100L35 85H15V65L0 50L15 35V15H35L50 0Z'/%3E%3Cpath d='M50 20L60 30H70V40L80 50L70 60V70H60L50 80L40 70H30V60L20 50L30 40V30H40L50 20Z'/%3E%3Cpath d='M35 15L50 30L65 15M85 35L70 50L85 65M65 85L50 70L35 85M15 65L30 50L15 35'/%3E%3Cpath d='M0 15L15 15V0M85 0V15H100M100 85H85V100M15 100V85H0'/%3E%3Cpath d='M50 0v20M100 50H80M50 100V80M0 50h20'/%3E%3C/g%3E%3C/svg%3E");
             pointer-events: none; z-index: 0;
         }
 
