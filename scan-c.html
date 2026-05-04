@@ -50,20 +50,14 @@
         }
 
         /* نقش العلامة المائية مبني على لوجو "نديم" (Monogram Pattern) */
+        /* نقش العلامة المائية - رصة منتظمة ونظيفة بدون أي تداخل */
         .header-pattern {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            
-            /* بنستدعي لوجو نديم الأساسي ونكرره مرتين */
-            background-image: 
-                url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2'), 
-                url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2');
-            
-            background-size: 100px 100px; /* حجم اللوجو في النقش */
-            
-            /* بنعمل إزاحة للصف الثاني عشان اللوجوهات تعشق في بعضها (زي خلية النحل) */
-            background-position: 0 0, 50px 50px; 
-            
-            opacity: 0.05; /* شفافية هادية جداً علشان يفضل مجرد إيحاء في الخلفية */
+            /* بنستدعي اللوجو مرة واحدة بس */
+            background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2');
+            background-size: 60px 60px; /* حجم معقول للوجو */
+            background-position: center; 
+            opacity: 0.04; /* شفافية هادية */
             pointer-events: none; z-index: 0;
         }
 
@@ -113,26 +107,37 @@
         #museumHeader.header-small .logo { height: 40px !important; }
         #museumHeader.header-small .header-title { font-size: 22px !important; }
 
-        /* شاشات الموبايل */
+/* شاشات الموبايل - نفس ترتيب الديسكتوب بالظبط بس بحجم أصغر */
         @media (max-width: 800px) {
-            #museumHeader { padding: 45px 15px 10px; } /* مساحة علوية عشان اللوجوهات */
-            .header-inner { justify-content: center; }
-            .header-title { font-size: 20px; text-align: center; }
+            #museumHeader { padding: 10px 15px; } 
             
-            /* فصل اللوجوهات لتصبح صغيرة في الزوايا العلوية */
-            .logos-group {
-                position: absolute; top: 12px; left: 15px; right: 15px; 
-                width: calc(100% - 30px);
-                justify-content: space-between; /* ده اللي بيرميهم في الزوايا */
-                direction: ltr;
+            .header-inner { 
+                display: flex; 
+                flex-direction: row; 
+                align-items: center; 
+                justify-content: space-between; 
             }
-            .logo { height: 32px; }
+            
+            .header-title { 
+                font-size: 17px; 
+                text-align: right; 
+                margin: 0; 
+                flex: 1; /* عشان العنوان ياخد مساحته براحته */
+            }
+            
+            /* بنلغي الأماكن الغريبة للوجوهات ونرجعها جنب بعض */
+            .logos-group {
+                position: relative; top: auto; left: auto; right: auto; width: auto;
+                display: flex; 
+                gap: 12px; 
+            }
+            
+            .logo { height: 42px; }
             
             /* السكرول في الموبايل */
-            #museumHeader.header-small { padding: 35px 15px 8px !important; }
-            #museumHeader.header-small .logo { height: 24px !important; }
-            #museumHeader.header-small .logos-group { top: 8px; }
-            #museumHeader.header-small .header-title { font-size: 16px !important; }
+            #museumHeader.header-small { padding: 6px 15px !important; }
+            #museumHeader.header-small .logo { height: 32px !important; }
+            #museumHeader.header-small .header-title { font-size: 14px !important; }
         }
 
         .cover-banner {
