@@ -293,7 +293,7 @@
 
         .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
         body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
-        #hall { font-weight: 700; color: var(--main); font-size: 18px; margin-top: 5px; }
+        #hall { font-weight: 700; color: var(--accent); font-size: 18px; margin-top: 5px; }
         body.dark #hall { color: var(--accent); }
 
         @media (min-width: 1000px) {
@@ -515,8 +515,10 @@
             <div class="meta-item" id="date"></div>
             <div class="meta-item" id="dim"></div>
             <div class="meta-material" id="material"></div>
-            <div id="hall"></div> 
+
             <div class="meta-inv" id="inv"></div>
+            
+            <div id="hall"></div> 
         </div>
     </aside>
     
@@ -726,9 +728,10 @@
         document.getElementById("date").innerHTML = (ar ? artwork.date_ar : artwork.date_en) || "";
         document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) || "";
         document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
-        document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
-        document.getElementById("inv").innerHTML = artwork.inventory_number || "";
 
+        document.getElementById("inv").innerHTML = artwork.inventory_number || "";
+        document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
+        
         let rawVid = String(artwork.video_url || "").trim();
         let vidSlot = -1; let finalVidUrl = "";
         if (rawVid !== "") {
