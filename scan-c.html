@@ -325,7 +325,8 @@
         }
 
         @media (min-width: 1000px) {
-            .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; } 
+            /* زودنا max-width لـ 1400px عشان ندي مساحة للنص إنه يعرض */
+            .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; max-width: 1400px; } 
             body.lang-ar .container { flex-direction: row; } 
             body.lang-en .container { flex-direction: row-reverse; } 
 
@@ -339,7 +340,9 @@
             body.lang-en .article-header { text-align: left; }
             
             body.lang-ar .meta-group { align-items: flex-start; } 
-            .article-content { flex-grow: 1; min-width: 0; max-width: 800px; margin: 0 auto; } 
+            
+            /* كبرنا مساحة الكتابة لـ 1050px بدل 800px */
+            .article-content { flex-grow: 1; min-width: 0; max-width: 1050px; margin: 0 auto; } 
             .info-toggle-btn { display: none !important; }
         }
 
