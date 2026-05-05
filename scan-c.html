@@ -234,7 +234,9 @@
         
         .info-toggle-btn::before {
             content: attr(data-tooltip); position: absolute; top: 50%; right: 120%; 
-            transform: translateY(-50%) translateX(10px); background: rgba(6, 68, 76, 0.98); color: var(--light); 
+            transform: translateY(-50%) translateX(10px); 
+            background: rgba(6, 68, 76, 0.80); color: var(--light); 
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 700;
             opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; font-family: 'Tajawal', sans-serif;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3); z-index: 1000;
@@ -290,11 +292,10 @@
         .meta-item { display: block; }
         .meta-material { font-weight: 700; color: var(--darkred); margin-top: 5px; font-size: 18px; }
         body.dark .meta-material { color: var(--gold) !important; }
-
+        #hall { font-weight: 700; color: var(--main); font-size: 18px; margin-top: 5px; }
+        body.dark #hall { color: var(--accent); }
         .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
         body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
-        #hall { font-weight: 700; color: var(--accent); font-size: 18px; margin-top: 5px; }
-        body.dark #hall { color: var(--accent); }
 
         @media (min-width: 1000px) {
             .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; } 
@@ -361,8 +362,8 @@
         body.lang-ar .photo-credit { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
         body.lang-en .photo-credit { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
 
-        .article-body p { font-size: 20px; line-height: 2.1; margin-bottom: 30px; color: var(--main); text-align: justify; }
-        body.dark .article-body p { color: var(--light); }
+        .article-body p { font-size: 20px; line-height: 2.1; margin-bottom: 30px; color: #222; text-align: justify; }
+        body.dark .article-body p { color: #e0e0e0; }
         body.lang-en .article-body { direction: ltr; }
         body.lang-ar .article-body { direction: rtl; }
 
@@ -515,10 +516,8 @@
             <div class="meta-item" id="date"></div>
             <div class="meta-item" id="dim"></div>
             <div class="meta-material" id="material"></div>
-
-            <div class="meta-inv" id="inv"></div>
-            
             <div id="hall"></div> 
+            <div class="meta-inv" id="inv"></div>
         </div>
     </aside>
     
@@ -728,10 +727,9 @@
         document.getElementById("date").innerHTML = (ar ? artwork.date_ar : artwork.date_en) || "";
         document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) || "";
         document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
-
-        document.getElementById("inv").innerHTML = artwork.inventory_number || "";
         document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
-        
+        document.getElementById("inv").innerHTML = artwork.inventory_number || "";
+
         let rawVid = String(artwork.video_url || "").trim();
         let vidSlot = -1; let finalVidUrl = "";
         if (rawVid !== "") {
