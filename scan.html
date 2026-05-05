@@ -197,11 +197,11 @@
 <header id="museumHeader">
     <div class="logo-row">
         <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank">
-            <img src="images/MIALOGO.png" class="logo">
+            <img src="logo-mia.svg" class="logo">
         </a>
         <div class="header-title" id="headerTitle">من حياة التحفة<br>From the Life of an Artefact Exhibition</div>
         <a href="https://nd-f.github.io/QR/">
-            <img src="images/logo-nadim.png" class="logo">
+            <img src="images/logo-nadim.svg" class="logo">
         </a>
     </div>
 </header>
@@ -432,7 +432,7 @@
             if (index === currentVidSlot && currentVidUrl) {
                 checkedCount++; loadedCount++;
                 let ytMatch = currentVidUrl.match(/embed\/([^?]+)/);
-                let ytThumb = ytMatch ? `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg` : 'images/logo-nadim.png';
+                let ytThumb = ytMatch ? `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg` : 'images/logo-nadim.svg';
                 
                 const img = document.createElement("img");
                 img.src = ytThumb;
