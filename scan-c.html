@@ -348,6 +348,27 @@
                 padding: 100px 30px 40px; box-shadow: -5px 0 25px rgba(0,0,0,0.2);
                 transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
             }
+            
+            /* --- الووتر مارك الخاص بدرج المعلومات --- */
+            .article-header::before {
+                content: "";
+                position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2');
+                background-size: 80px 80px; 
+                background-position: center;
+                opacity: 0.03; 
+                pointer-events: none; z-index: 0;
+            }
+            body.dark .article-header::before {
+                background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim-light.svg?v=2');
+                opacity: 0.02;
+            }
+            /* رفع الكلام فوق الووتر مارك عشان يفضل مقروء */
+            .article-header > * {
+                position: relative; z-index: 1;
+            }
+            /* -------------------------------------- */
+
             body.dark .article-header { background: var(--main); box-shadow: -5px 0 25px rgba(0,0,0,0.8); }
             body.lang-ar .article-header { text-align: right; }
             body.lang-en .article-header { text-align: left; }
