@@ -76,14 +76,14 @@
         }
 
         /* ========================================== */
-        /* باترن الهيدر (تقريب المسافات وتكثيف التكرار) */
+        /* باترن الهيدر (بدون تشوه) */
         /* ========================================== */
         .header-pattern {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('images/NADIM+MIA-icon.svg');
             
-            /* السطر السحري: الرقم الأول للمسافة الأفقية، والتاني للمسافة الرأسية */
-            background-size: 110px 45px; 
+            /* خلينا العرض 120 والطول auto عشان الصورة تحتفظ بنسبتها الأصلية ومتبكسلش */
+            background-size: 120px auto; 
             
             background-position: center; 
             opacity: 0.05; 
