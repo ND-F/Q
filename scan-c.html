@@ -431,7 +431,7 @@
 
         .controls > div:not(.sep)::before {
             content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%;
-            transform: translateX(-50%) translateY(10px); background: rgba(6, 68, 76, 0.98); color: var(--light); 
+            transform: translateX(-50%) translateY(10px); background: rgba(6, 68, 76, 0.50); color: var(--light); 
             padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 700;
             opacity: 0; visibility: hidden; transition: 0.3s; pointer-events: none; font-family: 'Tajawal', sans-serif;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
@@ -457,8 +457,8 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
 
-        #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255,255,255,0.98); z-index: 10001; }
-        body.dark #fullscreenModal { background: rgba(6, 68, 76, 0.98); }
+        #fullscreenModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255,255,255,0.50); z-index: 10001; }
+        body.dark #fullscreenModal { background: rgba(6, 68, 76, 0.50); }
         #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; overflow: hidden; }
         #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; cursor: grab; transform-origin: center center; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2)); }
         #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--main); cursor: pointer; z-index: 10002; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
