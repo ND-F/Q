@@ -10,14 +10,14 @@
     if (segment && segment !== 'Q') {
       var upperSeg = segment.toUpperCase();
       
-      // 1. مسار التصميم الثالث (M و VM) -> يوجه إلى scan-c.html
+      // 1. مسار التصميم الثالث (M و VM) -> يوجه إلى c.html
       if (upperSeg.startsWith('VM')) {
         var realId = 'V' + segment.substring(2); // V1
-        window.location.replace('/Q/scan-c.html?id=' + realId);
+        window.location.replace('/Q/c.html?id=' + realId);
       } 
       else if (upperSeg.startsWith('M')) {
         var realId = segment.substring(1); // 1
-        window.location.replace('/Q/scan-c.html?id=' + realId);
+        window.location.replace('/Q/c.html?id=' + realId);
       }
       
       // 2. مسار التصميم التجريبي الجديد (N و VN) -> يوجه إلى n.html
