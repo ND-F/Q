@@ -710,7 +710,7 @@
             if (!id) {
                 let pathName = window.location.pathname.replace(/\/$/, "");
                 let fileName = pathName.split('/').pop().replace('.html', '');
-                if (fileName && fileName !== "scan-c" && fileName !== "Q") id = fileName;
+                if (fileName && fileName !== "c" && fileName !== "Q") id = fileName;
             }
             if (!allArtworks || allArtworks.length === 0) return;
             const finalId = id || allArtworks[0].id;
