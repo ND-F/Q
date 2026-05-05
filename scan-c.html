@@ -432,11 +432,15 @@
 
         .controls > div:not(.sep)::before {
             content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%;
-            transform: translateX(-50%) translateY(10px); background: rgba(6, 68, 76, 0.50); color: var(--light); 
+            transform: translateX(-50%) translateY(10px); 
+            background: rgba(6, 68, 76, 0.50); 
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); /* تأثير الزجاج */
+            color: var(--light); 
             padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 700;
             opacity: 0; visibility: hidden; transition: 0.3s; pointer-events: none; font-family: 'Tajawal', sans-serif;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
+        
         .controls > div:not(.sep):hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
 
         .controls.controls-mini {
