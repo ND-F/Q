@@ -13,7 +13,7 @@
     <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2" media="(prefers-color-scheme: light)">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim-light.svg?v=2">
     
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWD0WHS7EV"></script>
@@ -28,11 +28,12 @@
         :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; --accent: #ADCAC9; --darkred: #4A121C; }
         
         body { 
-            margin: 0; font-family: 'Tajawal', serif; 
+            margin: 0; font-family: 'Tajawal', sans-serif; 
+            font-weight: 500; /* إجبار كل نصوص الموقع على Medium كبداية */
             background: var(--light); color: var(--main); 
             transition: background 0.4s ease, color 0.4s ease; overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            padding-top: 95px; /* مقاس الهيدر في الديسكتوب */
+            padding-top: 95px; 
         }
         body.dark { background: var(--main); color: var(--light); }
         
@@ -211,7 +212,7 @@
             background: rgba(6, 68, 76, 0.50); /* الشفافية 50 */
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); /* تأثير الزجاج */
             color: var(--light); 
-            padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 700;
+            padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 800;
             opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; font-family: 'Tajawal', sans-serif;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3); z-index: 1000;
         }
@@ -255,21 +256,67 @@
             display: none;
         }
         
-        .article-header h1 { font-size: 32px; color: var(--darkred) !important; margin: 0 0 10px 0; font-weight: 800; line-height: 1.4; }
+        /* عنوان القطعة (Tajawal Black) */
+        .article-header h1 { 
+            font-size: 32px; 
+            color: var(--darkred) !important; 
+            margin: 0 0 10px 0; 
+            font-weight: 900; /* Black */
+            line-height: 1.4; 
+        }
         body.dark .article-header h1 { color: var(--gold) !important; }
+        
         .title-separator { border: none; border-top: 2px solid rgba(225, 169, 62, 0.5); width: 40px; margin: 0 0 20px 0; }
         body.lang-ar .title-separator { margin-left: auto; margin-right: 0; }
         body.lang-en .title-separator { margin-left: 0; margin-right: auto; }
 
-        .meta-group { display: flex; flex-direction: column; gap: 12px; font-size: 16px; color: var(--main); opacity: 0.9; line-height: 1.6; }
+        /* مجموعة المعلومات الأساسية (Tajawal Medium) */
+        .meta-group { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            font-size: 16px; 
+            color: var(--main); 
+            opacity: 0.9; 
+            line-height: 1.6; 
+            font-weight: 500; /* Medium */
+        }
         body.dark .meta-group { color: var(--light); }
         .meta-item { display: block; }
-        .meta-material { font-weight: 700; color: var(--darkred); margin-top: 5px; font-size: 18px; }
-        body.dark .meta-material { color: var(--gold) !important; }
-        #hall { font-weight: 700; color: var(--main); font-size: 18px; margin-top: 5px; }
+        
+        /* جعل الماتريال بنفس تنسيق المكان والتاريخ */
+        .meta-material { 
+            display: block; 
+            /* شيلنا اللون الأحمر والخط التخين عشان يمشي مع الباقي */
+        }
+
+        /* القاعة (Tajawal Extra Bold) */
+        #hall { 
+            font-weight: 800; /* Extra Bold */
+            color: var(--main); 
+            font-size: 18px; 
+            margin-top: 5px; 
+        }
         body.dark #hall { color: var(--accent); }
-        .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
-        body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
+        
+        /* رقم الحفظ (بنفس روح العنوان Tajawal Black - وبحجم 18) */
+        .meta-inv { 
+            margin-top: 25px; 
+            padding-top: 15px; 
+            border-top: 1px solid rgba(0,0,0,0.1); 
+            
+            font-size: 18px; /* حجم الماتريال القديم */
+            color: var(--darkred); /* لون العنوان */
+            font-weight: 900; /* Black زي العنوان */
+            font-family: 'Tajawal', serif; /* لغينا الـ sans-serif */
+            opacity: 1; /* لغينا الشفافية */
+        }
+        
+        /* رقم الحفظ في الدارك مود (لون ذهبي زي العنوان) */
+        body.dark .meta-inv { 
+            border-top-color: rgba(255,255,255,0.1); 
+            color: var(--gold) !important;
+        }
 
         @media (min-width: 1000px) {
             .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; } 
@@ -323,15 +370,16 @@
             .image-pair-wrapper.has-double img { max-width: calc(50% - 10px); }
         }
 
-        figcaption { margin-top: 15px; font-size: 14px; color: #555; font-style: italic; opacity: 0.9; line-height: 1.5; }
+        figcaption { margin-top: 15px; font-size: 14px; color: #555; font-weight: 500; opacity: 0.9; line-height: 1.5; }
         body.dark figcaption { color: #aaa; }
         body.lang-ar figcaption { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
         body.lang-en figcaption { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
         
         .photo-credit { 
             display: block !important; margin-top: 15px; font-size: 13px; color: #666; 
-            font-style: italic; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; width: 100%; 
+            font-weight: 500; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; width: 100%; 
         }
+        
         body.dark .photo-credit { color: #aaa; border-bottom: 1px solid rgba(255,255,255,0.1); }
         body.lang-ar .photo-credit { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
         body.lang-en .photo-credit { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
@@ -409,7 +457,7 @@
             background: rgba(6, 68, 76, 0.50); 
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); /* تأثير الزجاج */
             color: var(--light); 
-            padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 700;
+            padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 800;
             opacity: 0; visibility: hidden; transition: 0.3s; pointer-events: none; font-family: 'Tajawal', sans-serif;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
