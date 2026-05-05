@@ -319,21 +319,37 @@
         }
 
         @media (min-width: 1000px) {
-            .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; } 
-            body.lang-ar .container { flex-direction: row; } 
-            body.lang-en .container { flex-direction: row-reverse; } 
+            /* إلغاء الـ Flex عشان نخلي الكارت فوق والمحتوى تحته */
+            .container { display: block; } 
 
+            /* تنسيق كارت المعلومات في الديسكتوب */
             .article-header {
-                width: 320px; flex-shrink: 0; position: sticky; top: 120px; text-align: inherit;
-                background: transparent !important; padding: 0 !important; margin-bottom: 0 !important; z-index: 10;
-                box-shadow: none; transition: none; left: auto !important; right: auto !important;
+                max-width: 800px; /* نفس عرض المحتوى */
+                margin: 0 auto 50px auto !important; /* توسيط الكارت */
+                position: relative; top: auto; left: auto; right: auto;
+                text-align: inherit;
+                background: var(--light) !important; /* إرجاع لون الخلفية */
+                padding: 40px 50px !important; /* هوامش داخلية مريحة */
+                border-radius: 15px; /* حواف دائرية */
+                z-index: 10;
+                box-shadow: 0 15px 40px rgba(0,0,0,0.12) !important; /* ظل فخم */
                 height: auto; overflow-y: visible; 
             }
+            
+            /* السطر السحري: رفع الكارت فوق الكافر لما يكون فيه صورة كافر */
+            body.has-cover .article-header {
+                margin-top: -100px !important; 
+            }
+
+            /* ألوان الدارك مود للكارت */
+            body.dark .article-header { background: var(--main) !important; box-shadow: 0 15px 40px rgba(0,0,0,0.5) !important; }
+            
             body.lang-ar .article-header { text-align: right; }
             body.lang-en .article-header { text-align: left; }
-            
             body.lang-ar .meta-group { align-items: flex-start; } 
-            .article-content { flex-grow: 1; min-width: 0; max-width: 800px; margin: 0 auto; } 
+            
+            /* توسيط محتوى المقالة */
+            .article-content { max-width: 800px; margin: 0 auto; } 
             .info-toggle-btn { display: none !important; }
         }
 
