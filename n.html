@@ -95,8 +95,14 @@
         }
 
         .logos-group {
-            display: flex; align-items: center; gap: 20px;
+            display: flex; align-items: center; gap: 00px;
             flex-shrink: 0; /* يمنع الانكماش والركوب على العنوان */
+        }
+        /* السطر ده هيشد اللوجو التاني ناحية الأولاني بالسالب */
+        .logos-group a:first-child {
+            margin-inline-end: -10px; /* لو لسه بعاد كبر الرقم ده خليه -50px أو -60px */
+            position: relative;
+            z-index: 2;
         }
 
         .logo { 
