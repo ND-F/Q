@@ -76,17 +76,15 @@
         }
 
         /* ========================================== */
-        /* باترن الهيدر (تقارب أوتوماتيكي للـ SVG) */
+        /* باترن الهيدر (متناسق مع الصورة المقصوصة) */
         /* ========================================== */
         .header-pattern {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('images/NADIM+MIA-icon.svg?v=5');
+            /* ضفنا v=6 عشان المتصفح يحس بالتحديث فوراً */
+            background-image: url('images/NADIM+MIA-icon.svg?v=6');
             
-            /* هنا السحر: 
-               - العرض 80px عشان يقربوا من بعض جداً أفقياً.
-               - الطول 45px عشان ميحصلش تشوه (Squish) ويحافظ على شكله.
-            */
-            background-size: 80px 45px; 
+            /* هنا الحل الجذري: العرض 120px والطول auto */
+            background-size: 120px auto; 
             
             background-position: center; 
             opacity: 0.05; 
