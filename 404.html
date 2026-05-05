@@ -10,7 +10,7 @@
     if (segment && segment !== 'Q') {
       var upperSeg = segment.toUpperCase();
       
-      // 1. مسار التصميم الثالث (M و MV) -> يوجه إلى scan-c.html
+      // 1. مسار التصميم الثالث (M و VM) -> يوجه إلى scan-c.html
       if (upperSeg.startsWith('VM')) {
         var realId = 'V' + segment.substring(2); // V1
         window.location.replace('/Q/scan-c.html?id=' + realId);
@@ -20,7 +20,17 @@
         window.location.replace('/Q/scan-c.html?id=' + realId);
       }
       
-      // 2. مسار التصميم الثاني (Q و VQ) -> يوجه إلى scan-b.html
+      // 2. مسار التصميم التجريبي الجديد (N و VN) -> يوجه إلى n.html
+      else if (upperSeg.startsWith('VN')) {
+        var realId = 'V' + segment.substring(2); // V1
+        window.location.replace('/Q/n.html?id=' + realId); // تأكد إن ده اسم ملفك الجديد
+      } 
+      else if (upperSeg.startsWith('N')) {
+        var realId = segment.substring(1); // 1
+        window.location.replace('/Q/n.html?id=' + realId); // تأكد إن ده اسم ملفك الجديد
+      }
+      
+      // 3. مسار التصميم الثاني (Q و VQ) -> يوجه إلى scan-b.html
       else if (upperSeg.startsWith('VQ')) {
         var realId = 'V' + segment.substring(2); // V1
         window.location.replace('/Q/scan-b.html?id=' + realId);
@@ -30,7 +40,7 @@
         window.location.replace('/Q/scan-b.html?id=' + realId);
       } 
       
-      // 3. المسار الافتراضي العادي -> يوجه إلى scan.html
+      // 4. المسار الافتراضي العادي -> يوجه إلى scan.html
       else {
         window.location.replace('/Q/scan.html?id=' + segment);
       }
