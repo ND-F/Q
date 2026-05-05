@@ -232,11 +232,12 @@
             transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .info-toggle-btn::before {
+            .info-toggle-btn::before {
             content: attr(data-tooltip); position: absolute; top: 50%; right: 120%; 
             transform: translateY(-50%) translateX(10px); 
-            background: rgba(6, 68, 76, 0.80); color: var(--light); 
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            background: rgba(6, 68, 76, 0.50); /* الشفافية 50 اللي عجبتك */
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); /* تأثير الزجاج علشان الكلام يتقري كويس */
+            color: var(--light); 
             padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 700;
             opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; font-family: 'Tajawal', sans-serif;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3); z-index: 1000;
