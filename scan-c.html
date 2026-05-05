@@ -75,12 +75,17 @@
             overflow: hidden; 
         }
 
+        /* ========================================== */
+        /* نقش العلامة المائية الجديد (اللوجوهين معاً) */
+        /* ========================================== */
         .header-pattern {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim.svg?v=2');
-            background-size: 60px 60px; 
+            /* مسار الصورة الجديدة */
+            background-image: url('images/Logos_Centralized.png');
+            /* خلينا العرض 150 بيكسل والارتفاع auto عشان الصورة مستطيلة ومتبكسلش أو تتمط */
+            background-size: 150px auto; 
             background-position: center; 
-            opacity: 0.04; 
+            opacity: 0.05; /* نسبة شفافية ممتازة للعلامة المائية */
             pointer-events: none; z-index: 0;
         }
 
