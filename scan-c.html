@@ -80,12 +80,8 @@
         /* ========================================== */
         .header-pattern {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            /* ضفنا v=6 عشان المتصفح يحس بالتحديث فوراً */
             background-image: url('images/NADIM+MIA-icon.svg?v=6');
-            
-            /* هنا الحل الجذري: العرض 120px والطول auto */
             background-size: 85px auto; 
-            
             background-position: center; 
             opacity: 0.05; 
             pointer-events: none; z-index: 0;
@@ -166,65 +162,35 @@
 
             /* مقاسات الكافر في الموبايل */
             .cover-banner { 
-                top: 62px !important; 
                 height: 250px !important; 
-            }
-            .cover-banner.cover-small { 
-                top: 44px !important; 
-                height: 50px !important; 
-            }
-            /* شد المحتوى لفوق في الموبايل بالمللي بدون فراغ */
-            body.has-cover .container { 
-                margin-top: 250px !important; /* الكافر 250 (لأن البودي واخد 62) */
-            }
-            body.has-cover.is-scrolled .container { 
-                margin-top: 32px !important; /* الهيدر الصغير 44 + الكافر الصغير 50 - بادينج البودي 62 = 32 */
             }
         }
 
        /* ========================================== */
-        /* الكافر (Cover Banner) وتثبيت أبعاده بقوة */
+        /* الكافر (Cover Banner) بوضعه الطبيعي (بينزل مع السكرول) */
         /* ========================================== */
         .cover-banner {
-            width: 100vw; /* إجبار بعرض الشاشة بالكامل لمنع الفراغات الجانبية */
-            height: 400px; /* تثبيت الارتفاع مهما كان حجم الصورة */
-            overflow: hidden; position: fixed; 
-            top: 95px; left: 0; z-index: 990;
+            width: 100%; /* 100% أفضل من 100vw لمنع سكرول العرض */
+            height: 400px; 
+            overflow: hidden; 
+            position: relative; /* الكافر أصبح جزء من الصفحة وبيتحرك معاها */
             display: none;
             background: var(--main); margin: 0; padding: 0;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .cover-banner.cover-small {
-            top: 56px; 
-            height: 60px; 
-            opacity: 0.95; 
         }
 
         .cover-banner img { 
             width: 100%; height: 100%; 
-            object-fit: cover !important; /* السطر ده بيملى الفراغات ويقص الزيادة */
+            object-fit: cover !important; 
             object-position: center; 
             display: block; opacity: 1; 
         }
 
         .container { 
             max-width: 1200px; 
+            /* المسافة هنا 40px هي المسافة بين الكافر والمحتوى */
             margin: 40px auto 100px; padding: 0 20px; 
             opacity: 0; position: relative;
-            /* أضفنا انتقال للمسافة العلوية عشان المحتوى يتشد لفوق بنعومة */
-            transition: opacity 0.5s ease, margin-top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-
-        /* الحالة الافتراضية: الكافر كبير */
-        body.has-cover .container {
-            margin-top: 400px; /* ارتفاع الكافر فقط لأن البودي واخد بادينج الهيدر 95 */
-        }
-        
-        /* الحالة الجديدة: الكافر صغير (المحتوى هيتشفط لفوق) */
-        body.has-cover.is-scrolled .container {
-            margin-top: 21px; /* الهيدر الصغير 56 + الكافر الصغير 60 - بادينج البودي 95 = 21 */
+            transition: opacity 0.5s ease; 
         }
         
         .container.ready { opacity: 1; }
@@ -239,11 +205,11 @@
             transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
         }
         
-            .info-toggle-btn::before {
+        .info-toggle-btn::before {
             content: attr(data-tooltip); position: absolute; top: 50%; right: 120%; 
             transform: translateY(-50%) translateX(10px); 
-            background: rgba(6, 68, 76, 0.50); /* الشفافية 50 اللي عجبتك */
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); /* تأثير الزجاج علشان الكلام يتقري كويس */
+            background: rgba(6, 68, 76, 0.50); /* الشفافية 50 */
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); /* تأثير الزجاج */
             color: var(--light); 
             padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 700;
             opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; font-family: 'Tajawal', sans-serif;
@@ -298,11 +264,11 @@
         .meta-group { display: flex; flex-direction: column; gap: 12px; font-size: 16px; color: var(--main); opacity: 0.9; line-height: 1.6; }
         body.dark .meta-group { color: var(--light); }
         .meta-item { display: block; }
-        .meta-material { font-weight: 700; color: var(--main); margin-top: 5px; font-size: 18px; }
-        body.dark .meta-material { color: var(--light) !important; }
+        .meta-material { font-weight: 700; color: var(--darkred); margin-top: 5px; font-size: 18px; }
+        body.dark .meta-material { color: var(--gold) !important; }
         #hall { font-weight: 700; color: var(--main); font-size: 18px; margin-top: 5px; }
         body.dark #hall { color: var(--accent); }
-        .meta-inv { margin-top: 25px; font-size: 14px; color: var(--darkred) !important; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
+        .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
         body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
 
         @media (min-width: 1000px) {
@@ -529,7 +495,6 @@
             <div class="meta-material" id="material"></div>
             <div class="meta-item" id="dim"></div>
             
-
             <div class="meta-inv" id="inv"></div>
             <div id="hall"></div> 
         </div>
@@ -627,7 +592,6 @@
         let isScrolled = window.scrollY > 40;
         document.body.classList.toggle("is-scrolled", isScrolled); 
         document.getElementById("museumHeader").classList.toggle("header-small", isScrolled); 
-        document.getElementById("coverBanner").classList.toggle("cover-small", isScrolled); 
         
         if(sidebar.classList.contains("open") && window.scrollY > 50) {
             setInfoDrawer(false);
@@ -739,10 +703,10 @@
         document.getElementById("title").innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "بدون عنوان";
         document.getElementById("from").innerHTML = (ar ? artwork.from_ar : artwork.from_en) || "";
         document.getElementById("date").innerHTML = (ar ? artwork.date_ar : artwork.date_en) || "";
-        document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) || "";
         document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
-        document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
+        document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) || "";
         document.getElementById("inv").innerHTML = artwork.inventory_number || "";
+        document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
 
         let rawVid = String(artwork.video_url || "").trim();
         let vidSlot = -1; let finalVidUrl = "";
