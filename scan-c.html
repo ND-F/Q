@@ -298,11 +298,11 @@
         .meta-group { display: flex; flex-direction: column; gap: 12px; font-size: 16px; color: var(--main); opacity: 0.9; line-height: 1.6; }
         body.dark .meta-group { color: var(--light); }
         .meta-item { display: block; }
-        .meta-material { font-weight: 700; color: var(--darkred); margin-top: 5px; font-size: 18px; }
-        body.dark .meta-material { color: var(--gold) !important; }
+        .meta-material { font-weight: 700; color: var(--main); margin-top: 5px; font-size: 18px; }
+        body.dark .meta-material { color: var(--light) !important; }
         #hall { font-weight: 700; color: var(--main); font-size: 18px; margin-top: 5px; }
         body.dark #hall { color: var(--accent); }
-        .meta-inv { margin-top: 25px; font-size: 14px; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
+        .meta-inv { margin-top: 25px; font-size: 14px; color: var(--darkred) !important; opacity: 0.5; font-family: sans-serif; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; }
         body.dark .meta-inv { border-top-color: rgba(255,255,255,0.1); }
 
         @media (min-width: 1000px) {
@@ -526,8 +526,9 @@
         <div class="meta-group">
             <div class="meta-item" id="from"></div>
             <div class="meta-item" id="date"></div>
-            <div class="meta-item" id="dim"></div>
             <div class="meta-material" id="material"></div>
+            <div class="meta-item" id="dim"></div>
+            
 
             <div class="meta-inv" id="inv"></div>
             <div id="hall"></div> 
