@@ -311,14 +311,31 @@
         /* رقم الحفظ (بنفس روح العنوان Tajawal Black - وبحجم 18) */
         .meta-inv { 
             margin-top: 25px; 
-            padding-top: 15px; 
-            border-top: 1px solid rgba(0,0,0,0.1); 
+            padding-top: 0px; 
+            border-top: none; /* لغينا الخط القديم الطويل */
             
             font-size: 18px; /* حجم الماتريال القديم */
             color: var(--darkred); /* لون العنوان */
             font-weight: 900; /* Black زي العنوان */
             font-family: 'Tajawal', serif; /* لغينا الـ sans-serif */
             opacity: 1; /* لغينا الشفافية */
+        }
+        /* إضافة الخط الذهبي القصير فوق رقم الحفظ */
+        .meta-inv::before {
+            content: "";
+            display: block;
+            border-top: 2px solid rgba(225, 169, 62, 0.5); /* نفس لون وسمك خط العنوان */
+            width: 40px; /* نفس طول خط العنوان */
+            margin-bottom: 15px; /* المسافة بين الخط والكلمة */
+        }
+        
+        /* ضبط محاذاة الخط حسب اللغة */
+        body.lang-ar .meta-inv::before { margin-left: auto; margin-right: 0; }
+        body.lang-en .meta-inv::before { margin-left: 0; margin-right: auto; }
+        
+        /* رقم الحفظ في الدارك مود (لون ذهبي زي العنوان) */
+        body.dark .meta-inv { 
+            color: var(--gold) !important;
         }
         
         /* رقم الحفظ في الدارك مود (لون ذهبي زي العنوان) */
