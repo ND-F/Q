@@ -92,9 +92,57 @@
 
         .header-inner {
             position: relative; z-index: 1;
-            display: flex; align-items: center; justify-content: space-between; 
-            width: 100%; max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: flex-start;
+            width: 100%; max-width: 1400px; margin: 0 auto; box-sizing: border-box;
         }
+        /* ========================================== */
+        /* محاذاة الهيدر حسب اللغة */
+        /* ========================================== */
+        
+        /* ENGLISH */
+        body.lang-en .header-inner {
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 60px;
+        }
+        
+        /* عنوان الهيدر يبدأ مع بداية الديسكريبشن */
+        body.lang-en .header-title {
+            width: calc(100% - 380px);
+            max-width: 1050px;
+            text-align: left;
+        }
+        
+        /* اللوجوهات تبدأ مع بداية عنوان القطعة */
+        body.lang-en .logos-group {
+            width: 320px;
+            flex-shrink: 0;
+            justify-content: flex-start;
+            transform: none;
+        }
+        
+        /* ARABIC */
+        body.lang-ar .header-inner {
+            flex-direction: row-reverse;
+            justify-content: flex-start;
+            gap: 60px;
+        }
+        
+        /* عنوان الهيدر يبدأ مع عنوان القطعة */
+        body.lang-ar .header-title {
+            width: 320px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+        
+        /* اللوجوهات في العربي تفضل في مكانها الحالي */
+        body.lang-ar .logos-group {
+            flex: 1;
+            display: flex;
+            justify-content: flex-start;
+        }
+        
+        
 
         .logos-group {
             display: flex; align-items: center; gap: 00px;
