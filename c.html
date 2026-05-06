@@ -326,17 +326,20 @@
         }
 
         @media (min-width: 1000px) {
-            /* هنوحد عرض الهيدر مع المحتوى */
-            .header-inner { max-width: 1400px; }
+            /* توحيد المقاسات بين الهيدر والكونتينر بالمللي */
+            .header-inner { max-width: 1400px; width: 100%; box-sizing: border-box; }
             
-            /* 🔥 السر هنا: هندي اللوجوهات في الإنجليزي 320px ونحاذيها للشمال عشان تركب فوق النص بالمسطرة 🔥 */
+            /* اللوجوهات هتاخد نفس عرض عمود النص، وتبدأ من الشمال معاه بالمسطرة */
             body.lang-en .logos-group { 
                 width: 320px; 
                 justify-content: flex-start; 
+                transform: translateX( 00px);
+                /* لو حسيت إن اللوجو لسه مرحل سيكا بسبب الفراغ اللي جوه الصورة نفسها، تقدر تزود السطر ده: */
+                /* transform: translateX(-10px); */
             }
 
-            /* زودنا max-width لـ 1400px عشان ندي مساحة للنص إنه يعرض */
-            .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; max-width: 1400px; } 
+            /* ⚠️ التعديل الجذري هنا: ضفنا box-sizing عشان الـ padding ميكبرش الكونتينر ويبوظ المحاذاة */
+            .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; max-width: 1400px; box-sizing: border-box; } 
             body.lang-ar .container { flex-direction: row; } 
             body.lang-en .container { flex-direction: row-reverse; } 
 
