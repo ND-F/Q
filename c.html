@@ -110,10 +110,12 @@
             height: 65px; 
             width: auto; 
             cursor: pointer; 
-            backface-visibility: hidden;
-            will-change: transform;
+            /* السطرين دول هم "السر" عشان اللوجو ميبكسلش وهو بيصغر ويكبر */
+            image-rendering: -webkit-optimize-contrast; 
+            transform: translateZ(0);
             /* لغينا الـ translateZ والـ cubic-bezier النطاط وخليناها ناعمة جداً */
-            transition: transform 0.3s ease-out, filter 0.3s ease-out; 
+            /* خلي الـ transition ناعم وبسيط */
+            transition: height 0.3s ease-out, transform 0.3s ease-out;
         }
 
         .logo:hover {
