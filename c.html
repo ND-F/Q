@@ -348,13 +348,17 @@
             /* توحيد المقاسات بين الهيدر والكونتينر بالمللي */
             .header-inner { max-width: 1400px; width: 100%; box-sizing: border-box; }
             
-           /* ضبط اللوجوهات في الإنجليزي عشان تحاذي النص هندسياً وماتتحركش وقت السكرول */
+           /* ضبط اللوجوهات في الإنجليزي ومحاذاتها للشمال براحتك */
             body.lang-en .logos-group { 
                 width: 320px; 
                 box-sizing: border-box;
-                padding-left: 50px !important; /* نفس هامش الكارت الداخلي عشان يبدأوا على خط واحد بالضبط */
+                padding-left: 50px !important; /* دي بتثبتهم عشان ميتزحلقوش وقت السكرول */
                 justify-content: flex-start; 
-                transform: translateX( -50px); !important; /* لغينا الترحيل الوهمي اللي كان بيزحلقهم */
+                transform: none !important; 
+                
+                /* السر هنا: زق اللوجوهات شمال براحتك */
+                position: relative;
+                left: -40px; /* كبر الرقم ده بالسالب (مثلاً -30px أو -40px) عشان ترحلهم شمال أكتر لحد ما يظبطوا معاك */
             }
             /* ترحيل عنوان الهيدر ليكون محاذي للمتن (بالعربي والإنجليزي) */
             body.lang-ar .header-title { transform: translateX(-20px); } /* رحلناه يمين في العربي */
