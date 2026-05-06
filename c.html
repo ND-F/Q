@@ -348,13 +348,13 @@
             /* توحيد المقاسات بين الهيدر والكونتينر بالمللي */
             .header-inner { max-width: 1400px; width: 100%; box-sizing: border-box; }
             
-            /* اللوجوهات هتاخد نفس عرض عمود النص، وتبدأ من الشمال معاه بالمسطرة */
+           /* ضبط اللوجوهات في الإنجليزي عشان تحاذي النص هندسياً وماتتحركش وقت السكرول */
             body.lang-en .logos-group { 
                 width: 320px; 
+                box-sizing: border-box;
+                padding-left: 50px !important; /* نفس هامش الكارت الداخلي عشان يبدأوا على خط واحد بالضبط */
                 justify-content: flex-start; 
-                transform: translateX( -50px);
-                /* لو حسيت إن اللوجو لسه مرحل سيكا بسبب الفراغ اللي جوه الصورة نفسها، تقدر تزود السطر ده: */
-                /* transform: translateX(-20px); */
+                transform: none !important; /* لغينا الترحيل الوهمي اللي كان بيزحلقهم */
             }
             /* ترحيل عنوان الهيدر ليكون محاذي للمتن (بالعربي والإنجليزي) */
             body.lang-ar .header-title { transform: translateX(-20px); } /* رحلناه يمين في العربي */
