@@ -48,10 +48,10 @@
             width: 100vw; height: 100vh;
             
             background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim-b.svg?v=2');
-            background-size: 80px 80px; 
+            background-size: 55px 55px; /* قللنا الحجم لـ 55px عشان الأيقونات تقرب من بعضها (كانت 80) */
             background-position: center;
             
-            opacity: 0.03; 
+            opacity: 0.09; /*  ضاعفنا درجة الوضوح مرتين لـ 0.09 (كانت 0.03) */
             pointer-events: none; 
             z-index: -1; 
             transition: background-image 0.4s ease, opacity 0.4s ease;
@@ -59,7 +59,7 @@
 
         body.dark::before {
             background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim-light-b.svg?v=2');
-            opacity: 0.02; 
+            opacity: 0.09; /* زودنا الوضوح في وضع الدارك كمان */
         }
         
        
@@ -377,14 +377,14 @@
                 content: "";
                 position: absolute; top: 0; left: 0; width: 100%; height: 100%;
                 background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim-b.svg?v=2');
-                background-size: 80px 80px; 
+                background-size: 55px 55px; 
                 background-position: center;
-                opacity: 0.03; 
+                opacity: 0.09; 
                 pointer-events: none; z-index: 0;
             }
             body.dark .article-header::before {
                 background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-nadim-light-b.svg?v=2');
-                opacity: 0.02;
+                opacity: 0.09;
             }
             /* رفع الكلام فوق الووتر مارك عشان يفضل مقروء */
             .article-header > * {
