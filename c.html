@@ -329,8 +329,11 @@
             /* هنضيف السطر ده عشان الهيدر يتساوى بالظبط مع مساحة المحتوى */
             .header-inner { max-width: 1400px; }
             
-            /* 🔥 التعديل الجديد: توحيد مساحة اللوجوهات مع مساحة قائمة القطعة (320px) في اللغتين 🔥 */
-            .logos-group { width: 320px; justify-content: flex-end; }
+            /* 🔥 التعديل الصح: هندي اللوجوهات في الإنجليزي 320px ونقولها تبدأ من الشمال (flex-start) عشان تحاذي النص بالمللي 🔥 */
+            body.lang-en .logos-group { 
+                width: 320px; 
+                justify-content: flex-start; 
+            }
 
             /* زودنا max-width لـ 1400px عشان ندي مساحة للنص إنه يعرض */
             .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; max-width: 1400px; } 
