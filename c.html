@@ -111,13 +111,13 @@
             width: auto; 
             cursor: pointer; 
             backface-visibility: hidden;
-            transform: translateZ(0);
             will-change: transform;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease; 
+            /* لغينا الـ translateZ والـ cubic-bezier النطاط وخليناها ناعمة جداً */
+            transition: transform 0.3s ease-out, filter 0.3s ease-out; 
         }
 
         .logo:hover {
-            transform: translateZ(0) scale(1.08); 
+            transform: scale(1.08); 
             filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.15)); 
         }
 
@@ -333,9 +333,9 @@
             body.lang-en .logos-group { 
                 width: 320px; 
                 justify-content: flex-start; 
-                transform: translateX( -10px);
+                transform: translateX( -13px);
                 /* لو حسيت إن اللوجو لسه مرحل سيكا بسبب الفراغ اللي جوه الصورة نفسها، تقدر تزود السطر ده: */
-                /* transform: translateX(-10px); */
+                /* transform: translateX(-20px); */
             }
 
             /* ⚠️ التعديل الجذري هنا: ضفنا box-sizing عشان الـ padding ميكبرش الكونتينر ويبوظ المحاذاة */
