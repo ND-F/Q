@@ -316,7 +316,8 @@
             initPiece(finalId);
             
             if (window.location.search.includes("id=")) {
-                window.history.replaceState({id: finalId}, '', finalId);
+                let urlPath = String(finalId).toUpperCase().startsWith('V') ? 'VM' + String(finalId).substring(1) : 'M' + finalId;
+                window.history.replaceState({id: finalId}, '', urlPath);
             }
         } catch(e) { 
             console.error("Data Load Failed", e); 
@@ -624,8 +625,8 @@
         const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
         if(idx >= 0 && idx < allArtworks.length) {
             const nextId = allArtworks[idx].id;
-            window.history.pushState({id: nextId}, '', nextId);
-            initPiece(nextId);
+            let urlPath = String(nextId).toUpperCase().startsWith('V') ? 'VM' + String(nextId).substring(1) : 'M' + nextId;
+            window.history.pushState({id: nextId}, '', urlPath);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
