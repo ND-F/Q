@@ -1,242 +1,573 @@
+# Complete Refactored `index.html`
+
+```html
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NADIM in Museum of Islamic Arts - نديم في متحف الفن الإسلامي</title>
-    <link rel="icon" type="image/svg+xml" href="images/nadim-icon.svg">
-    <link rel="apple-touch-icon" href="images/nadim-icon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>NADIM in Museum of Islamic Arts - نديم في متحف الفن الإسلامي</title>
+
+<link rel="icon" type="image/svg+xml" href="images/icon-nadim.svg?v=2">
+<link rel="apple-touch-icon" href="images/icon-nadim.svg?v=2">
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWD0WHS7EV"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-RWD0WHS7EV');
-    </script>
-    <script>
-        /* 1. نظام التحويل السريع (محدث للأرقام المجردة) */
-        const query = window.location.search.substring(1);
-        if (query && query.length >= 1) {
-            // سيقوم بتحويل ?02 إلى رابط نظيف 02 مباشرة
-            window.location.replace(query);
-        }
 
-        /* 2. مزامنة الثيم قبل تحميل الصفحة لمنع الوميض */
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "light") {
-            document.documentElement.classList.add("light-theme-applied");
-        }
-    </script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-RWD0WHS7EV');
+</script>
 
-    <style>
-        :root {
-            --main: #06444C;
-            --light: #EAE8D8;
-            --gold: #E1A93E;
-        }
+<script>
 
-        body {
-            margin: 0;
-            font-family: 'Tajawal', sans-serif;
-            background: var(--main);
-            color: var(--light);
-            transition: background 0.4s ease;
-            -webkit-font-smoothing: antialiased;
-        }
+const query = window.location.search.substring(1);
 
-        /* كلاس الثيم الفاتح */
-        body.light { background: var(--light); color: var(--main); }
-        .light-theme-applied body { background: var(--light); color: var(--main); }
+if (query && query.length >= 1) {
+    window.location.replace(query);
+}
 
-        /* HEADER (موحد مع صفحة scan) */
-        #museumHeader { 
-            background: var(--light); 
-            padding: 15px 20px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            box-shadow: 0 2px 15px rgba(0,0,0,0.2); 
-            position: sticky; top: 0; z-index: 1000;
-        }
-        .logo-row { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; max-width: 1200px; }
-        .logo { height: 45px; }
-        .header-title { 
-            font-size: 16px; font-weight: 700; text-align: center; 
-            color: var(--main) !important; line-height: 1.3; 
-        }
+const savedTheme = localStorage.getItem("theme");
 
-        /* SEARCH SECTION */
-        .search-container {
-            margin: 40px auto;
-            text-align: center;
-            padding: 0 20px;
-        }
-        .search-container input {
-            padding: 14px 25px;
-            width: 100%;
-            max-width: 500px;
-            border-radius: 40px;
-            border: 2px solid var(--gold);
-            background: rgba(255, 255, 255, 0.1);
-            color: inherit;
-            font-family: 'Tajawal';
-            font-size: 18px;
-            backdrop-filter: blur(10px);
-            outline: none;
-            transition: 0.3s;
-        }
-        body.light .search-container input { background: rgba(0,0,0,0.05); color: var(--main); }
-        .search-container input:focus { box-shadow: 0 0 15px rgba(225, 169, 62, 0.4); }
+if (savedTheme === "light") {
+    document.documentElement.classList.add("light-theme-applied");
+}
 
-        /* GRID & CARDS */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-            padding: 20px;
-            max-width: 1300px;
-            margin: auto;
-        }
+</script>
 
-        .card {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 20px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(225, 169, 62, 0.1);
-            position: relative;
-        }
-        body.light .card { background: white; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+<style>
 
-        .card:hover {
-            transform: translateY(-12px);
-            border-color: var(--gold);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-        }
+:root{
+    --main:#06444C;
+    --light:#EAE8D8;
+    --gold:#E1A93E;
+    --accent:#ADCAC9;
+    --darkred:#4A121C;
+}
 
-        .card img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            transition: 0.5s;
-        }
-        .card:hover img { transform: scale(1.05); }
+*{
+    box-sizing:border-box;
+}
 
-        .card-body { padding: 20px; text-align: right; direction: rtl; }
-        .lang-en .card-body { text-align: left; direction: ltr; }
+body{
+    margin:0;
+    font-family:'Tajawal',sans-serif;
+    font-weight:500;
+    background:var(--main);
+    color:var(--light);
+    overflow-x:hidden;
+    transition:0.4s ease;
+    -webkit-font-smoothing:antialiased;
+}
 
-        .card-title {
-            font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: var(--gold);
-            min-height: 50px;
-            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-        }
+body.light{
+    background:var(--light);
+    color:var(--main);
+}
 
-        .id-badge {
-            background: var(--gold);
-            color: var(--main);
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 800;
-            display: inline-block;
-        }
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:url('images/icon-nadim-light.svg?v=2');
+    background-size:55px 55px;
+    background-position:center;
+    opacity:0.08;
+    pointer-events:none;
+    z-index:-1;
+}
 
-        #loader { margin: 100px auto; color: var(--gold); font-size: 20px; }
+body.light::before{
+    background-image:url('images/icon-nadim.svg?v=2');
+    opacity:0.10;
+}
 
-        footer { text-align: center; margin: 60px 0; font-size: 14px; opacity: 0.5; }
+#museumHeader{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    padding:15px 20px;
+    background:rgba(10,30,35,0.78);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(225,169,62,0.22);
+}
 
-        @media (max-width: 600px) {
-            .grid { grid-template-columns: 1fr; padding: 15px; }
-            .logo { height: 35px; }
-        }
-    </style>
+body.light #museumHeader{
+    background:rgba(234,232,216,0.82);
+}
+
+.header-inner{
+    max-width:1400px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.header-title{
+    flex:1;
+    text-align:center;
+    line-height:1.3;
+    font-size:24px;
+    font-weight:900;
+    color:var(--light);
+}
+
+body.light .header-title{
+    color:var(--main);
+}
+
+.logos-group{
+    display:flex;
+    align-items:center;
+    gap:0;
+}
+
+.logos-group a:first-child{
+    margin-inline-end:-15px;
+    position:relative;
+    z-index:2;
+}
+
+.logo{
+    height:58px;
+    width:auto;
+    transition:0.3s ease;
+}
+
+.logo:hover{
+    transform:scale(1.05);
+}
+
+.hero{
+    max-width:1400px;
+    margin:55px auto 20px;
+    padding:0 20px;
+}
+
+.hero-card{
+    position:relative;
+    overflow:hidden;
+    border-radius:34px;
+    padding:70px 50px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(225,169,62,0.15);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+}
+
+body.light .hero-card{
+    background:rgba(255,255,255,0.48);
+}
+
+.hero-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle at top right, rgba(225,169,62,0.18), transparent 40%);
+    pointer-events:none;
+}
+
+.hero-subtitle{
+    color:var(--gold);
+    font-size:16px;
+    font-weight:800;
+    letter-spacing:1px;
+    margin-bottom:18px;
+}
+
+.hero-title{
+    font-size:56px;
+    font-weight:900;
+    line-height:1.15;
+    margin:0 0 20px;
+}
+
+.hero-description{
+    max-width:760px;
+    font-size:20px;
+    line-height:2;
+    opacity:0.86;
+}
+
+.search-container{
+    max-width:1400px;
+    margin:40px auto 10px;
+    padding:0 20px;
+}
+
+.search-shell{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(225,169,62,0.16);
+    border-radius:24px;
+    padding:18px;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+}
+
+body.light .search-shell{
+    background:rgba(255,255,255,0.45);
+}
+
+.search-container input{
+    width:100%;
+    border:none;
+    outline:none;
+    background:transparent;
+    color:inherit;
+    font-family:'Tajawal';
+    font-size:20px;
+    padding:10px 12px;
+}
+
+.search-container input::placeholder{
+    color:inherit;
+    opacity:0.5;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:30px;
+    max-width:1400px;
+    margin:35px auto 100px;
+    padding:0 20px;
+}
+
+.card{
+    position:relative;
+    overflow:hidden;
+    border-radius:28px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(225,169,62,0.12);
+    cursor:pointer;
+    transition:0.35s ease;
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+}
+
+body.light .card{
+    background:rgba(255,255,255,0.50);
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    border-color:rgba(225,169,62,0.35);
+    box-shadow:0 20px 40px rgba(0,0,0,0.25);
+}
+
+.card-image{
+    position:relative;
+    overflow:hidden;
+}
+
+.card img{
+    width:100%;
+    height:300px;
+    object-fit:cover;
+    transition:0.5s ease;
+}
+
+.card:hover img{
+    transform:scale(1.05);
+}
+
+.card-overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,0.55), transparent 60%);
+}
+
+.card-body{
+    padding:24px;
+    text-align:right;
+    direction:rtl;
+}
+
+.card-title{
+    font-size:24px;
+    font-weight:900;
+    line-height:1.5;
+    color:var(--light);
+    margin-bottom:18px;
+}
+
+body.light .card-title{
+    color:var(--main);
+}
+
+.id-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:8px 14px;
+    border-radius:14px;
+    background:rgba(225,169,62,0.16);
+    border:1px solid rgba(225,169,62,0.35);
+    color:var(--gold);
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:0.5px;
+}
+
+#loader{
+    text-align:center;
+    margin:80px auto;
+    font-size:20px;
+    color:var(--gold);
+}
+
+footer{
+    text-align:center;
+    margin:50px 0 110px;
+    opacity:0.45;
+    font-size:13px;
+}
+
+@media(max-width:900px){
+
+    .header-title{
+        font-size:16px;
+    }
+
+    .logo{
+        height:42px;
+    }
+
+    .hero-card{
+        padding:45px 28px;
+        border-radius:26px;
+    }
+
+    .hero-title{
+        font-size:34px;
+    }
+
+    .hero-description{
+        font-size:17px;
+        line-height:1.9;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .card img{
+        height:250px;
+    }
+
+}
+
+</style>
+
 </head>
 
 <body>
 
 <header id="museumHeader">
-    <div class="logo-row">
-        <img src="images/logo-nadim.png" class="logo">
-        <div class="header-title" id="headerTitle">
-            NADIM in Museum of Islamic Arts<br>نديم في متحف الفن الإسلامي
+
+    <div class="header-inner">
+
+        <div class="header-title">
+            NADIM in Museum of Islamic Arts<br>
+            نديم في متحف الفن الإسلامي
         </div>
-        <img src="images/MIALOGO.png" class="logo">
+
+        <div class="logos-group">
+
+            <a href="/">
+                <img src="images/logo-nadim.svg" class="logo">
+            </a>
+
+            <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank">
+                <img src="images/logo-mia.svg" class="logo">
+            </a>
+
+        </div>
+
     </div>
+
 </header>
 
+<section class="hero">
+
+    <div class="hero-card">
+
+        <div class="hero-subtitle">
+            DIGITAL MUSEUM EXPERIENCE
+        </div>
+
+        <h1 class="hero-title">
+            Discover the Collection Through QR Experiences
+        </h1>
+
+        <div class="hero-description">
+            Explore artefacts, stories, details, and immersive visual experiences from the Museum of Islamic Arts through NADIM’s interactive museum platform.
+        </div>
+
+    </div>
+
+</section>
+
 <div class="search-container">
-    <input id="search" placeholder="ابحث عن قطعة... Search...">
+
+    <div class="search-shell">
+
+        <input
+            id="search"
+            placeholder="ابحث عن قطعة... Search the collection..."
+        >
+
+    </div>
+
 </div>
 
 <div id="loader">جاري تحميل المعرض...</div>
+
 <div class="grid" id="grid"></div>
 
-<footer> Nadim Foundation © ® </footer>
+<footer>
+    Nadim Foundation © ®
+</footer>
 
 <script>
-    let artworks = [];
-    
-    /* مزامنة الثيم عند التحميل */
-    if (localStorage.getItem("theme") === "light") {
-        document.body.classList.add("light");
-    }
 
-    /* تحميل البيانات */
-    fetch("data/artworks.json?v=" + new Date().getTime())
-        .then(r => r.json())
-        .then(data => {
-            artworks = data;
-            document.getElementById("loader").style.display = "none";
-            render(data);
-        })
-        .catch(err => {
-            document.getElementById("loader").textContent = "Error loading exhibition data.";
-        });
+let artworks = [];
 
-    function render(list) {
-        const grid = document.getElementById("grid");
-        grid.innerHTML = "";
+if (
+    localStorage.getItem("theme") === "light"
+) {
+    document.body.classList.add("light");
+}
 
-        list.forEach(a => {
-            // قراءة الصورة بصيغة webp لضمان التوافق وسرعة التحميل
-            let imgPath = a.image1 ? a.image1.replace(/\.[^/.]+$/, ".webp") : 'images/no-image.webp';
-            
-            const card = document.createElement("div");
-            card.className = "card";
-            
-            // التعديل الأهم: توجيه المستخدم للرابط النظيف مباشرة بدلاً من scan.html
-            card.onclick = () => {
-                location.href = a.id; 
-            };
+fetch(
+    "data/artworks.json?v=" +
+    new Date().getTime()
+)
 
-            card.innerHTML = `
-                <img src="${imgPath}" onerror="this.src='images/no-image.webp'">
-                <div class="card-body">
-                    <div class="card-title">${a.title_ar || "قطعة بدون عنوان"}</div>
-                    <div class="id-badge">${a.id}</div>
+.then(r => r.json())
+
+.then(data => {
+
+    artworks = data;
+
+    document.getElementById(
+        "loader"
+    ).style.display = "none";
+
+    render(data);
+
+})
+
+.catch(err => {
+
+    document.getElementById(
+        "loader"
+    ).textContent =
+    "Error loading exhibition data.";
+
+});
+
+function render(list) {
+
+    const grid =
+        document.getElementById("grid");
+
+    grid.innerHTML = "";
+
+    list.forEach(a => {
+
+        let imgPath =
+            a.image1
+            ? a.image1.replace(
+                /\.[^/.]+$/,
+                ".webp"
+              )
+            : 'images/no-image.webp';
+
+        const card =
+            document.createElement("div");
+
+        card.className = "card";
+
+        card.onclick = () => {
+            location.href = a.id;
+        };
+
+        card.innerHTML = `
+
+            <div class="card-image">
+
+                <img
+                    src="${imgPath}"
+                    onerror="this.src='images/no-image.webp'"
+                >
+
+                <div class="card-overlay"></div>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="card-title">
+                    ${a.title_ar || "قطعة بدون عنوان"}
                 </div>
-            `;
-            grid.appendChild(card);
-        });
-    }
 
-    /* نظام البحث الذكي (يبحث في الاسم العربي، الإنجليزي، والكود) */
-    document.getElementById("search").oninput = (e) => {
-        let q = e.target.value.toLowerCase();
-        const filtered = artworks.filter(a => 
-            (a.title_ar || "").toLowerCase().includes(q) || 
-            (a.title_en || "").toLowerCase().includes(q) ||
-            (a.id || "").toLowerCase().includes(q)
-        );
-        render(filtered);
-    };
+                <div class="id-badge">
+                    ${a.id}
+                </div>
+
+            </div>
+
+        `;
+
+        grid.appendChild(card);
+
+    });
+}
+
+/* ========================================== */
+/* Smart Search */
+/* ========================================== */
+
+document.getElementById("search")
+.oninput = (e) => {
+
+    let q =
+        e.target.value.toLowerCase();
+
+    const filtered = artworks.filter(a =>
+
+        (a.title_ar || "")
+        .toLowerCase()
+        .includes(q)
+
+        ||
+
+        (a.title_en || "")
+        .toLowerCase()
+        .includes(q)
+
+        ||
+
+        (a.id || "")
+        .toLowerCase()
+        .includes(q)
+
+    );
+
+    render(filtered);
+};
+
 </script>
 
 </body>
 </html>
+```
