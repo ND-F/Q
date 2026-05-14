@@ -3,49 +3,115 @@
 <head>
   <meta charset="utf-8">
   <title>Loading...</title>
+
   <script>
-    var path = window.location.pathname; 
-    var segment = path.split('/').filter(Boolean).pop(); 
-    
-    if (segment && segment !== 'Q') {
-      var upperSeg = segment.toUpperCase();
-      
-      // 1. مسار التصميم الثالث (M و VM) -> يوجه إلى scan.html (بدل c.html)
-      if (upperSeg.startsWith('VM')) {
-        var realId = 'V' + segment.substring(2); // V1
-        window.location.replace('/Q/scan.html?id=' + realId);
-      } 
-      else if (upperSeg.startsWith('M')) {
-        var realId = segment.substring(1); // 1
-        window.location.replace('/Q/scan.html?id=' + realId);
+    var path =
+      window.location.pathname;
+
+    var segment =
+      path.split('/')
+      .filter(Boolean)
+      .pop();
+
+    if (
+      segment &&
+      segment !== ''
+    ) {
+
+      var upperSeg =
+        segment.toUpperCase();
+
+      // VM -> scan.html
+      if (
+        upperSeg.startsWith('VM')
+      ) {
+
+        var realId =
+          'V' + segment.substring(2);
+
+        window.location.replace(
+          '/scan.html?id=' + realId
+        );
       }
-      
-      // 2. مسار التصميم التجريبي الجديد (N و VN) -> يوجه إلى n.html (زي ما هو)
-      else if (upperSeg.startsWith('VN')) {
-        var realId = 'V' + segment.substring(2); // V1
-        window.location.replace('/Q/n.html?id=' + realId); 
-      } 
-      else if (upperSeg.startsWith('N')) {
-        var realId = segment.substring(1); // 1
-        window.location.replace('/Q/n.html?id=' + realId); 
+
+      // M -> scan.html
+      else if (
+        upperSeg.startsWith('M')
+      ) {
+
+        var realId =
+          segment.substring(1);
+
+        window.location.replace(
+          '/scan.html?id=' + realId
+        );
       }
-      
-      // 3. مسار التصميم الثاني (Q و VQ) -> يوجه إلى scan-b.html (زي ما هو)
-      else if (upperSeg.startsWith('VQ')) {
-        var realId = 'V' + segment.substring(2); // V1
-        window.location.replace('/Q/scan-b.html?id=' + realId);
-      } 
-      else if (upperSeg.startsWith('Q')) {
-        var realId = segment.substring(1); // 1
-        window.location.replace('/Q/scan-b.html?id=' + realId);
-      } 
-      
-      // 4. المسار الافتراضي العادي -> يوجه إلى c.html (بدل scan.html)
+
+      // VN -> n.html
+      else if (
+        upperSeg.startsWith('VN')
+      ) {
+
+        var realId =
+          'V' + segment.substring(2);
+
+        window.location.replace(
+          '/n.html?id=' + realId
+        );
+      }
+
+      // N -> n.html
+      else if (
+        upperSeg.startsWith('N')
+      ) {
+
+        var realId =
+          segment.substring(1);
+
+        window.location.replace(
+          '/n.html?id=' + realId
+        );
+      }
+
+      // VQ -> scan-b.html
+      else if (
+        upperSeg.startsWith('VQ')
+      ) {
+
+        var realId =
+          'V' + segment.substring(2);
+
+        window.location.replace(
+          '/scan-b.html?id=' + realId
+        );
+      }
+
+      // Q -> scan-b.html
+      else if (
+        upperSeg.startsWith('Q')
+      ) {
+
+        var realId =
+          segment.substring(1);
+
+        window.location.replace(
+          '/scan-b.html?id=' + realId
+        );
+      }
+
+      // default -> c.html
       else {
-        window.location.replace('/Q/c.html?id=' + segment);
+
+        window.location.replace(
+          '/c.html?id=' + segment
+        );
       }
+
     } else {
-      window.location.replace('/Q/c.html'); // (بدل scan.html)
+
+      window.location.replace(
+        '/c.html'
+      );
     }
   </script>
 </head>
