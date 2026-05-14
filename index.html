@@ -237,14 +237,54 @@
         /* ========================================== */
         /* CONTROL PANEL */
         /* ========================================== */
-        .control-panel {
-            position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
-            display: flex; align-items: center; gap: 0; z-index: 5000;
-            padding: 0 24px; height: 84px; border-radius: 999px;
-            background: linear-gradient(90deg, #041f24, #052f36);
-            border: 2px solid rgba(225,169,62,0.75); box-shadow: 0 10px 40px rgba(0,0,0,0.35);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-        }
+        .control-panel{
+
+  direction:ltr;
+
+  position:fixed;
+
+  bottom:28px;
+
+  left:50%;
+
+  transform:translateX(-50%);
+
+  display:flex;
+
+  align-items:center;
+
+  gap:0;
+
+  z-index:5000;
+
+  padding:0 24px;
+
+  height:84px;
+
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #041f24,
+      #052f36
+    );
+
+  border:
+    2px solid
+    rgba(225,169,62,0.75);
+
+  box-shadow:
+    0 10px 40px
+    rgba(0,0,0,0.35);
+
+  backdrop-filter:
+    blur(20px);
+
+  -webkit-backdrop-filter:
+    blur(20px);
+
+}
         .control-divider { width: 1px; height: 34px; background: rgba(225,169,62,0.35); margin: 0 12px; }
         .control-btn {
             width: 62px; height: 62px; border: none; background: transparent; color: var(--gold);
