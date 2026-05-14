@@ -1,39 +1,113 @@
-
 <!DOCTYPE html>
 <html lang="ar">
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>NADIM in Museum of Islamic Arts - نديم في متحف الفن الإسلامي</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+>
 
-<link rel="icon" type="image/svg+xml" href="images/icon-nadim.svg?v=2">
-<link rel="apple-touch-icon" href="images/icon-nadim.svg?v=2">
+<title>
+NADIM in Museum of Islamic Arts
+</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">
+<link
+  rel="icon"
+  type="image/svg+xml"
+  href="images/icon-nadim.svg?v=2"
+>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RWD0WHS7EV"></script>
+<link
+  rel="apple-touch-icon"
+  href="images/icon-nadim.svg?v=2"
+>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap"
+  rel="stylesheet"
+>
+
+<script
+  async
+  src="https://www.googletagmanager.com/gtag/js?id=G-RWD0WHS7EV"
+></script>
 
 <script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
+
+window.dataLayer =
+  window.dataLayer || [];
+
+function gtag(){
+  dataLayer.push(arguments);
+}
+
 gtag('js', new Date());
-gtag('config', 'G-RWD0WHS7EV');
+
+gtag(
+  'config',
+  'G-RWD0WHS7EV'
+);
+
 </script>
 
 <script>
 
-const query = window.location.search.substring(1);
+/* ========================================== */
+/* Fast Redirect */
+/* ========================================== */
 
-if (query && query.length >= 1) {
-    window.location.replace(query);
+const query =
+  window.location.search.substring(1);
+
+if (
+  query &&
+  query.length >= 1
+) {
+
+  window.location.replace(query);
+
 }
 
-const savedTheme = localStorage.getItem("theme");
+/* ========================================== */
+/* Saved Theme */
+/* ========================================== */
 
-if (savedTheme === "light") {
-    document.documentElement.classList.add("light-theme-applied");
+const savedTheme =
+  localStorage.getItem(
+    "nadim_theme"
+  );
+
+if (
+  savedTheme === "light"
+) {
+
+  document.documentElement
+  .classList.add(
+    "light-theme-applied"
+  );
+
+}
+
+/* ========================================== */
+/* Saved Language */
+/* ========================================== */
+
+const savedLang =
+  localStorage.getItem(
+    "nadim_lang"
+  ) || "ar";
+
+if (
+  savedLang === "en"
+) {
+
+  document.documentElement
+  .classList.add(
+    "lang-en"
+  );
+
 }
 
 </script>
@@ -41,325 +115,699 @@ if (savedTheme === "light") {
 <style>
 
 :root{
-    --main:#06444C;
-    --light:#EAE8D8;
-    --gold:#E1A93E;
-    --accent:#ADCAC9;
-    --darkred:#4A121C;
+
+  --main:#06444C;
+
+  --light:#EAE8D8;
+
+  --gold:#E1A93E;
+
+  --accent:#ADCAC9;
+
+  --darkred:#4A121C;
+
 }
 
 *{
-    box-sizing:border-box;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
 }
 
 body{
-    margin:0;
-    font-family:'Tajawal',sans-serif;
-    font-weight:500;
-    background:var(--main);
-    color:var(--light);
-    overflow-x:hidden;
-    transition:0.4s ease;
-    -webkit-font-smoothing:antialiased;
+
+  margin:0;
+
+  font-family:'Tajawal',sans-serif;
+
+  font-weight:500;
+
+  background:var(--main);
+
+  color:var(--light);
+
+  overflow-x:hidden;
+
+  transition:
+    background 0.4s ease,
+    color 0.4s ease;
+
+  -webkit-font-smoothing:
+    antialiased;
+
 }
+
+/* ========================================== */
+/* LIGHT MODE */
+/* ========================================== */
 
 body.light{
-    background:var(--light);
-    color:var(--main);
+
+  background:var(--light);
+
+  color:var(--main);
+
 }
 
+/* ========================================== */
+/* GLOBAL PATTERN */
+/* ========================================== */
+
 body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    background-image:url('images/icon-nadim-light.svg?v=2');
-    background-size:55px 55px;
-    background-position:center;
-    opacity:0.08;
-    pointer-events:none;
-    z-index:-1;
+
+  content:"";
+
+  position:fixed;
+
+  inset:0;
+
+  background-image:
+    url('images/icon-nadim-light.svg?v=2');
+
+  background-size:
+    55px 55px;
+
+  background-position:center;
+
+  opacity:0.08;
+
+  pointer-events:none;
+
+  z-index:-1;
+
 }
 
 body.light::before{
-    background-image:url('images/icon-nadim.svg?v=2');
-    opacity:0.10;
+
+  background-image:
+    url('images/icon-nadim.svg?v=2');
+
+  opacity:0.10;
+
 }
+
+/* ========================================== */
+/* HEADER */
+/* ========================================== */
 
 #museumHeader{
-    position:sticky;
-    top:0;
-    z-index:1000;
-    padding:15px 20px;
-    background:rgba(10,30,35,0.78);
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
-    border-bottom:1px solid rgba(225,169,62,0.22);
+
+  position:sticky;
+
+  top:0;
+
+  z-index:1000;
+
+  padding:14px 20px;
+
+  background:
+    rgba(234,232,216,0.94);
+
+  backdrop-filter:
+    blur(16px);
+
+  -webkit-backdrop-filter:
+    blur(16px);
+
+  border-bottom:
+    1px solid
+    rgba(225,169,62,0.20);
+
 }
 
-body.light #museumHeader{
-    background:rgba(234,232,216,0.82);
-}
+/* ========================================== */
+/* HEADER INNER */
+/* ========================================== */
 
 .header-inner{
-    max-width:1400px;
-    margin:auto;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:20px;
+
+  max-width:1400px;
+
+  margin:auto;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:20px;
+
 }
 
 .header-title{
-    flex:1;
-    text-align:center;
-    line-height:1.3;
-    font-size:24px;
-    font-weight:900;
-    color:var(--light);
-}
 
-body.light .header-title{
-    color:var(--main);
+  flex:1;
+
+  text-align:center;
+
+  line-height:1.3;
+
+  font-size:24px;
+
+  font-weight:900;
+
+  color:var(--main);
+
 }
 
 .logos-group{
-    display:flex;
-    align-items:center;
-    gap:0;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:0;
+
 }
 
 .logos-group a:first-child{
-    margin-inline-end:-15px;
-    position:relative;
-    z-index:2;
+
+  margin-inline-end:-15px;
+
+  position:relative;
+
+  z-index:2;
+
 }
 
 .logo{
-    height:58px;
-    width:auto;
-    transition:0.3s ease;
+
+  height:58px;
+
+  width:auto;
+
+  transition:0.3s ease;
+
 }
 
 .logo:hover{
-    transform:scale(1.05);
+
+  transform:scale(1.05);
+
 }
 
+/* ========================================== */
+/* HEADER ACTIONS */
+/* ========================================== */
+
+.header-actions{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+}
+
+.action-btn{
+
+  width:46px;
+
+  height:46px;
+
+  border-radius:16px;
+
+  border:1px solid
+    rgba(225,169,62,0.20);
+
+  background:
+    rgba(6,68,76,0.05);
+
+  color:var(--main);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  cursor:pointer;
+
+  font-size:20px;
+
+  transition:0.3s ease;
+
+}
+
+.action-btn:hover{
+
+  transform:translateY(-2px);
+
+  border-color:var(--gold);
+
+  background:
+    rgba(225,169,62,0.10);
+
+}
+
+/* ========================================== */
+/* HERO */
+/* ========================================== */
+
 .hero{
-    max-width:1400px;
-    margin:55px auto 20px;
-    padding:0 20px;
+
+  max-width:1400px;
+
+  margin:55px auto 20px;
+
+  padding:0 20px;
+
 }
 
 .hero-card{
-    position:relative;
-    overflow:hidden;
-    border-radius:34px;
-    padding:70px 50px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(225,169,62,0.15);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+
+  position:relative;
+
+  overflow:hidden;
+
+  border-radius:34px;
+
+  padding:70px 50px;
+
+  background:
+    rgba(255,255,255,0.05);
+
+  border:
+    1px solid
+    rgba(225,169,62,0.15);
+
+  backdrop-filter:
+    blur(18px);
+
+  -webkit-backdrop-filter:
+    blur(18px);
+
 }
 
 body.light .hero-card{
-    background:rgba(255,255,255,0.48);
+
+  background:
+    rgba(255,255,255,0.50);
+
 }
 
 .hero-card::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:radial-gradient(circle at top right, rgba(225,169,62,0.18), transparent 40%);
-    pointer-events:none;
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(225,169,62,0.18),
+      transparent 40%
+    );
+
+  pointer-events:none;
+
 }
 
 .hero-subtitle{
-    color:var(--gold);
-    font-size:16px;
-    font-weight:800;
-    letter-spacing:1px;
-    margin-bottom:18px;
+
+  color:var(--gold);
+
+  font-size:16px;
+
+  font-weight:800;
+
+  letter-spacing:1px;
+
+  margin-bottom:18px;
+
 }
 
 .hero-title{
-    font-size:56px;
-    font-weight:900;
-    line-height:1.15;
-    margin:0 0 20px;
+
+  font-size:56px;
+
+  font-weight:900;
+
+  line-height:1.15;
+
+  margin:0 0 20px;
+
 }
 
 .hero-description{
-    max-width:760px;
-    font-size:20px;
-    line-height:2;
-    opacity:0.86;
+
+  max-width:760px;
+
+  font-size:20px;
+
+  line-height:2;
+
+  opacity:0.86;
+
 }
 
+/* ========================================== */
+/* SEARCH */
+/* ========================================== */
+
 .search-container{
-    max-width:1400px;
-    margin:40px auto 10px;
-    padding:0 20px;
+
+  max-width:1400px;
+
+  margin:40px auto 10px;
+
+  padding:0 20px;
+
 }
 
 .search-shell{
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(225,169,62,0.16);
-    border-radius:24px;
-    padding:18px;
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
+
+  background:
+    rgba(255,255,255,0.05);
+
+  border:
+    1px solid
+    rgba(225,169,62,0.16);
+
+  border-radius:24px;
+
+  padding:18px;
+
+  backdrop-filter:
+    blur(14px);
+
+  -webkit-backdrop-filter:
+    blur(14px);
+
 }
 
 body.light .search-shell{
-    background:rgba(255,255,255,0.45);
+
+  background:
+    rgba(255,255,255,0.45);
+
 }
 
 .search-container input{
-    width:100%;
-    border:none;
-    outline:none;
-    background:transparent;
-    color:inherit;
-    font-family:'Tajawal';
-    font-size:20px;
-    padding:10px 12px;
+
+  width:100%;
+
+  border:none;
+
+  outline:none;
+
+  background:transparent;
+
+  color:inherit;
+
+  font-family:'Tajawal';
+
+  font-size:20px;
+
+  padding:10px 12px;
+
 }
 
 .search-container input::placeholder{
-    color:inherit;
-    opacity:0.5;
+
+  color:inherit;
+
+  opacity:0.5;
+
 }
+
+/* ========================================== */
+/* GRID */
+/* ========================================== */
 
 .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-    gap:30px;
-    max-width:1400px;
-    margin:35px auto 100px;
-    padding:0 20px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(320px,1fr)
+    );
+
+  gap:30px;
+
+  max-width:1400px;
+
+  margin:35px auto 100px;
+
+  padding:0 20px;
+
 }
 
+/* ========================================== */
+/* CARD */
+/* ========================================== */
+
 .card{
-    position:relative;
-    overflow:hidden;
-    border-radius:28px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(225,169,62,0.12);
-    cursor:pointer;
-    transition:0.35s ease;
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
+
+  position:relative;
+
+  overflow:hidden;
+
+  border-radius:28px;
+
+  background:
+    rgba(255,255,255,0.05);
+
+  border:
+    1px solid
+    rgba(225,169,62,0.12);
+
+  cursor:pointer;
+
+  transition:0.35s ease;
+
+  backdrop-filter:
+    blur(12px);
+
+  -webkit-backdrop-filter:
+    blur(12px);
+
 }
 
 body.light .card{
-    background:rgba(255,255,255,0.50);
+
+  background:
+    rgba(255,255,255,0.52);
+
 }
 
 .card:hover{
-    transform:translateY(-8px);
-    border-color:rgba(225,169,62,0.35);
-    box-shadow:0 20px 40px rgba(0,0,0,0.25);
+
+  transform:
+    translateY(-8px);
+
+  border-color:
+    rgba(225,169,62,0.35);
+
+  box-shadow:
+    0 20px 40px
+    rgba(0,0,0,0.25);
+
 }
 
 .card-image{
-    position:relative;
-    overflow:hidden;
+
+  position:relative;
+
+  overflow:hidden;
+
 }
 
 .card img{
-    width:100%;
-    height:300px;
-    object-fit:cover;
-    transition:0.5s ease;
+
+  width:100%;
+
+  height:300px;
+
+  object-fit:cover;
+
+  transition:0.5s ease;
+
 }
 
 .card:hover img{
-    transform:scale(1.05);
+
+  transform:scale(1.05);
+
 }
 
 .card-overlay{
-    position:absolute;
-    inset:0;
-    background:linear-gradient(to top, rgba(0,0,0,0.55), transparent 60%);
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0,0,0,0.55),
+      transparent 60%
+    );
+
 }
 
 .card-body{
-    padding:24px;
-    text-align:right;
-    direction:rtl;
+
+  padding:24px;
+
+}
+
+body.lang-ar .card-body{
+
+  text-align:right;
+
+  direction:rtl;
+
+}
+
+body.lang-en .card-body{
+
+  text-align:left;
+
+  direction:ltr;
+
 }
 
 .card-title{
-    font-size:24px;
-    font-weight:900;
-    line-height:1.5;
-    color:var(--light);
-    margin-bottom:18px;
+
+  font-size:24px;
+
+  font-weight:900;
+
+  line-height:1.5;
+
+  color:var(--light);
+
+  margin-bottom:18px;
+
 }
 
 body.light .card-title{
-    color:var(--main);
+
+  color:var(--main);
+
 }
 
 .id-badge{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    padding:8px 14px;
-    border-radius:14px;
-    background:rgba(225,169,62,0.16);
-    border:1px solid rgba(225,169,62,0.35);
-    color:var(--gold);
-    font-size:13px;
-    font-weight:800;
-    letter-spacing:0.5px;
+
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:8px 14px;
+
+  border-radius:14px;
+
+  background:
+    rgba(225,169,62,0.16);
+
+  border:
+    1px solid
+    rgba(225,169,62,0.35);
+
+  color:var(--gold);
+
+  font-size:13px;
+
+  font-weight:800;
+
+  letter-spacing:0.5px;
+
 }
+
+/* ========================================== */
+/* LOADER */
+/* ========================================== */
 
 #loader{
-    text-align:center;
-    margin:80px auto;
-    font-size:20px;
-    color:var(--gold);
+
+  text-align:center;
+
+  margin:80px auto;
+
+  font-size:20px;
+
+  color:var(--gold);
+
 }
 
+/* ========================================== */
+/* FOOTER */
+/* ========================================== */
+
 footer{
-    text-align:center;
-    margin:50px 0 110px;
-    opacity:0.45;
-    font-size:13px;
+
+  text-align:center;
+
+  margin:50px 0 110px;
+
+  opacity:0.45;
+
+  font-size:13px;
+
 }
+
+/* ========================================== */
+/* MOBILE */
+/* ========================================== */
 
 @media(max-width:900px){
 
-    .header-title{
-        font-size:16px;
-    }
+  .header-title{
 
-    .logo{
-        height:42px;
-    }
+    font-size:15px;
 
-    .hero-card{
-        padding:45px 28px;
-        border-radius:26px;
-    }
+  }
 
-    .hero-title{
-        font-size:34px;
-    }
+  .logo{
 
-    .hero-description{
-        font-size:17px;
-        line-height:1.9;
-    }
+    height:42px;
 
-    .grid{
-        grid-template-columns:1fr;
-    }
+  }
 
-    .card img{
-        height:250px;
-    }
+  .hero-card{
+
+    padding:45px 28px;
+
+    border-radius:26px;
+
+  }
+
+  .hero-title{
+
+    font-size:34px;
+
+  }
+
+  .hero-description{
+
+    font-size:17px;
+
+    line-height:1.9;
+
+  }
+
+  .grid{
+
+    grid-template-columns:1fr;
+
+  }
+
+  .card img{
+
+    height:250px;
+
+  }
 
 }
 
@@ -367,205 +815,517 @@ footer{
 
 </head>
 
-<body>
+<body class="lang-ar">
+
+<!-- ========================================== -->
+<!-- HEADER -->
+<!-- ========================================== -->
 
 <header id="museumHeader">
 
-    <div class="header-inner">
+  <div class="header-inner">
 
-        <div class="header-title">
-            NADIM in Museum of Islamic Arts<br>
-            نديم في متحف الفن الإسلامي
-        </div>
+    <div class="header-title" id="headerTitle">
 
-        <div class="logos-group">
+      NADIM in Museum of Islamic Arts<br>
 
-            <a href="/">
-                <img src="images/logo-nadim.svg" class="logo">
-            </a>
-
-            <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank">
-                <img src="images/logo-mia.svg" class="logo">
-            </a>
-
-        </div>
+      نديم في متحف الفن الإسلامي
 
     </div>
+
+    <div class="logos-group">
+
+      <a href="/">
+
+        <img
+          src="images/logo-nadim.svg"
+          class="logo"
+        >
+
+      </a>
+
+      <a
+        href="https://www.miaegypt.org/ar-eg/museum/collection/Collection"
+        target="_blank"
+      >
+
+        <img
+          src="images/logo-mia.svg"
+          class="logo"
+        >
+
+      </a>
+
+    </div>
+
+    <div class="header-actions">
+
+      <div
+        class="action-btn"
+        onclick="toggleLang()"
+      >
+        🌐
+      </div>
+
+      <div
+        class="action-btn"
+        onclick="toggleTheme()"
+        id="themeBtn"
+      >
+        ☀️
+      </div>
+
+    </div>
+
+  </div>
 
 </header>
 
+<!-- ========================================== -->
+<!-- HERO -->
+<!-- ========================================== -->
+
 <section class="hero">
 
-    <div class="hero-card">
+  <div class="hero-card">
 
-        <div class="hero-subtitle">
-            DIGITAL MUSEUM EXPERIENCE
-        </div>
+    <div
+      class="hero-subtitle"
+      id="heroSubtitle"
+    >
 
-        <h1 class="hero-title">
-            Discover the Collection Through QR Experiences
-        </h1>
-
-        <div class="hero-description">
-            Explore artefacts, stories, details, and immersive visual experiences from the Museum of Islamic Arts through NADIM’s interactive museum platform.
-        </div>
+      DIGITAL MUSEUM EXPERIENCE
 
     </div>
+
+    <h1
+      class="hero-title"
+      id="heroTitle"
+    >
+
+      Discover the Collection Through QR Experiences
+
+    </h1>
+
+    <div
+      class="hero-description"
+      id="heroDescription"
+    >
+
+      Explore artefacts, stories, details,
+      and immersive visual experiences
+      from the Museum of Islamic Arts
+      through NADIM’s interactive museum platform.
+
+    </div>
+
+  </div>
 
 </section>
 
+<!-- ========================================== -->
+<!-- SEARCH -->
+<!-- ========================================== -->
+
 <div class="search-container">
 
-    <div class="search-shell">
+  <div class="search-shell">
 
-        <input
-            id="search"
-            placeholder="ابحث عن قطعة... Search the collection..."
-        >
+    <input
+      id="search"
+      placeholder="ابحث عن قطعة... Search the collection..."
+    >
 
-    </div>
+  </div>
 
 </div>
 
-<div id="loader">جاري تحميل المعرض...</div>
+<!-- ========================================== -->
+<!-- GRID -->
+<!-- ========================================== -->
 
-<div class="grid" id="grid"></div>
+<div id="loader">
+  جاري تحميل المعرض...
+</div>
+
+<div
+  class="grid"
+  id="grid"
+></div>
+
+<!-- ========================================== -->
+<!-- FOOTER -->
+<!-- ========================================== -->
 
 <footer>
-    Nadim Foundation © ®
+  Nadim Foundation © ®
 </footer>
 
 <script>
 
+/* ========================================== */
+/* STATE */
+/* ========================================== */
+
 let artworks = [];
 
+let lang =
+  localStorage.getItem(
+    "nadim_lang"
+  ) || "ar";
+
+/* ========================================== */
+/* THEME */
+/* ========================================== */
+
 if (
-    localStorage.getItem("theme") === "light"
+
+  localStorage.getItem(
+    "nadim_theme"
+  ) === "light"
+
 ) {
-    document.body.classList.add("light");
+
+  document.body
+  .classList.add("light");
+
 }
 
+/* ========================================== */
+/* LANGUAGE */
+/* ========================================== */
+
+if (lang === "en") {
+
+  document.body
+  .classList.replace(
+    "lang-ar",
+    "lang-en"
+  );
+
+}
+
+/* ========================================== */
+/* UPDATE THEME ICON */
+/* ========================================== */
+
+function updateThemeIcon(){
+
+  const isLight =
+    document.body.classList
+    .contains("light");
+
+  document
+    .getElementById("themeBtn")
+    .textContent =
+      isLight
+      ? "☀️"
+      : "🌙";
+
+}
+
+updateThemeIcon();
+
+/* ========================================== */
+/* TOGGLE THEME */
+/* ========================================== */
+
+function toggleTheme(){
+
+  document.body
+  .classList.toggle("light");
+
+  const isLight =
+    document.body.classList
+    .contains("light");
+
+  localStorage.setItem(
+    "nadim_theme",
+    isLight
+      ? "light"
+      : "dark"
+  );
+
+  updateThemeIcon();
+
+}
+
+/* ========================================== */
+/* TOGGLE LANGUAGE */
+/* ========================================== */
+
+function toggleLang(){
+
+  lang =
+    lang === "ar"
+    ? "en"
+    : "ar";
+
+  localStorage.setItem(
+    "nadim_lang",
+    lang
+  );
+
+  if (lang === "en") {
+
+    document.body
+    .classList.replace(
+      "lang-ar",
+      "lang-en"
+    );
+
+  } else {
+
+    document.body
+    .classList.replace(
+      "lang-en",
+      "lang-ar"
+    );
+
+  }
+
+  updateTexts();
+
+  render(artworks);
+
+}
+
+/* ========================================== */
+/* UPDATE TEXTS */
+/* ========================================== */
+
+function updateTexts(){
+
+  const ar =
+    lang === "ar";
+
+  document
+  .documentElement.dir =
+    ar ? "rtl" : "ltr";
+
+  document
+  .getElementById(
+    "headerTitle"
+  ).innerHTML =
+
+    ar
+
+    ? `NADIM in Museum of Islamic Arts<br>
+       نديم في متحف الفن الإسلامي`
+
+    : `NADIM in Museum of Islamic Arts<br>
+       NADIM in Museum of Islamic Arts`;
+
+  document
+  .getElementById(
+    "heroSubtitle"
+  ).textContent =
+
+    ar
+    ? "تجربة متحفية رقمية"
+    : "DIGITAL MUSEUM EXPERIENCE";
+
+  document
+  .getElementById(
+    "heroTitle"
+  ).textContent =
+
+    ar
+
+    ? "اكتشف المجموعة من خلال تجارب QR التفاعلية"
+
+    : "Discover the Collection Through QR Experiences";
+
+  document
+  .getElementById(
+    "heroDescription"
+  ).textContent =
+
+    ar
+
+    ? "استكشف القطع الفنية والقصص والتفاصيل والتجارب البصرية الغامرة من متحف الفن الإسلامي عبر منصة نديم الرقمية."
+
+    : "Explore artefacts, stories, details, and immersive visual experiences from the Museum of Islamic Arts through NADIM’s interactive museum platform.";
+
+  document
+  .getElementById(
+    "search"
+  ).placeholder =
+
+    ar
+
+    ? "ابحث عن قطعة..."
+    : "Search the collection...";
+
+}
+
+updateTexts();
+
+/* ========================================== */
+/* FETCH DATA */
+/* ========================================== */
+
 fetch(
-    "data/artworks.json?v=" +
-    new Date().getTime()
+
+  "data/artworks.json?v=" +
+  new Date().getTime()
+
 )
 
 .then(r => r.json())
 
 .then(data => {
 
-    artworks = data;
+  artworks = data;
 
-    document.getElementById(
-        "loader"
-    ).style.display = "none";
+  document
+  .getElementById(
+    "loader"
+  ).style.display =
+    "none";
 
-    render(data);
+  render(data);
 
 })
 
 .catch(err => {
 
-    document.getElementById(
-        "loader"
-    ).textContent =
+  document
+  .getElementById(
+    "loader"
+  ).textContent =
+
     "Error loading exhibition data.";
 
 });
 
-function render(list) {
+/* ========================================== */
+/* RENDER */
+/* ========================================== */
 
-    const grid =
-        document.getElementById("grid");
+function render(list){
 
-    grid.innerHTML = "";
+  const grid =
+    document.getElementById(
+      "grid"
+    );
 
-    list.forEach(a => {
+  grid.innerHTML = "";
 
-        let imgPath =
-            a.image1
-            ? a.image1.replace(
-                /\.[^/.]+$/,
-                ".webp"
-              )
-            : 'images/no-image.webp';
+  list.forEach(a => {
 
-        const card =
-            document.createElement("div");
+    let imgPath =
 
-        card.className = "card";
+      a.image1
 
-        card.onclick = () => {
-            location.href = a.id;
-        };
+      ? a.image1.replace(
+          /\.[^/.]+$/,
+          ".webp"
+        )
 
-        card.innerHTML = `
+      : 'images/no-image.webp';
 
-            <div class="card-image">
+    const card =
+      document.createElement(
+        "div"
+      );
 
-                <img
-                    src="${imgPath}"
-                    onerror="this.src='images/no-image.webp'"
-                >
+    card.className =
+      "card";
 
-                <div class="card-overlay"></div>
+    card.onclick = () => {
 
-            </div>
+      location.href =
+        a.id;
 
-            <div class="card-body">
+    };
 
-                <div class="card-title">
-                    ${a.title_ar || "قطعة بدون عنوان"}
-                </div>
+    const title =
 
-                <div class="id-badge">
-                    ${a.id}
-                </div>
+      lang === "ar"
 
-            </div>
+      ? (
+          a.title_ar ||
+          "قطعة بدون عنوان"
+        )
 
-        `;
+      : (
+          a.title_en ||
+          "Untitled Artefact"
+        );
 
-        grid.appendChild(card);
+    card.innerHTML = `
 
-    });
+      <div class="card-image">
+
+        <img
+          src="${imgPath}"
+          onerror="this.src='images/no-image.webp'"
+        >
+
+        <div class="card-overlay"></div>
+
+      </div>
+
+      <div class="card-body">
+
+        <div class="card-title">
+          ${title}
+        </div>
+
+        <div class="id-badge">
+          ${a.id}
+        </div>
+
+      </div>
+
+    `;
+
+    grid.appendChild(card);
+
+  });
+
 }
 
 /* ========================================== */
-/* Smart Search */
+/* SEARCH */
 /* ========================================== */
 
-document.getElementById("search")
+document
+.getElementById("search")
+
 .oninput = (e) => {
 
-    let q =
-        e.target.value.toLowerCase();
+  let q =
+    e.target.value
+    .toLowerCase();
 
-    const filtered = artworks.filter(a =>
+  const filtered =
+    artworks.filter(a =>
 
-        (a.title_ar || "")
-        .toLowerCase()
-        .includes(q)
+      (a.title_ar || "")
+      .toLowerCase()
+      .includes(q)
 
-        ||
+      ||
 
-        (a.title_en || "")
-        .toLowerCase()
-        .includes(q)
+      (a.title_en || "")
+      .toLowerCase()
+      .includes(q)
 
-        ||
+      ||
 
-        (a.id || "")
-        .toLowerCase()
-        .includes(q)
+      (a.id || "")
+      .toLowerCase()
+      .includes(q)
 
     );
 
-    render(filtered);
+  render(filtered);
+
 };
 
 </script>
 
 </body>
 </html>
-```
