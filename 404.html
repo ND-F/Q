@@ -5,13 +5,22 @@
   <title>Loading...</title>
 
   <script>
+
     var path =
       window.location.pathname;
 
     var segment =
-      path.split('/')
-      .filter(Boolean)
-      .pop();
+      path
+        .split('/')
+        .filter(Boolean)
+        .pop();
+
+    // GitHub Pages => /Q
+    // Vercel / Custom Domain => ''
+    var base =
+      location.hostname.includes('github.io')
+        ? '/Q'
+        : '';
 
     if (
       segment &&
@@ -21,7 +30,9 @@
       var upperSeg =
         segment.toUpperCase();
 
+      // =========================================
       // VM -> scan.html
+      // =========================================
       if (
         upperSeg.startsWith('VM')
       ) {
@@ -30,11 +41,15 @@
           'V' + segment.substring(2);
 
         window.location.replace(
-          '/scan.html?id=' + realId
+          base +
+          '/scan.html?id=' +
+          realId
         );
       }
 
+      // =========================================
       // M -> scan.html
+      // =========================================
       else if (
         upperSeg.startsWith('M')
       ) {
@@ -43,11 +58,15 @@
           segment.substring(1);
 
         window.location.replace(
-          '/scan.html?id=' + realId
+          base +
+          '/scan.html?id=' +
+          realId
         );
       }
 
+      // =========================================
       // VN -> n.html
+      // =========================================
       else if (
         upperSeg.startsWith('VN')
       ) {
@@ -56,11 +75,15 @@
           'V' + segment.substring(2);
 
         window.location.replace(
-          '/n.html?id=' + realId
+          base +
+          '/n.html?id=' +
+          realId
         );
       }
 
+      // =========================================
       // N -> n.html
+      // =========================================
       else if (
         upperSeg.startsWith('N')
       ) {
@@ -69,11 +92,15 @@
           segment.substring(1);
 
         window.location.replace(
-          '/n.html?id=' + realId
+          base +
+          '/n.html?id=' +
+          realId
         );
       }
 
+      // =========================================
       // VQ -> scan-b.html
+      // =========================================
       else if (
         upperSeg.startsWith('VQ')
       ) {
@@ -82,11 +109,15 @@
           'V' + segment.substring(2);
 
         window.location.replace(
-          '/scan-b.html?id=' + realId
+          base +
+          '/scan-b.html?id=' +
+          realId
         );
       }
 
+      // =========================================
       // Q -> scan-b.html
+      // =========================================
       else if (
         upperSeg.startsWith('Q')
       ) {
@@ -95,24 +126,34 @@
           segment.substring(1);
 
         window.location.replace(
-          '/scan-b.html?id=' + realId
+          base +
+          '/scan-b.html?id=' +
+          realId
         );
       }
 
-      // default -> c.html
+      // =========================================
+      // Default -> c.html
+      // =========================================
       else {
 
         window.location.replace(
-          '/c.html?id=' + segment
+          base +
+          '/c.html?id=' +
+          segment
         );
       }
 
-    } else {
+    }
+
+    else {
 
       window.location.replace(
+        base +
         '/c.html'
       );
     }
+
   </script>
 </head>
 <body></body>
