@@ -25,17 +25,25 @@
     </script>
 
     <style>
-        :root { --main: #06444C; --light: #EAE8D8; --gold: #E1A93E; --accent: #ADCAC9; --darkred: #4A121C; }
+        :root {
+            --teal: #06444C;
+            --beige: #EAE8D8;
+            --gold: #E1A93E;
+            --aqua: #ADCAC9;
+            --burgundy: #4A121C;
+            --midnight: #07181D;
+            --offehite: #F5F1E8;
+        }
         
         body { 
             margin: 0; font-family: 'Tajawal', sans-serif; 
             font-weight: 500; /* إجبار كل نصوص الموقع على Medium كبداية */
-            background: var(--light); color: var(--main); 
+            background: var(--beige); color: var( --teal); 
             transition: background 0.4s ease, color 0.4s ease; overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             padding-top: 95px; 
         }
-        body.dark { background: var(--main); color: var(--light); }
+        body.dark { background: var( --teal); color: var(--beige); }
         
         
         /* ========================================== */
@@ -125,7 +133,7 @@
 
         .header-title { 
             font-size: 28px; font-weight: 800;
-            color: var(--main) !important; line-height: 1.2; 
+            color: var( --teal) !important; line-height: 1.2; 
             transition: all 0.3s ease; margin: 0;
             flex: 1 1 auto;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -185,7 +193,7 @@
             overflow: hidden; 
             position: relative; /* الكافر أصبح جزء من الصفحة وبيتحرك معاها */
             display: none;
-            background: var(--main); margin: 0; padding: 0;
+            background: var( --teal); margin: 0; padding: 0;
         }
 
         .cover-banner img { 
@@ -220,7 +228,7 @@
             transform: translateY(-50%) translateX(10px); 
             background: rgba(6, 68, 76, 0.50); /* الشفافية 50 */
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); /* تأثير الزجاج */
-            color: var(--light); 
+            color: var(--beige); 
             padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 800;
             opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; font-family: 'Tajawal', sans-serif;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3); z-index: 1000;
@@ -258,7 +266,7 @@
 
         body.dark .info-toggle-btn.close {
             background: rgba(234, 232, 216, 0.16);
-            color: var(--light);
+            color: var(--beige);
         }
 
         .info-toggle-btn.close::before {
@@ -268,7 +276,7 @@
         /* عنوان القطعة (Tajawal Black) */
         .article-header h1 { 
             font-size: 32px; 
-            color: var(--darkred) !important; 
+            color: var(--burgundy) !important; 
             margin: 0 0 10px 0; 
             font-weight: 900; /* Black */
             line-height: 1.4; 
@@ -285,12 +293,12 @@
             flex-direction: column; 
             gap: 12px; 
             font-size: 16px; 
-            color: var(--main); 
+            color: var( --teal); 
             opacity: 0.9; 
             line-height: 1.6; 
             font-weight: 500; /* Medium */
         }
-        body.dark .meta-group { color: var(--light); }
+        body.dark .meta-group { color: var(--beige); }
         .meta-item { display: block; }
         
         /* جعل الماتريال بنفس تنسيق المكان والتاريخ */
@@ -302,11 +310,11 @@
         /* القاعة (Tajawal Extra Bold) */
         #hall { 
             font-weight: 800; /* Extra Bold */
-            color: var(--main); 
+            color: var( --teal); 
             font-size: 18px; 
             margin-top: 5px; 
         }
-        body.dark #hall { color: var(--accent); }
+        body.dark #hall { color: var(--aqua); }
         
         /* رقم الحفظ (بنفس روح العنوان Tajawal Black - وبحجم 18) */
         .meta-inv { 
@@ -315,7 +323,7 @@
             border-top: none; /* لغينا الخط القديم الطويل */
             
             font-size: 18px; /* حجم الماتريال القديم */
-            color: var(--darkred); /* لون العنوان */
+            color: var(--burgundy); /* لون العنوان */
             font-weight: 900; /* Black زي العنوان */
             font-family: 'Tajawal', serif; /* لغينا الـ sans-serif */
             opacity: 1; /* لغينا الشفافية */
@@ -393,7 +401,7 @@
                 position: fixed; top: 0; 
                 right: -100%; left: auto;
                 width: 80%; max-width: 350px; height: 100vh; overflow-y: auto;
-                background: var(--light); z-index: 999; 
+                background: var(--beige); z-index: 999; 
                 padding: 100px 30px 40px; box-shadow: -5px 0 25px rgba(0,0,0,0.2);
                 transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
             }
@@ -418,7 +426,7 @@
             }
             /* -------------------------------------- */
 
-            body.dark .article-header { background: var(--main); box-shadow: -5px 0 25px rgba(0,0,0,0.8); }
+            body.dark .article-header { background: var( --teal); box-shadow: -5px 0 25px rgba(0,0,0,0.8); }
             body.lang-ar .article-header { text-align: right; }
             body.lang-en .article-header { text-align: left; }
             .article-header.open { right: 0; }
@@ -441,24 +449,24 @@
         }
 
         /* الشرح تحت الصور - باستخدام ألوان البراند مع شفافية بسيطة */
-        figcaption { margin-top: 15px; font-size: 14px; color: var(--main); font-weight: 500; opacity: 0.8; line-height: 1.5; }
-        body.dark figcaption { color: var(--light); opacity: 0.7; }
+        figcaption { margin-top: 15px; font-size: 14px; color: var( --teal); font-weight: 500; opacity: 0.8; line-height: 1.5; }
+        body.dark figcaption { color: var(--beige); opacity: 0.7; }
         body.lang-ar figcaption { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
         body.lang-en figcaption { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
         
         /* حقوق الصور - باستخدام ألوان البراند */
         .photo-credit { 
-            display: block !important; margin-top: 15px; font-size: 13px; color: var(--main); opacity: 0.75;
+            display: block !important; margin-top: 15px; font-size: 13px; color: var( --teal); opacity: 0.75;
             font-weight: 500; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 15px; 
             width: 100%; box-sizing: border-box; /* التعديل هنا: ضفنا box-sizing عشان الخط الدهبي ميحركش البوكس */
         }
-        body.dark .photo-credit { color: var(--light); opacity: 0.65; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        body.dark .photo-credit { color: var(--beige); opacity: 0.65; border-bottom: 1px solid rgba(255,255,255,0.1); }
         body.lang-ar .photo-credit { text-align: right; border-right: 3px solid var(--gold); padding-right: 12px; }
         body.lang-en .photo-credit { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
 
         /* نصوص المقالة الأساسية - لون صريح وقوي من البراند */
-        .article-body p { font-size: 20px; line-height: 2.1; margin-bottom: 30px; color: var(--main); text-align: justify; }
-        body.dark .article-body p { color: var(--light); }
+        .article-body p { font-size: 20px; line-height: 2.1; margin-bottom: 30px; color: var( --teal); text-align: justify; }
+        body.dark .article-body p { color: var(--beige); }
         body.lang-en .article-body { direction: ltr; }
         body.lang-ar .article-body { direction: rtl; }
 
@@ -532,7 +540,7 @@
             transform: translateX(-50%) translateY(10px); 
             background: rgba(6, 68, 76, 0.50); 
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); /* تأثير الزجاج */
-            color: var(--light); 
+            color: var(--beige); 
             padding: 8px 15px; border-radius: 12px; font-size: 14px; white-space: nowrap; font-weight: 800;
             opacity: 0; visibility: hidden; transition: 0.3s; pointer-events: none; font-family: 'Tajawal', sans-serif;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
@@ -563,7 +571,7 @@
         body.dark #fullscreenModal { background: rgba(6, 68, 76, 0.50); }
         #modalContent { display: flex; height: 100%; align-items: center; justify-content: center; overflow: hidden; }
         #modalImage { max-width: 95%; max-height: 95%; object-fit: contain; cursor: grab; transform-origin: center center; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2)); }
-        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--main); cursor: pointer; z-index: 10002; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+        #modalClose { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var( --teal); cursor: pointer; z-index: 10002; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
         body.dark #modalClose { color: white; }
         footer { display: block; width: 100%; clear: both; text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
     </style>
