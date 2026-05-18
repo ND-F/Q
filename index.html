@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NADIM in Museum of Islamic Arts</title>
     
-    <link rel="icon" type="image/svg+xml" href="images/icon-nadim.svg?v=2">
-    <link rel="apple-touch-icon" href="images/icon-nadim.svg?v=2">
+    <link rel="icon" type="image/svg+xml" href="images/icon-teal.svg?v=2">
+    <link rel="apple-touch-icon" href="images/icon-teal.svg?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWD0WHS7EV"></script>
@@ -29,11 +29,13 @@
 
     <style>
         :root {
-            --main: #06444C;
-            --light: #EAE8D8;
+            --teal: #06444C;
+            --beige: #EAE8D8;
             --gold: #E1A93E;
-            --accent: #ADCAC9;
-            --darkred: #4A121C;
+            --aqua: #ADCAC9;
+            --burgundy: #4A121C;
+            --midnight: #07181D;
+            --offehite: #F5F1E8;
         }
 
         * { box-sizing: border-box; }
@@ -43,8 +45,8 @@
             margin: 0;
             font-family: 'Tajawal', sans-serif;
             font-weight: 500;
-            background: var(--main);
-            color: var(--light);
+            background: var(--teal);
+            color: var(--beige);
             overflow-x: hidden;
             transition: background 0.4s ease, color 0.4s ease;
             -webkit-font-smoothing: antialiased;
@@ -53,8 +55,8 @@
         }
 
         body.light {
-            background: var(--light);
-            color: var(--main);
+            background: var(--beige);
+            color: var(--teal);
         }
 
         /* ========================================== */
@@ -62,12 +64,12 @@
         /* ========================================== */
         body::before {
             content: ""; position: fixed; inset: 0;
-            background-image: url('images/icon-nadim-light.svg?v=2');
+            background-image: url('images/icon-beige.svg?v=2');
             background-size: 55px 55px; background-position: center;
             opacity: 0.08; pointer-events: none; z-index: -1;
         }
         body.light::before {
-            background-image: url('images/icon-nadim.svg?v=2');
+            background-image: url('images/icon-teal.svg?v=2');
             opacity: 0.10;
         }
 
@@ -129,7 +131,7 @@
 
         .header-title { 
             font-size: 28px; font-weight: 800;
-            color: var(--main) !important; line-height: 1.2; 
+            color: var(--teal) !important; line-height: 1.2; 
             transition: all 0.3s ease; margin: 0;
             flex: 1 1 auto;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -224,8 +226,8 @@
         .card-body { padding: 26px; }
         body.lang-ar .card-body { text-align: right; direction: rtl; }
         body.lang-en .card-body { text-align: left; direction: ltr; }
-        .card-title { font-size: 26px; font-weight: 900; line-height: 1.5; color: var(--light); margin-bottom: 10px; }
-        body.light .card-title { color: var(--main); }
+        .card-title { font-size: 26px; font-weight: 900; line-height: 1.5; color: var(--beige); margin-bottom: 10px; }
+        body.light .card-title { color: var(--teal); }
         .inventory-line { opacity: 0.72; font-size: 13px; margin-bottom: 18px; line-height: 1.8; }
         .id-badge {
             display: inline-flex; align-items: center; justify-content: center;
@@ -313,7 +315,7 @@
         <div class="header-title" id="headerTitle">نديم في متحف الفن الإسلامي</div>
         
         <div class="logos-group">
-            <a href="/"><img src="images/logo-nadim.svg" class="logo"></a>
+            <a href="/"><img src="images/logo-v-teal.svg" class="logo"></a>
             <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank"><img src="images/logo-mia.svg" class="logo"></a>
         </div>
     </div>
