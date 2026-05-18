@@ -56,10 +56,10 @@
             width: 100vw; height: 100vh;
             
             background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-teal.svg?v=2');
-            background-size: 68px 68px; /* قللنا الحجم لـ 55px عشان الأيقونات تقرب من بعضها (كانت 80) */
+            background-size: 35px 35px; /* قللنا الحجم لـ 55px عشان الأيقونات تقرب من بعضها (كانت 80) */
             background-position: center;
             
-            opacity: 0.11; /*  ضاعفنا درجة الوضوح مرتين لـ 0.09 (كانت 0.03) */
+            opacity: 0.13; /*  ضاعفنا درجة الوضوح مرتين لـ 0.09 (كانت 0.03) */
             pointer-events: none; 
             z-index: -1; 
             transition: background-image 0.4s ease, opacity 0.4s ease;
@@ -67,7 +67,7 @@
 
         body.dark::before {
             background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-beige.svg?v=2');
-            opacity: 0.09; /* زودنا الوضوح في وضع الدارك كمان */
+            opacity: 0.11; /* زودنا الوضوح في وضع الدارك كمان */
         }
         
        
@@ -360,7 +360,7 @@
             body.lang-en .logos-group { 
                 width: 320px; 
                 box-sizing: border-box;
-                padding-left: 43px !important; /* دي بتثبتهم عشان ميتزحلقوش وقت السكرول */
+                padding-left: 60px !important; /* دي بتثبتهم عشان ميتزحلقوش وقت السكرول */
                 justify-content: flex-start; 
                 transform: none !important; 
                 
@@ -411,14 +411,14 @@
                 content: "";
                 position: absolute; top: 0; left: 0; width: 100%; height: 100%;
                 background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-teal.svg?v=2');
-                background-size: 55px 55px; 
+                background-size: 40px 40px; 
                 background-position: center;
-                opacity: 0.11; 
+                opacity: 0.13; 
                 pointer-events: none; z-index: 0;
             }
             body.dark .article-header::before {
                 background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/icon-beige.svg?v=2');
-                opacity: 0.09;
+                opacity: 0.11;
             }
             /* رفع الكلام فوق الووتر مارك عشان يفضل مقروء */
             .article-header > * {
