@@ -59,7 +59,7 @@
             background-size: 75px 75px; /* قللنا الحجم لـ 55px عشان الأيقونات تقرب من بعضها (كانت 80) */
             background-position: center;
             
-            opacity: 0.11; /*  ضاعفنا درجة الوضوح مرتين لـ 0.09 (كانت 0.03) */
+            opacity: 0.09; /*  ضاعفنا درجة الوضوح مرتين لـ 0.09 (كانت 0.03) */
             pointer-events: none; 
             z-index: -1; 
             transition: background-image 0.4s ease, opacity 0.4s ease;
@@ -67,7 +67,7 @@
 
         body.dark::before {
             background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/pattern-beige.svg?v=2');
-            opacity: 0.09; /* زودنا الوضوح في وضع الدارك كمان */
+            opacity: 0.075; /* زودنا الوضوح في وضع الدارك كمان */
         }
         
        
@@ -413,12 +413,12 @@
                 background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/pattern-teal.svg?v=2');
                 background-size: 75px 75px; 
                 background-position: center;
-                opacity: 0.11; 
+                opacity: 0.09; 
                 pointer-events: none; z-index: 0;
             }
             body.dark .article-header::before {
                 background-image: url('https://raw.githubusercontent.com/ND-F/Q/main/images/pattern-beige.svg?v=2');
-                opacity: 0.09;
+                opacity: 0.075;
             }
             /* رفع الكلام فوق الووتر مارك عشان يفضل مقروء */
             .article-header > * {
