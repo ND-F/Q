@@ -193,7 +193,13 @@
             overflow: hidden; 
             position: relative; /* الكافر أصبح جزء من الصفحة وبيتحرك معاها */
             display: none;
-            background: var( --teal); margin: 0; padding: 0;
+            background: var( --beige);
+            margin: 0; padding: 0;
+            transition: background 0.4s ease; /* عشان يتغير بنعومة مع الثيم */
+        }
+        /* إضافة السطر ده عشان ياخد اللون الغامق في حالة الدارك مود */
+        body.dark .cover-banner {
+            background: var(--teal);
         }
 
         .cover-banner img { 
