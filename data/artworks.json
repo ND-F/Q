@@ -37,11 +37,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "c<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/t6pfl25HJHs?si=eq3UxrmVTx2jUa6Q\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/1.png",
-    "image2": "images/1b.png",
-    "image3": "images/1c.png",
-    "image4": "images/1d.png",
-    "image5": "images/1e.png"
+    "image1": "images/1.webp",
+    "image2": "images/1b.webp",
+    "image3": "images/1c.webp",
+    "image4": "images/1d.webp",
+    "image5": "images/1e.webp"
   },
   {
     "id": "2",
@@ -81,11 +81,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/2.png",
-    "image2": "images/2b.png",
-    "image3": "images/2c.png",
-    "image4": "images/2d.png",
-    "image5": "images/2e.png"
+    "image1": "images/2.webp",
+    "image2": "images/2b.webp",
+    "image3": "images/2c.webp",
+    "image4": "images/2d.webp",
+    "image5": "images/2e.webp"
   },
   {
     "id": "3",
@@ -125,11 +125,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/3.png",
-    "image2": "images/3b.png",
-    "image3": "images/3c.png",
-    "image4": "images/3d.png",
-    "image5": "images/3e.png"
+    "image1": "images/3.webp",
+    "image2": "images/3b.webp",
+    "image3": "images/3c.webp",
+    "image4": "images/3d.webp",
+    "image5": "images/3e.webp"
   },
   {
     "id": "4",
@@ -169,11 +169,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/4.png",
-    "image2": "images/4b.png",
-    "image3": "images/4c.png",
-    "image4": "images/4d.png",
-    "image5": "images/4e.png"
+    "image1": "images/4.webp",
+    "image2": "images/4b.webp",
+    "image3": "images/4c.webp",
+    "image4": "images/4d.webp",
+    "image5": "images/4e.webp"
   },
   {
     "id": "5",
@@ -213,11 +213,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/5.png",
-    "image2": "images/5b.png",
-    "image3": "images/5c.png",
-    "image4": "images/5d.png",
-    "image5": "images/5e.png"
+    "image1": "images/5.webp",
+    "image2": "images/5b.webp",
+    "image3": "images/5c.webp",
+    "image4": "images/5d.webp",
+    "image5": "images/5e.webp"
   },
   {
     "id": "6",
@@ -257,11 +257,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/6.png",
-    "image2": "images/6b.png",
-    "image3": "images/6c.png",
-    "image4": "images/6d.png",
-    "image5": "images/6e.png"
+    "image1": "images/6.webp",
+    "image2": "images/6b.webp",
+    "image3": "images/6c.webp",
+    "image4": "images/6d.webp",
+    "image5": "images/6e.webp"
   },
   {
     "id": "7",
@@ -301,11 +301,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/7.png",
-    "image2": "images/7b.png",
-    "image3": "images/7c.png",
-    "image4": "images/7d.png",
-    "image5": "images/7e.png"
+    "image1": "images/7.webp",
+    "image2": "images/7b.webp",
+    "image3": "images/7c.webp",
+    "image4": "images/7d.webp",
+    "image5": "images/7e.webp"
   },
   {
     "id": "8",
@@ -345,11 +345,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/8.png",
-    "image2": "images/8b.png",
-    "image3": "images/8c.png",
-    "image4": "images/8d.png",
-    "image5": "images/8e.png"
+    "image1": "images/8.webp",
+    "image2": "images/8b.webp",
+    "image3": "images/8c.webp",
+    "image4": "images/8d.webp",
+    "image5": "images/8e.webp"
   },
   {
     "id": "9",
@@ -389,11 +389,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/9.png",
-    "image2": "images/9b.png",
-    "image3": "images/9c.png",
-    "image4": "images/9d.png",
-    "image5": "images/9e.png"
+    "image1": "images/9.webp",
+    "image2": "images/9b.webp",
+    "image3": "images/9c.webp",
+    "image4": "images/9d.webp",
+    "image5": "images/9e.webp"
   },
   {
     "id": "10",
@@ -433,11 +433,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/10.png",
-    "image2": "images/10b.png",
-    "image3": "images/10c.png",
-    "image4": "images/10d.png",
-    "image5": "images/10e.png"
+    "image1": "images/10.webp",
+    "image2": "images/10b.webp",
+    "image3": "images/10c.webp",
+    "image4": "images/10d.webp",
+    "image5": "images/10e.webp"
   },
   {
     "id": "11",
@@ -477,11 +477,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/11.png",
-    "image2": "images/11b.png",
-    "image3": "images/11c.png",
-    "image4": "images/11d.png",
-    "image5": "images/11e.png"
+    "image1": "images/11.webp",
+    "image2": "images/11b.webp",
+    "image3": "images/11c.webp",
+    "image4": "images/11d.webp",
+    "image5": "images/11e.webp"
   },
   {
     "id": "12",
@@ -521,11 +521,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/12.png",
-    "image2": "images/12b.png",
-    "image3": "images/12c.png",
-    "image4": "images/12d.png",
-    "image5": "images/12e.png"
+    "image1": "images/12.webp",
+    "image2": "images/12b.webp",
+    "image3": "images/12c.webp",
+    "image4": "images/12d.webp",
+    "image5": "images/12e.webp"
   },
   {
     "id": "13",
@@ -565,11 +565,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/13.png",
-    "image2": "images/13b.png",
-    "image3": "images/13c.png",
-    "image4": "images/13d.png",
-    "image5": "images/13e.png"
+    "image1": "images/13.webp",
+    "image2": "images/13b.webp",
+    "image3": "images/13c.webp",
+    "image4": "images/13d.webp",
+    "image5": "images/13e.webp"
   },
   {
     "id": "14",
@@ -609,11 +609,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/14.png",
-    "image2": "images/14b.png",
-    "image3": "images/14c.png",
-    "image4": "images/14d.png",
-    "image5": "images/14e.png"
+    "image1": "images/14.webp",
+    "image2": "images/14b.webp",
+    "image3": "images/14c.webp",
+    "image4": "images/14d.webp",
+    "image5": "images/14e.webp"
   },
   {
     "id": "15",
@@ -653,11 +653,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/15.png",
-    "image2": "images/15b.png",
-    "image3": "images/15c.png",
-    "image4": "images/15d.png",
-    "image5": "images/15e.png"
+    "image1": "images/15.webp",
+    "image2": "images/15b.webp",
+    "image3": "images/15c.webp",
+    "image4": "images/15d.webp",
+    "image5": "images/15e.webp"
   },
   {
     "id": "16",
@@ -697,11 +697,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/16.png",
-    "image2": "images/16b.png",
-    "image3": "images/16c.png",
-    "image4": "images/16d.png",
-    "image5": "images/16e.png"
+    "image1": "images/16.webp",
+    "image2": "images/16b.webp",
+    "image3": "images/16c.webp",
+    "image4": "images/16d.webp",
+    "image5": "images/16e.webp"
   },
   {
     "id": "17",
@@ -741,11 +741,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/17.png",
-    "image2": "images/17b.png",
-    "image3": "images/17c.png",
-    "image4": "images/17d.png",
-    "image5": "images/17e.png"
+    "image1": "images/17.webp",
+    "image2": "images/17b.webp",
+    "image3": "images/17c.webp",
+    "image4": "images/17d.webp",
+    "image5": "images/17e.webp"
   },
   {
     "id": "18",
@@ -785,11 +785,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/18.png",
-    "image2": "images/18b.png",
-    "image3": "images/18c.png",
-    "image4": "images/18d.png",
-    "image5": "images/18e.png"
+    "image1": "images/18.webp",
+    "image2": "images/18b.webp",
+    "image3": "images/18c.webp",
+    "image4": "images/18d.webp",
+    "image5": "images/18e.webp"
   },
   {
     "id": "19",
@@ -829,11 +829,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/19.png",
-    "image2": "images/19b.png",
-    "image3": "images/19c.png",
-    "image4": "images/19d.png",
-    "image5": "images/19e.png"
+    "image1": "images/19.webp",
+    "image2": "images/19b.webp",
+    "image3": "images/19c.webp",
+    "image4": "images/19d.webp",
+    "image5": "images/19e.webp"
   },
   {
     "id": "20",
@@ -873,11 +873,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/20.png",
-    "image2": "images/20b.png",
-    "image3": "images/20c.png",
-    "image4": "images/20d.png",
-    "image5": "images/20e.png"
+    "image1": "images/20.webp",
+    "image2": "images/20b.webp",
+    "image3": "images/20c.webp",
+    "image4": "images/20d.webp",
+    "image5": "images/20e.webp"
   },
   {
     "id": "21",
@@ -917,11 +917,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/21.png",
-    "image2": "images/21b.png",
-    "image3": "images/21c.png",
-    "image4": "images/21d.png",
-    "image5": "images/21e.png"
+    "image1": "images/21.webp",
+    "image2": "images/21b.webp",
+    "image3": "images/21c.webp",
+    "image4": "images/21d.webp",
+    "image5": "images/21e.webp"
   },
   {
     "id": "22",
@@ -961,11 +961,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/22.png",
-    "image2": "images/22b.png",
-    "image3": "images/22c.png",
-    "image4": "images/22d.png",
-    "image5": "images/22e.png"
+    "image1": "images/22.webp",
+    "image2": "images/22b.webp",
+    "image3": "images/22c.webp",
+    "image4": "images/22d.webp",
+    "image5": "images/22e.webp"
   },
   {
     "id": "23",
@@ -1005,11 +1005,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/23.png",
-    "image2": "images/23b.png",
-    "image3": "images/23c.png",
-    "image4": "images/23d.png",
-    "image5": "images/23e.png"
+    "image1": "images/23.webp",
+    "image2": "images/23b.webp",
+    "image3": "images/23c.webp",
+    "image4": "images/23d.webp",
+    "image5": "images/23e.webp"
   },
   {
     "id": "24",
@@ -1049,11 +1049,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/24.png",
-    "image2": "images/24b.png",
-    "image3": "images/24c.png",
-    "image4": "images/24d.png",
-    "image5": "images/24e.png"
+    "image1": "images/24.webp",
+    "image2": "images/24b.webp",
+    "image3": "images/24c.webp",
+    "image4": "images/24d.webp",
+    "image5": "images/24e.webp"
   },
   {
     "id": "25",
@@ -1093,11 +1093,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "",
-    "image1": "images/25.png",
-    "image2": "images/25b.png",
-    "image3": "images/25c.png",
-    "image4": "images/25d.png",
-    "image5": "images/25e.png"
+    "image1": "images/25.webp",
+    "image2": "images/25b.webp",
+    "image3": "images/25c.webp",
+    "image4": "images/25d.webp",
+    "image5": "images/25e.webp"
   },
   {
     "id": "V1",
@@ -1137,11 +1137,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/KmIjaRwY6eo?si=5DsIQ4g_1ISn3emC\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/V1.png",
-    "image2": "images/V1b.png",
-    "image3": "images/V1c.png",
-    "image4": "images/V1d.png",
-    "image5": "images/V1e.png"
+    "image1": "images/V1.webp",
+    "image2": "images/V1b.webp",
+    "image3": "images/V1c.webp",
+    "image4": "images/V1d.webp",
+    "image5": "images/V1e.webp"
   },
   {
     "id": "V2",
@@ -1181,11 +1181,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/GHhL1E48nug?si=r3diMqCK1Axeyb0l\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/V2.png",
-    "image2": "images/V2b.png",
-    "image3": "images/V2c.png",
-    "image4": "images/V2d.png",
-    "image5": "images/V2e.png"
+    "image1": "images/V2.webp",
+    "image2": "images/V2b.webp",
+    "image3": "images/V2c.webp",
+    "image4": "images/V2d.webp",
+    "image5": "images/V2e.webp"
   },
   {
     "id": "V3",
@@ -1225,11 +1225,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/UUB4VLeu1nI?si=7lA4bJuTav24c3Y3\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/V3.png",
-    "image2": "images/V3b.png",
-    "image3": "images/V3c.png",
-    "image4": "images/V3d.png",
-    "image5": "images/V3e.png"
+    "image1": "images/V3.webp",
+    "image2": "images/V3b.webp",
+    "image3": "images/V3c.webp",
+    "image4": "images/V3d.webp",
+    "image5": "images/V3e.webp"
   },
   {
     "id": "V4",
@@ -1269,11 +1269,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "https://www.youtube.com/embed/aGYJdcYKs7g?si=73ZRV82k6lJ_KESw",
-    "image1": "images/V4.png",
-    "image2": "images/V4b.png",
-    "image3": "images/V4c.png",
-    "image4": "images/V4d.png",
-    "image5": "images/V4e.png"
+    "image1": "images/V4.webp",
+    "image2": "images/V4b.webp",
+    "image3": "images/V4c.webp",
+    "image4": "images/V4d.webp",
+    "image5": "images/V4e.webp"
   },
   {
     "id": "V5",
@@ -1313,11 +1313,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "https://www.youtube.com/embed/NLouBnqD1_I?si=Bhfusl4kSnaxhWDm",
-    "image1": "images/V5.png",
-    "image2": "images/V5b.png",
-    "image3": "images/V5c.png",
-    "image4": "images/V5d.png",
-    "image5": "images/V5e.png"
+    "image1": "images/V5.webp",
+    "image2": "images/V5b.webp",
+    "image3": "images/V5c.webp",
+    "image4": "images/V5d.webp",
+    "image5": "images/V5e.webp"
   },
   {
     "id": "VNF1",
@@ -1357,11 +1357,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/KmIjaRwY6eo?si=5DsIQ4g_1ISn3emC\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF1.png",
-    "image2": "images/VNF1b.png",
-    "image3": "images/VNF1c.png",
-    "image4": "images/VNF1d.png",
-    "image5": "images/VNF1e.png"
+    "image1": "images/VNF1.webp",
+    "image2": "images/VNF1b.webp",
+    "image3": "images/VNF1c.webp",
+    "image4": "images/VNF1d.webp",
+    "image5": "images/VNF1e.webp"
   },
   {
     "id": "VNF2",
@@ -1401,11 +1401,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/GHhL1E48nug?si=r3diMqCK1Axeyb0l\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF2.png",
-    "image2": "images/VNF2b.png",
-    "image3": "images/VNF2c.png",
-    "image4": "images/VNF2d.png",
-    "image5": "images/VNF2e.png"
+    "image1": "images/VNF2.webp",
+    "image2": "images/VNF2b.webp",
+    "image3": "images/VNF2c.webp",
+    "image4": "images/VNF2d.webp",
+    "image5": "images/VNF2e.webp"
   },
   {
     "id": "VNF3",
@@ -1445,11 +1445,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/UUB4VLeu1nI?si=7lA4bJuTav24c3Y3\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF3.png",
-    "image2": "images/VNF3b.png",
-    "image3": "images/VNF3c.png",
-    "image4": "images/VNF3d.png",
-    "image5": "images/VNF3e.png"
+    "image1": "images/VNF3.webp",
+    "image2": "images/VNF3b.webp",
+    "image3": "images/VNF3c.webp",
+    "image4": "images/VNF3d.webp",
+    "image5": "images/VNF3e.webp"
   },
   {
     "id": "VNF4",
@@ -1489,11 +1489,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "https://www.youtube.com/embed/aGYJdcYKs7g?si=73ZRV82k6lJ_KESw",
-    "image1": "images/VNF4.png",
-    "image2": "images/VNF4b.png",
-    "image3": "images/VNF4c.png",
-    "image4": "images/VNF4d.png",
-    "image5": "images/VNF4e.png"
+    "image1": "images/VNF4.webp",
+    "image2": "images/VNF4b.webp",
+    "image3": "images/VNF4c.webp",
+    "image4": "images/VNF4d.webp",
+    "image5": "images/VNF4e.webp"
   },
   {
     "id": "VNF5",
@@ -1533,11 +1533,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "https://www.youtube.com/embed/NLouBnqD1_I?si=Bhfusl4kSnaxhWDm",
-    "image1": "images/VNF5.png",
-    "image2": "images/VNF5b.png",
-    "image3": "images/VNF5c.png",
-    "image4": "images/VNF5d.png",
-    "image5": "images/VNF5e.png"
+    "image1": "images/VNF5.webp",
+    "image2": "images/VNF5b.webp",
+    "image3": "images/VNF5c.webp",
+    "image4": "images/VNF5d.webp",
+    "image5": "images/VNF5e.webp"
   },
   {
     "id": "VNF6",
@@ -1577,11 +1577,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/P1LBbyyeVOs?si=KeGj_u-lTI1f78X1\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF6.png",
-    "image2": "images/VNF6b.png",
-    "image3": "images/VNF6c.png",
-    "image4": "images/VNF6d.png",
-    "image5": "images/VNF6e.png"
+    "image1": "images/VNF6.webp",
+    "image2": "images/VNF6b.webp",
+    "image3": "images/VNF6c.webp",
+    "image4": "images/VNF6d.webp",
+    "image5": "images/VNF6e.webp"
   },
   {
     "id": "VNF7",
@@ -1621,11 +1621,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/RiaeGFYJ1RI?si=qLz8s8UXyTjF6UtQ\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF7.png",
-    "image2": "images/VNF7b.png",
-    "image3": "images/VNF7c.png",
-    "image4": "images/VNF7d.png",
-    "image5": "images/VNF7e.png"
+    "image1": "images/VNF7.webp",
+    "image2": "images/VNF7b.webp",
+    "image3": "images/VNF7c.webp",
+    "image4": "images/VNF7d.webp",
+    "image5": "images/VNF7e.webp"
   },
   {
     "id": "VNF8",
@@ -1665,11 +1665,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/tbiyQu-VAE4?si=2qnFotcGU3b4rrYH\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF8.png",
-    "image2": "images/VNF8b.png",
-    "image3": "images/VNF8c.png",
-    "image4": "images/VNF8d.png",
-    "image5": "images/VNF8e.png"
+    "image1": "images/VNF8.webp",
+    "image2": "images/VNF8b.webp",
+    "image3": "images/VNF8c.webp",
+    "image4": "images/VNF8d.webp",
+    "image5": "images/VNF8e.webp"
   },
   {
     "id": "VNF9",
@@ -1709,11 +1709,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Ww2ItSOGrRI?si=tr-D9WRjKFqLkm45\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF9.png",
-    "image2": "images/VNF9b.png",
-    "image3": "images/VNF9c.png",
-    "image4": "images/VNF9d.png",
-    "image5": "images/VNF9e.png"
+    "image1": "images/VNF9.webp",
+    "image2": "images/VNF9b.webp",
+    "image3": "images/VNF9c.webp",
+    "image4": "images/VNF9d.webp",
+    "image5": "images/VNF9e.webp"
   },
   {
     "id": "VNF10",
@@ -1753,11 +1753,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "https://www.youtube.com/embed/TQZB1gU6tmY?si=eDooZAzCNhI88pjP",
-    "image1": "images/VNF10.png",
-    "image2": "images/VNF10b.png",
-    "image3": "images/VNF10c.png",
-    "image4": "images/VNF10d.png",
-    "image5": "images/VNF10e.png"
+    "image1": "images/VNF10.webp",
+    "image2": "images/VNF10b.webp",
+    "image3": "images/VNF10c.webp",
+    "image4": "images/VNF10d.webp",
+    "image5": "images/VNF10e.webp"
   },
   {
     "id": "VNF11",
@@ -1797,11 +1797,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/t6pfl25HJHs?si=eq3UxrmVTx2jUa6Q\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF11.png",
-    "image2": "images/VNF11b.png",
-    "image3": "images/VNF11c.png",
-    "image4": "images/VNF11d.png",
-    "image5": "images/VNF11e.png"
+    "image1": "images/VNF11.webp",
+    "image2": "images/VNF11b.webp",
+    "image3": "images/VNF11c.webp",
+    "image4": "images/VNF11d.webp",
+    "image5": "images/VNF11e.webp"
   },
   {
     "id": "VNF12",
@@ -1841,11 +1841,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Ra_RaF1UAmM?si=z7mBGV_F9Vknbqs4\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF12.png",
-    "image2": "images/VNF12b.png",
-    "image3": "images/VNF12c.png",
-    "image4": "images/VNF12d.png",
-    "image5": "images/VNF12e.png"
+    "image1": "images/VNF12.webp",
+    "image2": "images/VNF12b.webp",
+    "image3": "images/VNF12c.webp",
+    "image4": "images/VNF12d.webp",
+    "image5": "images/VNF12e.webp"
   },
   {
     "id": "VNF13",
@@ -1885,11 +1885,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/-NMD5fo2R3Y?si=QJMhzHfs2L8W48yJ\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF13.png",
-    "image2": "images/VNF13b.png",
-    "image3": "images/VNF13c.png",
-    "image4": "images/VNF13d.png",
-    "image5": "images/VNF13e.png"
+    "image1": "images/VNF13.webp",
+    "image2": "images/VNF13b.webp",
+    "image3": "images/VNF13c.webp",
+    "image4": "images/VNF13d.webp",
+    "image5": "images/VNF13e.webp"
   },
   {
     "id": "VNF14",
@@ -1929,11 +1929,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/7uJrFK42Sps?si=2ZSeu2QUYwsHRPLc\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF14.png",
-    "image2": "images/VNF14b.png",
-    "image3": "images/VNF14c.png",
-    "image4": "images/VNF14d.png",
-    "image5": "images/VNF14e.png"
+    "image1": "images/VNF14.webp",
+    "image2": "images/VNF14b.webp",
+    "image3": "images/VNF14c.webp",
+    "image4": "images/VNF14d.webp",
+    "image5": "images/VNF14e.webp"
   },
   {
     "id": "VNF15",
@@ -1973,11 +1973,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/q3Pxy2UtN6o?si=P2kX6zVP_8DIed-A\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF15.png",
-    "image2": "images/VNF15b.png",
-    "image3": "images/VNF15c.png",
-    "image4": "images/VNF15d.png",
-    "image5": "images/VNF15e.png"
+    "image1": "images/VNF15.webp",
+    "image2": "images/VNF15b.webp",
+    "image3": "images/VNF15c.webp",
+    "image4": "images/VNF15d.webp",
+    "image5": "images/VNF15e.webp"
   },
   {
     "id": "VNF16",
@@ -2017,11 +2017,11 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/x9xlK7y1ar8?si=_iLrDkp-AKBEeV85\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF16.png",
-    "image2": "images/VNF16b.png",
-    "image3": "images/VNF16c.png",
-    "image4": "images/VNF16d.png",
-    "image5": "images/VNF16e.png"
+    "image1": "images/VNF16.webp",
+    "image2": "images/VNF16b.webp",
+    "image3": "images/VNF16c.webp",
+    "image4": "images/VNF16d.webp",
+    "image5": "images/VNF16e.webp"
   },
   {
     "id": "VNF17",
@@ -2061,10 +2061,10 @@
     "dsc_en5": "",
     "dsc_ar5": "",
     "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/RWxDAxKxoIM?si=O1fygUL7raX-MlWA\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-    "image1": "images/VNF17.png",
-    "image2": "images/VNF17b.png",
-    "image3": "images/VNF17c.png",
-    "image4": "images/VNF17d.png",
-    "image5": "images/VNF17e.png"
+    "image1": "images/VNF17.webp",
+    "image2": "images/VNF17b.webp",
+    "image3": "images/VNF17c.webp",
+    "image4": "images/VNF17d.webp",
+    "image5": "images/VNF17e.webp"
   }
 ]
