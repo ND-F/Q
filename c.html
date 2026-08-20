@@ -115,7 +115,7 @@
         }
 
         .logo { 
-            height: 85px; 
+            height: 65px; 
             width: auto; 
             cursor: pointer; 
             /* السطرين دول هم "السر" عشان اللوجو ميبكسلش وهو بيصغر ويكبر */
@@ -143,7 +143,7 @@
 
         /* حالة السكرول للهيدر */
         #museumHeader.header-small { padding: 8px 20px !important; } /* وحدنا البادينج هنا كمان */
-        #museumHeader.header-small .logo { height: 52px !important; }
+        #museumHeader.header-small .logo { height: 40px !important; }
         #museumHeader.header-small .header-title { font-size: 22px !important; }
 
         /* شاشات الموبايل */
@@ -172,10 +172,10 @@
                 gap: 10px; flex-shrink: 0;
             }
             
-            .logo { height: 65px; }
+            .logo { height: 42px; }
             
             #museumHeader.header-small { padding: 6px 20px !important; }
-            #museumHeader.header-small .logo { height: 45px !important; }
+            #museumHeader.header-small .logo { height: 32px !important; }
             #museumHeader.header-small .header-title { font-size: 14px !important; }
 
             /* مقاسات الكافر في الموبايل */
@@ -903,7 +903,12 @@
         document.getElementById("inv").innerHTML = artwork.inventory_number || "";
         document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
 
-        let rawVid = String(artwork.video_url || "").trim();
+        let vidCandidates = [artwork.video_url, artwork.video_url2, artwork.video_url3];
+        let rawVid = "";
+        for (let vi = 0; vi < vidCandidates.length; vi++) {
+            let vv = String(vidCandidates[vi] || "").trim();
+            if (vv !== "") { rawVid = vv; break; }
+        }
         let vidSlot = -1; let finalVidUrl = "";
         if (rawVid !== "") {
             let firstChar = rawVid.charAt(0).toLowerCase();
@@ -923,25 +928,28 @@
             vidContainer.innerHTML = `<iframe width="100%" height="100%" src="${finalVidUrl}" frameborder="0" allowfullscreen></iframe>`;
         } else { vidContainer.style.display = "none"; }
 
-        // ===== الريل (نفس منطق الفيديو: لو مفيش ريل مايتبنيش قالب) =====
+        // ===== الريل (نفس منطق الفيديو: بديل احتياطي + نظام الحروف للتنزيل تحت) =====
         let reelContainer = document.getElementById("reelContainer");
         let reelCandidates = [artwork.reel_url, artwork.reel_url2, artwork.reel_url3];
-        let finalReelUrl = "";
-        for (let i = 0; i < reelCandidates.length; i++) {
-            let r = String(reelCandidates[i] || "").trim();
-            if (r !== "") {
-                finalReelUrl = r;
-                if (r.includes("<iframe") && r.includes("src=")) {
-                    let m = r.match(/src="([^"]+)"/);
-                    if (m) finalReelUrl = m[1];
-                } else {
-                    let ytId = r.match(/(?:shorts\/|youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{6,})/);
-                    if (ytId) finalReelUrl = "https://www.youtube.com/embed/" + ytId[1];
-                }
-                break;
+        let reelSlot = -1; let finalReelUrl = "";
+        for (let ri = 0; ri < reelCandidates.length; ri++) {
+            let r = String(reelCandidates[ri] || "").trim();
+            if (r === "") continue;
+            let reelFirst = r.charAt(0).toLowerCase();
+            if (['a', 'b', 'c', 'd', 'e'].includes(reelFirst) && r.length > 1 && (r.charAt(1) === 'h' || r.charAt(1) === '<')) {
+                reelSlot = reelFirst.charCodeAt(0) - 97; r = r.substring(1).trim();
             }
+            finalReelUrl = r;
+            if (r.includes("<iframe") && r.includes("src=")) {
+                let m = r.match(/src="([^"]+)"/);
+                if (m) finalReelUrl = m[1];
+            } else {
+                let ytId = r.match(/(?:shorts\/|youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{6,})/);
+                if (ytId) finalReelUrl = "https://www.youtube.com/embed/" + ytId[1];
+            }
+            break;
         }
-        if (finalReelUrl) {
+        if (finalReelUrl && reelSlot === -1) {
             reelContainer.style.display = "block";
             reelContainer.innerHTML = `<iframe src="${finalReelUrl}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
         } else {
@@ -955,13 +963,17 @@
         let heroSection = document.getElementById("heroSection");
         heroSection.innerHTML = "";
         
-        if (images[0] || (vidSlot === 0 && finalVidUrl)) {
+        if (images[0] || (vidSlot === 0 && finalVidUrl) || (reelSlot === 0 && finalReelUrl)) {
             let heroFig = document.createElement("figure");
             heroFig.className = "main-figure";
             if (vidSlot === 0 && finalVidUrl) {
                 let vWrap = document.createElement("div"); vWrap.className = "video-container inline-video"; vWrap.style.display = "block"; vWrap.style.width = "100%";
                 vWrap.innerHTML = `<iframe width="100%" height="100%" src="${finalVidUrl}" frameborder="0" allowfullscreen></iframe>`;
                 heroFig.appendChild(vWrap);
+            } else if (reelSlot === 0 && finalReelUrl) {
+                let rWrap = document.createElement("div"); rWrap.className = "reel-container"; rWrap.style.display = "block";
+                rWrap.innerHTML = `<iframe src="${finalReelUrl}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+                heroFig.appendChild(rWrap);
             } else if (images[0]) {
                 let viewer = document.createElement("div"); viewer.className = "viewer";
                 let img = document.createElement("img"); img.src = images[0];
@@ -1005,8 +1017,9 @@
                     articleBody.appendChild(p);
                 }
             } else {
-                if (images[i] || (vidSlot === i && finalVidUrl) || (hasSplitDesc && pText.trim() !== "")) {
+                if (images[i] || (vidSlot === i && finalVidUrl) || (reelSlot === i && finalReelUrl) || (hasSplitDesc && pText.trim() !== "")) {
                     if (vidSlot === i && finalVidUrl) articleBody.appendChild(createInlineVideo(finalVidUrl, i));
+                    else if (reelSlot === i && finalReelUrl) articleBody.appendChild(createInlineReel(finalReelUrl, i));
                     else if (images[i]) articleBody.appendChild(createInlineFigure(images[i], i));
                     
                     if (hasSplitDesc && pText.trim() !== "") {
@@ -1038,6 +1051,19 @@
         img2.onload = function() { this.style.display = "block"; wrapper.classList.add("has-double"); };
         img2.onerror = function() { this.remove(); }; img2.onclick = () => openModal(doubleSrc); wrapper.appendChild(img2);
         
+        let infoStr = (artwork[`info_${lang}${idx + 1}`] || "").trim();
+        if (infoStr) { let cap = document.createElement("figcaption"); cap.className = "photo-credit"; cap.innerHTML = infoStr; fig.appendChild(cap); }
+        return fig;
+    }
+
+    function createInlineReel(url, idx) {
+        let fig = document.createElement("figure");
+        fig.className = "image-pair-container";
+        let rWrap = document.createElement("div");
+        rWrap.className = "reel-container";
+        rWrap.style.display = "block";
+        rWrap.innerHTML = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+        fig.appendChild(rWrap);
         let infoStr = (artwork[`info_${lang}${idx + 1}`] || "").trim();
         if (infoStr) { let cap = document.createElement("figcaption"); cap.className = "photo-credit"; cap.innerHTML = infoStr; fig.appendChild(cap); }
         return fig;
