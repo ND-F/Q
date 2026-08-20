@@ -903,55 +903,29 @@
         document.getElementById("inv").innerHTML = artwork.inventory_number || "";
         document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
 
-        let vidCandidates = [artwork.video_url, artwork.video_url2, artwork.video_url3];
-        let rawVid = "";
-        for (let vi = 0; vi < vidCandidates.length; vi++) {
-            let vv = String(vidCandidates[vi] || "").trim();
-            if (vv !== "") { rawVid = vv; break; }
-        }
-        let vidSlot = -1; let finalVidUrl = "";
-        if (rawVid !== "") {
-            let firstChar = rawVid.charAt(0).toLowerCase();
-            if (['a', 'b', 'c', 'd', 'e'].includes(firstChar) && rawVid.length > 1 && (rawVid.charAt(1) === 'h' || rawVid.charAt(1) === '<')) {
-                vidSlot = firstChar.charCodeAt(0) - 97; rawVid = rawVid.substring(1).trim(); 
-            }
-            finalVidUrl = rawVid;
-            if (rawVid.includes("<iframe") && rawVid.includes("src=")) {
-                let match = rawVid.match(/src="([^"]+)"/);
-                if (match) finalVidUrl = match[1];
-            }
-        }
+        // ===== الفيديو والريل: اعرض كل عمود في مكانه حسب حرفه (مش احتياطي) =====
+        // slot -1 = فوق | a=0 الهيرو | b..e = 1..4 تحت. أول قيمة لكل خانة تكسب.
+        let videoBySlot = {};
+        [artwork.video_url, artwork.video_url2, artwork.video_url3].forEach(raw => {
+            let p = parseMediaSlot(raw);
+            if (p && videoBySlot[p.slot] === undefined) videoBySlot[p.slot] = p.url;
+        });
+        let reelBySlot = {};
+        [artwork.reel_url, artwork.reel_url2, artwork.reel_url3].forEach(raw => {
+            let p = parseMediaSlot(raw);
+            if (p && reelBySlot[p.slot] === undefined) reelBySlot[p.slot] = p.url;
+        });
 
         let vidContainer = document.getElementById("videoContainer");
-        if (finalVidUrl && vidSlot === -1) {
+        if (videoBySlot[-1]) {
             vidContainer.style.display = "block";
-            vidContainer.innerHTML = `<iframe width="100%" height="100%" src="${finalVidUrl}" frameborder="0" allowfullscreen></iframe>`;
-        } else { vidContainer.style.display = "none"; }
+            vidContainer.innerHTML = `<iframe width="100%" height="100%" src="${videoBySlot[-1]}" frameborder="0" allowfullscreen></iframe>`;
+        } else { vidContainer.style.display = "none"; vidContainer.innerHTML = ""; }
 
-        // ===== الريل (نفس منطق الفيديو: بديل احتياطي + نظام الحروف للتنزيل تحت) =====
         let reelContainer = document.getElementById("reelContainer");
-        let reelCandidates = [artwork.reel_url, artwork.reel_url2, artwork.reel_url3];
-        let reelSlot = -1; let finalReelUrl = "";
-        for (let ri = 0; ri < reelCandidates.length; ri++) {
-            let r = String(reelCandidates[ri] || "").trim();
-            if (r === "") continue;
-            let reelFirst = r.charAt(0).toLowerCase();
-            if (['a', 'b', 'c', 'd', 'e'].includes(reelFirst) && r.length > 1 && (r.charAt(1) === 'h' || r.charAt(1) === '<')) {
-                reelSlot = reelFirst.charCodeAt(0) - 97; r = r.substring(1).trim();
-            }
-            finalReelUrl = r;
-            if (r.includes("<iframe") && r.includes("src=")) {
-                let m = r.match(/src="([^"]+)"/);
-                if (m) finalReelUrl = m[1];
-            } else {
-                let ytId = r.match(/(?:shorts\/|youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{6,})/);
-                if (ytId) finalReelUrl = "https://www.youtube.com/embed/" + ytId[1];
-            }
-            break;
-        }
-        if (finalReelUrl && reelSlot === -1) {
+        if (reelBySlot[-1]) {
             reelContainer.style.display = "block";
-            reelContainer.innerHTML = `<iframe src="${finalReelUrl}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+            reelContainer.innerHTML = `<iframe src="${reelBySlot[-1]}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
         } else {
             reelContainer.style.display = "none";
             reelContainer.innerHTML = "";
@@ -963,16 +937,16 @@
         let heroSection = document.getElementById("heroSection");
         heroSection.innerHTML = "";
         
-        if (images[0] || (vidSlot === 0 && finalVidUrl) || (reelSlot === 0 && finalReelUrl)) {
+        if (images[0] || videoBySlot[0] || reelBySlot[0]) {
             let heroFig = document.createElement("figure");
             heroFig.className = "main-figure";
-            if (vidSlot === 0 && finalVidUrl) {
+            if (videoBySlot[0]) {
                 let vWrap = document.createElement("div"); vWrap.className = "video-container inline-video"; vWrap.style.display = "block"; vWrap.style.width = "100%";
-                vWrap.innerHTML = `<iframe width="100%" height="100%" src="${finalVidUrl}" frameborder="0" allowfullscreen></iframe>`;
+                vWrap.innerHTML = `<iframe width="100%" height="100%" src="${videoBySlot[0]}" frameborder="0" allowfullscreen></iframe>`;
                 heroFig.appendChild(vWrap);
-            } else if (reelSlot === 0 && finalReelUrl) {
+            } else if (reelBySlot[0]) {
                 let rWrap = document.createElement("div"); rWrap.className = "reel-container"; rWrap.style.display = "block";
-                rWrap.innerHTML = `<iframe src="${finalReelUrl}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+                rWrap.innerHTML = `<iframe src="${reelBySlot[0]}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
                 heroFig.appendChild(rWrap);
             } else if (images[0]) {
                 let viewer = document.createElement("div"); viewer.className = "viewer";
@@ -1017,9 +991,9 @@
                     articleBody.appendChild(p);
                 }
             } else {
-                if (images[i] || (vidSlot === i && finalVidUrl) || (reelSlot === i && finalReelUrl) || (hasSplitDesc && pText.trim() !== "")) {
-                    if (vidSlot === i && finalVidUrl) articleBody.appendChild(createInlineVideo(finalVidUrl, i));
-                    else if (reelSlot === i && finalReelUrl) articleBody.appendChild(createInlineReel(finalReelUrl, i));
+                if (images[i] || videoBySlot[i] || reelBySlot[i] || (hasSplitDesc && pText.trim() !== "")) {
+                    if (videoBySlot[i]) articleBody.appendChild(createInlineVideo(videoBySlot[i], i));
+                    else if (reelBySlot[i]) articleBody.appendChild(createInlineReel(reelBySlot[i], i));
                     else if (images[i]) articleBody.appendChild(createInlineFigure(images[i], i));
                     
                     if (hasSplitDesc && pText.trim() !== "") {
@@ -1054,6 +1028,24 @@
         let infoStr = (artwork[`info_${lang}${idx + 1}`] || "").trim();
         if (infoStr) { let cap = document.createElement("figcaption"); cap.className = "photo-credit"; cap.innerHTML = infoStr; fig.appendChild(cap); }
         return fig;
+    }
+
+    function parseMediaSlot(raw) {
+        let v = String(raw || "").trim();
+        if (v === "") return null;
+        let slot = -1;
+        let fc = v.charAt(0).toLowerCase();
+        if (['a', 'b', 'c', 'd', 'e'].includes(fc) && v.length > 1 && (v.charAt(1) === 'h' || v.charAt(1) === '<')) {
+            slot = fc.charCodeAt(0) - 97; v = v.substring(1).trim();
+        }
+        let url = v;
+        if (v.includes("<iframe") && v.includes("src=")) {
+            let m = v.match(/src="([^"]+)"/); if (m) url = m[1];
+        } else {
+            let yt = v.match(/(?:shorts\/|youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{6,})/);
+            if (yt) url = "https://www.youtube.com/embed/" + yt[1];
+        }
+        return { slot: slot, url: url };
     }
 
     function createInlineReel(url, idx) {
