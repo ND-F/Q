@@ -521,6 +521,25 @@
             border: none;
         }
 
+        /* ===== ثامنيل يوتيوب (facade): صورة + زرار تشغيل، وبالكليك يشتغل inline ===== */
+        .yt-facade {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border: none; padding: 0; margin: 0; cursor: pointer; display: block;
+            background-color: #000; background-size: cover; background-position: center;
+        }
+        .yt-facade .yt-play {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 68px; height: 48px; border-radius: 14px;
+            background: rgba(0,0,0,0.62); transition: background 0.2s ease;
+        }
+        .yt-facade:hover .yt-play { background: var(--gold); }
+        .yt-facade .yt-play::before {
+            content: ""; position: absolute; top: 50%; left: 50%;
+            transform: translate(-40%, -50%);
+            border-style: solid; border-width: 11px 0 11px 19px;
+            border-color: transparent transparent transparent #fff;
+        }
+
         .main-figure { 
             width: 100%; margin: 0 0 30px 0; padding: 0; 
             display: block; text-align: center; /* التعديل هنا: لغينا الـ flex وخليناها block عشان الانفو بوكس ياخد راحته زي باقي الصور بالظبط */
@@ -711,6 +730,7 @@
   </svg>
 
 </div>
+    <div onclick="downloadPDF()" id="pdfBtn" data-ar="تحميل PDF" data-en="Download PDF" style="display: flex; align-items: center; justify-content: center;"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
     <div class="sep"></div>
     <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn" data-ar="القطعة التالية" data-en="Next Piece">▶</div>
 </div>
@@ -919,13 +939,13 @@
         let vidContainer = document.getElementById("videoContainer");
         if (videoBySlot[-1]) {
             vidContainer.style.display = "block";
-            vidContainer.innerHTML = `<iframe width="100%" height="100%" src="${videoBySlot[-1]}" frameborder="0" allowfullscreen></iframe>`;
+            vidContainer.innerHTML = ytFacade(videoBySlot[-1]);
         } else { vidContainer.style.display = "none"; vidContainer.innerHTML = ""; }
 
         let reelContainer = document.getElementById("reelContainer");
         if (reelBySlot[-1]) {
             reelContainer.style.display = "block";
-            reelContainer.innerHTML = `<iframe src="${reelBySlot[-1]}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+            reelContainer.innerHTML = ytFacade(reelBySlot[-1]);
         } else {
             reelContainer.style.display = "none";
             reelContainer.innerHTML = "";
@@ -942,11 +962,11 @@
             heroFig.className = "main-figure";
             if (videoBySlot[0]) {
                 let vWrap = document.createElement("div"); vWrap.className = "video-container inline-video"; vWrap.style.display = "block"; vWrap.style.width = "100%";
-                vWrap.innerHTML = `<iframe width="100%" height="100%" src="${videoBySlot[0]}" frameborder="0" allowfullscreen></iframe>`;
+                vWrap.innerHTML = ytFacade(videoBySlot[0]);
                 heroFig.appendChild(vWrap);
             } else if (reelBySlot[0]) {
                 let rWrap = document.createElement("div"); rWrap.className = "reel-container"; rWrap.style.display = "block";
-                rWrap.innerHTML = `<iframe src="${reelBySlot[0]}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+                rWrap.innerHTML = ytFacade(reelBySlot[0]);
                 heroFig.appendChild(rWrap);
             } else if (images[0]) {
                 let viewer = document.createElement("div"); viewer.className = "viewer";
@@ -1054,7 +1074,7 @@
         let rWrap = document.createElement("div");
         rWrap.className = "reel-container";
         rWrap.style.display = "block";
-        rWrap.innerHTML = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+        rWrap.innerHTML = ytFacade(url);
         fig.appendChild(rWrap);
         let infoStr = (artwork[`info_${lang}${idx + 1}`] || "").trim();
         if (infoStr) { let cap = document.createElement("figcaption"); cap.className = "photo-credit"; cap.innerHTML = infoStr; fig.appendChild(cap); }
@@ -1069,7 +1089,7 @@
         vWrap.className = "video-container inline-video"; 
         vWrap.style.display = "block"; 
         vWrap.style.marginBottom = "0"; 
-        vWrap.innerHTML = `<iframe width="100%" height="100%" src="${url}" frameborder="0" allowfullscreen></iframe>`; 
+        vWrap.innerHTML = ytFacade(url);
         fig.appendChild(vWrap);
 
         let infoStr = (artwork[`info_${lang}${idx + 1}`] || "").trim();
@@ -1121,6 +1141,109 @@
     document.getElementById("modalClose").onclick = () => { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); };
     window.onpopstate = (e) => { if (modal.style.display === 'block') { modal.style.display = 'none'; document.body.style.overflow = ''; resetZoom(); } else if (e.state && e.state.id) initPiece(e.state.id); };
     window.addEventListener("scroll", () => { document.getElementById("museumHeader").classList.toggle("header-small", window.scrollY > 40); }, { passive: true });
+
+    // ================= ثامنيل يوتيوب (facade) =================
+    function ytVideoId(embedUrl) {
+        let m = String(embedUrl || "").match(/embed\/([A-Za-z0-9_-]+)/);
+        return m ? m[1] : "";
+    }
+    function ytFacade(embedUrl) {
+        let id = ytVideoId(embedUrl);
+        if (!id) return `<iframe src="${embedUrl}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe>`;
+        let thumb = "https://img.youtube.com/vi/" + id + "/hqdefault.jpg";
+        return `<button type="button" class="yt-facade" data-embed="${embedUrl}" aria-label="Play video" style="background-image:url('${thumb}')"><span class="yt-play"></span></button>`;
+    }
+    // الكليك على الثامنيل: يستبدله بمشغّل inline بأوتوبلاي (في نفس الصفحة)
+    document.addEventListener("click", function(e) {
+        let f = e.target.closest ? e.target.closest(".yt-facade") : null;
+        if (!f) return;
+        let embed = f.getAttribute("data-embed") || "";
+        let sep = embed.indexOf("?") >= 0 ? "&" : "?";
+        let ifr = document.createElement("iframe");
+        ifr.src = embed + sep + "autoplay=1";
+        ifr.setAttribute("frameborder", "0");
+        ifr.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
+        ifr.setAttribute("allowfullscreen", "");
+        ifr.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;border:none;";
+        f.replaceWith(ifr);
+        if (typeof gtag === "function") gtag("event", "play_video_inline", { artifact_id: artwork ? artwork.id : "unknown", video_id: ytVideoId(embed) });
+    });
+
+    // ================= تحميل الصفحة كـ PDF (مباشر، بدون نافذة Print) =================
+    function loadHtml2Pdf(cb) {
+        if (window.html2pdf) { cb(); return; }
+        let s = document.createElement("script");
+        s.src = "https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.3/dist/html2pdf.bundle.min.js";
+        s.onload = cb;
+        s.onerror = function() { alert(lang === "ar" ? "تعذّر تحميل أداة الـ PDF، حاول تاني." : "Could not load the PDF tool, try again."); };
+        document.head.appendChild(s);
+    }
+    function pdfReplaceMedia(root) {
+        root.querySelectorAll(".yt-facade, iframe").forEach(function(el) {
+            let embed = el.getAttribute("data-embed") || el.getAttribute("src") || "";
+            let id = ytVideoId(embed);
+            let container = el.closest(".video-container, .reel-container") || el;
+            if (!id) { container.remove(); return; }
+            let box = document.createElement("div");
+            box.style.cssText = "margin:16px auto;max-width:480px;text-align:center;";
+            box.innerHTML =
+                '<img src="https://img.youtube.com/vi/' + id + '/hqdefault.jpg" crossorigin="anonymous" ' +
+                'style="width:100%;border-radius:10px;border:2px solid #E1A93E;display:block;">' +
+                '<div style="font-size:12px;margin-top:6px;color:#06444C;direction:ltr;word-break:break-all;">' +
+                '▶ https://www.youtube.com/watch?v=' + id + '</div>';
+            container.replaceWith(box);
+        });
+    }
+    function downloadPDF() {
+        if (!artwork) return;
+        loadHtml2Pdf(function() {
+            let ar = lang === "ar";
+            let wrap = document.createElement("div");
+            wrap.dir = ar ? "rtl" : "ltr";
+            wrap.style.cssText = "position:absolute;left:-99999px;top:0;width:794px;background:#fff;color:#06444C;padding:40px;box-sizing:border-box;font-family:'Tajawal',sans-serif;text-align:" + (ar ? "right" : "left") + ";";
+
+            let head = document.createElement("div");
+            head.style.cssText = "margin:0 0 18px 0;";
+            let metaLines = [
+                ar ? artwork.from_ar : artwork.from_en,
+                ar ? artwork.date_ar : artwork.date_en,
+                ar ? artwork.material_ar : artwork.material_en,
+                ar ? artwork.dimensions_ar : artwork.dimensions_en,
+                ar ? artwork.hall_ar : artwork.hall_en
+            ].filter(function(x){ return x && String(x).trim() !== ""; }).map(function(x){ return "<div>" + x + "</div>"; }).join("");
+            head.innerHTML =
+                '<h1 style="font-size:26px;color:#4A121C;font-weight:900;margin:0 0 8px;line-height:1.4;">' + ((ar ? artwork.title_ar : artwork.title_en) || "") + '</h1>' +
+                '<div style="border-top:2px solid rgba(225,169,62,.6);width:40px;margin:0 0 14px;"></div>' +
+                '<div style="font-size:14px;line-height:1.9;">' + metaLines +
+                (artwork.inventory_number ? '<div style="margin-top:10px;color:#4A121C;font-weight:900;">' + artwork.inventory_number + '</div>' : "") +
+                '</div>';
+
+            let content = document.querySelector(".article-content").cloneNode(true);
+            content.querySelectorAll("[id]").forEach(function(n){ n.removeAttribute("id"); });
+            pdfReplaceMedia(content);
+            content.querySelectorAll("img, figure").forEach(function(n){ n.style.pageBreakInside = "avoid"; n.style.breakInside = "avoid"; });
+
+            wrap.appendChild(head);
+            wrap.appendChild(content);
+            document.body.appendChild(wrap);
+
+            let opt = {
+                margin: [10, 10, 12, 10],
+                filename: String(artwork.id) + ".pdf",
+                image: { type: "jpeg", quality: 0.95 },
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", logging: false },
+                jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+                pagebreak: { mode: ["css", "legacy"] }
+            };
+            html2pdf().set(opt).from(wrap).save().then(function() {
+                if (wrap.parentNode) document.body.removeChild(wrap);
+            }).catch(function(err) {
+                if (wrap.parentNode) document.body.removeChild(wrap);
+                console.error(err);
+            });
+            if (typeof gtag === "function") gtag("event", "download_pdf", { artifact_id: artwork.id });
+        });
+    }
 
     load();
 </script>
