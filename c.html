@@ -1178,14 +1178,18 @@
         s.onerror = function() { alert(lang === "ar" ? "تعذّر تحميل أداة الـ PDF، حاول تاني." : "Could not load the PDF tool, try again."); };
         document.head.appendChild(s);
     }
-    // ثامنيل يوتيوب مقروء للـ PDF (فيديو أفقي / ريل طولي)
+    // ثامنيل يوتيوب للـ PDF: صورة قابلة للضغط تفتح يوتيوب (اللينك مخفي جوّه الصورة نفسها)
     function pdfMediaThumb(embedUrl, portrait) {
         let id = ytVideoId(embedUrl);
         if (!id) return "";
-        let w = portrait ? "260px" : "480px";
-        return '<div style="margin:18px auto;max-width:' + w + ';text-align:center;page-break-inside:avoid;">' +
+        let w = portrait ? "300px" : "560px";
+        let watch = "https://www.youtube.com/watch?v=" + id;
+        return '<div style="margin:22px auto;max-width:' + w + ';page-break-inside:avoid;">' +
+            '<a href="' + watch + '" style="display:block;position:relative;text-decoration:none;">' +
             '<img src="https://img.youtube.com/vi/' + id + '/hqdefault.jpg" crossorigin="anonymous" style="width:100%;border-radius:10px;border:2px solid #E1A93E;display:block;">' +
-            '<div style="font-size:12px;margin-top:6px;color:#06444C;direction:ltr;word-break:break-all;">▶ https://www.youtube.com/watch?v=' + id + '</div></div>';
+            '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:44px;background:rgba(6,68,76,.72);border-radius:12px;"></span>' +
+            '<span style="position:absolute;top:50%;left:50%;transform:translate(-38%,-50%);border-style:solid;border-width:10px 0 10px 17px;border-color:transparent transparent transparent #ffffff;"></span>' +
+            '</a></div>';
     }
     function downloadPDF() {
         if (!artwork) return;
@@ -1199,7 +1203,7 @@
             let imgs = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
 
             function capHTML(i){ let s = (artwork["info_" + lang + (i + 1)] || "").trim(); return s ? '<div style="font-size:12px;color:#06444C;opacity:.85;margin-top:6px;' + (ar ? 'text-align:right;border-right:3px solid #E1A93E;padding-right:10px;' : 'text-align:left;border-left:3px solid #E1A93E;padding-left:10px;') + '">' + s + '</div>' : ""; }
-            function imgHTML(src, i){ return '<figure style="margin:18px 0;text-align:center;page-break-inside:avoid;"><img src="' + src + '" style="max-width:100%;border-radius:6px;display:inline-block;">' + capHTML(i) + '</figure>'; }
+            function imgHTML(src, i){ return '<figure style="margin:22px 0;text-align:center;page-break-inside:avoid;"><img src="' + src + '" style="max-width:100%;max-height:820px;border-radius:6px;display:inline-block;">' + capHTML(i) + '</figure>'; }
             let pStyle = 'style="font-size:15px;line-height:1.95;margin:0 0 16px;text-align:justify;color:#06444C;"';
 
             let metaLines = [
@@ -1208,10 +1212,19 @@
                 ar ? artwork.hall_ar : artwork.hall_en
             ].filter(function(x){ return x && String(x).trim() !== ""; }).map(function(x){ return "<div>" + x + "</div>"; }).join("");
 
-            let html =
-                '<h1 style="font-size:26px;color:#4A121C;font-weight:900;margin:0 0 8px;line-height:1.4;">' + ((ar ? artwork.title_ar : artwork.title_en) || "") + '</h1>' +
+            let headerHTML =
+                '<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #E1A93E;padding-bottom:14px;margin-bottom:24px;">' +
+                    '<div style="font-size:20px;font-weight:800;color:#06444C;">' + (ar ? "من حياة التحفة" : "From the Life of an Artefact") + '</div>' +
+                    '<div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">' +
+                        '<img src="images/logo-v-teal.svg" style="height:46px;width:auto;">' +
+                        '<img src="images/logo-mia.svg" style="height:46px;width:auto;">' +
+                    '</div>' +
+                '</div>';
+
+            let html = headerHTML +
+                '<h1 style="font-size:28px;color:#4A121C;font-weight:900;margin:0 0 8px;line-height:1.4;">' + ((ar ? artwork.title_ar : artwork.title_en) || "") + '</h1>' +
                 '<div style="border-top:2px solid rgba(225,169,62,.6);width:40px;margin:0 0 14px;"></div>' +
-                '<div style="font-size:14px;line-height:1.9;margin-bottom:22px;">' + metaLines +
+                '<div style="font-size:14px;line-height:1.9;margin-bottom:24px;">' + metaLines +
                 (artwork.inventory_number ? '<div style="margin-top:10px;color:#4A121C;font-weight:900;">' + artwork.inventory_number + '</div>' : "") + '</div>';
 
             // فوق (بدون حرف)
@@ -1245,8 +1258,11 @@
             holder.style.cssText = "position:fixed;left:-100000px;top:0;width:794px;z-index:-1;overflow:hidden;";
             let wrap = document.createElement("div");
             wrap.dir = ar ? "rtl" : "ltr";
-            wrap.style.cssText = "width:794px;background:#fff;color:#06444C;padding:40px;box-sizing:border-box;font-family:'Tajawal',sans-serif;text-align:" + (ar ? "right" : "left") + ";";
-            wrap.innerHTML = html;
+            // الثيم الفاتح بالظبط: خلفية بيج + نقش خفيف + نص تركوازي
+            wrap.style.cssText = "position:relative;width:794px;background:#EAE8D8;color:#06444C;padding:40px;box-sizing:border-box;font-family:'Tajawal',sans-serif;text-align:" + (ar ? "right" : "left") + ";";
+            wrap.innerHTML =
+                '<div style="position:absolute;inset:0;background-image:url(\'images/pattern-teal.svg\');background-size:80px 80px;opacity:0.05;pointer-events:none;z-index:0;"></div>' +
+                '<div style="position:relative;z-index:1;">' + html + '</div>';
             holder.appendChild(wrap);
             document.body.appendChild(holder);
 
@@ -1256,8 +1272,9 @@
                 let opt = {
                     margin: [10, 10, 12, 10],
                     filename: String(artwork.id) + ".pdf",
+                    enableLinks: true,
                     image: { type: "jpeg", quality: 0.95 },
-                    html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", logging: false },
+                    html2canvas: { scale: 2, useCORS: true, backgroundColor: "#EAE8D8", logging: false },
                     jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
                     pagebreak: { mode: ["css", "legacy"] }
                 };
