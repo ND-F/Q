@@ -1178,99 +1178,119 @@
         s.onerror = function() { alert(lang === "ar" ? "تعذّر تحميل أداة الـ PDF، حاول تاني." : "Could not load the PDF tool, try again."); };
         document.head.appendChild(s);
     }
-    // ثامنيل يوتيوب للـ PDF: صورة قابلة للضغط تفتح يوتيوب (اللينك مخفي جوّه الصورة نفسها)
+    // ثامنيل يوتيوب للـ PDF: صورة قابلة للضغط تفتح يوتيوب (اللينك مخفي جوّه الصورة)
     function pdfMediaThumb(embedUrl, portrait) {
         let id = ytVideoId(embedUrl);
         if (!id) return "";
-        let w = portrait ? "300px" : "560px";
+        let w = portrait ? "260px" : "100%";
         let watch = "https://www.youtube.com/watch?v=" + id;
-        return '<div style="margin:22px auto;max-width:' + w + ';page-break-inside:avoid;">' +
+        return '<div style="margin:0 auto 20px;max-width:' + w + ';page-break-inside:avoid;">' +
             '<a href="' + watch + '" style="display:block;position:relative;text-decoration:none;">' +
             '<img src="https://img.youtube.com/vi/' + id + '/hqdefault.jpg" crossorigin="anonymous" style="width:100%;border-radius:10px;border:2px solid #E1A93E;display:block;">' +
-            '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:44px;background:rgba(6,68,76,.72);border-radius:12px;"></span>' +
+            '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:42px;background:rgba(6,68,76,.72);border-radius:12px;"></span>' +
             '<span style="position:absolute;top:50%;left:50%;transform:translate(-38%,-50%);border-style:solid;border-width:10px 0 10px 17px;border-color:transparent transparent transparent #ffffff;"></span>' +
             '</a></div>';
+    }
+    // حوّل SVG اللوجو لـ PNG قبل التصوير (عشان html2canvas يرسمه مضمون)
+    function pdfRasterize(src, h) {
+        return new Promise(function(res){
+            let im = new Image(); im.crossOrigin = "anonymous";
+            im.onload = function(){
+                try {
+                    let arr = (im.naturalWidth && im.naturalHeight) ? im.naturalWidth / im.naturalHeight : 1;
+                    let w = Math.max(1, Math.round(h * arr));
+                    let c = document.createElement("canvas"); c.width = w * 2; c.height = h * 2;
+                    c.getContext("2d").drawImage(im, 0, 0, w * 2, h * 2);
+                    res('<img src="' + c.toDataURL("image/png") + '" style="height:' + h + 'px;width:auto;display:block;">');
+                } catch(e){ res('<img src="' + src + '" style="height:' + h + 'px;width:auto;display:block;">'); }
+            };
+            im.onerror = function(){ res(""); };
+            im.src = src;
+        });
     }
     function downloadPDF() {
         if (!artwork) return;
         loadHtml2Pdf(function() {
+        Promise.all([pdfRasterize("images/logo-v-teal.svg", 44), pdfRasterize("images/logo-mia.svg", 44)]).then(function(logos) {
             let ar = lang === "ar";
 
-            // اجمع الميديا حسب الخانة (نفس منطق renderArticle)
             let vBy = {}, rBy = {};
             [artwork.video_url, artwork.video_url2, artwork.video_url3].forEach(function(raw){ let p = parseMediaSlot(raw); if (p && vBy[p.slot] === undefined) vBy[p.slot] = p.url; });
             [artwork.reel_url, artwork.reel_url2, artwork.reel_url3].forEach(function(raw){ let p = parseMediaSlot(raw); if (p && rBy[p.slot] === undefined) rBy[p.slot] = p.url; });
             let imgs = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
 
             function capHTML(i){ let s = (artwork["info_" + lang + (i + 1)] || "").trim(); return s ? '<div style="font-size:12px;color:#06444C;opacity:.85;margin-top:6px;' + (ar ? 'text-align:right;border-right:3px solid #E1A93E;padding-right:10px;' : 'text-align:left;border-left:3px solid #E1A93E;padding-left:10px;') + '">' + s + '</div>' : ""; }
-            function imgHTML(src, i){ return '<figure style="margin:22px 0;text-align:center;page-break-inside:avoid;"><img src="' + src + '" style="max-width:100%;max-height:820px;border-radius:6px;display:inline-block;">' + capHTML(i) + '</figure>'; }
-            let pStyle = 'style="font-size:15px;line-height:1.95;margin:0 0 16px;text-align:justify;color:#06444C;"';
+            function imgHTML(src, i){ return '<figure style="margin:0 0 20px;text-align:center;page-break-inside:avoid;"><img src="' + src + '" style="max-width:100%;max-height:760px;border-radius:6px;display:inline-block;">' + capHTML(i) + '</figure>'; }
+            // بدون justify + مسافة عشان html2canvas مايقصّش نهاية السطر العربي
+            let pStyle = 'style="font-size:15px;line-height:2;margin:0 0 16px;padding:0 12px;text-align:' + (ar ? 'right' : 'left') + ';color:#06444C;word-break:break-word;"';
 
+            // === الهيدر (لوجوهات PNG + عنوان القسم) — عرض كامل ===
+            let headerHTML =
+                '<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #E1A93E;padding-bottom:14px;margin-bottom:26px;">' +
+                    '<div style="font-size:20px;font-weight:800;color:#06444C;">' + (ar ? "من حياة التحفة" : "From the Life of an Artefact") + '</div>' +
+                    '<div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">' + logos[0] + logos[1] + '</div>' +
+                '</div>';
+
+            // === العمود الجانبي (المعلومات) زي الديسكتوب ===
             let metaLines = [
                 ar ? artwork.from_ar : artwork.from_en, ar ? artwork.date_ar : artwork.date_en,
                 ar ? artwork.material_ar : artwork.material_en, ar ? artwork.dimensions_ar : artwork.dimensions_en,
                 ar ? artwork.hall_ar : artwork.hall_en
-            ].filter(function(x){ return x && String(x).trim() !== ""; }).map(function(x){ return "<div>" + x + "</div>"; }).join("");
+            ].filter(function(x){ return x && String(x).trim() !== ""; }).map(function(x){ return '<div style="margin-bottom:8px;">' + x + '</div>'; }).join("");
+            let sidebar =
+                '<h1 style="font-size:25px;color:#4A121C;font-weight:900;margin:0 0 10px;line-height:1.4;">' + ((ar ? artwork.title_ar : artwork.title_en) || "") + '</h1>' +
+                '<div style="border-top:2px solid rgba(225,169,62,.6);width:40px;margin:0 0 16px;"></div>' +
+                '<div style="font-size:14px;line-height:1.7;">' + metaLines + '</div>' +
+                (artwork.inventory_number ? '<div style="margin-top:18px;"><div style="border-top:2px solid rgba(225,169,62,.6);width:40px;margin-bottom:12px;"></div><div style="color:#4A121C;font-weight:900;font-size:16px;">' + artwork.inventory_number + '</div></div>' : "");
 
-            let headerHTML =
-                '<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #E1A93E;padding-bottom:14px;margin-bottom:24px;">' +
-                    '<div style="font-size:20px;font-weight:800;color:#06444C;">' + (ar ? "من حياة التحفة" : "From the Life of an Artefact") + '</div>' +
-                    '<div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">' +
-                        '<img src="images/logo-v-teal.svg" style="height:46px;width:auto;">' +
-                        '<img src="images/logo-mia.svg" style="height:46px;width:auto;">' +
-                    '</div>' +
-                '</div>';
+            // === العمود الرئيسي (الميديا + الشرح) ===
+            let mainCol = "";
+            if (vBy[-1]) mainCol += pdfMediaThumb(vBy[-1], false);
+            if (rBy[-1]) mainCol += pdfMediaThumb(rBy[-1], true);
+            if (vBy[0]) mainCol += pdfMediaThumb(vBy[0], false);
+            else if (rBy[0]) mainCol += pdfMediaThumb(rBy[0], true);
+            else if (imgs[0]) mainCol += imgHTML(imgs[0], 0);
 
-            let html = headerHTML +
-                '<h1 style="font-size:28px;color:#4A121C;font-weight:900;margin:0 0 8px;line-height:1.4;">' + ((ar ? artwork.title_ar : artwork.title_en) || "") + '</h1>' +
-                '<div style="border-top:2px solid rgba(225,169,62,.6);width:40px;margin:0 0 14px;"></div>' +
-                '<div style="font-size:14px;line-height:1.9;margin-bottom:24px;">' + metaLines +
-                (artwork.inventory_number ? '<div style="margin-top:10px;color:#4A121C;font-weight:900;">' + artwork.inventory_number + '</div>' : "") + '</div>';
-
-            // فوق (بدون حرف)
-            if (vBy[-1]) html += pdfMediaThumb(vBy[-1], false);
-            if (rBy[-1]) html += pdfMediaThumb(rBy[-1], true);
-            // الهيرو (slot 0)
-            if (vBy[0]) html += pdfMediaThumb(vBy[0], false);
-            else if (rBy[0]) html += pdfMediaThumb(rBy[0], true);
-            else if (imgs[0]) html += imgHTML(imgs[0], 0);
-
-            // المتن
             let dsc = [];
             for (let i = 0; i < 5; i++) dsc.push((ar ? artwork["dsc_ar" + (i + 1)] : artwork["dsc_en" + (i + 1)]) || "");
             let hasSplit = dsc.some(function(t){ return t.trim() !== ""; });
             let mainDesc = (ar ? artwork.desc_ar : artwork.desc_en) || "";
-            if (!hasSplit && mainDesc.trim() !== "") html += '<p ' + pStyle + '>' + mainDesc.replace(/\n/g, '<br>') + '</p>';
+            if (!hasSplit && mainDesc.trim() !== "") mainCol += '<p ' + pStyle + '>' + mainDesc.replace(/\n/g, '<br>') + '</p>';
             for (let i = 0; i < 5; i++) {
                 let pText = dsc[i] || "";
-                if (i === 0) { if (hasSplit && pText.trim() !== "") html += '<p ' + pStyle + '>' + pText.replace(/\n/g, '<br>') + '</p>'; }
+                if (i === 0) { if (hasSplit && pText.trim() !== "") mainCol += '<p ' + pStyle + '>' + pText.replace(/\n/g, '<br>') + '</p>'; }
                 else {
-                    if (vBy[i]) html += pdfMediaThumb(vBy[i], false);
-                    else if (rBy[i]) html += pdfMediaThumb(rBy[i], true);
-                    else if (imgs[i]) html += imgHTML(imgs[i], i);
-                    if (hasSplit && pText.trim() !== "") html += '<p ' + pStyle + '>' + pText.replace(/\n/g, '<br>') + '</p>';
+                    if (vBy[i]) mainCol += pdfMediaThumb(vBy[i], false);
+                    else if (rBy[i]) mainCol += pdfMediaThumb(rBy[i], true);
+                    else if (imgs[i]) mainCol += imgHTML(imgs[i], i);
+                    if (hasSplit && pText.trim() !== "") mainCol += '<p ' + pStyle + '>' + pText.replace(/\n/g, '<br>') + '</p>';
                 }
             }
 
-            // مهم: اللي يتبعت لـ html2pdf لازم يكون static (مش fixed/absolute)، وإلا حاوية
-            // html2pdf بترتفاعها صفر وتطلع صفحة بيضا. فبنخبّي wrap الـ static جوّه holder ثابت.
+            // عمودين: الجانبي على اليمين (RTL) + الرئيسي على الشمال — زي الديسكتوب
+            let body = '<div style="display:flex;flex-direction:row;align-items:flex-start;gap:28px;">' +
+                '<div style="width:215px;flex-shrink:0;">' + sidebar + '</div>' +
+                '<div style="flex:1;min-width:0;">' + mainCol + '</div>' +
+            '</div>';
+
+            let html = headerHTML + body;
+
             let holder = document.createElement("div");
             holder.style.cssText = "position:fixed;left:-100000px;top:0;width:794px;z-index:-1;overflow:hidden;";
             let wrap = document.createElement("div");
             wrap.dir = ar ? "rtl" : "ltr";
-            // الثيم الفاتح بالظبط: خلفية بيج + نقش خفيف + نص تركوازي
-            wrap.style.cssText = "position:relative;width:794px;background:#EAE8D8;color:#06444C;padding:40px;box-sizing:border-box;font-family:'Tajawal',sans-serif;text-align:" + (ar ? "right" : "left") + ";";
+            // الثيم الفاتح بالظبط: خلفية بيج تملا الصفحة كلها + نقش خفيف
+            wrap.style.cssText = "position:relative;width:794px;background:#EAE8D8;color:#06444C;padding:38px 40px 70px;box-sizing:border-box;font-family:'Tajawal',sans-serif;text-align:" + (ar ? "right" : "left") + ";";
             wrap.innerHTML =
                 '<div style="position:absolute;inset:0;background-image:url(\'images/pattern-teal.svg\');background-size:80px 80px;opacity:0.05;pointer-events:none;z-index:0;"></div>' +
                 '<div style="position:relative;z-index:1;">' + html + '</div>';
             holder.appendChild(wrap);
             document.body.appendChild(holder);
 
-            // استنى كل الصور تخلص تحميل قبل التصوير
             let imgEls = Array.prototype.slice.call(wrap.querySelectorAll("img"));
             Promise.all(imgEls.map(function(im){ return im.complete ? Promise.resolve() : new Promise(function(res){ im.onload = res; im.onerror = res; }); })).then(function(){
                 let opt = {
-                    margin: [10, 10, 12, 10],
+                    margin: 0,
                     filename: String(artwork.id) + ".pdf",
                     enableLinks: true,
                     image: { type: "jpeg", quality: 0.95 },
@@ -1283,6 +1303,7 @@
               .catch(function(err){ if (holder.parentNode) document.body.removeChild(holder); console.error(err); });
 
             if (typeof gtag === "function") gtag("event", "download_pdf", { artifact_id: artwork.id });
+        });
         });
     }
 
