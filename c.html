@@ -1332,12 +1332,12 @@
     }
     function closeDownloadMenu(){ let m = document.getElementById("dlMenu"); if (m) m.remove(); }
 
-    // PDF من السيرفر (Vercel function) — عربي مثالي، تحميل مباشر بدون Print
+    // PDF عبر "حفظ كـ PDF" بتاع المتصفح — عربي مثالي، شغّال في كل مكان بدون سيرفر
     function downloadPDF() {
         closeDownloadMenu();
         if (!artwork) return;
         if (typeof gtag === "function") gtag("event", "download_pdf", { artifact_id: artwork.id });
-        window.location.href = "/api/pdf?id=" + encodeURIComponent(artwork.id) + "&lang=" + lang;
+        buildPrintRoot().then(function(){ setTimeout(function(){ window.print(); }, 200); });
     }
 
     // تحميل صفحة HTML مستقلة (صور مدمجة) — عربي سليم + لينكات شغّالة + من غير Print
