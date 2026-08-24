@@ -2,8 +2,11 @@
   "name": "ndf-mia-qr",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
-    "@sparticuz/chromium": "131.0.0",
-    "puppeteer-core": "23.9.0"
+    "@sparticuz/chromium": "123.0.1",
+    "puppeteer-core": "22.8.2"
   }
 }
