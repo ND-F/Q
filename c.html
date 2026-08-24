@@ -622,6 +622,15 @@
         body.dark #modalClose { color: white; }
         footer { display: block; width: 100%; clear: both; text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
 
+        /* ===== قائمة التحميل (PDF / HTML) ===== */
+        .dl-overlay { position: fixed; inset: 0; background: rgba(6,68,76,.45); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); z-index: 3000; display: flex; align-items: center; justify-content: center; }
+        .dl-menu { background: var(--beige); color: var(--teal); border: 1px solid var(--gold); border-radius: 18px; padding: 22px 18px; width: 260px; max-width: 84vw; box-shadow: 0 20px 60px rgba(0,0,0,.4); text-align: center; font-family: 'Tajawal', sans-serif; }
+        body.dark .dl-menu { background: var(--teal); color: var(--beige); }
+        .dl-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; }
+        .dl-opt { display: block; width: 100%; box-sizing: border-box; margin: 8px 0; padding: 13px; border: none; border-radius: 12px; background: var(--gold); color: #fff; font-size: 16px; font-weight: 700; font-family: 'Tajawal', sans-serif; cursor: pointer; transition: transform .15s ease, filter .15s ease; }
+        .dl-opt:hover { transform: translateY(-2px); filter: brightness(1.06); }
+        .dl-cancel { display: block; width: 100%; margin-top: 10px; padding: 10px; border: none; background: transparent; color: inherit; opacity: .7; font-size: 14px; font-family: 'Tajawal', sans-serif; cursor: pointer; }
+
         /* ===== طباعة / تصدير PDF بعرض المتصفح الأصلي (عربي سليم، مفيش قص، مفيش ورق أبيض) ===== */
         #printRoot { display: none; }
         @media print {
@@ -726,7 +735,7 @@
     <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
     <div class="sep"></div>
     <div onclick="toggleLang()" data-ar="اللغة" data-en="Language">🌐</div>
-    <div onclick="downloadPDF()" id="pdfBtn" data-ar="تحميل PDF" data-en="Download PDF" style="display: flex; align-items: center; justify-content: center;"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
+    <div onclick="openDownloadMenu()" id="pdfBtn" data-ar="تحميل" data-en="Download" style="display: flex; align-items: center; justify-content: center;"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
     <div onclick="window.location.href='https://nd-f.github.io/QR/'" data-ar="اتصل بنا" data-en="Contact Us" style="display: flex; align-items: center; justify-content: center;"><img src="images/icon-gold.png" style="width: 35px; height: 35px; object-fit: contain;"></div>
     <div
   onclick="share()"
@@ -1242,27 +1251,20 @@
             im.src = src;
         });
     }
-    // بنّاء الفيديو للطباعة: صورة قابلة للضغط تفتح يوتيوب (لينك أصلي في الـ PDF)
-    function prVid(u){ let id = ytVideoId(u); if(!id) return ""; return '<a class="pr-vid" href="https://www.youtube.com/watch?v=' + id + '"><img src="https://img.youtube.com/vi/' + id + '/hqdefault.jpg"><span class="pr-play"></span></a>'; }
+    // بنّاء الفيديو: صورة قابلة للضغط تفتح يوتيوب (لينك حقيقي)
+    function prVid(u, imgSrc){ let id = ytVideoId(u); if(!id) return ""; let thumb = "https://img.youtube.com/vi/" + id + "/hqdefault.jpg"; if (imgSrc) thumb = imgSrc(thumb); return '<a class="pr-vid" href="https://www.youtube.com/watch?v=' + id + '" target="_blank" rel="noopener"><img src="' + thumb + '"><span class="pr-play"></span></a>'; }
 
-    // تصدير PDF عبر طباعة المتصفح الأصلية — عربي سليم، مفيش قص ولا ورق أبيض
-    function downloadPDF() {
-        if (!artwork) return;
-        let ar = lang === "ar";
-
+    // بنّاء محتوى القطعة (مشترك بين HTML و PDF). imgSrc(url) بترجّع الرابط المستخدم (نسبي أو data-uri)
+    function prBuildContent(ar, imgSrc) {
+        let src = imgSrc || function(u){ return u; };
         let vBy = {}, rBy = {};
         [artwork.video_url, artwork.video_url2, artwork.video_url3].forEach(function(raw){ let p = parseMediaSlot(raw); if (p && vBy[p.slot] === undefined) vBy[p.slot] = p.url; });
         [artwork.reel_url, artwork.reel_url2, artwork.reel_url3].forEach(function(raw){ let p = parseMediaSlot(raw); if (p && rBy[p.slot] === undefined) rBy[p.slot] = p.url; });
         let imgs = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
-
         function cap(i){ let s = (artwork["info_" + lang + (i + 1)] || "").trim(); return s ? '<div class="pr-cap">' + s + '</div>' : ""; }
-        function fig(src, i){ return '<figure class="pr-fig"><img src="' + src + '">' + cap(i) + '</figure>'; }
-
-        // الهيدر (لوجوهات SVG — الطباعة الأصلية بترسمها صح + عنوان القسم)
+        function fig(u, i){ return '<figure class="pr-fig"><img src="' + src(u) + '">' + cap(i) + '</figure>'; }
         let head = '<div class="pr-header"><div class="pr-section">' + (ar ? "من حياة التحفة" : "From the Life of an Artefact") + '</div>' +
-            '<div class="pr-logos"><img src="images/logo-v-teal.svg"><img src="images/logo-mia.svg"></div></div>';
-
-        // كتلة المعلومات
+            '<div class="pr-logos"><img src="' + src("images/logo-v-teal.svg") + '"><img src="' + src("images/logo-mia.svg") + '"></div></div>';
         let metaLines = [
             ar ? artwork.from_ar : artwork.from_en, ar ? artwork.date_ar : artwork.date_en,
             ar ? artwork.material_ar : artwork.material_en, ar ? artwork.dimensions_ar : artwork.dimensions_en,
@@ -1271,46 +1273,127 @@
         let meta = '<div class="pr-meta"><h1 class="pr-title">' + ((ar ? artwork.title_ar : artwork.title_en) || "") + '</h1>' +
             '<div class="pr-rule"></div><div class="pr-metalines">' + metaLines + '</div>' +
             (artwork.inventory_number ? '<div class="pr-rule" style="margin-top:14px;"></div><div class="pr-inv">' + artwork.inventory_number + '</div>' : "") + '</div>';
-
-        // المحتوى (نفس ترتيب الصفحة: ميديا + فقرات)
-        let bodyHTML = "";
-        if (vBy[-1]) bodyHTML += prVid(vBy[-1]);
-        if (rBy[-1]) bodyHTML += prVid(rBy[-1]);
-        if (vBy[0]) bodyHTML += prVid(vBy[0]);
-        else if (rBy[0]) bodyHTML += prVid(rBy[0]);
-        else if (imgs[0]) bodyHTML += fig(imgs[0], 0);
-
+        let body = "";
+        if (vBy[-1]) body += prVid(vBy[-1], src);
+        if (rBy[-1]) body += prVid(rBy[-1], src);
+        if (vBy[0]) body += prVid(vBy[0], src);
+        else if (rBy[0]) body += prVid(rBy[0], src);
+        else if (imgs[0]) body += fig(imgs[0], 0);
         let dsc = [];
         for (let i = 0; i < 5; i++) dsc.push((ar ? artwork["dsc_ar" + (i + 1)] : artwork["dsc_en" + (i + 1)]) || "");
         let hasSplit = dsc.some(function(t){ return t.trim() !== ""; });
         let mainDesc = (ar ? artwork.desc_ar : artwork.desc_en) || "";
-        if (!hasSplit && mainDesc.trim() !== "") bodyHTML += '<p>' + mainDesc.replace(/\n/g, '<br>') + '</p>';
+        if (!hasSplit && mainDesc.trim() !== "") body += '<p>' + mainDesc.replace(/\n/g, '<br>') + '</p>';
         for (let i = 0; i < 5; i++) {
             let pT = dsc[i] || "";
-            if (i === 0) { if (hasSplit && pT.trim() !== "") bodyHTML += '<p>' + pT.replace(/\n/g, '<br>') + '</p>'; }
+            if (i === 0) { if (hasSplit && pT.trim() !== "") body += '<p>' + pT.replace(/\n/g, '<br>') + '</p>'; }
             else {
-                if (vBy[i]) bodyHTML += prVid(vBy[i]);
-                else if (rBy[i]) bodyHTML += prVid(rBy[i]);
-                else if (imgs[i]) bodyHTML += fig(imgs[i], i);
-                if (hasSplit && pT.trim() !== "") bodyHTML += '<p>' + pT.replace(/\n/g, '<br>') + '</p>';
+                if (vBy[i]) body += prVid(vBy[i], src);
+                else if (rBy[i]) body += prVid(rBy[i], src);
+                else if (imgs[i]) body += fig(imgs[i], i);
+                if (hasSplit && pT.trim() !== "") body += '<p>' + pT.replace(/\n/g, '<br>') + '</p>';
             }
         }
+        return { head: head, meta: meta, body: '<div class="pr-body">' + body + '</div>', imgUrls: imgs };
+    }
 
+    // بناء #printRoot (تُستخدم من السيرفر للطباعة) — Promise تخلص لما الصور تتحمّل
+    function buildPrintRoot() {
+        let ar = lang === "ar";
+        let c = prBuildContent(ar, null);
         let root = document.getElementById("printRoot");
         if (!root) { root = document.createElement("div"); root.id = "printRoot"; document.body.appendChild(root); }
         root.dir = ar ? "rtl" : "ltr";
-        root.innerHTML = head + meta + '<div class="pr-body">' + bodyHTML + '</div>';
-
-        // استنى كل الصور تخلص تحميل قبل الطباعة (عشان ماتطلعش نسخة ناقصة)
+        root.innerHTML = c.head + c.meta + c.body;
         let imgEls = Array.prototype.slice.call(root.querySelectorAll("img"));
-        Promise.all(imgEls.map(function(im){ return im.complete ? Promise.resolve() : new Promise(function(res){ im.onload = res; im.onerror = res; }); })).then(function(){
-            setTimeout(function(){ window.print(); }, 120);
-        });
+        return Promise.all(imgEls.map(function(im){ return im.complete ? Promise.resolve() : new Promise(function(res){ im.onload = res; im.onerror = res; }); }));
+    }
 
+    // زرار التحميل: يفتح قائمة (PDF / HTML)
+    function openDownloadMenu() {
+        let ex = document.getElementById("dlMenu"); if (ex) { ex.remove(); return; }
+        let ar = lang === "ar";
+        let ov = document.createElement("div"); ov.id = "dlMenu"; ov.className = "dl-overlay";
+        ov.innerHTML = '<div class="dl-menu">' +
+            '<div class="dl-title">' + (ar ? "تحميل القطعة" : "Download") + '</div>' +
+            '<button class="dl-opt" onclick="downloadPDF()">📄 ' + (ar ? "ملف PDF" : "PDF file") + '</button>' +
+            '<button class="dl-opt" onclick="downloadHTML()">🌐 ' + (ar ? "صفحة HTML" : "HTML page") + '</button>' +
+            '<button class="dl-cancel" onclick="closeDownloadMenu()">' + (ar ? "إلغاء" : "Cancel") + '</button>' +
+            '</div>';
+        ov.addEventListener("click", function(e){ if (e.target === ov) closeDownloadMenu(); });
+        document.body.appendChild(ov);
+    }
+    function closeDownloadMenu(){ let m = document.getElementById("dlMenu"); if (m) m.remove(); }
+
+    // PDF من السيرفر (Vercel function) — عربي مثالي، تحميل مباشر بدون Print
+    function downloadPDF() {
+        closeDownloadMenu();
+        if (!artwork) return;
         if (typeof gtag === "function") gtag("event", "download_pdf", { artifact_id: artwork.id });
+        window.location.href = "/api/pdf?id=" + encodeURIComponent(artwork.id) + "&lang=" + lang;
+    }
+
+    // تحميل صفحة HTML مستقلة (صور مدمجة) — عربي سليم + لينكات شغّالة + من غير Print
+    function inlineDataURL(url) {
+        return fetch(url, { mode: "cors" }).then(function(r){ return r.blob(); }).then(function(b){
+            return new Promise(function(res){ let fr = new FileReader(); fr.onload = function(){ res(fr.result); }; fr.onerror = function(){ res(url); }; fr.readAsDataURL(b); });
+        }).catch(function(){ return url; });
+    }
+    async function downloadHTML() {
+        closeDownloadMenu();
+        if (!artwork) return;
+        let ar = lang === "ar";
+        let urls = {};
+        urls["images/logo-v-teal.svg"] = 1; urls["images/logo-mia.svg"] = 1; urls["images/pattern-teal.svg"] = 1;
+        prBuildContent(ar, null).imgUrls.forEach(function(u){ if (u) urls[u] = 1; });
+        [artwork.video_url, artwork.video_url2, artwork.video_url3, artwork.reel_url, artwork.reel_url2, artwork.reel_url3].forEach(function(raw){ let p = parseMediaSlot(raw); if (p) { let id = ytVideoId(p.url); if (id) urls["https://img.youtube.com/vi/" + id + "/hqdefault.jpg"] = 1; } });
+        let urlArr = Object.keys(urls);
+        let dataArr = await Promise.all(urlArr.map(inlineDataURL));
+        let map = {}; urlArr.forEach(function(u, i){ map[u] = dataArr[i]; });
+        let src = function(u){ return map[u] || u; };
+        let c = prBuildContent(ar, src);
+        let patternURI = map["images/pattern-teal.svg"] || "";
+        let css =
+            "body{margin:0;background:#EAE8D8;color:#06444C;font-family:'Tajawal',sans-serif;font-weight:500;}" +
+            "#w{position:relative;max-width:820px;margin:0 auto;padding:26px 20px 60px;box-sizing:border-box;}" +
+            "#w::before{content:'';position:fixed;inset:0;background-image:url('" + patternURI + "');background-size:80px 80px;opacity:.05;z-index:-1;}" +
+            ".pr-header{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #E1A93E;padding-bottom:12px;margin-bottom:22px;}" +
+            ".pr-section{font-size:19px;font-weight:800;}.pr-logos{display:flex;align-items:center;gap:14px;flex-shrink:0;}.pr-logos img{height:42px;width:auto;}" +
+            ".pr-title{font-size:26px;font-weight:900;color:#4A121C;margin:0 0 8px;line-height:1.4;}.pr-rule{border-top:2px solid rgba(225,169,62,.6);width:40px;}" +
+            ".pr-meta{margin-bottom:24px;}.pr-metalines{font-size:14px;line-height:1.9;margin-top:12px;}.pr-metalines>div{margin-bottom:6px;}" +
+            ".pr-inv{color:#4A121C;font-weight:900;font-size:16px;margin-top:8px;}" +
+            ".pr-body p{font-size:16px;line-height:2;margin:0 0 16px;text-align:justify;}" +
+            ".pr-fig{margin:0 0 18px;text-align:center;}.pr-fig img{max-width:100%;border-radius:6px;}" +
+            ".pr-cap{font-size:12px;opacity:.85;margin-top:6px;text-align:" + (ar ? "right" : "left") + ";border-" + (ar ? "right" : "left") + ":3px solid #E1A93E;padding-" + (ar ? "right" : "left") + ":8px;}" +
+            ".pr-vid{display:block;position:relative;max-width:520px;margin:0 auto 18px;text-decoration:none;}.pr-vid img{width:100%;border:2px solid #E1A93E;border-radius:8px;display:block;}" +
+            ".pr-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:42px;background:rgba(6,68,76,.72);border-radius:12px;}" +
+            ".pr-play::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-38%,-50%);border-style:solid;border-width:10px 0 10px 17px;border-color:transparent transparent transparent #fff;}";
+        let doc = '<!doctype html><html lang="' + (ar ? "ar" : "en") + '" dir="' + (ar ? "rtl" : "ltr") + '"><head><meta charset="UTF-8">' +
+            '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+            '<title>' + ((ar ? artwork.title_ar : artwork.title_en) || "NADIM") + '</title>' +
+            '<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">' +
+            '<style>' + css + '</style></head><body><div id="w">' + c.head + c.meta + c.body + '</div></body></html>';
+        let blob = new Blob([doc], { type: "text/html;charset=utf-8" });
+        let a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = String(artwork.id) + ".html";
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+        if (typeof gtag === "function") gtag("event", "download_html", { artifact_id: artwork.id });
     }
 
     load();
+
+    // hook للسيرفر (Vercel /api/pdf): لو pdfmode، ابنِ صفحة الطباعة وبلّغ إنها جاهزة للـ page.pdf()
+    (function(){
+        if (!new URLSearchParams(location.search).get("pdfmode")) return;
+        let tries = 0;
+        let iv = setInterval(function(){
+            tries++;
+            if (typeof artwork !== "undefined" && artwork) {
+                clearInterval(iv);
+                buildPrintRoot().then(function(){ setTimeout(function(){ window.__printReady = true; }, 250); });
+            } else if (tries > 120) { clearInterval(iv); window.__printReady = true; }
+        }, 100);
+    })();
 </script>
 </body>
 </html>
