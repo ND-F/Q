@@ -1251,18 +1251,21 @@
             im.src = src;
         });
     }
+    // بروب: هل رابط الصورة بيتحمّل فعلًا؟ (عشان نتجاهل الخانات اللي مفيهاش صورة)
+    function probeImg(url){ return new Promise(function(res){ let im = new Image(); im.onload = function(){ res(im.naturalWidth > 0); }; im.onerror = function(){ res(false); }; im.src = url; }); }
     // بنّاء الفيديو: صورة قابلة للضغط تفتح يوتيوب (لينك حقيقي)
-    function prVid(u, imgSrc){ let id = ytVideoId(u); if(!id) return ""; let thumb = "https://img.youtube.com/vi/" + id + "/hqdefault.jpg"; if (imgSrc) thumb = imgSrc(thumb); return '<a class="pr-vid" href="https://www.youtube.com/watch?v=' + id + '" target="_blank" rel="noopener"><img src="' + thumb + '"><span class="pr-play"></span></a>'; }
+    function prVid(u, imgSrc){ let id = ytVideoId(u); if(!id) return ""; let thumb = "https://img.youtube.com/vi/" + id + "/hqdefault.jpg"; if (imgSrc) thumb = imgSrc(thumb); return '<a class="pr-vid" href="https://www.youtube.com/watch?v=' + id + '" target="_blank" rel="noopener"><img src="' + thumb + '" onerror="var a=this.closest(\'a\');if(a)a.style.display=\'none\';"><span class="pr-play"></span></a>'; }
 
     // بنّاء محتوى القطعة (مشترك بين HTML و PDF). imgSrc(url) بترجّع الرابط المستخدم (نسبي أو data-uri)
-    function prBuildContent(ar, imgSrc) {
+    function prBuildContent(ar, imgSrc, imgOk) {
         let src = imgSrc || function(u){ return u; };
+        let ok = imgOk || function(){ return true; };
         let vBy = {}, rBy = {};
         [artwork.video_url, artwork.video_url2, artwork.video_url3].forEach(function(raw){ let p = parseMediaSlot(raw); if (p && vBy[p.slot] === undefined) vBy[p.slot] = p.url; });
         [artwork.reel_url, artwork.reel_url2, artwork.reel_url3].forEach(function(raw){ let p = parseMediaSlot(raw); if (p && rBy[p.slot] === undefined) rBy[p.slot] = p.url; });
         let imgs = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
         function cap(i){ let s = (artwork["info_" + lang + (i + 1)] || "").trim(); return s ? '<div class="pr-cap">' + s + '</div>' : ""; }
-        function fig(u, i){ return '<figure class="pr-fig"><img src="' + src(u) + '">' + cap(i) + '</figure>'; }
+        function fig(u, i){ if (!ok(u)) return ""; return '<figure class="pr-fig"><img src="' + src(u) + '" onerror="var f=this.closest(\'figure\');if(f)f.style.display=\'none\';">' + cap(i) + '</figure>'; }
         let head = '<div class="pr-header"><div class="pr-section">' + (ar ? "من حياة التحفة" : "From the Life of an Artefact") + '</div>' +
             '<div class="pr-logos"><img src="' + src("images/logo-v-teal.svg") + '"><img src="' + src("images/logo-mia.svg") + '"></div></div>';
         let metaLines = [
@@ -1300,13 +1303,17 @@
     // بناء #printRoot (تُستخدم من السيرفر للطباعة) — Promise تخلص لما الصور تتحمّل
     function buildPrintRoot() {
         let ar = lang === "ar";
-        let c = prBuildContent(ar, null);
-        let root = document.getElementById("printRoot");
-        if (!root) { root = document.createElement("div"); root.id = "printRoot"; document.body.appendChild(root); }
-        root.dir = ar ? "rtl" : "ltr";
-        root.innerHTML = c.head + c.meta + c.body;
-        let imgEls = Array.prototype.slice.call(root.querySelectorAll("img"));
-        return Promise.all(imgEls.map(function(im){ return im.complete ? Promise.resolve() : new Promise(function(res){ im.onload = res; im.onerror = res; }); }));
+        let pimgs = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
+        return Promise.all(pimgs.map(function(u){ return u ? probeImg(u) : Promise.resolve(false); })).then(function(oks){
+            let okSet = {}; pimgs.forEach(function(u, i){ if (u && oks[i]) okSet[u] = 1; });
+            let c = prBuildContent(ar, null, function(u){ return !!okSet[u]; });
+            let root = document.getElementById("printRoot");
+            if (!root) { root = document.createElement("div"); root.id = "printRoot"; document.body.appendChild(root); }
+            root.dir = ar ? "rtl" : "ltr";
+            root.innerHTML = c.head + c.meta + c.body;
+            let imgEls = Array.prototype.slice.call(root.querySelectorAll("img"));
+            return Promise.all(imgEls.map(function(im){ return im.complete ? Promise.resolve() : new Promise(function(res){ im.onload = res; im.onerror = res; }); }));
+        });
     }
 
     // زرار التحميل: يفتح قائمة (PDF / HTML)
@@ -1343,15 +1350,19 @@
         closeDownloadMenu();
         if (!artwork) return;
         let ar = lang === "ar";
+        let artImgs = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
+        let oks = await Promise.all(artImgs.map(function(u){ return u ? probeImg(u) : Promise.resolve(false); }));
+        let okSet = {}; artImgs.forEach(function(u, i){ if (u && oks[i]) okSet[u] = 1; });
+        let imgOk = function(u){ return !!okSet[u]; };
         let urls = {};
         urls["images/logo-v-teal.svg"] = 1; urls["images/logo-mia.svg"] = 1; urls["images/pattern-teal.svg"] = 1;
-        prBuildContent(ar, null).imgUrls.forEach(function(u){ if (u) urls[u] = 1; });
+        Object.keys(okSet).forEach(function(u){ urls[u] = 1; });
         [artwork.video_url, artwork.video_url2, artwork.video_url3, artwork.reel_url, artwork.reel_url2, artwork.reel_url3].forEach(function(raw){ let p = parseMediaSlot(raw); if (p) { let id = ytVideoId(p.url); if (id) urls["https://img.youtube.com/vi/" + id + "/hqdefault.jpg"] = 1; } });
         let urlArr = Object.keys(urls);
         let dataArr = await Promise.all(urlArr.map(inlineDataURL));
         let map = {}; urlArr.forEach(function(u, i){ map[u] = dataArr[i]; });
         let src = function(u){ return map[u] || u; };
-        let c = prBuildContent(ar, src);
+        let c = prBuildContent(ar, src, imgOk);
         let patternURI = map["images/pattern-teal.svg"] || "";
         let css =
             "body{margin:0;background:#EAE8D8;color:#06444C;font-family:'Tajawal',sans-serif;font-weight:500;}" +
