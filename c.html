@@ -630,6 +630,9 @@
         .dl-opt { display: block; width: 100%; box-sizing: border-box; margin: 8px 0; padding: 13px; border: none; border-radius: 12px; background: var(--gold); color: #fff; font-size: 16px; font-weight: 700; font-family: 'Tajawal', sans-serif; cursor: pointer; transition: transform .15s ease, filter .15s ease; }
         .dl-opt:hover { transform: translateY(-2px); filter: brightness(1.06); }
         .dl-cancel { display: block; width: 100%; margin-top: 10px; padding: 10px; border: none; background: transparent; color: inherit; opacity: .7; font-size: 14px; font-family: 'Tajawal', sans-serif; cursor: pointer; }
+        .dl-spin { width: 30px; height: 30px; border: 3px solid rgba(6,68,76,.2); border-top-color: var(--gold); border-radius: 50%; margin: 0 auto 14px; animation: dlspin .8s linear infinite; }
+        body.dark .dl-spin { border-color: rgba(234,232,216,.2); border-top-color: var(--gold); }
+        @keyframes dlspin { to { transform: rotate(360deg); } }
 
         /* ===== طباعة / تصدير PDF بعرض المتصفح الأصلي (عربي سليم، مفيش قص، مفيش ورق أبيض) ===== */
         #printRoot { display: none; }
@@ -1332,17 +1335,65 @@
     }
     function closeDownloadMenu(){ let m = document.getElementById("dlMenu"); if (m) m.remove(); }
 
-    // PDF عبر "حفظ كـ PDF" بتاع المتصفح — عربي مثالي، شغّال في كل مكان بدون سيرفر
-    function downloadPDF() {
-        closeDownloadMenu();
-        if (!artwork) return;
-        if (typeof gtag === "function") gtag("event", "download_pdf", { artifact_id: artwork.id });
-        buildPrintRoot().then(function(){ setTimeout(function(){ window.print(); }, 200); });
+    // ===== أدوات مشتركة للتحميل =====
+    function absURL(u){ try { return new URL(u, location.href).href; } catch(e){ return u; } }
+    function dlFilename(){
+        let n = (artwork.inventory_number ? artwork.inventory_number + " - " : "") + (artwork.title_en || artwork.title_ar || String(artwork.id));
+        n = n.replace(/[\/\\:*?"<>|]+/g, "-").replace(/\s+/g, " ").trim();
+        return n.slice(0, 120) || String(artwork.id);
+    }
+    function triggerDownload(blob, name){
+        let a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(a.href); }, 5000);
+    }
+    function showPdfLoading(on){
+        let el = document.getElementById("pdfLoading");
+        if (on) { if (el) return; el = document.createElement("div"); el.id = "pdfLoading"; el.className = "dl-overlay";
+            el.innerHTML = '<div class="dl-menu"><div class="dl-spin"></div><div class="dl-title" style="margin:0;">' + (lang === "ar" ? "جاري إنشاء الملف…" : "Preparing file…") + '</div></div>';
+            document.body.appendChild(el);
+        } else if (el) { el.remove(); }
+    }
+    function pdfOkImages(){
+        let artImgs = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
+        return Promise.all(artImgs.map(function(u){ return u ? probeImg(u) : Promise.resolve(false); })).then(function(oks){
+            let okSet = {}; artImgs.forEach(function(u, i){ if (u && oks[i]) okSet[u] = 1; }); return okSet;
+        });
     }
 
-    // تحميل صفحة HTML مستقلة (صور مدمجة) — عربي سليم + لينكات شغّالة + من غير Print
+    // ===== ستايل صفحة التحميل (مشترك HTML + PDF) — لوجوهات أكبر + حقوق + فوتر =====
+    function prDocCSS(ar, patternURL){
+        return "body{margin:0;background:#EAE8D8;color:#06444C;font-family:'Tajawal',sans-serif;font-weight:500;}" +
+            "#w{position:relative;max-width:820px;margin:0 auto;padding:30px 22px 40px;box-sizing:border-box;}" +
+            "#w::before{content:'';position:fixed;inset:0;background-image:url('" + patternURL + "');background-size:80px 80px;opacity:.05;z-index:-1;}" +
+            ".pr-header{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #E1A93E;padding-bottom:16px;margin-bottom:24px;}" +
+            ".pr-section{font-size:21px;font-weight:800;}.pr-logos{display:flex;align-items:center;gap:16px;flex-shrink:0;}.pr-logos img{height:58px;width:auto;display:block;}" +
+            ".pr-title{font-size:27px;font-weight:900;color:#4A121C;margin:0 0 8px;line-height:1.4;}.pr-rule{border-top:2px solid rgba(225,169,62,.6);width:40px;}" +
+            ".pr-meta{margin-bottom:24px;}.pr-metalines{font-size:14px;line-height:1.9;margin-top:12px;}.pr-metalines>div{margin-bottom:6px;}" +
+            ".pr-inv{color:#4A121C;font-weight:900;font-size:16px;margin-top:8px;}" +
+            ".pr-body p{font-size:16px;line-height:2;margin:0 0 16px;text-align:justify;}" +
+            ".pr-fig{margin:0 0 20px;text-align:center;}.pr-fig img{max-width:100%;border-radius:6px;}" +
+            ".pr-cap{font-size:12px;opacity:.85;margin-top:6px;text-align:" + (ar ? "right" : "left") + ";border-" + (ar ? "right" : "left") + ":3px solid #E1A93E;padding-" + (ar ? "right" : "left") + ":8px;}" +
+            ".pr-vid{display:block;position:relative;max-width:520px;margin:0 auto 18px;text-decoration:none;}.pr-vid img{width:100%;border:2px solid #E1A93E;border-radius:8px;display:block;}" +
+            ".pr-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:42px;background:rgba(6,68,76,.72);border-radius:12px;}" +
+            ".pr-play::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-38%,-50%);border-style:solid;border-width:10px 0 10px 17px;border-color:transparent transparent transparent #fff;}" +
+            ".pr-footer{margin-top:34px;padding-top:16px;border-top:1px solid rgba(6,68,76,.25);font-size:12px;opacity:.75;text-align:center;color:#06444C;}";
+    }
+    // بناء صفحة التحميل الكاملة (بعنوان = رقم القطعة - العنوان + فوتر حقوق)
+    function prDoc(ar, src, patternURL, imgOk){
+        let c = prBuildContent(ar, src, imgOk);
+        let title = (artwork.inventory_number ? artwork.inventory_number + " - " : "") + ((ar ? artwork.title_ar : artwork.title_en) || "NADIM");
+        let footer = '<div class="pr-footer">© ' + (ar ? "مؤسسة نديم — متحف الفن الإسلامي" : "Nadim Foundation — Museum of Islamic Art") + '</div>';
+        return '<!doctype html><html lang="' + (ar ? "ar" : "en") + '" dir="' + (ar ? "rtl" : "ltr") + '"><head><meta charset="UTF-8">' +
+            '<meta name="viewport" content="width=device-width,initial-scale=1"><title>' + title + '</title>' +
+            '<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">' +
+            '<style>' + prDocCSS(ar, patternURL) + '</style></head><body><div id="w">' + c.head + c.meta + c.body + footer + '</div></body></html>';
+    }
+
+    // ===== تحميل صفحة HTML مستقلة (صور مدمجة data-uri) =====
     function inlineDataURL(url) {
-        return fetch(url, { mode: "cors" }).then(function(r){ return r.blob(); }).then(function(b){
+        return fetch(url, { mode: "cors" }).then(function(r){ if (!r.ok) throw 0; return r.blob(); }).then(function(b){
+            if (b.type && b.type.indexOf("image/") !== 0) throw 0;
             return new Promise(function(res){ let fr = new FileReader(); fr.onload = function(){ res(fr.result); }; fr.onerror = function(){ res(url); }; fr.readAsDataURL(b); });
         }).catch(function(){ return url; });
     }
@@ -1350,45 +1401,41 @@
         closeDownloadMenu();
         if (!artwork) return;
         let ar = lang === "ar";
-        let artImgs = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
-        let oks = await Promise.all(artImgs.map(function(u){ return u ? probeImg(u) : Promise.resolve(false); }));
-        let okSet = {}; artImgs.forEach(function(u, i){ if (u && oks[i]) okSet[u] = 1; });
-        let imgOk = function(u){ return !!okSet[u]; };
-        let urls = {};
-        urls["images/logo-v-teal.svg"] = 1; urls["images/logo-mia.svg"] = 1; urls["images/pattern-teal.svg"] = 1;
-        Object.keys(okSet).forEach(function(u){ urls[u] = 1; });
-        [artwork.video_url, artwork.video_url2, artwork.video_url3, artwork.reel_url, artwork.reel_url2, artwork.reel_url3].forEach(function(raw){ let p = parseMediaSlot(raw); if (p) { let id = ytVideoId(p.url); if (id) urls["https://img.youtube.com/vi/" + id + "/hqdefault.jpg"] = 1; } });
-        let urlArr = Object.keys(urls);
-        let dataArr = await Promise.all(urlArr.map(inlineDataURL));
-        let map = {}; urlArr.forEach(function(u, i){ map[u] = dataArr[i]; });
-        let src = function(u){ return map[u] || u; };
-        let c = prBuildContent(ar, src, imgOk);
-        let patternURI = map["images/pattern-teal.svg"] || "";
-        let css =
-            "body{margin:0;background:#EAE8D8;color:#06444C;font-family:'Tajawal',sans-serif;font-weight:500;}" +
-            "#w{position:relative;max-width:820px;margin:0 auto;padding:26px 20px 60px;box-sizing:border-box;}" +
-            "#w::before{content:'';position:fixed;inset:0;background-image:url('" + patternURI + "');background-size:80px 80px;opacity:.05;z-index:-1;}" +
-            ".pr-header{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #E1A93E;padding-bottom:12px;margin-bottom:22px;}" +
-            ".pr-section{font-size:19px;font-weight:800;}.pr-logos{display:flex;align-items:center;gap:14px;flex-shrink:0;}.pr-logos img{height:42px;width:auto;}" +
-            ".pr-title{font-size:26px;font-weight:900;color:#4A121C;margin:0 0 8px;line-height:1.4;}.pr-rule{border-top:2px solid rgba(225,169,62,.6);width:40px;}" +
-            ".pr-meta{margin-bottom:24px;}.pr-metalines{font-size:14px;line-height:1.9;margin-top:12px;}.pr-metalines>div{margin-bottom:6px;}" +
-            ".pr-inv{color:#4A121C;font-weight:900;font-size:16px;margin-top:8px;}" +
-            ".pr-body p{font-size:16px;line-height:2;margin:0 0 16px;text-align:justify;}" +
-            ".pr-fig{margin:0 0 18px;text-align:center;}.pr-fig img{max-width:100%;border-radius:6px;}" +
-            ".pr-cap{font-size:12px;opacity:.85;margin-top:6px;text-align:" + (ar ? "right" : "left") + ";border-" + (ar ? "right" : "left") + ":3px solid #E1A93E;padding-" + (ar ? "right" : "left") + ":8px;}" +
-            ".pr-vid{display:block;position:relative;max-width:520px;margin:0 auto 18px;text-decoration:none;}.pr-vid img{width:100%;border:2px solid #E1A93E;border-radius:8px;display:block;}" +
-            ".pr-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:42px;background:rgba(6,68,76,.72);border-radius:12px;}" +
-            ".pr-play::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-38%,-50%);border-style:solid;border-width:10px 0 10px 17px;border-color:transparent transparent transparent #fff;}";
-        let doc = '<!doctype html><html lang="' + (ar ? "ar" : "en") + '" dir="' + (ar ? "rtl" : "ltr") + '"><head><meta charset="UTF-8">' +
-            '<meta name="viewport" content="width=device-width,initial-scale=1">' +
-            '<title>' + ((ar ? artwork.title_ar : artwork.title_en) || "NADIM") + '</title>' +
-            '<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">' +
-            '<style>' + css + '</style></head><body><div id="w">' + c.head + c.meta + c.body + '</div></body></html>';
-        let blob = new Blob([doc], { type: "text/html;charset=utf-8" });
-        let a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = String(artwork.id) + ".html";
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
-        if (typeof gtag === "function") gtag("event", "download_html", { artifact_id: artwork.id });
+        showPdfLoading(true);
+        try {
+            let okSet = await pdfOkImages();
+            let imgOk = function(u){ return !!okSet[u]; };
+            let urls = { "images/logo-v-teal.svg": 1, "images/logo-mia.svg": 1, "images/pattern-teal.svg": 1 };
+            Object.keys(okSet).forEach(function(u){ urls[u] = 1; });
+            [artwork.video_url, artwork.video_url2, artwork.video_url3, artwork.reel_url, artwork.reel_url2, artwork.reel_url3].forEach(function(raw){ let p = parseMediaSlot(raw); if (p) { let id = ytVideoId(p.url); if (id) urls["https://img.youtube.com/vi/" + id + "/hqdefault.jpg"] = 1; } });
+            let urlArr = Object.keys(urls);
+            let dataArr = await Promise.all(urlArr.map(inlineDataURL));
+            let map = {}; urlArr.forEach(function(u, i){ map[u] = dataArr[i]; });
+            let src = function(u){ return map[u] || u; };
+            let doc = prDoc(ar, src, map["images/pattern-teal.svg"] || "", imgOk);
+            triggerDownload(new Blob([doc], { type: "text/html;charset=utf-8" }), dlFilename() + ".html");
+            if (typeof gtag === "function") gtag("event", "download_html", { artifact_id: artwork.id });
+        } catch (e) { alert(ar ? "تعذّر إنشاء الملف، حاول تاني." : "Could not create the file."); console.error(e); }
+        showPdfLoading(false);
+    }
+
+    // ===== تحميل PDF صامت عبر خدمة خارجية (روابط مطلقة → الخدمة تجيب الصور، اللينكات شغّالة) =====
+    async function downloadPDF() {
+        closeDownloadMenu();
+        if (!artwork) return;
+        let ar = lang === "ar";
+        showPdfLoading(true);
+        try {
+            let okSet = await pdfOkImages();
+            let imgOk = function(u){ return !!okSet[u]; };
+            let doc = prDoc(ar, absURL, absURL("images/pattern-teal.svg"), imgOk);
+            let r = await fetch("/api/pdf", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ html: doc, filename: dlFilename() }) });
+            if (!r.ok) { throw new Error(await r.text()); }
+            let blob = await r.blob();
+            triggerDownload(blob, dlFilename() + ".pdf");
+            if (typeof gtag === "function") gtag("event", "download_pdf", { artifact_id: artwork.id });
+        } catch (e) { alert(ar ? "تعذّر إنشاء الـ PDF، حاول تاني." : "Could not create the PDF, try again."); console.error(e); }
+        showPdfLoading(false);
     }
 
     load();
