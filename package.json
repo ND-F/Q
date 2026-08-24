@@ -1,0 +1,9 @@
+{
+  "name": "ndf-mia-qr",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@sparticuz/chromium": "131.0.0",
+    "puppeteer-core": "23.9.0"
+  }
+}
