@@ -1,5 +1,8 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/404.html" }
-  ]
+    { "source": "/((?!api/).*)", "destination": "/404.html" }
+  ],
+  "functions": {
+    "api/pdf.js": { "maxDuration": 30 }
+  }
 }
