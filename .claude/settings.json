@@ -1,0 +1,14 @@
+{
+  "extraKnownMarketplaces": {
+    "sh33ar": {
+      "source": {
+        "source": "github",
+        "repo": "Sh33ar/claude-skills"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "ebraheem-core@sh33ar": true,
+    "mia-qr@sh33ar": true
+  }
+}
