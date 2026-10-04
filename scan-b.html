@@ -894,7 +894,7 @@
             const finalId = id || allArtworks[0].id;
             initPiece(finalId);
             if (window.location.search.includes("id=")) {
-                window.history.replaceState({id: finalId}, '', 'Q' + finalId);
+                window.history.replaceState({id: finalId}, '', 'q' + finalId);
             }
         } catch(e) { console.error(e); }
     }
@@ -903,19 +903,17 @@
     function normInv(s) {
         return String(s || "").toLowerCase().replace(/^\s*inv\.?\s*(no\.?)?\s*/, "").replace(/\s+/g, "").replace(/[\/_.]/g, "-");
     }
-    // لو اللينك آخره Inv + رقم → دوّر بيه في inventory_number (الرقم كله أو أي رقم من الأرقام المتعددة)، غير كده دوّر بالـ id
+    // الـ id للقطع الجديدة = رقم الجرد (mia.nadimfoundation.org/q3196).
+    // لو مفيش id مطابق → دوّر في inventory_number (الرقم كله أو أي رقم من الأرقام المتعددة). كلمة Inv في اللينك اختيارية.
     function findArtwork(id) {
         let raw = String(id || "").trim();
-        if (/^inv/i.test(raw)) {
-            let key = normInv(raw);
-            if (key) {
-                let hit = allArtworks.find(a => a.inventory_number && normInv(a.inventory_number) === key);
-                if (!hit) hit = allArtworks.find(a => a.inventory_number && String(a.inventory_number).replace(/^\s*inv\.?\s*(no\.?)?/i, "").split(/[;,]/).some(part => normInv(part) === key));
-                if (hit) return hit;
-            }
-        }
         let targetId = raw.toUpperCase();
-        return allArtworks.find(a => a.id && String(a.id).trim().toUpperCase() === targetId);
+        let byId = allArtworks.find(a => a.id && String(a.id).trim().toUpperCase() === targetId);
+        if (byId) return byId;
+        let key = normInv(raw);
+        if (!key) return null;
+        return allArtworks.find(a => a.inventory_number && normInv(a.inventory_number) === key)
+            || allArtworks.find(a => a.inventory_number && String(a.inventory_number).replace(/^\s*inv\.?\s*(no\.?)?/i, "").split(/[;,]/).some(part => normInv(part) === key));
     }
 
     function initPiece(id) {
