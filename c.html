@@ -1155,18 +1155,27 @@
     function trackContactUs() { if (typeof gtag === 'function') gtag('event', 'contact_us_click', { 'from_page_id': artwork ? artwork.id : 'unknown' }); setTimeout(() => { window.location.href = 'https://nd-f.github.io/QR/'; }, 150); }
     document.querySelector('[data-en="Contact Us"]').setAttribute("onclick", "trackContactUs()");
 
+    // التقليب في c.html على القطع القديمة بس. القطع الجديدة من الكتالوج بتتعرض من scan-b.html (q + رقم الجرد) من غير تقليب.
+    const C_NAV_IDS = ["0", "aq", "gw", "ha", "gn", "1", "2", "3", "4", "5", "6"];
+    function navList() {
+        const list = allArtworks.filter(a => C_NAV_IDS.indexOf(String(a.id).trim().toLowerCase()) !== -1);
+        return list.length ? list : allArtworks;
+    }
+
     function navigatePiece(step) {
-        const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id)) + step;
-        if(idx >= 0 && idx < allArtworks.length) {
-            const nextId = allArtworks[idx].id;
+        const list = navList();
+        const idx = list.findIndex(a => String(a.id) === String(artwork.id)) + step;
+        if(idx >= 0 && idx < list.length) {
+            const nextId = list[idx].id;
             window.history.pushState({id: nextId}, '', nextId);
             initPiece(nextId); window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
 
     function updateNavButtons() {
-        const idx = allArtworks.findIndex(a => String(a.id) === String(artwork.id));
-        document.getElementById("prevPiece").classList.toggle("disabled", idx === 0); document.getElementById("nextPiece").classList.toggle("disabled", idx === allArtworks.length - 1);
+        const list = navList();
+        const idx = list.findIndex(a => String(a.id) === String(artwork.id));
+        document.getElementById("prevPiece").classList.toggle("disabled", idx <= 0); document.getElementById("nextPiece").classList.toggle("disabled", idx === -1 || idx === list.length - 1);
     }
 
     let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0, startDist = 0, initialScale = 1, isPinching = false, tapStartX = 0, tapStartY = 0;
