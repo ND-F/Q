@@ -735,8 +735,6 @@
 </div>
 
 <div class="controls">
-    <div onclick="navigatePiece(-1)" id="prevPiece" class="nav-btn" data-ar="القطعة السابقة" data-en="Previous Piece">◀</div>
-    <div class="sep"></div>
     <div onclick="toggleLang()" data-ar="اللغة" data-en="Language">🌐</div>
     <div onclick="downloadPDF()" id="pdfBtn" data-ar="تحميل PDF" data-en="Download PDF" style="display: flex; align-items: center; justify-content: center;"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
     <div onclick="window.location.href='https://nd-f.github.io/QR/'" data-ar="اتصل بنا" data-en="Contact Us" style="display: flex; align-items: center; justify-content: center;"><img src="images/icon-gold.png" style="width: 35px; height: 35px; object-fit: contain;"></div>
@@ -777,8 +775,6 @@
 
 </div>
     <div onclick="toggleTheme()" id="themeBtn" data-ar="المظهر" data-en="Theme">☀️</div>
-    <div class="sep"></div>
-    <div onclick="navigatePiece(1)" id="nextPiece" class="nav-btn" data-ar="القطعة التالية" data-en="Next Piece">▶</div>
 </div>
 
 <footer> Nadim Foundation ©® 2018 </footer>
@@ -921,7 +917,6 @@
         if(sidebar.classList.contains("open")) setInfoDrawer(false);
 
         renderArticle();
-        updateNavButtons();
         document.getElementById('mainContainer').classList.add('ready');
 
         if (window.innerWidth < 1000) {
@@ -1071,10 +1066,6 @@
             }
         }
 
-        let isVideo = String(artwork.id).toUpperCase().startsWith('V');
-        const prevBtn = document.getElementById("prevPiece"), nextBtn = document.getElementById("nextPiece");
-        if (isVideo) { prevBtn.setAttribute("data-ar", "الحرفة السابقة"); prevBtn.setAttribute("data-en", "Previous Craft"); nextBtn.setAttribute("data-ar", "الحرفة التالية"); nextBtn.setAttribute("data-en", "Next Craft"); } 
-        else { prevBtn.setAttribute("data-ar", "القطعة السابقة"); prevBtn.setAttribute("data-en", "Previous Piece"); nextBtn.setAttribute("data-ar", "القطعة التالية"); nextBtn.setAttribute("data-en", "Next Piece"); }
         document.querySelectorAll('[data-ar]').forEach(el => { el.setAttribute('data-tooltip', el.getAttribute(`data-${lang}`) || ''); });
         
         const infoBtnEl = document.getElementById("infoToggleBtn");
@@ -1154,29 +1145,6 @@
     function share() { if (navigator.share) navigator.share({title: document.getElementById("title").innerText, url: location.href}); if (typeof gtag === 'function') gtag('event', 'share_click', { 'artifact_id': artwork ? artwork.id : 'unknown' }); }
     function trackContactUs() { if (typeof gtag === 'function') gtag('event', 'contact_us_click', { 'from_page_id': artwork ? artwork.id : 'unknown' }); setTimeout(() => { window.location.href = 'https://nd-f.github.io/QR/'; }, 150); }
     document.querySelector('[data-en="Contact Us"]').setAttribute("onclick", "trackContactUs()");
-
-    // التقليب في c.html على القطع القديمة بس. القطع الجديدة من الكتالوج بتتعرض من scan-b.html (q + رقم الجرد) من غير تقليب.
-    const C_NAV_IDS = ["0", "aq", "gw", "ha", "gn", "1", "2", "3", "4", "5", "6"];
-    function navList() {
-        const list = allArtworks.filter(a => C_NAV_IDS.indexOf(String(a.id).trim().toLowerCase()) !== -1);
-        return list.length ? list : allArtworks;
-    }
-
-    function navigatePiece(step) {
-        const list = navList();
-        const idx = list.findIndex(a => String(a.id) === String(artwork.id)) + step;
-        if(idx >= 0 && idx < list.length) {
-            const nextId = list[idx].id;
-            window.history.pushState({id: nextId}, '', nextId);
-            initPiece(nextId); window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }
-
-    function updateNavButtons() {
-        const list = navList();
-        const idx = list.findIndex(a => String(a.id) === String(artwork.id));
-        document.getElementById("prevPiece").classList.toggle("disabled", idx <= 0); document.getElementById("nextPiece").classList.toggle("disabled", idx === -1 || idx === list.length - 1);
-    }
 
     let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0, startDist = 0, initialScale = 1, isPinching = false, tapStartX = 0, tapStartY = 0;
     function setTransform() { modalImage.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`; }
