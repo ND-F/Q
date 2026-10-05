@@ -1,7 +1,7 @@
 import json, re
 D=json.load(open('sides.json'))
 EXCLUDE={'1066','560','3553','596','4615','1065'}
-DOMAIN='https://mia.nadimfoundation.org/q'
+DOMAIN='https://mia.nadimfoundation.org/'
 COLS="id inventory_number title_en title_ar from_en from_ar desc_en desc_ar date_en date_ar dimensions_en dimensions_ar section_en section_ar hall_en hall_ar material_en material_ar info_en1 info_ar1 info_en2 info_ar2 info_en3 info_ar3 info_en4 info_ar4 info_en5 info_ar5 video_url dsc_en1 dsc_ar1 dsc_en2 dsc_ar2 dsc_en3 dsc_ar3 dsc_en4 dsc_ar4 dsc_en5 dsc_ar5 reel_url reel_url2 reel_url3 video_url2 video_url3 LINK QR".split()
 EXTRA="registered_en registered_ar acquisition_en acquisition_ar catalogue_no catalogue_page".split()
 AR_DIG=str.maketrans('0123456789','٠١٢٣٤٥٦٧٨٩')
@@ -51,7 +51,32 @@ MANUAL={
 }
 for x in rows:
     if x['id'] in MANUAL: x.update(MANUAL[x['id']])
+for x in rows:
+    for L in ('en','ar'):
+        paras=[p for p in x['desc_'+L].split('\n\n') if p.strip()]
+        if len(paras)>5: paras=paras[:4]+['\n\n'.join(paras[4:])]
+        for i,p in enumerate(paras): x[f'dsc_{L}{i+1}']=p
 rows.sort(key=lambda r:int(r['catalogue_page']))
+# القسم: لو صفحة القطعة عليها اسم الفصل العام، خد القسم الفرعى من الصفحة المقابلة فى نفس الفرشة
+import importlib.util
+_spec=importlib.util.spec_from_file_location('parse_mod','parse.py')
+P2=json.load(open('pages2.json'))
+def foot(pg):
+    import re as _re
+    if not (1<=pg<=len(P2)): return ('','')
+    fl=[l for l in P2[pg-1]['lines'] if l['y']>565 and _re.search(r'[A-Za-z\u0600-\u06ff]',l['t'])]
+    en=' '.join(l['t'] for l in sorted(fl,key=lambda l:l['x0']) if not l['ar']).strip()
+    ar=' '.join(l['t'] for l in sorted(fl,key=lambda l:-l['x1']) if l['ar']).strip()
+    return en,ar
+MAIN={'Combs','Architectural Fittings'}
+for x in rows:
+    pg=int(x['catalogue_page'])
+    if x['section_en'] in MAIN or not x['section_en']:
+        mate=pg+1 if pg%2==0 else pg-1      # الصفحة المقابلة (زوجى شمال، فردى يمين)
+        e,a=foot(mate)
+        if e and e not in MAIN: x['section_en'],x['section_ar']=e,a
+    x['section_ar']=x['section_ar'].replace('(شارات(','(شارات)')
+    x['section_en']=x['section_en'].replace('—Openwork','— Openwork')
 last=('','')
 for x in rows:  # صفحات من غير فوتر → نفس قسم القطعة اللى قبلها
     if x['section_en'] or x['section_ar']: last=(x['section_en'],x['section_ar'])

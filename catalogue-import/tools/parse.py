@@ -5,12 +5,17 @@ FOOT_Y=565
 NUM_ONLY=re.compile(r'^(\d+[a-z]?\.|\.\d+[a-z]?|\d{2})$')
 def has_letters(t): return re.search(r'[A-Za-z؀-ۿ]',t) is not None
 def section(page):
-    for l in page['lines']:
-        if l['y']>FOOT_Y and re.search('[A-Za-z]',l['t']) and re.search('[؀-ۿ]',l['t']):
-            en=''.join(re.findall(r'[A-Za-z][A-Za-z ,&\-’\']*',l['t'])).strip()
-            ar=re.sub(r'[A-Za-z][A-Za-z ,&\-’\']*','',l['t']).strip()
-            return en, ar
-    return '',''
+    # الفوتر: سطر إنجليزى + سطر عربى (بعد تقسيم الفجوات بقوا سطرين منفصلين)
+    foot=[l for l in page['lines'] if l['y']>FOOT_Y and re.search(r'[A-Za-z\u0600-\u06ff]',l['t'])]
+    en=' '.join(l['t'] for l in sorted(foot,key=lambda l:l['x0']) if not l['ar']).strip()
+    ar=' '.join(l['t'] for l in sorted(foot,key=lambda l:-l['x1']) if l['ar']).strip()
+    # لو اتجمعوا فى سطر واحد مختلط
+    if not en or not ar:
+        for l in foot:
+            if re.search('[A-Za-z]',l['t']) and re.search('[\u0600-\u06ff]',l['t']):
+                en=en or ''.join(re.findall(r"[A-Za-z][A-Za-z ,&\-’'—]*",l['t'])).strip()
+                ar=ar or re.sub(r"[A-Za-z][A-Za-z ,&\-’'—]*",'',l['t']).strip()
+    return re.sub(r'\s+',' ',en), re.sub(r'\s+',' ',ar)
 def join_fragments(ls):
     # أجزاء نفس السطر (نص مضبوط justified) → سطر واحد
     ls=sorted(ls, key=lambda l:(round(l['y']), l['x0']))
