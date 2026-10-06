@@ -1686,6 +1686,11 @@
         });
     }
 
+    // صور الـ PDF: نفس الصورة PNG بشفافيتها، بس مصغّرة لأقصى 1400px (المحرك بيحفظ الصور الشفافة جوه الـ PDF
+    // من غير ضغط تقريبًا، فصورتين كبار بيعدّوا حد PDFShift اللي هو 15MB). ولا خلفية ولا تغيير في الشكل.
+    function pdfPhotoURL(u, px){ px = px || 1400; return "https://wsrv.nl/?url=" + encodeURIComponent(absURL(u)) + "&w=" + px + "&h=" + px + "&fit=inside&we&output=png"; }
+    function isPdfPhoto(u){ return /^images\/.+\.(webp|png|jpe?g)$/i.test(String(u)) && !/logo|icon|pattern/i.test(String(u)); }
+
     async function downloadPDF() {
         closeDownloadMenu();
         if (!artwork) return;
@@ -1695,8 +1700,15 @@
         try {
             let okSet = isGroup ? await pdfOkPieceImages() : await pdfOkImages();
             let imgOk = function(u){ return !!okSet[u]; };
-            let doc = isGroup ? prGroupDoc(ar, absURL, absURL("images/pattern-teal.svg"), imgOk)
-                              : prDoc(ar, absURL, absURL("images/pattern-teal.svg"), imgOk);
+            // لو خدمة التصغير مش شغالة، نرجع للصور الأصلية
+            // المقاس حسب عدد الصور عشان الملف يفضل تحت 15MB (الصورة بتتعرض في الـ PDF بأقصى 470px، والمشط 250px)
+            let nImgs = Object.keys(okSet).length;
+            let px = isGroup ? 700 : (nImgs <= 2 ? 1400 : (nImgs <= 3 ? 1200 : 1000));
+            let firstImg = Object.keys(okSet)[0];
+            let useSmall = firstImg ? await probeImg(pdfPhotoURL(firstImg, px)) : false;
+            let src = function(u){ return (useSmall && isPdfPhoto(u)) ? pdfPhotoURL(u, px) : absURL(u); };
+            let doc = isGroup ? prGroupDoc(ar, src, absURL("images/pattern-teal.svg"), imgOk)
+                              : prDoc(ar, src, absURL("images/pattern-teal.svg"), imgOk);
             let name = isGroup ? groupFilename() : dlFilename();
             let r = await fetch("/api/pdf", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ html: doc, filename: name }) });
             if (!r.ok) { throw new Error(await r.text()); }
