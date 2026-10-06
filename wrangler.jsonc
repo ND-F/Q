@@ -1,0 +1,10 @@
+// Cloudflare Workers (static assets only): نسخة من الموقع على Cloudflare، مجانية ومن غير حد للزيارات.
+// الصفحات على Vercel بتجيب منها الصور و artworks.json عشان نوفّر رصيد Vercel.
+{
+  "name": "ndf-mia",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./",
+    "not_found_handling": "404-page"
+  }
+}

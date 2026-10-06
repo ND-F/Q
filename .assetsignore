@@ -1,0 +1,10 @@
+.git
+.github
+.claude
+tools
+catalogue-import
+api
+node_modules
+wrangler.jsonc
+vercel.json
+README.md
