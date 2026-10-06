@@ -31,8 +31,8 @@
         segment.toUpperCase();
 
       // =========================================
-      // أكواد المجموعات القديمة المطبوعة -> صفحة المجموعة في scan-b.html
-      // (الأمشاط بقت مجموعات: 71 = qDEP ...)
+      // أكواد المجموعات القديمة المطبوعة -> صفحة المجموعة في c.html
+      // (الأمشاط بقت مجموعات: 71 = DEP ...)
       // =========================================
       var oldGroupCodes = {
         '67': 'SSC', '69': 'DSC', '70': 'DLC', '71': 'DEP',
@@ -49,7 +49,7 @@
 
         window.location.replace(
           base +
-          '/scan-b.html?id=' +
+          '/c.html?id=' +
           oldGroupCodes[segment]
         );
       }
@@ -166,7 +166,8 @@
         window.location.replace(
           base +
           '/c.html?id=' +
-          segment
+          segment +
+          extraQuery
         );
       }
 

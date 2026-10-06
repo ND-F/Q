@@ -846,6 +846,7 @@
     let lang = localStorage.getItem("nadim_lang") || systemLang;
     let allArtworks = [], artwork;
     let pieceIdx = 0, startPieceKey = "";
+    const LINK_PREFIX = "q"; // scan-b: mia.nadimfoundation.org/q<id>   (c.html: من غير prefix)
     let zoomStartTime = 0, isZoomTracked = false;
 
     const modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
@@ -1305,7 +1306,7 @@
     // اللينك بيفضل qDEP، ومع القطعة: qDEP?p=4927 (عشان المشاركة تفتح نفس القطعة)
     function syncPieceUrl() {
         let p = currentPiece();
-        let url = "q" + artwork.id + (p && pieceIdx > 0 ? "?p=" + encodeURIComponent(normInv(p.inventory_number)) : "");
+        let url = LINK_PREFIX + artwork.id + (p && pieceIdx > 0 ? "?p=" + encodeURIComponent(normInv(p.inventory_number)) : "");
         window.history.replaceState({ id: artwork.id }, "", url);
     }
 
@@ -1644,43 +1645,76 @@
     }
 
     // ===== تحميل PDF صامت عبر خدمة خارجية (روابط مطلقة → الخدمة تجيب الصور، اللينكات شغّالة) =====
-    // مجموعة قطع: الـ PDF بيطلع للقطعة المعروضة (بياناتها وصورها) + الوصف العام للمجموعة
-    function pdfPieceView() {
-        let p = currentPiece();
-        if (!p) return null;
-        let v = Object.assign({}, artwork);
-        ["from_en", "from_ar", "date_en", "date_ar", "material_en", "material_ar", "dimensions_en", "dimensions_ar"].forEach(k => { if (p[k]) v[k] = p[k]; });
-        v.inventory_number = p.inventory_number || "";
-        ["", "b", "c", "d", "e"].forEach((s, i) => { v["image" + (i + 1)] = p.img + s + ".png"; });
-        for (let i = 1; i <= 5; i++) { v["dsc_en" + i] = ""; v["dsc_ar" + i] = ""; v["info_en" + i] = ""; v["info_ar" + i] = ""; }
-        v.info_en1 = p.info_en1 || ""; v.info_ar1 = p.info_ar1 || "";
-        ["en", "ar"].forEach(l => {
-            v["dsc_" + l + "1"] = p["desc_" + l] || "";
-            let g = [artwork["desc_" + l]].concat([1, 2, 3, 4, 5].map(i => artwork["dsc_" + l + i])).filter(x => x && String(x).trim() !== "").join("\n\n");
-            v["dsc_" + l + "2"] = g;
+    // ===== PDF مجموعة القطع: العنوان + الوصف العام + كل القطع (صورة + رقم الجرد + بياناتها + وصفها) =====
+    function prGroupCSS(ar){
+        return ".pr-count{font-size:14px;opacity:.75;margin-top:10px;}" +
+            ".pr-piece{display:flex;gap:20px;align-items:flex-start;padding:16px 0;border-top:1px solid rgba(225,169,62,.4);break-inside:avoid;page-break-inside:avoid;}" +
+            ".pr-piece-img{flex:0 0 36%;text-align:center;}.pr-piece-img img{max-width:100%;max-height:250px;width:auto;height:auto;border-radius:6px;}" +
+            ".pr-piece-txt{flex:1;min-width:0;}.pr-piece-inv{color:#4A121C;font-weight:900;font-size:16px;margin-bottom:4px;}" +
+            ".pr-piece-meta{font-size:13px;line-height:1.8;margin-bottom:6px;opacity:.9;}" +
+            ".pr-body .pr-piece-txt p{font-size:14px;line-height:1.9;margin:0;}";
+    }
+    function prGroupDoc(ar, src, patternURL, imgOk){
+        src = src || function(u){ return u; };
+        let L = ar ? "ar" : "en";
+        let base = prBuildContent(ar, src, function(){ return false; }); // نفس الهيدر واللوجوهات
+        let title = (ar ? artwork.title_ar : artwork.title_en) || "";
+        let hall = (ar ? artwork.hall_ar : artwork.hall_en) || "";
+        let n = artwork.pieces.length;
+        let meta = '<div class="pr-meta"><h1 class="pr-title">' + title + '</h1><div class="pr-rule"></div>' +
+            '<div class="pr-metalines">' + (hall ? '<div>' + hall + '</div>' : '') + '</div>' +
+            '<div class="pr-count">' + (ar ? "عدد القطع: " + n : n + (n === 1 ? " piece" : " pieces")) + '</div></div>';
+        let gdesc = [artwork["desc_" + L]].concat([1, 2, 3, 4, 5].map(function(i){ return artwork["dsc_" + L + i]; }))
+            .filter(function(x){ return x && String(x).trim() !== ""; })
+            .map(function(x){ return '<p>' + String(x).replace(/\n/g, '<br>') + '</p>'; }).join("");
+        let pieces = artwork.pieces.map(function(p){
+            let u = p.img + ".webp";
+            let img = imgOk(u) ? '<div class="pr-piece-img"><img src="' + src(u) + '"></div>' : '';
+            let lines = ["from", "date", "material", "dimensions", "registered", "acquisition"]
+                .map(function(k){ return p[k + "_" + L]; }).filter(function(x){ return x && String(x).trim() !== ""; })
+                .map(function(x){ return '<div>' + x + '</div>'; }).join("");
+            let d = (p["desc_" + L] || "").trim();
+            return '<div class="pr-piece">' + img + '<div class="pr-piece-txt">' +
+                '<div class="pr-piece-inv">' + (p.inventory_number || "") + '</div>' +
+                (lines ? '<div class="pr-piece-meta">' + lines + '</div>' : '') +
+                (d ? '<p>' + d.replace(/\n/g, '<br>') + '</p>' : '') + '</div></div>';
+        }).join("");
+        let footer = '<div class="pr-footer">Nadim Foundation &copy;&reg; 2018</div>';
+        return '<!doctype html><html lang="' + L + '" dir="' + (ar ? "rtl" : "ltr") + '"><head><meta charset="UTF-8">' +
+            '<meta name="viewport" content="width=device-width,initial-scale=1"><title>' + groupFilename() + '</title>' +
+            '<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">' +
+            '<style>' + prDocCSS(ar, patternURL) + prGroupCSS(ar) + '</style></head><body><div id="w">' +
+            base.head + meta + '<div class="pr-body">' + gdesc + pieces + '</div>' + footer + '</div></body></html>';
+    }
+    function groupFilename(){
+        let n = String(artwork.id) + " - " + (artwork.title_en || artwork.title_ar || "");
+        return n.replace(/[\/\\:*?"<>|]+/g, "-").replace(/\s+/g, " ").trim().slice(0, 120);
+    }
+    function pdfOkPieceImages(){
+        let urls = artwork.pieces.map(function(p){ return p.img + ".webp"; });
+        return Promise.all(urls.map(probeImg)).then(function(oks){
+            let okSet = {}; urls.forEach(function(u, i){ if (oks[i]) okSet[u] = 1; }); return okSet;
         });
-        ["video_url", "video_url2", "video_url3", "reel_url", "reel_url2", "reel_url3"].forEach(k => v[k] = "");
-        return v;
     }
 
     async function downloadPDF() {
         closeDownloadMenu();
         if (!artwork) return;
         let ar = lang === "ar";
-        let groupArtwork = null, pv = pdfPieceView();
-        if (pv) { groupArtwork = artwork; artwork = pv; }
+        let isGroup = !!(artwork.pieces && artwork.pieces.length);
         showPdfLoading(true);
         try {
-            let okSet = await pdfOkImages();
+            let okSet = isGroup ? await pdfOkPieceImages() : await pdfOkImages();
             let imgOk = function(u){ return !!okSet[u]; };
-            let doc = prDoc(ar, absURL, absURL("images/pattern-teal.svg"), imgOk);
-            let r = await fetch("/api/pdf", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ html: doc, filename: dlFilename() }) });
+            let doc = isGroup ? prGroupDoc(ar, absURL, absURL("images/pattern-teal.svg"), imgOk)
+                              : prDoc(ar, absURL, absURL("images/pattern-teal.svg"), imgOk);
+            let name = isGroup ? groupFilename() : dlFilename();
+            let r = await fetch("/api/pdf", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ html: doc, filename: name }) });
             if (!r.ok) { throw new Error(await r.text()); }
             let blob = await r.blob();
-            triggerDownload(blob, dlFilename() + ".pdf");
+            triggerDownload(blob, name + ".pdf");
             if (typeof gtag === "function") gtag("event", "download_pdf", { artifact_id: artwork.id });
         } catch (e) { alert(ar ? "تعذّر إنشاء الـ PDF، حاول تاني." : "Could not create the PDF, try again."); console.error(e); }
-        if (groupArtwork) artwork = groupArtwork;
         showPdfLoading(false);
     }
 
