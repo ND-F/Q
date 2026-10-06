@@ -552,6 +552,65 @@
         }
         body.dark .viewer img { box-shadow: none; border: none; }
 
+        /* ===== معرض القطع (مجموعة أمشاط): بوكس عرض + ثامنيلز، تقليب بين القطع ===== */
+        .piece-gallery { margin-bottom: 30px; }
+        .pg-viewer {
+            position: relative; width: 100%; height: 58vh; min-height: 280px;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+            border-radius: 15px; background: rgba(6, 68, 76, 0.05); cursor: pointer; touch-action: pan-y;
+        }
+        body.dark .pg-viewer { background: rgba(255, 255, 255, 0.04); }
+        .pg-viewer img { max-width: 95%; max-height: 95%; object-fit: contain; opacity: 0; transition: opacity 0.3s ease; border-radius: 4px; }
+        .pg-viewer.loaded img { opacity: 1; }
+        .pg-empty { display: none; flex-direction: column; align-items: center; gap: 10px; color: var(--teal); opacity: 0.55; font-weight: 700; font-size: 15px; text-align: center; padding: 20px; }
+        .pg-empty .pg-empty-inv { font-size: 26px; font-weight: 900; color: var(--burgundy); opacity: 1; direction: ltr; }
+        body.dark .pg-empty { color: var(--beige); }
+        body.dark .pg-empty .pg-empty-inv { color: var(--gold); }
+        .pg-viewer.no-img { cursor: default; }
+        .pg-viewer.no-img img { display: none; }
+        .pg-viewer.no-img .pg-empty { display: flex; }
+        .pg-nav {
+            position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+            width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(225, 169, 62, 0.6);
+            background: rgba(234, 232, 216, 0.85); color: var(--teal); font-size: 18px;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); transition: opacity 0.2s ease;
+        }
+        body.dark .pg-nav { background: rgba(6, 68, 76, 0.85); color: var(--gold); }
+        .pg-nav.disabled { opacity: 0.2; pointer-events: none; }
+        body.lang-ar .pg-prev { right: 12px; left: auto; }
+        body.lang-ar .pg-next { left: 12px; right: auto; }
+        body.lang-en .pg-prev { left: 12px; right: auto; }
+        body.lang-en .pg-next { right: 12px; left: auto; }
+        .pg-counter {
+            position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); z-index: 5;
+            background: rgba(6, 68, 76, 0.85); color: var(--beige); font-size: 13px; font-weight: 700;
+            padding: 4px 14px; border-radius: 20px; direction: ltr; pointer-events: none;
+        }
+        .pg-views { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+        .pg-views:empty { display: none; }
+        .pg-views img { width: 56px; height: 56px; object-fit: contain; border-radius: 10px; cursor: pointer; opacity: 0.45; border: 2px solid transparent; background: rgba(6, 68, 76, 0.05); transition: 0.2s; }
+        .pg-views img.active { opacity: 1; border-color: var(--gold); }
+        .pg-desc { margin-top: 14px; text-align: start; }
+        .pg-desc:empty { display: none; }
+        .pg-thumbs { display: flex; gap: 10px; overflow-x: auto; padding: 14px 4px 6px; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+        .pg-thumb {
+            flex: 0 0 auto; width: 78px; display: flex; flex-direction: column; align-items: center; gap: 5px;
+            background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; color: inherit; opacity: 0.55; transition: opacity 0.2s ease;
+        }
+        .pg-thumb.active { opacity: 1; }
+        .pg-thumb-box {
+            width: 74px; height: 74px; border-radius: 12px; border: 2px solid transparent; overflow: hidden;
+            display: flex; align-items: center; justify-content: center; background: rgba(6, 68, 76, 0.06);
+        }
+        body.dark .pg-thumb-box { background: rgba(255, 255, 255, 0.06); }
+        .pg-thumb.active .pg-thumb-box { border-color: var(--gold); }
+        .pg-thumb-box img { width: 100%; height: 100%; object-fit: contain; }
+        .pg-thumb-box span { font-size: 11px; font-weight: 800; opacity: 0.6; direction: ltr; }
+        .pg-thumb-label { font-size: 11px; font-weight: 700; direction: ltr; white-space: nowrap; }
+        .piece-count { font-size: 14px; font-weight: 700; opacity: 0.7; margin-top: -6px; }
+        .piece-count:empty, #registered:empty, #acquisition:empty { display: none; }
+
         
         .controls { 
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
@@ -719,8 +778,11 @@
             <div class="meta-item" id="date"></div>
             <div class="meta-material" id="material"></div>
             <div class="meta-item" id="dim"></div>
-            
+            <div class="meta-item" id="registered"></div>
+            <div class="meta-item" id="acquisition"></div>
+
             <div class="meta-inv" id="inv"></div>
+            <div class="piece-count" id="pieceCount"></div>
             <div id="hall"></div> 
         </div>
     </aside>
@@ -783,6 +845,7 @@
     const systemLang = navigator.language.startsWith("ar") ? "ar" : "en";
     let lang = localStorage.getItem("nadim_lang") || systemLang;
     let allArtworks = [], artwork;
+    let pieceIdx = 0, startPieceKey = "";
     let zoomStartTime = 0, isZoomTracked = false;
 
     const modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
@@ -892,8 +955,10 @@
             }
             if (!allArtworks || allArtworks.length === 0) return;
             const finalId = id || allArtworks[0].id;
+            startPieceKey = new URLSearchParams(location.search).get("p") || "";
             initPiece(finalId);
-            if (window.location.search.includes("id=")) {
+            if (artwork && artwork.pieces) syncPieceUrl();
+            else if (window.location.search.includes("id=")) {
                 window.history.replaceState({id: finalId}, '', 'q' + finalId);
             }
         } catch(e) { console.error(e); }
@@ -921,6 +986,16 @@
         artwork = findArtwork(id);
         if(!artwork) artwork = allArtworks[0];
         if(!artwork) return;
+
+        // مجموعة قطع: افتح القطعة اللي في ?p= أو اللي رقمها في اللينك نفسه (q4927 → مشط 4927 جوه DEP)
+        pieceIdx = 0;
+        if (artwork.pieces) {
+            let keys = [startPieceKey, id].map(normInv).filter(Boolean);
+            for (let k of keys) {
+                let i = artwork.pieces.findIndex(p => normInv(p.inventory_number) === k);
+                if (i > -1) { pieceIdx = i; break; }
+            }
+        }
 
         if (typeof gtag === 'function') {
             let actualId = String(artwork.id).toUpperCase();
@@ -973,12 +1048,8 @@
         };
 
         document.getElementById("title").innerHTML = (ar ? artwork.title_ar : artwork.title_en) || "بدون عنوان";
-        document.getElementById("from").innerHTML = (ar ? artwork.from_ar : artwork.from_en) || "";
-        document.getElementById("date").innerHTML = (ar ? artwork.date_ar : artwork.date_en) || "";
-        document.getElementById("material").innerHTML = (ar ? artwork.material_ar : artwork.material_en) || "";
-        document.getElementById("dim").innerHTML = (ar ? artwork.dimensions_ar : artwork.dimensions_en) || "";
-        document.getElementById("inv").innerHTML = artwork.inventory_number || "";
         document.getElementById("hall").innerHTML = (ar ? artwork.hall_ar : artwork.hall_en) || "";
+        renderPieceMeta();
 
         // ===== الفيديو والريل: اعرض كل عمود في مكانه حسب حرفه (مش احتياطي) =====
         // slot -1 = فوق | a=0 الهيرو | b..e = 1..4 تحت. أول قيمة لكل خانة تكسب.
@@ -1013,8 +1084,11 @@
 
         let heroSection = document.getElementById("heroSection");
         heroSection.innerHTML = "";
-        
-        if (images[0] || videoBySlot[0] || reelBySlot[0]) {
+
+        if (artwork.pieces && artwork.pieces.length) {
+            // مجموعة قطع: بوكس العرض + الثامنيلز مكان صورة الهيرو
+            heroSection.appendChild(buildPieceGallery());
+        } else if (images[0] || videoBySlot[0] || reelBySlot[0]) {
             let heroFig = document.createElement("figure");
             heroFig.className = "main-figure";
             if (videoBySlot[0]) {
@@ -1087,6 +1161,160 @@
         const infoBtnEl = document.getElementById("infoToggleBtn");
         if(infoBtnEl) infoBtnEl.setAttribute('data-tooltip', infoBtnEl.getAttribute(`data-${lang}`) || '');
     }
+
+    // ===== مجموعة قطع (الأمشاط): العنوان والقاعة والوصف العام ثابتين، وبيانات كل قطعة بتتغير مع التقليب =====
+    function currentPiece() { return artwork && artwork.pieces ? artwork.pieces[pieceIdx] : null; }
+
+    function renderPieceMeta() {
+        const ar = lang === "ar";
+        const p = currentPiece();
+        const val = (k) => (p && p[k]) || artwork[k] || "";
+        const pick = (base) => val(base + (ar ? "_ar" : "_en"));
+        document.getElementById("from").innerHTML = pick("from");
+        document.getElementById("date").innerHTML = pick("date");
+        document.getElementById("material").innerHTML = pick("material");
+        document.getElementById("dim").innerHTML = pick("dimensions");
+        document.getElementById("registered").innerHTML = p ? (p[ar ? "registered_ar" : "registered_en"] || "") : "";
+        document.getElementById("acquisition").innerHTML = p ? (p[ar ? "acquisition_ar" : "acquisition_en"] || "") : "";
+        document.getElementById("inv").innerHTML = p ? (p.inventory_number || "") : (artwork.inventory_number || "");
+        let n = artwork.pieces ? artwork.pieces.length : 0;
+        document.getElementById("pieceCount").innerHTML = n > 1 ? (ar ? `القطعة ${pieceIdx + 1} من ${n}` : `Piece ${pieceIdx + 1} of ${n}`) : "";
+    }
+
+    // يجرّب webp ثم png ثم jpg (الصور: images/combs/<CODE>/<رقم الجرد>.webp والإضافية b,c,d,e)
+    function loadImgChain(img, base, onOk, onFail, exts) {
+        exts = exts || [".webp", ".png", ".jpg"]; let k = 0;
+        img.onload = () => { if (img.naturalWidth > 0) onOk && onOk(img.src); else next(); };
+        img.onerror = () => next();
+        function next() { if (k < exts.length) img.src = base + exts[k++]; else { img.onload = img.onerror = null; onFail && onFail(); } }
+        next();
+    }
+
+    function buildPieceGallery() {
+        const ar = lang === "ar";
+        let fig = document.createElement("figure");
+        fig.className = "main-figure piece-gallery";
+        fig.innerHTML =
+            '<div class="pg-viewer" id="pgViewer">' +
+                '<img id="pgImg" alt="">' +
+                '<div class="pg-empty"><div class="pg-empty-inv" id="pgEmptyInv"></div><div>' + (ar ? "الصورة قريبًا" : "Image coming soon") + '</div></div>' +
+                '<button class="pg-nav pg-prev" id="pgPrev" aria-label="' + (ar ? "القطعة السابقة" : "Previous piece") + '"><i class="fas fa-chevron-' + (ar ? "right" : "left") + '"></i></button>' +
+                '<button class="pg-nav pg-next" id="pgNext" aria-label="' + (ar ? "القطعة التالية" : "Next piece") + '"><i class="fas fa-chevron-' + (ar ? "left" : "right") + '"></i></button>' +
+                '<div class="pg-counter" id="pgCounter"></div>' +
+            '</div>' +
+            '<div class="pg-views" id="pgViews"></div>' +
+            '<figcaption class="photo-credit pg-desc" id="pgDesc"></figcaption>' +
+            '<div class="pg-thumbs" id="pgThumbs"></div>';
+
+        let viewer = fig.querySelector("#pgViewer");
+        let many = artwork.pieces.length > 1;
+        fig.querySelector("#pgPrev").onclick = (e) => { e.stopPropagation(); showPiece(pieceIdx - 1, true); };
+        fig.querySelector("#pgNext").onclick = (e) => { e.stopPropagation(); showPiece(pieceIdx + 1, true); };
+        if (!many) fig.querySelectorAll(".pg-nav, .pg-counter").forEach(el => el.style.display = "none");
+
+        viewer.onclick = () => {
+            let img = fig.querySelector("#pgImg");
+            if (viewer.classList.contains("loaded") && !viewer.classList.contains("no-img")) openModal(img.src);
+        };
+        let sx = 0;
+        viewer.addEventListener("touchstart", e => { if (e.touches.length === 1) sx = e.touches[0].clientX; }, { passive: true });
+        viewer.addEventListener("touchend", e => {
+            let d = sx - e.changedTouches[0].clientX;
+            if (!many || Math.abs(d) < 50) return;
+            let fwd = d > 0; if (lang === "ar") fwd = !fwd;
+            showPiece(pieceIdx + (fwd ? 1 : -1), true);
+        }, { passive: true });
+
+        let thumbs = fig.querySelector("#pgThumbs");
+        if (!many) thumbs.style.display = "none";
+        artwork.pieces.forEach((p, i) => {
+            let b = document.createElement("button");
+            b.className = "pg-thumb"; b.type = "button";
+            let short = String(p.inventory_number || "").replace(/^\s*inv\.?\s*(no\.?)?\s*/i, "");
+            b.innerHTML = '<div class="pg-thumb-box"><span>' + short + '</span></div><div class="pg-thumb-label" style="display:none">' + short + '</div>';
+            let box = b.querySelector(".pg-thumb-box");
+            let im = document.createElement("img"); im.alt = "";
+            loadImgChain(im, p.img, () => { box.innerHTML = ""; box.appendChild(im); b.querySelector(".pg-thumb-label").style.display = ""; }, null, [".webp"]);
+            b.onclick = () => showPiece(i, true);
+            thumbs.appendChild(b);
+        });
+
+        // اعرض القطعة الحالية بعد ما الـ DOM يتحط في الصفحة
+        setTimeout(() => showPiece(pieceIdx, false), 0);
+        return fig;
+    }
+
+    function showPiece(i, userAction) {
+        let n = artwork.pieces.length;
+        if (i < 0 || i >= n) return;
+        pieceIdx = i;
+        const ar = lang === "ar";
+        const p = artwork.pieces[i];
+        renderPieceMeta();
+
+        let viewer = document.getElementById("pgViewer");
+        if (!viewer) return;
+        let img = document.getElementById("pgImg");
+        document.getElementById("pgEmptyInv").textContent = String(p.inventory_number || "").replace(/^\s*inv\.?\s*(no\.?)?\s*/i, "");
+        document.getElementById("pgCounter").textContent = (i + 1) + " / " + n;
+        document.getElementById("pgPrev").classList.toggle("disabled", i === 0);
+        document.getElementById("pgNext").classList.toggle("disabled", i === n - 1);
+
+        viewer.classList.remove("loaded", "no-img");
+        loadImgChain(img, p.img, () => { if (pieceIdx === i) viewer.classList.add("loaded"); }, () => { if (pieceIdx === i) viewer.classList.add("no-img", "loaded"); });
+
+        // صور إضافية للقطعة نفسها (b..e)
+        let views = document.getElementById("pgViews");
+        views.innerHTML = "";
+        let mainThumb = null;
+        ["b", "c", "d", "e"].forEach(letter => {
+            let v = document.createElement("img"); v.alt = "";
+            loadImgChain(v, p.img + letter, (src) => {
+                if (pieceIdx !== i) return;
+                if (!mainThumb) {
+                    mainThumb = document.createElement("img"); mainThumb.alt = ""; mainThumb.className = "active";
+                    loadImgChain(mainThumb, p.img, (s0) => { mainThumb.onclick = () => swapView(mainThumb, s0); }, () => mainThumb.remove());
+                    views.prepend(mainThumb);
+                }
+                v.onclick = () => swapView(v, src);
+                views.appendChild(v);
+            }, null, [".webp"]);
+        });
+        function swapView(el, src) {
+            views.querySelectorAll("img").forEach(x => x.classList.toggle("active", x === el));
+            img.onload = img.onerror = null; img.src = src; viewer.classList.remove("no-img"); viewer.classList.add("loaded");
+        }
+
+        let desc = (p[ar ? "desc_ar" : "desc_en"] || "").trim();
+        let credit = (p[ar ? "info_ar1" : "info_en1"] || "").trim();
+        document.getElementById("pgDesc").innerHTML = desc.replace(/\n/g, "<br>") + (credit ? (desc ? "<br>" : "") + credit : "");
+
+        document.querySelectorAll("#pgThumbs .pg-thumb").forEach((t, k) => t.classList.toggle("active", k === i));
+        // وسّط الثامنيل النشط جوه الشريط بس (من غير ما الصفحة نفسها تتحرك)
+        let strip = document.getElementById("pgThumbs"), t = strip && strip.children[i];
+        if (t) {
+            let d = (t.getBoundingClientRect().left + t.offsetWidth / 2) - (strip.getBoundingClientRect().left + strip.clientWidth / 2);
+            strip.scrollBy({ left: d, behavior: userAction ? "smooth" : "auto" });
+        }
+        if (userAction) {
+            syncPieceUrl();
+            if (typeof gtag === "function") gtag("event", "view_piece", { group_id: artwork.id, inventory_number: p.inventory_number });
+        }
+    }
+
+    // اللينك بيفضل qDEP، ومع القطعة: qDEP?p=4927 (عشان المشاركة تفتح نفس القطعة)
+    function syncPieceUrl() {
+        let p = currentPiece();
+        let url = "q" + artwork.id + (p && pieceIdx > 0 ? "?p=" + encodeURIComponent(normInv(p.inventory_number)) : "");
+        window.history.replaceState({ id: artwork.id }, "", url);
+    }
+
+    document.addEventListener("keydown", (e) => {
+        if (!artwork || !artwork.pieces || modal.style.display === "block") return;
+        if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+        let fwd = e.key === "ArrowRight"; if (lang === "ar") fwd = !fwd;
+        showPiece(pieceIdx + (fwd ? 1 : -1), true);
+    });
 
     function createInlineFigure(src, idx) {
         let fig = document.createElement("figure"); fig.className = "image-pair-container";
@@ -1416,10 +1644,31 @@
     }
 
     // ===== تحميل PDF صامت عبر خدمة خارجية (روابط مطلقة → الخدمة تجيب الصور، اللينكات شغّالة) =====
+    // مجموعة قطع: الـ PDF بيطلع للقطعة المعروضة (بياناتها وصورها) + الوصف العام للمجموعة
+    function pdfPieceView() {
+        let p = currentPiece();
+        if (!p) return null;
+        let v = Object.assign({}, artwork);
+        ["from_en", "from_ar", "date_en", "date_ar", "material_en", "material_ar", "dimensions_en", "dimensions_ar"].forEach(k => { if (p[k]) v[k] = p[k]; });
+        v.inventory_number = p.inventory_number || "";
+        ["", "b", "c", "d", "e"].forEach((s, i) => { v["image" + (i + 1)] = p.img + s + ".png"; });
+        for (let i = 1; i <= 5; i++) { v["dsc_en" + i] = ""; v["dsc_ar" + i] = ""; v["info_en" + i] = ""; v["info_ar" + i] = ""; }
+        v.info_en1 = p.info_en1 || ""; v.info_ar1 = p.info_ar1 || "";
+        ["en", "ar"].forEach(l => {
+            v["dsc_" + l + "1"] = p["desc_" + l] || "";
+            let g = [artwork["desc_" + l]].concat([1, 2, 3, 4, 5].map(i => artwork["dsc_" + l + i])).filter(x => x && String(x).trim() !== "").join("\n\n");
+            v["dsc_" + l + "2"] = g;
+        });
+        ["video_url", "video_url2", "video_url3", "reel_url", "reel_url2", "reel_url3"].forEach(k => v[k] = "");
+        return v;
+    }
+
     async function downloadPDF() {
         closeDownloadMenu();
         if (!artwork) return;
         let ar = lang === "ar";
+        let groupArtwork = null, pv = pdfPieceView();
+        if (pv) { groupArtwork = artwork; artwork = pv; }
         showPdfLoading(true);
         try {
             let okSet = await pdfOkImages();
@@ -1431,6 +1680,7 @@
             triggerDownload(blob, dlFilename() + ".pdf");
             if (typeof gtag === "function") gtag("event", "download_pdf", { artifact_id: artwork.id });
         } catch (e) { alert(ar ? "تعذّر إنشاء الـ PDF، حاول تاني." : "Could not create the PDF, try again."); console.error(e); }
+        if (groupArtwork) artwork = groupArtwork;
         showPdfLoading(false);
     }
 

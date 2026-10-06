@@ -31,9 +31,33 @@
         segment.toUpperCase();
 
       // =========================================
+      // أكواد المجموعات القديمة المطبوعة -> صفحة المجموعة في scan-b.html
+      // (الأمشاط بقت مجموعات: 71 = qDEP ...)
+      // =========================================
+      var oldGroupCodes = {
+        '67': 'SSC', '69': 'DSC', '70': 'DLC', '71': 'DEP',
+        '72': 'DRK', '73': 'DGO', '76': 'DAC'
+      };
+
+      // ?p=... (القطعة جوه المجموعة) بيتنقل مع التحويل
+      var extraQuery =
+        location.search
+          ? '&' + location.search.substring(1)
+          : '';
+
+      if (oldGroupCodes[segment]) {
+
+        window.location.replace(
+          base +
+          '/scan-b.html?id=' +
+          oldGroupCodes[segment]
+        );
+      }
+
+      // =========================================
       // VM -> scan.html
       // =========================================
-      if (
+      else if (
         upperSeg.startsWith('VM')
       ) {
 
@@ -111,7 +135,8 @@
         window.location.replace(
           base +
           '/scan-b.html?id=' +
-          realId
+          realId +
+          extraQuery
         );
       }
 
@@ -128,7 +153,8 @@
         window.location.replace(
           base +
           '/scan-b.html?id=' +
-          realId
+          realId +
+          extraQuery
         );
       }
 
