@@ -91,7 +91,7 @@
         /* ========================================== */
         .header-pattern {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('images/NADIM+MIA-icon.svg?v=6');
+            background-image: url('https://ndf-mia.ebraheem-shaar.workers.dev/images/NADIM+MIA-icon.svg?v=6');
             background-size: 80px auto; 
             background-position: center; 
             opacity: 0.04; 
@@ -754,11 +754,11 @@
         
         <div class="logos-group">
             <a href="https://qr.nadimfoundation.org/">
-                <img src="images/logo-v-teal.svg" class="logo">
+                <img src="https://ndf-mia.ebraheem-shaar.workers.dev/images/logo-v-teal.svg" onerror="this.onerror=null;this.src='images/logo-v-teal.svg'" class="logo">
             </a>
             
             <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank">
-                <img src="images/logo-mia.svg" class="logo">
+                <img src="https://ndf-mia.ebraheem-shaar.workers.dev/images/logo-mia.svg" onerror="this.onerror=null;this.src='images/logo-mia.svg'" class="logo">
             </a>
         </div>
     </div>
@@ -799,7 +799,7 @@
 <div class="controls">
     <div onclick="toggleLang()" data-ar="اللغة" data-en="Language">🌐</div>
     <div onclick="downloadPDF()" id="pdfBtn" data-ar="تحميل PDF" data-en="Download PDF" style="display: flex; align-items: center; justify-content: center;"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
-    <div onclick="window.location.href='https://nd-f.github.io/QR/'" data-ar="اتصل بنا" data-en="Contact Us" style="display: flex; align-items: center; justify-content: center;"><img src="images/icon-gold.png" style="width: 35px; height: 35px; object-fit: contain;"></div>
+    <div onclick="window.location.href='https://nd-f.github.io/QR/'" data-ar="اتصل بنا" data-en="Contact Us" style="display: flex; align-items: center; justify-content: center;"><img src="https://ndf-mia.ebraheem-shaar.workers.dev/images/icon-gold.png" onerror="this.onerror=null;this.src='images/icon-gold.png'" style="width: 35px; height: 35px; object-fit: contain;"></div>
     <div
   onclick="share()"
   data-ar="مشاركة"
@@ -943,11 +943,35 @@
         }, 2500); 
     }
 
+    // ===== الداتا والصور من Cloudflare (مجاني ومن غير حد) عشان نوفّر رصيد Vercel =====
+    // لو Cloudflare ما ردّش في 4 ثواني أو رجّع خطأ، كل حاجة بتتحمل من Vercel زي الأول.
+    const CF_ASSETS = "https://ndf-mia.ebraheem-shaar.workers.dev/";
+    let assetBase = "";
+    function asset(p) { return (assetBase && /^(images|data)\//.test(String(p || ""))) ? assetBase + p : p; }
+    async function fetchArtworks() {
+        if (/(^|\.)nadimfoundation\.org$/i.test(location.hostname)) {
+            try {
+                const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 4000);
+                const r = await fetch(CF_ASSETS + "data/artworks.json", { cache: "default", signal: ctrl.signal });
+                clearTimeout(t);
+                if (r.ok) { assetBase = CF_ASSETS; return r; }
+            } catch (e) {}
+        }
+        return fetch("data/artworks.json", { cache: "default" });
+    }
+    function useAssetBase(list) {
+        list.forEach(a => {
+            ["image1", "image2", "image3", "image4", "image5"].forEach(k => { if (a[k]) a[k] = asset(a[k]); });
+            if (a.pieces) a.pieces.forEach(p => { if (p.img) p.img = asset(p.img); });
+        });
+    }
+
     async function load() {
         try {
             updateThemeIcon();
-            const res = await fetch("data/artworks.json", { cache: "default" });
+            const res = await fetchArtworks();
             allArtworks = await res.json();
+            if (assetBase) useAssetBase(allArtworks);
             let id = new URLSearchParams(location.search).get("id");
             if (!id) {
                 let pathName = window.location.pathname.replace(/\/$/, "");
@@ -1025,13 +1049,13 @@
         coverBanner.style.display = "none";
         document.body.classList.remove("has-cover");
         
-        coverImg.src = "images/" + artwork.id + "_cover.webp";
+        coverImg.src = asset("images/" + artwork.id + "_cover.webp");
         coverImg.onload = () => { coverBanner.style.display = "block"; document.body.classList.add("has-cover"); };
         coverImg.onerror = () => {
-            coverImg.src = "images/" + artwork.id + "_cover.jpg";
+            coverImg.src = asset("images/" + artwork.id + "_cover.jpg");
             coverImg.onload = () => { coverBanner.style.display = "block"; document.body.classList.add("has-cover"); };
             coverImg.onerror = () => {
-                 coverImg.src = "images/" + artwork.id + "_cover.png";
+                 coverImg.src = asset("images/" + artwork.id + "_cover.png");
                  coverImg.onload = () => { coverBanner.style.display = "block"; document.body.classList.add("has-cover"); };
                  coverImg.onerror = () => { coverBanner.style.display = "none"; document.body.classList.remove("has-cover"); }
             }
