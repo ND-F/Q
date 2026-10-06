@@ -1686,36 +1686,46 @@
         });
     }
 
-    // صور الـ PDF: نفس الصورة PNG بشفافيتها، بس مصغّرة لأقصى 1400px (المحرك بيحفظ الصور الشفافة جوه الـ PDF
-    // من غير ضغط تقريبًا، فصورتين كبار بيعدّوا حد PDFShift اللي هو 15MB). ولا خلفية ولا تغيير في الشكل.
-    function pdfPhotoURL(u, px){ px = px || 1400; return "https://wsrv.nl/?url=" + encodeURIComponent(absURL(u)) + "&w=" + px + "&h=" + px + "&fit=inside&we&output=png"; }
+    // صور الـ PDF (بيستخدمها tools/pdf/build.js): صور القطع بتتصغّر PNG بشفافيتها، واللوجوهات زي ما هي
     function isPdfPhoto(u){ return /^images\/.+\.(webp|png|jpe?g)$/i.test(String(u)) && !/logo|icon|pattern/i.test(String(u)); }
+
+    // ===== التحميل = ملف PDF جاهز =====
+    // الـ PDFs بتتعمل مرة واحدة على GitHub Actions (tools/pdf/build.js) كل ما الداتا أو الصفحة تتغير،
+    // وبتتحفظ في فرع pdfs، وبتتوزع من jsDelivr (CDN مجاني). الزائر بيحمّل ملف جاهز: فوري ومن غير حد.
+    const PDF_REPO = "ND-F/Q";
+    async function getPdfManifest() {
+        let urls = ["https://raw.githubusercontent.com/" + PDF_REPO + "/pdfs/manifest.json",
+                    "https://cdn.jsdelivr.net/gh/" + PDF_REPO + "@pdfs/manifest.json"];
+        for (let u of urls) {
+            try { let r = await fetch(u, { cache: "no-cache" }); if (r.ok) return await r.json(); } catch (e) {}
+        }
+        return null;
+    }
 
     async function downloadPDF() {
         closeDownloadMenu();
         if (!artwork) return;
         let ar = lang === "ar";
-        let isGroup = !!(artwork.pieces && artwork.pieces.length);
         showPdfLoading(true);
         try {
-            let okSet = isGroup ? await pdfOkPieceImages() : await pdfOkImages();
-            let imgOk = function(u){ return !!okSet[u]; };
-            // لو خدمة التصغير مش شغالة، نرجع للصور الأصلية
-            // المقاس حسب عدد الصور عشان الملف يفضل تحت 15MB (الصورة بتتعرض في الـ PDF بأقصى 470px، والمشط 250px)
-            let nImgs = Object.keys(okSet).length;
-            let px = isGroup ? 700 : (nImgs <= 2 ? 1400 : (nImgs <= 3 ? 1200 : 1000));
-            let firstImg = Object.keys(okSet)[0];
-            let useSmall = firstImg ? await probeImg(pdfPhotoURL(firstImg, px)) : false;
-            let src = function(u){ return (useSmall && isPdfPhoto(u)) ? pdfPhotoURL(u, px) : absURL(u); };
-            let doc = isGroup ? prGroupDoc(ar, src, absURL("images/pattern-teal.svg"), imgOk)
-                              : prDoc(ar, src, absURL("images/pattern-teal.svg"), imgOk);
-            let name = isGroup ? groupFilename() : dlFilename();
-            let r = await fetch("/api/pdf", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ html: doc, filename: name }) });
-            if (!r.ok) { throw new Error(await r.text()); }
-            let blob = await r.blob();
+            let m = await getPdfManifest();
+            let key = String(artwork.id).trim() + "-" + (ar ? "ar" : "en");
+            let f = m && m.files && m.files[key];
+            if (!f || !m.sha) throw new Error("no ready PDF for " + key);
+            let urls = ["https://cdn.jsdelivr.net/gh/" + PDF_REPO + "@" + m.sha + "/pdf/" + f.file,
+                        "https://raw.githubusercontent.com/" + PDF_REPO + "/" + m.sha + "/pdf/" + f.file];
+            let blob = null;
+            for (let u of urls) {
+                try { let r = await fetch(u); if (r.ok) { blob = await r.blob(); break; } } catch (e) {}
+            }
+            if (!blob) throw new Error("PDF not reachable: " + f.file);
+            let name = f.name || (artwork.pieces ? groupFilename() : dlFilename());
             triggerDownload(blob, name + ".pdf");
             if (typeof gtag === "function") gtag("event", "download_pdf", { artifact_id: artwork.id });
-        } catch (e) { alert(ar ? "تعذّر إنشاء الـ PDF، حاول تاني." : "Could not create the PDF, try again."); console.error(e); }
+        } catch (e) {
+            alert(ar ? "ملف الـ PDF بيتجهز، جرّب تاني بعد دقايق." : "The PDF is being prepared, please try again in a few minutes.");
+            console.error(e);
+        }
         showPdfLoading(false);
     }
 

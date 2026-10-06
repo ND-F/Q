@@ -4,5 +4,10 @@
   ],
   "functions": {
     "api/pdf.js": { "maxDuration": 30 }
+  },
+  "git": {
+    "deploymentEnabled": {
+      "pdfs": false
+    }
   }
 }

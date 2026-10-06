@@ -1,0 +1,74 @@
+# بيولّد ملفات الـ PDF الجاهزة لكل القطع (عربي + إنجليزي) كل ما الداتا أو الصفحة أو الصور تتغير،
+# وبيحطها في فرع pdfs. زرار التحميل في الموقع بيحمّلها من jsDelivr (CDN مجاني، من غير حد).
+# أي ملف ما اتغيرش بيتساب زي ما هو (بصمة الـ HTML + الصور في manifest.json).
+
+name: Build PDFs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/artworks.json"
+      - "c.html"
+      - "images/**"
+      - "tools/pdf/**"
+      - ".github/workflows/pdfs.yml"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "اعمل كل الملفات من الأول"
+        type: boolean
+        default: false
+
+concurrency:
+  group: build-pdfs
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install builder
+        working-directory: tools/pdf
+        run: npm install --no-audit --no-fund
+
+      - name: Get the current PDFs (pdfs branch)
+        run: |
+          if git ls-remote --exit-code --heads origin pdfs >/dev/null; then
+            git clone --quiet --depth 1 --branch pdfs --single-branch \
+              "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" out
+          else
+            mkdir -p out && git -C out init -q -b pdfs
+          fi
+
+      - name: Build changed PDFs
+        run: node tools/pdf/build.js out ${{ inputs.force && '--force' || '' }}
+
+      - name: Publish to pdfs branch
+        working-directory: out
+        run: |
+          if [ "$(cat .changed)" != "1" ]; then echo "nothing changed"; exit 0; fi
+          rm -f .changed
+          git config user.name "mia-pdf-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # commit واحد جديد من غير تاريخ (الفرع يفضل خفيف)، وبعده commit المانيفست اللي فيه sha الملفات
+          git checkout -q --orphan next
+          git rm -rq --cached . >/dev/null 2>&1 || true
+          git add pdf
+          git commit -q -m "PDFs $(date -u +%Y-%m-%dT%H:%MZ)"
+          FILES_SHA=$(git rev-parse HEAD)
+          node -e 'const fs=require("fs");const m=JSON.parse(fs.readFileSync("manifest.json","utf8"));m.sha=process.argv[1];fs.writeFileSync("manifest.json",JSON.stringify(m,null,1));' "$FILES_SHA"
+          git add manifest.json
+          git commit -q -m "manifest -> $FILES_SHA"
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" next:pdfs
+          echo "published $FILES_SHA"

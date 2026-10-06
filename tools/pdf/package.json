@@ -1,0 +1,12 @@
+{
+  "name": "mia-pdf-builder",
+  "private": true,
+  "description": "Builds the downloadable PDFs for every piece (ar + en) with the page's own PDF code",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "puppeteer": "^23.0.0",
+    "sharp": "^0.33.0"
+  }
+}
