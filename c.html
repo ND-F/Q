@@ -21,6 +21,25 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+      // مصدر الزيارة: qr = كود جديد فيه ?q=1 | direct = من غير referrer (غالباً كود مطبوع قديم) | share = لينك من زرار المشاركة | internal | web
+      window.MIA_SRC = (function () {
+        var q = new URLSearchParams(location.search), ref = null;
+        try { ref = sessionStorage.getItem('mia_ref'); sessionStorage.removeItem('mia_ref'); } catch (e) {}
+        if (ref === null) ref = document.referrer;
+        if (q.get('q')) return 'qr';
+        if (q.get('s') === 'sh') return 'share';
+        if (!ref) return 'direct';
+        try { return new URL(ref).hostname === location.hostname ? 'internal' : 'web'; } catch (e) { return 'web'; }
+      })();
+      // زيارات التجربة: أي دومين غير الحقيقي، أو جهاز اتعلّم بـ ?staff=1 مرة (وبيتلغي بـ ?staff=0) -> traffic_type=internal
+      var miaGa = { entry_source: window.MIA_SRC };
+      try {
+        var st = new URLSearchParams(location.search).get('staff');
+        if (st === '1') localStorage.setItem('mia_staff', '1');
+        if (st === '0') localStorage.removeItem('mia_staff');
+        if (localStorage.getItem('mia_staff') === '1' || location.hostname !== 'mia.nadimfoundation.org') miaGa.traffic_type = 'internal';
+      } catch (e) {}
+      gtag('set', miaGa);
       gtag('config', 'G-RWD0WHS7EV');
     </script>
 
@@ -839,7 +858,7 @@
     <div onclick="toggleTheme()" id="themeBtn" data-ar="المظهر" data-en="Theme">☀️</div>
 </div>
 
-<footer> Nadim Foundation ©® 2018 </footer>
+<footer> Nadim Foundation ©® 2026 </footer>
 
 <script>
     const systemLang = navigator.language.startsWith("ar") ? "ar" : "en";
@@ -1015,7 +1034,7 @@
             let actualId = String(artwork.id).toUpperCase();
             if (!actualId.startsWith('VN')) {
                 if (actualId.startsWith('V')) gtag('event', 'view_craft_video', { 'video_id': actualId, 'video_title': artwork.title_ar || artwork.title_en });
-                else gtag('event', 'view_artifact', { 'artifact_id': actualId, 'artifact_title': artwork.title_ar || artwork.title_en });
+                else gtag('event', 'view_artifact', { 'artifact_id': actualId, 'artifact_title': artwork.title_ar || artwork.title_en, 'entry_source': window.MIA_SRC });
             }
         }
         
@@ -1400,7 +1419,7 @@
     function toggleLang() { lang = lang === "ar" ? "en" : "ar"; localStorage.setItem("nadim_lang", lang); renderArticle(); if (typeof gtag === 'function') gtag('event', 'toggle_language', { 'language_selected': lang }); }
     function toggleTheme() { const isDark = document.body.classList.toggle("dark"); localStorage.setItem("nadim_theme", isDark ? "dark" : "light"); updateThemeIcon(); if (typeof gtag === 'function') gtag('event', 'toggle_theme', { 'theme_selected': isDark ? 'dark' : 'light' }); }
     function updateThemeIcon() { let isDark = document.body.classList.contains("dark"); document.getElementById("themeBtn").textContent = isDark ? "☀️" : "🌙"; }
-    function share() { if (navigator.share) navigator.share({title: document.getElementById("title").innerText, url: location.href}); if (typeof gtag === 'function') gtag('event', 'share_click', { 'artifact_id': artwork ? artwork.id : 'unknown' }); }
+    function share() { if (navigator.share) navigator.share({title: document.getElementById("title").innerText, url: location.href + (location.search ? "&" : "?") + "s=sh"}); if (typeof gtag === 'function') gtag('event', 'share_click', { 'artifact_id': artwork ? artwork.id : 'unknown' }); }
     function trackContactUs() { if (typeof gtag === 'function') gtag('event', 'contact_us_click', { 'from_page_id': artwork ? artwork.id : 'unknown' }); setTimeout(() => { window.location.href = 'https://nd-f.github.io/QR/'; }, 150); }
     document.querySelector('[data-en="Contact Us"]').setAttribute("onclick", "trackContactUs()");
 
@@ -1621,7 +1640,7 @@
     function prDoc(ar, src, patternURL, imgOk){
         let c = prBuildContent(ar, src, imgOk);
         let title = (artwork.inventory_number ? artwork.inventory_number + " - " : "") + ((ar ? artwork.title_ar : artwork.title_en) || "NADIM");
-        let footer = '<div class="pr-footer">Nadim Foundation &copy;&reg; 2018</div>';
+        let footer = '<div class="pr-footer">Nadim Foundation &copy;&reg; 2026</div>';
         return '<!doctype html><html lang="' + (ar ? "ar" : "en") + '" dir="' + (ar ? "rtl" : "ltr") + '"><head><meta charset="UTF-8">' +
             '<meta name="viewport" content="width=device-width,initial-scale=1"><title>' + title + '</title>' +
             '<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">' +
@@ -1692,7 +1711,7 @@
                 (lines ? '<div class="pr-piece-meta">' + lines + '</div>' : '') +
                 (d ? '<p>' + d.replace(/\n/g, '<br>') + '</p>' : '') + '</div></div>';
         }).join("");
-        let footer = '<div class="pr-footer">Nadim Foundation &copy;&reg; 2018</div>';
+        let footer = '<div class="pr-footer">Nadim Foundation &copy;&reg; 2026</div>';
         return '<!doctype html><html lang="' + L + '" dir="' + (ar ? "rtl" : "ltr") + '"><head><meta charset="UTF-8">' +
             '<meta name="viewport" content="width=device-width,initial-scale=1"><title>' + groupFilename() + '</title>' +
             '<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">' +

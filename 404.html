@@ -6,6 +6,9 @@
 
   <script>
 
+    // مصدر الزيارة الحقيقي (التحويل بـ location.replace بيضيّع الـreferrer)
+    try { sessionStorage.setItem('mia_ref', document.referrer || ''); } catch (e) {}
+
     var path =
       window.location.pathname;
 
