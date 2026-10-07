@@ -1,0 +1,1026 @@
+{
+ "built_at": "2026-10-06T13:08:43.943Z",
+ "files": {
+  "0-ar": {
+   "file": "0-ar.pdf",
+   "hash": "78702ed76810cda9",
+   "name": "Archive",
+   "bytes": 181174
+  },
+  "0-en": {
+   "file": "0-en.pdf",
+   "hash": "a9b075078dee8e48",
+   "name": "Archive",
+   "bytes": 184393
+  },
+  "aq-ar": {
+   "file": "aq-ar.pdf",
+   "hash": "868d83a9e5b367bc",
+   "name": "Antique Dealing",
+   "bytes": 183578
+  },
+  "aq-en": {
+   "file": "aq-en.pdf",
+   "hash": "c0817da9cca831bb",
+   "name": "Antique Dealing",
+   "bytes": 186238
+  },
+  "gw-ar": {
+   "file": "gw-ar.pdf",
+   "hash": "7a820c8605f1794a",
+   "name": "Gaston Wiet",
+   "bytes": 183783
+  },
+  "gw-en": {
+   "file": "gw-en.pdf",
+   "hash": "3babef21668d0ac8",
+   "name": "Gaston Wiet",
+   "bytes": 185679
+  },
+  "ha-ar": {
+   "file": "ha-ar.pdf",
+   "hash": "5ff8678799576694",
+   "name": "Hamed Abdullah",
+   "bytes": 182446
+  },
+  "ha-en": {
+   "file": "ha-en.pdf",
+   "hash": "76425fc5857c3f85",
+   "name": "Hamed Abdullah",
+   "bytes": 185791
+  },
+  "gn-ar": {
+   "file": "gn-ar.pdf",
+   "hash": "786c917228d6345c",
+   "name": "Glass Negatives",
+   "bytes": 4869269
+  },
+  "gn-en": {
+   "file": "gn-en.pdf",
+   "hash": "418ff150c8b8b944",
+   "name": "Glass Negatives",
+   "bytes": 4893246
+  },
+  "1-ar": {
+   "file": "1-ar.pdf",
+   "hash": "04162ca94d7d4cf3",
+   "name": "Inv. no. 1066 - Door From the Shrine of Sayyida Zaynab",
+   "bytes": 6403123
+  },
+  "1-en": {
+   "file": "1-en.pdf",
+   "hash": "337c25f2802880e1",
+   "name": "Inv. no. 1066 - Door From the Shrine of Sayyida Zaynab",
+   "bytes": 6360201
+  },
+  "2-ar": {
+   "file": "2-ar.pdf",
+   "hash": "418036f88e00deec",
+   "name": "Inv. no. 560 - Door From the Mausoleum of Sultan Al-Ghuri",
+   "bytes": 5087856
+  },
+  "2-en": {
+   "file": "2-en.pdf",
+   "hash": "231aca892d52e127",
+   "name": "Inv. no. 560 - Door From the Mausoleum of Sultan Al-Ghuri",
+   "bytes": 5041155
+  },
+  "3-ar": {
+   "file": "3-ar.pdf",
+   "hash": "c9ee57b800300621",
+   "name": "Inv. no. 3553 - Door From the Complex of Sultan Qalawun",
+   "bytes": 6445703
+  },
+  "3-en": {
+   "file": "3-en.pdf",
+   "hash": "03cc1c01642a69a4",
+   "name": "Inv. no. 3553 - Door From the Complex of Sultan Qalawun",
+   "bytes": 6381530
+  },
+  "4-ar": {
+   "file": "4-ar.pdf",
+   "hash": "12f7ec2e1e1029a3",
+   "name": "Inv. no. 596 - Mashrabeya",
+   "bytes": 7493237
+  },
+  "4-en": {
+   "file": "4-en.pdf",
+   "hash": "becb76d9233209d5",
+   "name": "Inv. no. 596 - Mashrabeya",
+   "bytes": 7467674
+  },
+  "5-ar": {
+   "file": "5-ar.pdf",
+   "hash": "8951838721e97eb1",
+   "name": "Inv. no. 4615 - Carved Panel With Beveled Ornament",
+   "bytes": 2267122
+  },
+  "5-en": {
+   "file": "5-en.pdf",
+   "hash": "eaf3581cc90c8036",
+   "name": "Inv. no. 4615 - Carved Panel With Beveled Ornament",
+   "bytes": 2365717
+  },
+  "6-ar": {
+   "file": "6-ar.pdf",
+   "hash": "ee7c6030767867d9",
+   "name": "Inv. no. 1065 - Metal-Revetted Door",
+   "bytes": 244677
+  },
+  "6-en": {
+   "file": "6-en.pdf",
+   "hash": "d853aec02cefc494",
+   "name": "Inv. no. 1065 - Metal-Revetted Door",
+   "bytes": 207142
+  },
+  "7-ar": {
+   "file": "7-ar.pdf",
+   "hash": "342fbc1d21082d02",
+   "name": "Inv. no. 11612 - Panel",
+   "bytes": 237892
+  },
+  "7-en": {
+   "file": "7-en.pdf",
+   "hash": "c01789d3eeb7bdd1",
+   "name": "Inv. no. 11612 - Panel",
+   "bytes": 202681
+  },
+  "8-ar": {
+   "file": "8-ar.pdf",
+   "hash": "b35eb66938e85e75",
+   "name": "Inv. no. 4618 - Panel",
+   "bytes": 231077
+  },
+  "8-en": {
+   "file": "8-en.pdf",
+   "hash": "7f492702eea4b948",
+   "name": "Inv. no. 4618 - Panel",
+   "bytes": 198058
+  },
+  "9-ar": {
+   "file": "9-ar.pdf",
+   "hash": "9a7abd56dfb60487",
+   "name": "Inv. no. 3469 - Panel",
+   "bytes": 237436
+  },
+  "9-en": {
+   "file": "9-en.pdf",
+   "hash": "e814dbfd8b672789",
+   "name": "Inv. no. 3469 - Panel",
+   "bytes": 208750
+  },
+  "10-ar": {
+   "file": "10-ar.pdf",
+   "hash": "dc06325b8c8367ee",
+   "name": "Inv. no. 9520 - Panel",
+   "bytes": 232744
+  },
+  "10-en": {
+   "file": "10-en.pdf",
+   "hash": "03d42ddb2d8224ea",
+   "name": "Inv. no. 9520 - Panel",
+   "bytes": 200901
+  },
+  "11-ar": {
+   "file": "11-ar.pdf",
+   "hash": "63e09a5fc07cf0bc",
+   "name": "Inv. no. 9898 - Panel",
+   "bytes": 229523
+  },
+  "11-en": {
+   "file": "11-en.pdf",
+   "hash": "459912686c38c5f4",
+   "name": "Inv. no. 9898 - Panel",
+   "bytes": 199080
+  },
+  "12-ar": {
+   "file": "12-ar.pdf",
+   "hash": "cb05c91c39cf1097",
+   "name": "Inv. no. 4132, 4133 - Panels",
+   "bytes": 235941
+  },
+  "12-en": {
+   "file": "12-en.pdf",
+   "hash": "9d6e749ec9aef40a",
+   "name": "Inv. no. 4132, 4133 - Panels",
+   "bytes": 203650
+  },
+  "13-ar": {
+   "file": "13-ar.pdf",
+   "hash": "7f4fe11c23be283f",
+   "name": "Inv. no. 6853 - Panel",
+   "bytes": 228360
+  },
+  "13-en": {
+   "file": "13-en.pdf",
+   "hash": "96b8a9f843bfc512",
+   "name": "Inv. no. 6853 - Panel",
+   "bytes": 200842
+  },
+  "14-ar": {
+   "file": "14-ar.pdf",
+   "hash": "23d9b8dda182345b",
+   "name": "Inv. no. 8367-2 - Panel",
+   "bytes": 228458
+  },
+  "14-en": {
+   "file": "14-en.pdf",
+   "hash": "71c323363da38a29",
+   "name": "Inv. no. 8367-2 - Panel",
+   "bytes": 200073
+  },
+  "15-ar": {
+   "file": "15-ar.pdf",
+   "hash": "03b011f0b95f0127",
+   "name": "Inv. no. 16466 - Panel",
+   "bytes": 223923
+  },
+  "15-en": {
+   "file": "15-en.pdf",
+   "hash": "0a7d5a0be030d6f7",
+   "name": "Inv. no. 16466 - Panel",
+   "bytes": 196471
+  },
+  "16-ar": {
+   "file": "16-ar.pdf",
+   "hash": "20b2a265e5119de4",
+   "name": "Inv. no. 2112 - Panel",
+   "bytes": 232456
+  },
+  "16-en": {
+   "file": "16-en.pdf",
+   "hash": "75e5d1950705f576",
+   "name": "Inv. no. 2112 - Panel",
+   "bytes": 201719
+  },
+  "17-ar": {
+   "file": "17-ar.pdf",
+   "hash": "7e30b55cfbc75e0a",
+   "name": "Inv. no. 14600 - Panel",
+   "bytes": 229076
+  },
+  "17-en": {
+   "file": "17-en.pdf",
+   "hash": "d96059536d148a06",
+   "name": "Inv. no. 14600 - Panel",
+   "bytes": 198766
+  },
+  "18-ar": {
+   "file": "18-ar.pdf",
+   "hash": "ff71177446b31aef",
+   "name": "Inv. no. 16343 - Panel",
+   "bytes": 223899
+  },
+  "18-en": {
+   "file": "18-en.pdf",
+   "hash": "3279dcf2d91c5b5c",
+   "name": "Inv. no. 16343 - Panel",
+   "bytes": 198567
+  },
+  "19-ar": {
+   "file": "19-ar.pdf",
+   "hash": "661c67246ec2fa90",
+   "name": "Inv. no. 14110 - Openwork Panel",
+   "bytes": 224889
+  },
+  "19-en": {
+   "file": "19-en.pdf",
+   "hash": "3c0d379fcd227942",
+   "name": "Inv. no. 14110 - Openwork Panel",
+   "bytes": 200203
+  },
+  "20-ar": {
+   "file": "20-ar.pdf",
+   "hash": "1cf4702aee3300d4",
+   "name": "Inv. no. 4134 - Panel",
+   "bytes": 234488
+  },
+  "20-en": {
+   "file": "20-en.pdf",
+   "hash": "0cc0d15756dc27e3",
+   "name": "Inv. no. 4134 - Panel",
+   "bytes": 201061
+  },
+  "21-ar": {
+   "file": "21-ar.pdf",
+   "hash": "993450afdfa13bb8",
+   "name": "Inv. no. 9519 - Frieze",
+   "bytes": 223892
+  },
+  "21-en": {
+   "file": "21-en.pdf",
+   "hash": "8783e5540ae7f3f9",
+   "name": "Inv. no. 9519 - Frieze",
+   "bytes": 198491
+  },
+  "22-ar": {
+   "file": "22-ar.pdf",
+   "hash": "75d1bd3716a04ba8",
+   "name": "Inv. no. 8946 - Frieze",
+   "bytes": 212614
+  },
+  "22-en": {
+   "file": "22-en.pdf",
+   "hash": "255430617a98fa56",
+   "name": "Inv. no. 8946 - Frieze",
+   "bytes": 198774
+  },
+  "23-ar": {
+   "file": "23-ar.pdf",
+   "hash": "2a688f267936917a",
+   "name": "Inv. no. 4749 - Panel",
+   "bytes": 223476
+  },
+  "23-en": {
+   "file": "23-en.pdf",
+   "hash": "2aa1990da88bc1f0",
+   "name": "Inv. no. 4749 - Panel",
+   "bytes": 196215
+  },
+  "24-ar": {
+   "file": "24-ar.pdf",
+   "hash": "7152d62bee2e0c98",
+   "name": "Inv. no. 1585 - Frieze",
+   "bytes": 227601
+  },
+  "24-en": {
+   "file": "24-en.pdf",
+   "hash": "905d1782309edba9",
+   "name": "Inv. no. 1585 - Frieze",
+   "bytes": 199127
+  },
+  "25-ar": {
+   "file": "25-ar.pdf",
+   "hash": "a8374d831405733b",
+   "name": "Inv. no. 479 - Spandrel from an Archway",
+   "bytes": 244882
+  },
+  "25-en": {
+   "file": "25-en.pdf",
+   "hash": "97ff4b35a21bca1a",
+   "name": "Inv. no. 479 - Spandrel from an Archway",
+   "bytes": 206046
+  },
+  "26-ar": {
+   "file": "26-ar.pdf",
+   "hash": "4825ccba02cebab2",
+   "name": "Inv. no. 466 - Spandrels from an Archway",
+   "bytes": 245437
+  },
+  "26-en": {
+   "file": "26-en.pdf",
+   "hash": "b6e7ecd9509dcc49",
+   "name": "Inv. no. 466 - Spandrels from an Archway",
+   "bytes": 207231
+  },
+  "27-ar": {
+   "file": "27-ar.pdf",
+   "hash": "5ff3c47a085513f6",
+   "name": "Inv. no. 467-1-2 - Panels",
+   "bytes": 221547
+  },
+  "27-en": {
+   "file": "27-en.pdf",
+   "hash": "c09d412a84d3fde9",
+   "name": "Inv. no. 467-1-2 - Panels",
+   "bytes": 197839
+  },
+  "28-ar": {
+   "file": "28-ar.pdf",
+   "hash": "596c3b134a89ac3c",
+   "name": "Inv. no. 1648 - Panel from a Window Frame",
+   "bytes": 246545
+  },
+  "28-en": {
+   "file": "28-en.pdf",
+   "hash": "bbb63819d02235a3",
+   "name": "Inv. no. 1648 - Panel from a Window Frame",
+   "bytes": 206089
+  },
+  "29-ar": {
+   "file": "29-ar.pdf",
+   "hash": "82eb7f6fa1affb00",
+   "name": "Inv. no. 4140 - Door Leaf",
+   "bytes": 230727
+  },
+  "29-en": {
+   "file": "29-en.pdf",
+   "hash": "063a786458d14fc4",
+   "name": "Inv. no. 4140 - Door Leaf",
+   "bytes": 199951
+  },
+  "30-ar": {
+   "file": "30-ar.pdf",
+   "hash": "a6c4d1682c5468c1",
+   "name": "Inv. no. 9748 - Wooden Panel",
+   "bytes": 244683
+  },
+  "30-en": {
+   "file": "30-en.pdf",
+   "hash": "08d69fc3037bb91a",
+   "name": "Inv. no. 9748 - Wooden Panel",
+   "bytes": 204826
+  },
+  "31-ar": {
+   "file": "31-ar.pdf",
+   "hash": "b06c19b566d1431c",
+   "name": "Inv. no. 644 - Frieze",
+   "bytes": 229627
+  },
+  "31-en": {
+   "file": "31-en.pdf",
+   "hash": "7a665692e3eb1a8d",
+   "name": "Inv. no. 644 - Frieze",
+   "bytes": 200705
+  },
+  "32-ar": {
+   "file": "32-ar.pdf",
+   "hash": "72d4c16676eac55d",
+   "name": "Inv. no. 3132 - Frieze",
+   "bytes": 231831
+  },
+  "32-en": {
+   "file": "32-en.pdf",
+   "hash": "24a00ac0786bc43e",
+   "name": "Inv. no. 3132 - Frieze",
+   "bytes": 203763
+  },
+  "33-ar": {
+   "file": "33-ar.pdf",
+   "hash": "0b1e05da4c10730b",
+   "name": "Inv. no. 431 - Panel from a Door Leaf",
+   "bytes": 239254
+  },
+  "33-en": {
+   "file": "33-en.pdf",
+   "hash": "148a70ed7cd1c55f",
+   "name": "Inv. no. 431 - Panel from a Door Leaf",
+   "bytes": 200088
+  },
+  "34-ar": {
+   "file": "34-ar.pdf",
+   "hash": "ba9404a745af8a97",
+   "name": "Inv. no. 2972 - Cabinet Leaf",
+   "bytes": 232035
+  },
+  "34-en": {
+   "file": "34-en.pdf",
+   "hash": "be1ef3951e210700",
+   "name": "Inv. no. 2972 - Cabinet Leaf",
+   "bytes": 201778
+  },
+  "35-ar": {
+   "file": "35-ar.pdf",
+   "hash": "e0120b0169ed962d",
+   "name": "Inv. no. 3102 - Panel",
+   "bytes": 231449
+  },
+  "35-en": {
+   "file": "35-en.pdf",
+   "hash": "cce577aeefb4fbef",
+   "name": "Inv. no. 3102 - Panel",
+   "bytes": 202705
+  },
+  "36-ar": {
+   "file": "36-ar.pdf",
+   "hash": "a9593bb82fa37dc6",
+   "name": "Inv. no. 3511 - Half of a Window Leaf",
+   "bytes": 234422
+  },
+  "36-en": {
+   "file": "36-en.pdf",
+   "hash": "97453fd9010617c4",
+   "name": "Inv. no. 3511 - Half of a Window Leaf",
+   "bytes": 204646
+  },
+  "37-ar": {
+   "file": "37-ar.pdf",
+   "hash": "161373f05a41ef69",
+   "name": "Inv. no. 539 - Cabinet Front",
+   "bytes": 228624
+  },
+  "37-en": {
+   "file": "37-en.pdf",
+   "hash": "23ba600e4ebf3510",
+   "name": "Inv. no. 539 - Cabinet Front",
+   "bytes": 199951
+  },
+  "38-ar": {
+   "file": "38-ar.pdf",
+   "hash": "5df3ce7e494c46ab",
+   "name": "Inv. no. 534 - Cabinet Front",
+   "bytes": 234787
+  },
+  "38-en": {
+   "file": "38-en.pdf",
+   "hash": "d110d0ce19021d52",
+   "name": "Inv. no. 534 - Cabinet Front",
+   "bytes": 201687
+  },
+  "39-ar": {
+   "file": "39-ar.pdf",
+   "hash": "9ce102d9cad37e5e",
+   "name": "Inv. no. 485 - Door Leaf",
+   "bytes": 235291
+  },
+  "39-en": {
+   "file": "39-en.pdf",
+   "hash": "2670c3befe3b46a6",
+   "name": "Inv. no. 485 - Door Leaf",
+   "bytes": 204985
+  },
+  "40-ar": {
+   "file": "40-ar.pdf",
+   "hash": "dda0658a9ab5446a",
+   "name": "Inv. no. 532 - Door Leaf",
+   "bytes": 229261
+  },
+  "40-en": {
+   "file": "40-en.pdf",
+   "hash": "dbd687b5a9561db2",
+   "name": "Inv. no. 532 - Door Leaf",
+   "bytes": 199118
+  },
+  "41-ar": {
+   "file": "41-ar.pdf",
+   "hash": "5378ba361ad940a1",
+   "name": "Inv. no. 1048 - Door Leaf",
+   "bytes": 223627
+  },
+  "41-en": {
+   "file": "41-en.pdf",
+   "hash": "bf9cb124b80f5a38",
+   "name": "Inv. no. 1048 - Door Leaf",
+   "bytes": 198505
+  },
+  "42-ar": {
+   "file": "42-ar.pdf",
+   "hash": "16a9f41c4e08dc61",
+   "name": "Inv. no. 1617 - Door Leaf",
+   "bytes": 234050
+  },
+  "42-en": {
+   "file": "42-en.pdf",
+   "hash": "d9111e4a4c15437c",
+   "name": "Inv. no. 1617 - Door Leaf",
+   "bytes": 203159
+  },
+  "43-ar": {
+   "file": "43-ar.pdf",
+   "hash": "a5f719fe4bc41288",
+   "name": "Inv. no. 2605 - Door",
+   "bytes": 235215
+  },
+  "43-en": {
+   "file": "43-en.pdf",
+   "hash": "81e2957fa308d1de",
+   "name": "Inv. no. 2605 - Door",
+   "bytes": 204436
+  },
+  "44-ar": {
+   "file": "44-ar.pdf",
+   "hash": "e124935d14b22fcb",
+   "name": "Inv. no. 445 - Door",
+   "bytes": 235637
+  },
+  "44-en": {
+   "file": "44-en.pdf",
+   "hash": "0561a94dafcf2116",
+   "name": "Inv. no. 445 - Door",
+   "bytes": 203315
+  },
+  "45-ar": {
+   "file": "45-ar.pdf",
+   "hash": "17b105d02f62c638",
+   "name": "Inv. no. 5977 - Door Leaf",
+   "bytes": 235917
+  },
+  "45-en": {
+   "file": "45-en.pdf",
+   "hash": "b3178ccbdd3d4d57",
+   "name": "Inv. no. 5977 - Door Leaf",
+   "bytes": 204083
+  },
+  "46-ar": {
+   "file": "46-ar.pdf",
+   "hash": "6079c85d100aa027",
+   "name": "Inv. no. 11724 - Panel",
+   "bytes": 237558
+  },
+  "46-en": {
+   "file": "46-en.pdf",
+   "hash": "cfcb2bc2e0bd9c0d",
+   "name": "Inv. no. 11724 - Panel",
+   "bytes": 202158
+  },
+  "47-ar": {
+   "file": "47-ar.pdf",
+   "hash": "f74e95aab4fb8dc4",
+   "name": "Inv. no. 11718 - Door Leaf",
+   "bytes": 238666
+  },
+  "47-en": {
+   "file": "47-en.pdf",
+   "hash": "3d0052dba32ef43e",
+   "name": "Inv. no. 11718 - Door Leaf",
+   "bytes": 198988
+  },
+  "48-ar": {
+   "file": "48-ar.pdf",
+   "hash": "4218e519aa4f8dc3",
+   "name": "Inv. no. 11721 - Panel",
+   "bytes": 240780
+  },
+  "48-en": {
+   "file": "48-en.pdf",
+   "hash": "11493cbeb5466af4",
+   "name": "Inv. no. 11721 - Panel",
+   "bytes": 204821
+  },
+  "49-ar": {
+   "file": "49-ar.pdf",
+   "hash": "82509660255f1679",
+   "name": "Inv. no. 9526 - Stele",
+   "bytes": 240862
+  },
+  "49-en": {
+   "file": "49-en.pdf",
+   "hash": "5968b1d3fe89c880",
+   "name": "Inv. no. 9526 - Stele",
+   "bytes": 202602
+  },
+  "50-ar": {
+   "file": "50-ar.pdf",
+   "hash": "a983de2147de2943",
+   "name": "Inv. no. 3555-1-5 - Property Deed",
+   "bytes": 235193
+  },
+  "50-en": {
+   "file": "50-en.pdf",
+   "hash": "eecd701e33601a4a",
+   "name": "Inv. no. 3555-1-5 - Property Deed",
+   "bytes": 206183
+  },
+  "51-ar": {
+   "file": "51-ar.pdf",
+   "hash": "38bf86ae9a62de59",
+   "name": "Inv. no. 11747 - Foundation Inscription",
+   "bytes": 241408
+  },
+  "51-en": {
+   "file": "51-en.pdf",
+   "hash": "858dbcd16b6100d3",
+   "name": "Inv. no. 11747 - Foundation Inscription",
+   "bytes": 206744
+  },
+  "52-ar": {
+   "file": "52-ar.pdf",
+   "hash": "4ab9b759b408076b",
+   "name": "Inv. no. 403, 405 - Minbar Panels",
+   "bytes": 253881
+  },
+  "52-en": {
+   "file": "52-en.pdf",
+   "hash": "31570b342944f0ff",
+   "name": "Inv. no. 403, 405 - Minbar Panels",
+   "bytes": 210702
+  },
+  "53-ar": {
+   "file": "53-ar.pdf",
+   "hash": "df7832cc3ba6c565",
+   "name": "Inv. no. 621-1-2 - Panels",
+   "bytes": 235647
+  },
+  "53-en": {
+   "file": "53-en.pdf",
+   "hash": "1e0432f4aa7eec0f",
+   "name": "Inv. no. 621-1-2 - Panels",
+   "bytes": 199590
+  },
+  "54-ar": {
+   "file": "54-ar.pdf",
+   "hash": "fa7c6fc4fd889b90",
+   "name": "Inv. no. 550 - Panel",
+   "bytes": 229161
+  },
+  "54-en": {
+   "file": "54-en.pdf",
+   "hash": "83ab7dc70d2d17bc",
+   "name": "Inv. no. 550 - Panel",
+   "bytes": 199994
+  },
+  "55-ar": {
+   "file": "55-ar.pdf",
+   "hash": "4baaacb7581f5bfc",
+   "name": "Inv. no. 528 - Window Grille",
+   "bytes": 228468
+  },
+  "55-en": {
+   "file": "55-en.pdf",
+   "hash": "cb92bf2fa8aadb27",
+   "name": "Inv. no. 528 - Window Grille",
+   "bytes": 200300
+  },
+  "56-ar": {
+   "file": "56-ar.pdf",
+   "hash": "c33cd892ae7c1e45",
+   "name": "Inv. no. 505 - Balustrade",
+   "bytes": 230513
+  },
+  "56-en": {
+   "file": "56-en.pdf",
+   "hash": "4916e64cd35a15cb",
+   "name": "Inv. no. 505 - Balustrade",
+   "bytes": 201401
+  },
+  "57-ar": {
+   "file": "57-ar.pdf",
+   "hash": "04541eac8ad1b7e8",
+   "name": "Inv. no. 3512 - Window Grille",
+   "bytes": 228545
+  },
+  "57-en": {
+   "file": "57-en.pdf",
+   "hash": "f10882efd4e7a357",
+   "name": "Inv. no. 3512 - Window Grille",
+   "bytes": 204654
+  },
+  "58-ar": {
+   "file": "58-ar.pdf",
+   "hash": "76fa036b4e958a76",
+   "name": "Inv. no. 4392 - Window Grille",
+   "bytes": 244014
+  },
+  "58-en": {
+   "file": "58-en.pdf",
+   "hash": "eaf0ec4684b8c435",
+   "name": "Inv. no. 4392 - Window Grille",
+   "bytes": 205545
+  },
+  "59-ar": {
+   "file": "59-ar.pdf",
+   "hash": "bb2ebeaa8a7c1ab8",
+   "name": "Inv. no. 612 - Mashrabeya",
+   "bytes": 236634
+  },
+  "59-en": {
+   "file": "59-en.pdf",
+   "hash": "572441085f184c07",
+   "name": "Inv. no. 612 - Mashrabeya",
+   "bytes": 204071
+  },
+  "60-ar": {
+   "file": "60-ar.pdf",
+   "hash": "e6dd27e65bde77c3",
+   "name": "Inv. no. 11641 - Ceiling Fragment",
+   "bytes": 231405
+  },
+  "60-en": {
+   "file": "60-en.pdf",
+   "hash": "3b84f3cca1950f80",
+   "name": "Inv. no. 11641 - Ceiling Fragment",
+   "bytes": 200607
+  },
+  "61-ar": {
+   "file": "61-ar.pdf",
+   "hash": "b8494ebd86ba9543",
+   "name": "Inv. no. 1421 - Ceiling Panel",
+   "bytes": 220859
+  },
+  "61-en": {
+   "file": "61-en.pdf",
+   "hash": "bf3a25cbbe714021",
+   "name": "Inv. no. 1421 - Ceiling Panel",
+   "bytes": 195723
+  },
+  "62-ar": {
+   "file": "62-ar.pdf",
+   "hash": "3ff7deb26cb7a89d",
+   "name": "Inv. no. 6857 - Ceiling Panel",
+   "bytes": 227643
+  },
+  "62-en": {
+   "file": "62-en.pdf",
+   "hash": "66fd326c0db28e86",
+   "name": "Inv. no. 6857 - Ceiling Panel",
+   "bytes": 200516
+  },
+  "63-ar": {
+   "file": "63-ar.pdf",
+   "hash": "bcfbbb61d8858fa4",
+   "name": "Inv. no. 2602 - Ceiling",
+   "bytes": 222941
+  },
+  "63-en": {
+   "file": "63-en.pdf",
+   "hash": "3c7e0519dff47189",
+   "name": "Inv. no. 2602 - Ceiling",
+   "bytes": 196938
+  },
+  "64-ar": {
+   "file": "64-ar.pdf",
+   "hash": "1936f1f833eeff27",
+   "name": "Inv. no. 3484 - Ceiling",
+   "bytes": 233569
+  },
+  "64-en": {
+   "file": "64-en.pdf",
+   "hash": "643ecfd1cf7454a3",
+   "name": "Inv. no. 3484 - Ceiling",
+   "bytes": 201277
+  },
+  "65-ar": {
+   "file": "65-ar.pdf",
+   "hash": "1266b874b92758c4",
+   "name": "Inv. no. 3485 - Ceiling",
+   "bytes": 229051
+  },
+  "65-en": {
+   "file": "65-en.pdf",
+   "hash": "52bd6d577ff827ae",
+   "name": "Inv. no. 3485 - Ceiling",
+   "bytes": 201888
+  },
+  "66-ar": {
+   "file": "66-ar.pdf",
+   "hash": "f9051f95670a3df7",
+   "name": "Inv. no. 4144 - Kurdi",
+   "bytes": 238500
+  },
+  "66-en": {
+   "file": "66-en.pdf",
+   "hash": "12842edc4c8958a0",
+   "name": "Inv. no. 4144 - Kurdi",
+   "bytes": 203780
+  },
+  "80-ar": {
+   "file": "80-ar.pdf",
+   "hash": "b0e4d000758545da",
+   "name": "Inv. no. 2801, 4155 - Cupboard Leaves",
+   "bytes": 250943
+  },
+  "80-en": {
+   "file": "80-en.pdf",
+   "hash": "085310f4ec3d3e26",
+   "name": "Inv. no. 2801, 4155 - Cupboard Leaves",
+   "bytes": 207558
+  },
+  "68-ar": {
+   "file": "68-ar.pdf",
+   "hash": "07e8de7b45ecd344",
+   "name": "Inv. no. 6120-6 - Mirror",
+   "bytes": 225144
+  },
+  "68-en": {
+   "file": "68-en.pdf",
+   "hash": "2c43071e71bccb3c",
+   "name": "Inv. no. 6120-6 - Mirror",
+   "bytes": 198088
+  },
+  "77-ar": {
+   "file": "77-ar.pdf",
+   "hash": "4f4a8ec40f4c18aa",
+   "name": "Inv. no. 3196 - Frieze",
+   "bytes": 243734
+  },
+  "77-en": {
+   "file": "77-en.pdf",
+   "hash": "8f7db6c3a3a6f395",
+   "name": "Inv. no. 3196 - Frieze",
+   "bytes": 205072
+  },
+  "SSC-ar": {
+   "file": "SSC-ar.pdf",
+   "hash": "0e13d8d051a5e0a1",
+   "name": "SSC - Single Sided",
+   "bytes": 570871
+  },
+  "SSC-en": {
+   "file": "SSC-en.pdf",
+   "hash": "fb3694be5cf7dd43",
+   "name": "SSC - Single Sided",
+   "bytes": 526045
+  },
+  "DSC-ar": {
+   "file": "DSC-ar.pdf",
+   "hash": "6643c6b26ee2a1a3",
+   "name": "DSC - Double Sided",
+   "bytes": 215521
+  },
+  "DSC-en": {
+   "file": "DSC-en.pdf",
+   "hash": "8ff02dc09352f603",
+   "name": "DSC - Double Sided",
+   "bytes": 197576
+  },
+  "DLC-ar": {
+   "file": "DLC-ar.pdf",
+   "hash": "132ecba4f1b0a2d9",
+   "name": "DLC - Double Sided - Long Combs",
+   "bytes": 241702
+  },
+  "DLC-en": {
+   "file": "DLC-en.pdf",
+   "hash": "3b5dbe1662404a4d",
+   "name": "DLC - Double Sided - Long Combs",
+   "bytes": 206196
+  },
+  "DEP-ar": {
+   "file": "DEP-ar.pdf",
+   "hash": "6e341a34de6950d7",
+   "name": "DEP - Double Sided - Epigraphy",
+   "bytes": 1244156
+  },
+  "DEP-en": {
+   "file": "DEP-en.pdf",
+   "hash": "73c60c4582772b4c",
+   "name": "DEP - Double Sided - Epigraphy",
+   "bytes": 1181335
+  },
+  "DRK-ar": {
+   "file": "DRK-ar.pdf",
+   "hash": "8463d9574a803a23",
+   "name": "DRK - Double Sided - Ranks",
+   "bytes": 403919
+  },
+  "DRK-en": {
+   "file": "DRK-en.pdf",
+   "hash": "42f6744df0ba30f5",
+   "name": "DRK - Double Sided - Ranks",
+   "bytes": 367270
+  },
+  "DGD-ar": {
+   "file": "DGD-ar.pdf",
+   "hash": "963c9c553d3bbe7f",
+   "name": "DGD - Double Sided - Geometric Designs",
+   "bytes": 233367
+  },
+  "DGD-en": {
+   "file": "DGD-en.pdf",
+   "hash": "2144312ffc796ca8",
+   "name": "DGD - Double Sided - Geometric Designs",
+   "bytes": 206513
+  },
+  "DGR-ar": {
+   "file": "DGR-ar.pdf",
+   "hash": "461e37b29ee299f7",
+   "name": "DGR - Double Sided - Geometric - Rings-and-Dots",
+   "bytes": 405878
+  },
+  "DGR-en": {
+   "file": "DGR-en.pdf",
+   "hash": "b1313704d1908bc9",
+   "name": "DGR - Double Sided - Geometric - Rings-and-Dots",
+   "bytes": 369422
+  },
+  "DGO-ar": {
+   "file": "DGO-ar.pdf",
+   "hash": "a17902faec9cfaee",
+   "name": "DGO - Double Sided - Geometric - Openwork",
+   "bytes": 1383380
+  },
+  "DGO-en": {
+   "file": "DGO-en.pdf",
+   "hash": "6fe9547042ed205f",
+   "name": "DGO - Double Sided - Geometric - Openwork",
+   "bytes": 1320114
+  },
+  "DVG-ar": {
+   "file": "DVG-ar.pdf",
+   "hash": "a0430cf7cd1c8eef",
+   "name": "DVG - Double Sided - Vegetal",
+   "bytes": 407094
+  },
+  "DVG-en": {
+   "file": "DVG-en.pdf",
+   "hash": "92ba8ade381757f6",
+   "name": "DVG - Double Sided - Vegetal",
+   "bytes": 369715
+  },
+  "DZM-ar": {
+   "file": "DZM-ar.pdf",
+   "hash": "72af71a54977b279",
+   "name": "DZM - Double Sided - Zoomorphic",
+   "bytes": 389739
+  },
+  "DZM-en": {
+   "file": "DZM-en.pdf",
+   "hash": "17440482b404b58b",
+   "name": "DZM - Double Sided - Zoomorphic",
+   "bytes": 362294
+  },
+  "DAC-ar": {
+   "file": "DAC-ar.pdf",
+   "hash": "16013023646f0699",
+   "name": "DAC - Double Sided - Architectural Designs",
+   "bytes": 229169
+  },
+  "DAC-en": {
+   "file": "DAC-en.pdf",
+   "hash": "addd4346724be688",
+   "name": "DAC - Double Sided - Architectural Designs",
+   "bytes": 204393
+  }
+ },
+ "sha": "1504b3843ea911e4b2604858809fead57bed0546"
+}
