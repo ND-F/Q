@@ -1479,9 +1479,11 @@
         let img1 = document.createElement("img"); img1.src = src; img1.onerror = function() { this.style.display = 'none'; }; img1.onclick = () => openModal(src); wrapper.appendChild(img1);
         
         let doubleChar = String.fromCharCode(97 + idx); let doubleSrc = src.replace(/\.webp$/, "") + doubleChar + ".webp"; 
+        if (idx < 26) { // الصورة المزدوجة (3b + 3bb) لحد حرف z بس
         let img2 = document.createElement("img"); img2.src = doubleSrc; img2.style.display = "none"; 
         img2.onload = function() { this.style.display = "block"; wrapper.classList.add("has-double"); };
         img2.onerror = function() { this.remove(); }; img2.onclick = () => openModal(doubleSrc); wrapper.appendChild(img2);
+        }
         
         let infoStr = (artwork[`info_${lang}${idx + 1}`] || "").trim();
         if (infoStr) { let cap = document.createElement("figcaption"); cap.className = "photo-credit"; cap.innerHTML = infoStr; fig.appendChild(cap); }
