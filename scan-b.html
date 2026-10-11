@@ -866,7 +866,8 @@
     let allArtworks = [], artwork;
     let pieceIdx = 0, startPieceKey = "";
     // قطعة واحدة ليها كذا صورة (زوايا مختلفة لنفس القطعة): بوكس عرض + ثامنيلز زي الأمشاط، والبيانات ثابتة
-    const VIEW_GALLERY_IDS = ["6"];
+    // العارض في scan-b بيشتغل لوحده لما يبقى فيه صور q<id> (artwork.gallery من الـ exporter)؛ القايمة دي للعارض بالصور العادية
+    const VIEW_GALLERY_IDS = [];
     let viewList = null, viewIdx = 0, viewSlot = {};
     // عدد الخانات (صورة + info + dsc): 5 على الأقل، وبيزيد لوحده لو الشيت فيه info_en6, dsc_ar7, ...
     function slotCount(a) {
@@ -992,6 +993,7 @@
         list.forEach(a => {
             Object.keys(a).filter(k => /^image\d+$/.test(k)).forEach(k => { if (a[k]) a[k] = asset(a[k]); });
             if (a.pieces) a.pieces.forEach(p => { if (p.img) p.img = asset(p.img); });
+            if (a.gallery) a.gallery.forEach(g => { if (g.src) g.src = asset(g.src); });
         });
     }
 
@@ -1140,7 +1142,12 @@
         heroSection.innerHTML = "";
 
         viewList = null;
-        if (!artwork.pieces && VIEW_GALLERY_IDS.includes(String(artwork.id).trim().toUpperCase()) && images[0] && !videoBySlot[0] && !reelBySlot[0]) {
+        if (LINK_PREFIX === "q" && !artwork.pieces && artwork.gallery && artwork.gallery.length && !videoBySlot[0] && !reelBySlot[0]) {
+            // صفحة q (scan-b) والقطعة ليها صور q<id>, q<id>b, ...: العارض بيعرضها هي بس، والصور العادية مش بتظهر
+            viewList = artwork.gallery.map(g => String(g.src).replace(/\.[^/.]+$/, ".webp"));
+            viewSlot = {}; artwork.gallery.forEach((g, k) => { viewSlot[viewList[k]] = g.n; });
+            images = images.map(() => null);
+        } else if (!artwork.pieces && VIEW_GALLERY_IDS.includes(String(artwork.id).trim().toUpperCase()) && images[0] && !videoBySlot[0] && !reelBySlot[0]) {
             viewList = images.filter(Boolean);
             viewSlot = {}; images.forEach((s, i) => { if (s) viewSlot[s] = i + 1; }); // رقم الخانة لكل صورة (عشان info_en<n>)
             images = images.map((s, i) => i === 0 ? s : null); // الصور كلها في البوكس، مش جوه النص
