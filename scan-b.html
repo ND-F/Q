@@ -865,6 +865,9 @@
     let lang = localStorage.getItem("nadim_lang") || systemLang;
     let allArtworks = [], artwork;
     let pieceIdx = 0, startPieceKey = "";
+    // قطعة واحدة ليها كذا صورة (زوايا مختلفة لنفس القطعة): بوكس عرض + ثامنيلز زي الأمشاط، والبيانات ثابتة
+    const VIEW_GALLERY_IDS = ["6"];
+    let viewList = null, viewIdx = 0;
     const LINK_PREFIX = "q"; // scan-b: mia.nadimfoundation.org/q<id>   (c.html: من غير prefix)
     let zoomStartTime = 0, isZoomTracked = false;
 
@@ -1129,9 +1132,17 @@
         let heroSection = document.getElementById("heroSection");
         heroSection.innerHTML = "";
 
+        viewList = null;
+        if (!artwork.pieces && VIEW_GALLERY_IDS.includes(String(artwork.id).trim().toUpperCase()) && images[0] && !videoBySlot[0] && !reelBySlot[0]) {
+            viewList = images.filter(Boolean);
+            images = images.map((s, i) => i === 0 ? s : null); // الصور كلها في البوكس، مش جوه النص
+        }
+
         if (artwork.pieces && artwork.pieces.length) {
             // مجموعة قطع: بوكس العرض + الثامنيلز مكان صورة الهيرو
             heroSection.appendChild(buildPieceGallery());
+        } else if (viewList) {
+            heroSection.appendChild(buildViewGallery());
         } else if (images[0] || videoBySlot[0] || reelBySlot[0]) {
             let heroFig = document.createElement("figure");
             heroFig.className = "main-figure";
@@ -1346,6 +1357,86 @@
         }
     }
 
+    // ===== صور مختلفة لنفس القطعة (VIEW_GALLERY_IDS): نفس شكل الأمشاط بس من غير تغيير البيانات =====
+    function buildViewGallery() {
+        const ar = lang === "ar";
+        let n = viewList.length, many = n > 1;
+        if (viewIdx >= n) viewIdx = 0;
+        let fig = document.createElement("figure");
+        fig.className = "main-figure piece-gallery";
+        fig.innerHTML =
+            '<div class="pg-viewer" id="pgViewer">' +
+                '<img id="pgImg" alt="">' +
+                '<div class="pg-empty"><div class="pg-empty-inv">' + String(artwork.inventory_number || "").replace(/^s*inv.?s*(no.?)?s*/i, "") + '</div><div>' + (ar ? "الصورة قريبًا" : "Image coming soon") + '</div></div>' +
+                '<button class="pg-nav pg-prev" id="pgPrev" aria-label="' + (ar ? "الصورة السابقة" : "Previous image") + '"><i class="fas fa-chevron-' + (ar ? "right" : "left") + '"></i></button>' +
+                '<button class="pg-nav pg-next" id="pgNext" aria-label="' + (ar ? "الصورة التالية" : "Next image") + '"><i class="fas fa-chevron-' + (ar ? "left" : "right") + '"></i></button>' +
+                '<div class="pg-counter" id="pgCounter"></div>' +
+            '</div>' +
+            '<figcaption class="photo-credit pg-desc" id="pgDesc"></figcaption>' +
+            '<div class="pg-thumbs" id="pgThumbs"></div>';
+
+        let viewer = fig.querySelector("#pgViewer");
+        fig.querySelector("#pgPrev").onclick = (e) => { e.stopPropagation(); showView(viewIdx - 1, true); };
+        fig.querySelector("#pgNext").onclick = (e) => { e.stopPropagation(); showView(viewIdx + 1, true); };
+        if (!many) fig.querySelectorAll(".pg-nav, .pg-counter").forEach(el => el.style.display = "none");
+        viewer.onclick = () => {
+            if (viewer.classList.contains("loaded") && !viewer.classList.contains("no-img")) openModal(fig.querySelector("#pgImg").src);
+        };
+        let sx = 0;
+        viewer.addEventListener("touchstart", e => { if (e.touches.length === 1) sx = e.touches[0].clientX; }, { passive: true });
+        viewer.addEventListener("touchend", e => {
+            let d = sx - e.changedTouches[0].clientX;
+            if (!many || Math.abs(d) < 50) return;
+            let fwd = d > 0; if (lang === "ar") fwd = !fwd;
+            showView(viewIdx + (fwd ? 1 : -1), true);
+        }, { passive: true });
+
+        let thumbs = fig.querySelector("#pgThumbs");
+        if (!many) thumbs.style.display = "none";
+        viewList.forEach((src, i) => {
+            let b = document.createElement("button");
+            b.className = "pg-thumb"; b.type = "button";
+            b.setAttribute("aria-label", (ar ? "صورة " : "Image ") + (i + 1));
+            b.innerHTML = '<div class="pg-thumb-box"><span>' + (i + 1) + '</span></div>';
+            let box = b.querySelector(".pg-thumb-box");
+            let im = document.createElement("img"); im.alt = "";
+            im.onload = () => { if (im.naturalWidth > 0) { box.innerHTML = ""; box.appendChild(im); } };
+            im.src = src;
+            b.onclick = () => showView(i, true);
+            thumbs.appendChild(b);
+        });
+
+        let capText = (artwork["info_" + lang + "1"] || "").trim();
+        fig.querySelector("#pgDesc").innerHTML = capText;
+
+        setTimeout(() => showView(viewIdx, false), 0);
+        return fig;
+    }
+
+    function showView(i, userAction) {
+        if (!viewList) return;
+        let n = viewList.length;
+        if (i < 0 || i >= n) return;
+        viewIdx = i;
+        let viewer = document.getElementById("pgViewer");
+        if (!viewer) return;
+        let img = document.getElementById("pgImg");
+        document.getElementById("pgCounter").textContent = (i + 1) + " / " + n;
+        document.getElementById("pgPrev").classList.toggle("disabled", i === 0);
+        document.getElementById("pgNext").classList.toggle("disabled", i === n - 1);
+        viewer.classList.remove("loaded", "no-img");
+        img.onload = () => { if (viewIdx === i) viewer.classList.add("loaded"); };
+        img.onerror = () => { if (viewIdx === i) viewer.classList.add("no-img", "loaded"); };
+        img.src = viewList[i];
+        document.querySelectorAll("#pgThumbs .pg-thumb").forEach((t, k) => t.classList.toggle("active", k === i));
+        let strip = document.getElementById("pgThumbs"), t = strip && strip.children[i];
+        if (t) {
+            let d = (t.getBoundingClientRect().left + t.offsetWidth / 2) - (strip.getBoundingClientRect().left + strip.clientWidth / 2);
+            strip.scrollBy({ left: d, behavior: userAction ? "smooth" : "auto" });
+        }
+        if (userAction && typeof gtag === "function") gtag("event", "view_image", { artifact_id: artwork.id, image_index: i + 1 });
+    }
+
     // اللينك بيفضل qDEP، ومع القطعة: qDEP?p=4927 (عشان المشاركة تفتح نفس القطعة)
     function syncPieceUrl() {
         let p = currentPiece();
@@ -1354,10 +1445,11 @@
     }
 
     document.addEventListener("keydown", (e) => {
-        if (!artwork || !artwork.pieces || modal.style.display === "block") return;
+        if (!artwork || !(artwork.pieces || viewList) || modal.style.display === "block") return;
         if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
         let fwd = e.key === "ArrowRight"; if (lang === "ar") fwd = !fwd;
-        showPiece(pieceIdx + (fwd ? 1 : -1), true);
+        if (artwork.pieces) showPiece(pieceIdx + (fwd ? 1 : -1), true);
+        else showView(viewIdx + (fwd ? 1 : -1), true);
     });
 
     function createInlineFigure(src, idx) {
