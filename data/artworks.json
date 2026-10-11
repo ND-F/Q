@@ -223,7 +223,7 @@
     "info_ar4": "",
     "info_ar5": "",
     "dsc_en1": "Six glass negative plates from the Museum of Islamic Art’s archival collection are on public display for the first time. Dating from the late 19th to early 20th century, they showcase wooden masterpieces from the collection, early shots of the museum interior, and a cityscape view of Islamic Cairo and the predecessor building that housed the museum's collection.",
-    "dsc_ar1": "",
+    "dsc_ar1": "ست صور نيجاتيف زجاجى من المجموعة الأرشيفية لمتحف الفن الإسلامى تُعرض لأول مرة للجمهور. يرجع تاريخها إلى أواخر القرن التاسع عشر / أوائل القرن العشرين، تكشف عن روائع الأعمال الخشبية بالمجموعة، وتُظهر صوراً توثق الجزء الداخلى من المتحف، بالإضافة إلى صورة بانورامية تُظهر القاهرة الإسلامية والمبنى السابق الذى احتضن مجموعة المتحف.",
     "dsc_en2": "<B>What is a glass plate?</B>\nA glass plate is a highly detailed negative on a glass sheet coated with light-sensitive emulsion. These plates preceded film as the dominant medium for professional photography, and remained in popular use from the 1850s to the late 1920s. Offering more stability and detail over other formats of the time, such as paper and daguerreotypes, they allowed multiple prints to be produced from a single negative. ",
     "dsc_ar2": "",
     "dsc_en3": "<B>Why did they disappear?</B>\nEarly film formats were not of very high quality and were intended mainly for amateur photography. However, advances in film technology and the introduction of large-format sheet film, coupled with their ease of use, gradually saw glass plates replaced by film in the early 20th century. Although they died out as a consumer format, their superior quality and stability meant they remained in use for certain specialised purposes, such as astrophotography, until the advent of digital photography at the end of the century.",
@@ -390,19 +390,77 @@
     "image3": "images/6c.png",
     "image4": "images/6d.png",
     "image5": "images/6e.png",
-    "image6": "images/6f.png",
-    "image7": "images/6g.png",
-    "image8": "images/6h.png",
-    "image9": "images/6i.png",
-    "image10": "images/6j.png",
-    "image11": "images/6k.png",
-    "image12": "images/6l.png",
-    "image13": "images/6m.png",
-    "image14": "images/6n.png",
-    "image15": "images/6o.png",
-    "image16": "images/6p.png",
     "info_ar17": "الباب الرئيسي لمسجد قايتباي",
-    "image17": "images/6q.png"
+    "gallery": [
+      {
+        "src": "images/q6.png",
+        "n": 1
+      },
+      {
+        "src": "images/q6b.png",
+        "n": 2
+      },
+      {
+        "src": "images/q6c.png",
+        "n": 3
+      },
+      {
+        "src": "images/q6d.png",
+        "n": 4
+      },
+      {
+        "src": "images/q6e.png",
+        "n": 5
+      },
+      {
+        "src": "images/q6f.png",
+        "n": 6
+      },
+      {
+        "src": "images/q6g.png",
+        "n": 7
+      },
+      {
+        "src": "images/q6h.png",
+        "n": 8
+      },
+      {
+        "src": "images/q6i.png",
+        "n": 9
+      },
+      {
+        "src": "images/q6j.png",
+        "n": 10
+      },
+      {
+        "src": "images/q6k.png",
+        "n": 11
+      },
+      {
+        "src": "images/q6l.png",
+        "n": 12
+      },
+      {
+        "src": "images/q6m.png",
+        "n": 13
+      },
+      {
+        "src": "images/q6n.png",
+        "n": 14
+      },
+      {
+        "src": "images/q6o.png",
+        "n": 15
+      },
+      {
+        "src": "images/q6p.png",
+        "n": 16
+      },
+      {
+        "src": "images/q6q.png",
+        "n": 17
+      }
+    ]
   },
   {
     "id": "3",
