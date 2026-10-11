@@ -868,6 +868,13 @@
     // قطعة واحدة ليها كذا صورة (زوايا مختلفة لنفس القطعة): بوكس عرض + ثامنيلز زي الأمشاط، والبيانات ثابتة
     const VIEW_GALLERY_IDS = ["6"];
     let viewList = null, viewIdx = 0;
+    // عدد الخانات (صورة + info + dsc): 5 على الأقل، وبيزيد لوحده لو الشيت فيه info_en6, dsc_ar7, ...
+    function slotCount(a) {
+        let n = 5;
+        Object.keys(a || {}).forEach(k => { let m = k.match(/^(?:image|info_(?:en|ar)|dsc_(?:en|ar))(\d+)$/); if (m) n = Math.max(n, +m[1]); });
+        return n;
+    }
+    function imageList(a) { return Array.from({ length: slotCount(a) }, (_, i) => a["image" + (i + 1)]); }
     const LINK_PREFIX = "q"; // scan-b: mia.nadimfoundation.org/q<id>   (c.html: من غير prefix)
     let zoomStartTime = 0, isZoomTracked = false;
 
@@ -983,7 +990,7 @@
     }
     function useAssetBase(list) {
         list.forEach(a => {
-            ["image1", "image2", "image3", "image4", "image5"].forEach(k => { if (a[k]) a[k] = asset(a[k]); });
+            Object.keys(a).filter(k => /^image\d+$/.test(k)).forEach(k => { if (a[k]) a[k] = asset(a[k]); });
             if (a.pieces) a.pieces.forEach(p => { if (p.img) p.img = asset(p.img); });
         });
     }
@@ -1126,7 +1133,7 @@
             reelContainer.innerHTML = "";
         }
 
-        let potentialImages = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5];
+        let potentialImages = imageList(artwork);
         let images = potentialImages.map(src => src && String(src).trim() !== "" ? String(src).replace(/\.[^/.]+$/, ".webp") : null);
 
         let heroSection = document.getElementById("heroSection");
@@ -1174,7 +1181,7 @@
         let articleBody = document.getElementById("articleBody");
         articleBody.innerHTML = "";
         
-        const splitDescParts = Array.from({ length: 5 }, (_, i) => {
+        const splitDescParts = Array.from({ length: slotCount(artwork) }, (_, i) => {
             return (ar ? artwork[`dsc_ar${i + 1}`] : artwork[`dsc_en${i + 1}`]) || "";
         });
 
@@ -1187,7 +1194,7 @@
             articleBody.appendChild(pMain);
         }
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < splitDescParts.length; i++) {
             let pText = splitDescParts[i] || "";
 
             if (i === 0) {
@@ -1400,8 +1407,10 @@
             b.innerHTML = '<div class="pg-thumb-box"><span>' + (i + 1) + '</span></div>';
             let box = b.querySelector(".pg-thumb-box");
             let im = document.createElement("img"); im.alt = "";
-            im.onload = () => { if (im.naturalWidth > 0) { box.innerHTML = ""; box.appendChild(im); } };
+            im.onload = () => { if (im.naturalWidth > 0) { box.innerHTML = ""; box.appendChild(im); } else dropView(src); };
+            im.onerror = () => dropView(src);
             im.src = src;
+            b.dataset.src = src;
             b.onclick = () => showView(i, true);
             thumbs.appendChild(b);
         });
@@ -1411,6 +1420,17 @@
 
         setTimeout(() => showView(viewIdx, false), 0);
         return fig;
+    }
+
+    // صورة مش موجودة: تتشال من البوكس والثامنيلز (الخانات من 6 وطالع موجودة كمسار لكل القطع)
+    function dropView(src) {
+        if (!viewList || viewList.length <= 1 || !viewList.includes(src)) return;
+        let cur = viewList[viewIdx];
+        viewList = viewList.filter(s => s !== src);
+        document.querySelectorAll("#pgThumbs .pg-thumb").forEach(t => { if (t.dataset.src === src) t.remove(); });
+        if (viewList.length <= 1) document.querySelectorAll("#pgPrev, #pgNext, #pgCounter, #pgThumbs").forEach(el => el.style.display = "none");
+        let k = viewList.indexOf(cur);
+        showView(k > -1 ? k : Math.min(viewIdx, viewList.length - 1), false);
     }
 
     function showView(i, userAction) {
@@ -1472,7 +1492,7 @@
         if (v === "") return null;
         let slot = -1;
         let fc = v.charAt(0).toLowerCase();
-        if (['a', 'b', 'c', 'd', 'e'].includes(fc) && v.length > 1 && (v.charAt(1) === 'h' || v.charAt(1) === '<')) {
+        if (fc >= 'a' && fc <= 'z' && v.length > 1 && (v.charAt(1) === 'h' || v.charAt(1) === '<')) {
             slot = fc.charCodeAt(0) - 97; v = v.substring(1).trim();
         }
         let url = v;
@@ -1623,7 +1643,7 @@
         let vBy = {}, rBy = {};
         [artwork.video_url, artwork.video_url2, artwork.video_url3].forEach(function(raw){ let p = parseMediaSlot(raw); if (p && vBy[p.slot] === undefined) vBy[p.slot] = p.url; });
         [artwork.reel_url, artwork.reel_url2, artwork.reel_url3].forEach(function(raw){ let p = parseMediaSlot(raw); if (p && rBy[p.slot] === undefined) rBy[p.slot] = p.url; });
-        let imgs = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
+        let imgs = imageList(artwork).map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
         function cap(i){ let s = (artwork["info_" + lang + (i + 1)] || "").trim(); return s ? '<div class="pr-cap">' + s + '</div>' : ""; }
         function fig(u, i){ if (!ok(u)) return ""; return '<figure class="pr-fig"><img src="' + src(u) + '" onerror="var f=this.closest(\'figure\');if(f)f.style.display=\'none\';">' + cap(i) + '</figure>'; }
         let head = '<div class="pr-header"><div class="pr-section">' + (ar ? "من حياة التحفة" : "From the Life of an Artefact") + '</div>' +
@@ -1646,11 +1666,11 @@
         else if (rBy[0]) body += prVid(rBy[0], src);
         else if (imgs[0]) body += fig(imgs[0], 0);
         let dsc = [];
-        for (let i = 0; i < 5; i++) dsc.push((ar ? artwork["dsc_ar" + (i + 1)] : artwork["dsc_en" + (i + 1)]) || "");
+        for (let i = 0; i < slotCount(artwork); i++) dsc.push((ar ? artwork["dsc_ar" + (i + 1)] : artwork["dsc_en" + (i + 1)]) || "");
         let hasSplit = dsc.some(function(t){ return t.trim() !== ""; });
         let mainDesc = (ar ? artwork.desc_ar : artwork.desc_en) || "";
         if (!hasSplit && mainDesc.trim() !== "") body += '<p>' + mainDesc.replace(/\n/g, '<br>') + '</p>';
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < dsc.length; i++) {
             let pT = dsc[i] || "";
             if (i === 0) { if (hasSplit && pT.trim() !== "") body += '<p>' + pT.replace(/\n/g, '<br>') + '</p>'; }
             else {
@@ -1666,7 +1686,7 @@
     // بناء #printRoot (تُستخدم من السيرفر للطباعة) — Promise تخلص لما الصور تتحمّل
     function buildPrintRoot() {
         let ar = lang === "ar";
-        let pimgs = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
+        let pimgs = imageList(artwork).map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
         return Promise.all(pimgs.map(function(u){ return u ? probeImg(u) : Promise.resolve(false); })).then(function(oks){
             let okSet = {}; pimgs.forEach(function(u, i){ if (u && oks[i]) okSet[u] = 1; });
             let c = prBuildContent(ar, null, function(u){ return !!okSet[u]; });
@@ -1715,7 +1735,7 @@
         } else if (el) { el.remove(); }
     }
     function pdfOkImages(){
-        let artImgs = [artwork.image1, artwork.image2, artwork.image3, artwork.image4, artwork.image5].map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
+        let artImgs = imageList(artwork).map(function(s){ return s && String(s).trim() !== "" ? String(s).replace(/\.[^/.]+$/, ".webp") : null; });
         return Promise.all(artImgs.map(function(u){ return u ? probeImg(u) : Promise.resolve(false); })).then(function(oks){
             let okSet = {}; artImgs.forEach(function(u, i){ if (u && oks[i]) okSet[u] = 1; }); return okSet;
         });
@@ -1799,7 +1819,7 @@
         let meta = '<div class="pr-meta"><h1 class="pr-title">' + title + '</h1><div class="pr-rule"></div>' +
             '<div class="pr-metalines">' + (hall ? '<div>' + hall + '</div>' : '') + '</div>' +
             '<div class="pr-count">' + (ar ? "عدد القطع: " + n : n + (n === 1 ? " piece" : " pieces")) + '</div></div>';
-        let gdesc = [artwork["desc_" + L]].concat([1, 2, 3, 4, 5].map(function(i){ return artwork["dsc_" + L + i]; }))
+        let gdesc = [artwork["desc_" + L]].concat(Array.from({ length: slotCount(artwork) }, function(_, k){ return artwork["dsc_" + L + (k + 1)]; }))
             .filter(function(x){ return x && String(x).trim() !== ""; })
             .map(function(x){ return '<p>' + String(x).replace(/\n/g, '<br>') + '</p>'; }).join("");
         let pieces = artwork.pieces.map(function(p){
