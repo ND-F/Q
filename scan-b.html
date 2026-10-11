@@ -867,7 +867,7 @@
     let pieceIdx = 0, startPieceKey = "";
     // قطعة واحدة ليها كذا صورة (زوايا مختلفة لنفس القطعة): بوكس عرض + ثامنيلز زي الأمشاط، والبيانات ثابتة
     const VIEW_GALLERY_IDS = ["6"];
-    let viewList = null, viewIdx = 0;
+    let viewList = null, viewIdx = 0, viewSlot = {};
     // عدد الخانات (صورة + info + dsc): 5 على الأقل، وبيزيد لوحده لو الشيت فيه info_en6, dsc_ar7, ...
     function slotCount(a) {
         let n = 5;
@@ -1142,6 +1142,7 @@
         viewList = null;
         if (!artwork.pieces && VIEW_GALLERY_IDS.includes(String(artwork.id).trim().toUpperCase()) && images[0] && !videoBySlot[0] && !reelBySlot[0]) {
             viewList = images.filter(Boolean);
+            viewSlot = {}; images.forEach((s, i) => { if (s) viewSlot[s] = i + 1; }); // رقم الخانة لكل صورة (عشان info_en<n>)
             images = images.map((s, i) => i === 0 ? s : null); // الصور كلها في البوكس، مش جوه النص
         }
 
@@ -1415,8 +1416,6 @@
             thumbs.appendChild(b);
         });
 
-        let capText = (artwork["info_" + lang + "1"] || "").trim();
-        fig.querySelector("#pgDesc").innerHTML = capText;
 
         setTimeout(() => showView(viewIdx, false), 0);
         return fig;
@@ -1448,6 +1447,8 @@
         img.onload = () => { if (viewIdx === i) viewer.classList.add("loaded"); };
         img.onerror = () => { if (viewIdx === i) viewer.classList.add("no-img", "loaded"); };
         img.src = viewList[i];
+        // تعليق الصورة: info_<lang><رقم خانتها>
+        document.getElementById("pgDesc").innerHTML = (artwork["info_" + lang + viewSlot[viewList[i]]] || "").trim();
         document.querySelectorAll("#pgThumbs .pg-thumb").forEach((t, k) => t.classList.toggle("active", k === i));
         let strip = document.getElementById("pgThumbs"), t = strip && strip.children[i];
         if (t) {
