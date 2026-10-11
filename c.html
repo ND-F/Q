@@ -992,12 +992,12 @@
         if (/(^|\.)nadimfoundation\.org$/i.test(location.hostname)) {
             try {
                 const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 4000);
-                const r = await fetch(CF_ASSETS + "data/artworks.json", { cache: "default", signal: ctrl.signal });
+                const r = await fetch(CF_ASSETS + "data/artworks.json", { cache: "no-cache", signal: ctrl.signal });
                 clearTimeout(t);
                 if (r.ok) { assetBase = CF_ASSETS; return r; }
             } catch (e) {}
         }
-        return fetch("data/artworks.json", { cache: "default" });
+        return fetch("data/artworks.json", { cache: "no-cache" });
     }
     function useAssetBase(list) {
         list.forEach(a => {

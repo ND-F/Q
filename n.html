@@ -717,7 +717,7 @@
     async function load() {
         try {
             updateThemeIcon();
-            const res = await fetch("data/artworks.json", { cache: "default" });
+            const res = await fetch("data/artworks.json", { cache: "no-cache" });
             allArtworks = await res.json();
             let id = new URLSearchParams(location.search).get("id");
             if (!id) {

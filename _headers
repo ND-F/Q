@@ -1,7 +1,7 @@
 /data/*
   Access-Control-Allow-Origin: *
-  Cache-Control: public, max-age=60
+  Cache-Control: public, max-age=0, must-revalidate
 
 /images/*
   Access-Control-Allow-Origin: *
-  Cache-Control: public, max-age=3600
+  Cache-Control: public, max-age=300
