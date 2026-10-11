@@ -458,7 +458,7 @@
             .info-toggle-btn.hide { transform: scale(0); }
         }
 
-        .image-pair-container { margin: 40px 0; width: 100%; text-align: center; display: block; }
+        .image-pair-container { margin: 30px 0; width: 100%; text-align: center; display: block; }
         .image-pair-wrapper { display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap; width: 100%; }
         
         .image-pair-wrapper img { 
@@ -490,7 +490,12 @@
         body.lang-en .photo-credit { text-align: left; border-left: 3px solid var(--gold); padding-left: 12px; }
 
         /* نصوص المقالة الأساسية - لون صريح وقوي من البراند */
-        .article-body p { font-size: 20px; line-height: 2.1; margin-bottom: 30px; color: var( --teal); text-align: justify; }
+        .article-body p { font-size: 20px; line-height: 2; margin: 0 0 22px; color: var( --teal); text-align: justify; }
+        body.lang-ar .article-body p { line-height: 1.95; text-justify: inter-word; }
+        @media (max-width: 600px) {
+            .article-body p { font-size: 18px; line-height: 1.85; margin-bottom: 18px; }
+            .image-pair-container { margin: 22px 0; }
+        }
         body.dark .article-body p { color: var(--beige); }
         body.lang-en .article-body { direction: ltr; }
         body.lang-ar .article-body { direction: rtl; }
@@ -875,6 +880,11 @@
         Object.keys(a || {}).forEach(k => { let m = k.match(/^(?:image|info_(?:en|ar)|dsc_(?:en|ar))(\d+)$/); if (m) n = Math.max(n, +m[1]); });
         return n;
     }
+    // نص الشيت: سطر فاضي = فقرة جديدة (مسافة ثابتة) بدل <br><br>، والسطر الواحد = <br>
+    function paras(text) {
+        return String(text || "").replace(/\r/g, "").split(/\n\s*\n+/).map(s => s.trim()).filter(Boolean)
+            .map(s => "<p>" + s.replace(/\n/g, "<br>") + "</p>").join("");
+    }
     function imageList(a) { return Array.from({ length: slotCount(a) }, (_, i) => a["image" + (i + 1)]); }
     const LINK_PREFIX = "q"; // scan-b: mia.nadimfoundation.org/q<id>   (c.html: من غير prefix)
     let zoomStartTime = 0, isZoomTracked = false;
@@ -1197,9 +1207,7 @@
         let mainDesc = (ar ? artwork.desc_ar : artwork.desc_en) || "";
 
         if (!hasSplitDesc && mainDesc.trim() !== "") {
-            let pMain = document.createElement("p");
-            pMain.innerHTML = mainDesc.replace(/\n/g, '<br>');
-            articleBody.appendChild(pMain);
+            articleBody.insertAdjacentHTML("beforeend", paras(mainDesc));
         }
 
         for (let i = 0; i < splitDescParts.length; i++) {
@@ -1207,9 +1215,7 @@
 
             if (i === 0) {
                 if (hasSplitDesc && pText.trim() !== "") {
-                    let p = document.createElement("p");
-                    p.innerHTML = pText.replace(/\n/g, '<br>');
-                    articleBody.appendChild(p);
+                    articleBody.insertAdjacentHTML("beforeend", paras(pText));
                 }
             } else {
                 if (images[i] || videoBySlot[i] || reelBySlot[i] || (hasSplitDesc && pText.trim() !== "")) {
@@ -1218,9 +1224,7 @@
                     else if (images[i]) articleBody.appendChild(createInlineFigure(images[i], i));
                     
                     if (hasSplitDesc && pText.trim() !== "") {
-                        let p = document.createElement("p");
-                        p.innerHTML = pText.replace(/\n/g, '<br>');
-                        articleBody.appendChild(p);
+                        articleBody.insertAdjacentHTML("beforeend", paras(pText));
                     }
                 }
             }
@@ -1679,15 +1683,15 @@
         for (let i = 0; i < slotCount(artwork); i++) dsc.push((ar ? artwork["dsc_ar" + (i + 1)] : artwork["dsc_en" + (i + 1)]) || "");
         let hasSplit = dsc.some(function(t){ return t.trim() !== ""; });
         let mainDesc = (ar ? artwork.desc_ar : artwork.desc_en) || "";
-        if (!hasSplit && mainDesc.trim() !== "") body += '<p>' + mainDesc.replace(/\n/g, '<br>') + '</p>';
+        if (!hasSplit && mainDesc.trim() !== "") body += paras(mainDesc);
         for (let i = 0; i < dsc.length; i++) {
             let pT = dsc[i] || "";
-            if (i === 0) { if (hasSplit && pT.trim() !== "") body += '<p>' + pT.replace(/\n/g, '<br>') + '</p>'; }
+            if (i === 0) { if (hasSplit && pT.trim() !== "") body += paras(pT); }
             else {
                 if (vBy[i]) body += prVid(vBy[i], src);
                 else if (rBy[i]) body += prVid(rBy[i], src);
                 else if (imgs[i]) body += fig(imgs[i], i);
-                if (hasSplit && pT.trim() !== "") body += '<p>' + pT.replace(/\n/g, '<br>') + '</p>';
+                if (hasSplit && pT.trim() !== "") body += paras(pT);
             }
         }
         return { head: head, meta: meta, body: '<div class="pr-body">' + body + '</div>', imgUrls: imgs };
