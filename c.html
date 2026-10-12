@@ -575,6 +575,8 @@
             border-radius: 4px; transition: opacity 0.4s ease; 
         }
         body.dark .viewer img { box-shadow: none; border: none; }
+        .viewer.has-double { max-height: none; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+        @media (min-width: 600px) { .viewer.has-double img { max-width: calc(50% - 10px); } }
 
         /* ===== معرض القطع (مجموعة أمشاط): بوكس عرض + ثامنيلز، تقليب بين القطع ===== */
         .piece-gallery { margin-bottom: 30px; }
@@ -1185,6 +1187,14 @@
                 img.onerror = function() { this.closest('.viewer').style.display = 'none'; };
                 img.onclick = () => openModal(img.src);
                 viewer.appendChild(img);
+                // الصورة المزدوجة للصورة الأولى: 3.webp + 3a.webp جنب بعض (زي 3b + 3bb)
+                let heroDouble = images[0].replace(/\.webp$/, "") + "a.webp";
+                let img2 = document.createElement("img"); img2.style.display = "none";
+                img2.onload = function() { this.style.display = ""; viewer.classList.add("has-double"); this.style.opacity = 1; };
+                img2.onerror = function() { this.remove(); };
+                img2.onclick = (e) => { e.stopPropagation(); openModal(heroDouble); };
+                img2.src = heroDouble;
+                viewer.appendChild(img2);
                 setTimeout(() => { img.style.opacity = 1; }, 50);
                 heroFig.appendChild(viewer);
             }
