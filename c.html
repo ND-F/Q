@@ -427,7 +427,7 @@
                 right: -100%; left: auto;
                 width: 80%; max-width: 350px; height: 100vh; overflow-y: auto;
                 background: var(--beige); z-index: 999; 
-                padding: 100px 30px 40px; box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+                padding: calc(var(--hdr-h, 70px) + 30px) 30px 40px; box-shadow: -5px 0 25px rgba(0,0,0,0.2);
                 transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
             }
             
@@ -930,7 +930,18 @@
         }, 2500);
     }
 
+    // طول الشريط اللي فوق الحقيقي (بيكبر لو خط الموبايل كبير): درج المعلومات بيبدأ تحته دايمًا
+    function syncHeaderHeight() {
+        let h = document.getElementById("museumHeader");
+        if (h) document.documentElement.style.setProperty("--hdr-h", Math.ceil(h.getBoundingClientRect().bottom) + "px");
+    }
+    window.addEventListener("resize", syncHeaderHeight);
+    window.addEventListener("load", syncHeaderHeight);
+    document.addEventListener("DOMContentLoaded", () => { let h = document.getElementById("museumHeader"); if (h) h.addEventListener("transitionend", syncHeaderHeight); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncHeaderHeight);
+
     function setInfoDrawer(open) {
+        if (open) syncHeaderHeight();
         sidebar.classList.toggle("open", open);
         infoBtn.classList.toggle("close", open);
         infoBtn.classList.remove("show-tooltip", "mini");
