@@ -459,7 +459,7 @@
         }
 
         .image-pair-container { margin: 30px 0; width: 100%; text-align: center; display: block; }
-        .image-pair-wrapper { display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap; width: 100%; }
+        .image-pair-wrapper { display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap; width: 100%; }
         
         .image-pair-wrapper img { 
             width: auto; max-width: 100%; height: auto; max-height: 65vh; object-fit: contain; 
@@ -575,7 +575,7 @@
             border-radius: 4px; transition: opacity 0.4s ease; 
         }
         body.dark .viewer img { box-shadow: none; border: none; }
-        .viewer.has-double { max-height: none; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+        .viewer.has-double { max-height: none; gap: 20px; flex-wrap: wrap; align-items: center; }
         /* الوش دايمًا على الشمال والظهر على اليمين، حتى في العربي */
         .viewer.has-double, .image-pair-wrapper { direction: ltr; }
         @media (min-width: 600px) { .viewer.has-double img { max-width: calc(50% - 10px); } }
