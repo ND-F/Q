@@ -495,5 +495,8 @@
     };
 </script>
 
+<!-- منع حفظ الصور: كليك يمين، ضغطة طويلة على الموبايل، وسحب الصورة -->
+<style>img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}</style>
+<script>(function(){function isImg(t){return t&&(t.tagName==="IMG"||(t.closest&&t.closest("img")))}document.addEventListener("contextmenu",function(e){if(isImg(e.target))e.preventDefault()},true);document.addEventListener("dragstart",function(e){if(isImg(e.target))e.preventDefault()},true);})();</script>
 </body>
 </html>

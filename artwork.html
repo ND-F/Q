@@ -16,5 +16,8 @@
 </head>
 <body style="background:#06444C; color:#EAE8D8; font-family:sans-serif; text-align:center; padding-top:20%;">
     <p>جاري الانتقال لأحدث نسخة من العارض... جاري التحميل</p>
+<!-- منع حفظ الصور: كليك يمين، ضغطة طويلة على الموبايل، وسحب الصورة -->
+<style>img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}</style>
+<script>(function(){function isImg(t){return t&&(t.tagName==="IMG"||(t.closest&&t.closest("img")))}document.addEventListener("contextmenu",function(e){if(isImg(e.target))e.preventDefault()},true);document.addEventListener("dragstart",function(e){if(isImg(e.target))e.preventDefault()},true);})();</script>
 </body>
 </html>
