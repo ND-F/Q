@@ -576,6 +576,8 @@
         }
         body.dark .viewer img { box-shadow: none; border: none; }
         .viewer.has-double { max-height: none; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+        /* الوش دايمًا على الشمال والظهر على اليمين، حتى في العربي */
+        .viewer.has-double, .image-pair-wrapper { direction: ltr; }
         @media (min-width: 600px) { .viewer.has-double img { max-width: calc(50% - 10px); } }
 
         /* ===== معرض القطع (مجموعة أمشاط): بوكس عرض + ثامنيلز، تقليب بين القطع ===== */
