@@ -35,6 +35,11 @@ The catalogue is on Google Drive (`NF-MIA catalogue.pdf`, ~270 MB). Drive's text
 - Dates/provenance are genuinely missing for many entries (combs especially) — leave them empty, don't invent.
 - Field rules: meta paragraph lines start a new field only on a recognised start (dims / From / Registered / Submitted…) or a date-like start (dynasty, century); everything else is a continuation.
 
+## Catalogue images (orientation reference for site photos)
+- Many catalogue images are stored rotated and turned upright by the page transform: read the rotation from the CTM
+  (pdf.js operator list, `atan2(ctm[1], ctm[0])`), not from the raw pixels.
+- A long piece the catalogue tilts or stands up just to fit the page (e.g. 56, 62) stays horizontal on the site.
+
 ## Rows
 - Description paragraphs go to `desc_*` **and** `dsc_*1..5`.
 - `material_*` only when the description's first sentence states it.
