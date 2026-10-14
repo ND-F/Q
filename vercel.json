@@ -1,4 +1,8 @@
 {
+  "redirects": [
+    { "source": "/staff", "destination": "https://mia.nadimfoundation.org/staff", "permanent": false },
+    { "source": "/staff/:path*", "destination": "https://mia.nadimfoundation.org/staff", "permanent": false }
+  ],
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/404.html" }
   ],
