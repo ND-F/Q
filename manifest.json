@@ -1,5 +1,5 @@
 {
- "built_at": "2026-10-15T10:14:36.503Z",
+ "built_at": "2026-10-15T12:19:13.483Z",
  "files": {
   "0-ar": {
    "file": "0-ar.pdf",
@@ -477,9 +477,9 @@
   },
   "36-en": {
    "file": "36-en.pdf",
-   "hash": "6235a67f244eb9ae",
+   "hash": "94be9daf2f9569ac",
    "name": "Inv. no. 3511 - Half of a Window Leaf",
-   "bytes": 4720099
+   "bytes": 4720098
   },
   "37-ar": {
    "file": "37-ar.pdf",
@@ -549,9 +549,9 @@
   },
   "42-en": {
    "file": "42-en.pdf",
-   "hash": "91db12cf917011b3",
+   "hash": "2c0490a03dc39703",
    "name": "Inv. no. 1617 - Door Leaf",
-   "bytes": 1373878
+   "bytes": 1373862
   },
   "43-ar": {
    "file": "43-ar.pdf",
@@ -729,21 +729,21 @@
   },
   "57-en": {
    "file": "57-en.pdf",
-   "hash": "ee5264ca15e26008",
+   "hash": "604551b4a6196460",
    "name": "Inv. no. 3512 - Window Grille",
-   "bytes": 1602449
+   "bytes": 1602456
   },
   "58-ar": {
    "file": "58-ar.pdf",
-   "hash": "a5bdd1bbb7d6a860",
+   "hash": "e38ad18c11236958",
    "name": "Inv. no. 4392 - Window Grille",
-   "bytes": 3863573
+   "bytes": 3863524
   },
   "58-en": {
    "file": "58-en.pdf",
-   "hash": "3ab2fabd6284c990",
+   "hash": "745d17aae0d7eded",
    "name": "Inv. no. 4392 - Window Grille",
-   "bytes": 3828659
+   "bytes": 3828639
   },
   "59-ar": {
    "file": "59-ar.pdf",
@@ -1022,5 +1022,5 @@
    "bytes": 355237
   }
  },
- "sha": "72348b232097328c5a09d421e8cf479906d9ce7f"
+ "sha": "3eb2ed76c96db5b9766871ff667a4e5d4aab76ba"
 }
