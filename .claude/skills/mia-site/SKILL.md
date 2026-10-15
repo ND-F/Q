@@ -24,6 +24,9 @@ Short copy for claude.ai web sessions. The master is the owner's private skill `
   catalogue_no catalogue_page image1..N`. N is open-ended (min 5, max 52); pages use `slotCount()`/`imageList()`, never a fixed 5.
 - Pages render `dsc_*` paragraphs when any exist, otherwise `desc_*`. Slot N photo goes with `info_<lang>N` (caption) and
   `dsc_<lang>N` (paragraph after it).
+- Staff review notes: the staff catalogue (`/staff-ndf-mia-only-7k3q`) posts to `functions/api/feedback.js` (Cloudflare Pages
+  Function, env `FEEDBACK_URL` + `FEEDBACK_KEY`) -> the Sheet's Apps Script `doPost` -> tab `feedback`. Notes are never applied
+  automatically; the owner edits tab `data` by hand.
 
 ## Photo file names (`.webp` INSIDE `images/`, case-sensitive)
 | Slot | File (piece `6`) |

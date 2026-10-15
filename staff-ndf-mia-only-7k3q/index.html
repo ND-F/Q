@@ -112,6 +112,36 @@
 
     .zoom { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(0,0,0,.85); z-index: 40; display: none; align-items: center; justify-content: center; cursor: zoom-out; }
     .zoom img { max-width: 94vw; max-height: 92vh; }
+    /* review notes */
+    .pen { border: 1px solid var(--line); background: var(--card); color: var(--teal); border-radius: 6px; font: inherit; font-size: .75rem;
+        padding: 1px 7px; cursor: pointer; line-height: 1.5; white-space: nowrap; vertical-align: middle; }
+    .pen:hover { border-color: var(--gold); background: #fff6e3; }
+    .pen.has { background: #fff4e0; color: var(--warn); border-color: #f2d9a8; font-weight: 700; }
+    .pen.has.done { background: #e8f4ec; color: var(--ok); border-color: #c6e3d0; }
+    table.kv td.pc { width: 1%; white-space: nowrap; text-align: end; }
+    .fbm { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(7,24,29,.55); z-index: 30; display: none; align-items: center; justify-content: center; padding: 16px; }
+    .fbm.open { display: flex; }
+    .fbbox { background: var(--offwhite); border-radius: 12px; width: min(620px, 100%); max-height: 92vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,.3); }
+    .fbbox .dh { position: static; border-radius: 12px 12px 0 0; }
+    .fbbox .db { display: flex; flex-direction: column; gap: 10px; }
+    .fbbox label { font-size: .82rem; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+    .fbbox textarea, .fbbox input { font: inherit; font-size: .9rem; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); width: 100%; }
+    .fbbox textarea { min-height: 90px; resize: vertical; line-height: 1.6; }
+    .fbcur { background: #f1eee2; border-radius: 8px; padding: 8px 10px; font-size: .85rem; line-height: 1.7; max-height: 160px; overflow-y: auto; white-space: pre-wrap; }
+    .fbtypes { display: flex; gap: 6px; flex-wrap: wrap; }
+    .fbtypes button.on { background: var(--teal); color: var(--offwhite); border-color: var(--teal); }
+    .fbmsg { font-size: .85rem; min-height: 1.2em; }
+    .fbmsg.bad { color: var(--bad); } .fbmsg.ok { color: var(--ok); }
+    .fbl { display: flex; flex-direction: column; gap: 8px; }
+    .fbi { background: var(--card); border: 1px solid var(--line); border-inline-start: 4px solid var(--warn); border-radius: 8px; padding: 8px 10px; font-size: .84rem; }
+    .fbi.done { border-inline-start-color: var(--ok); } .fbi.rejected { border-inline-start-color: var(--muted); opacity: .75; }
+    .fbi .h { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; color: var(--muted); font-size: .76rem; margin-bottom: 4px; }
+    .fbi .h code { direction: ltr; background: #f1eee2; padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+    .fbi .p { white-space: pre-wrap; line-height: 1.7; }
+    .fbi .r { margin-top: 4px; color: var(--teal); }
+    .fbi ins { background: #d8f0df; color: #1b5e33; text-decoration: none; border-radius: 3px; }
+    .fbi del { background: #fbe1df; color: var(--bad); border-radius: 3px; }
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--teal); color: #fff; padding: 9px 18px; border-radius: 999px; z-index: 50; font-size: .9rem; display: none; }
     #loader { text-align: center; padding: 60px 0; color: var(--muted); }
     @media (max-width: 600px) { .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); } .thumb { height: 130px; } table.kv td:first-child { white-space: normal; } }
 </style>
@@ -148,6 +178,8 @@
 <div class="shade" id="shade"></div>
 <aside class="drawer" id="drawer"></aside>
 <div class="zoom" id="zoom"><img id="zoomImg" alt=""></div>
+<div class="fbm" id="fbm"><div class="fbbox" id="fbbox"></div></div>
+<div class="toast" id="toast"></div>
 
 <script>
 (function () {
@@ -161,7 +193,7 @@
         ar: {
             title: "كتالوج الفريق: من حياة التحفة", sub: "للاستخدام الداخلي لمؤسسة نديم ومتحف الفن الإسلامي", other: "English",
             brief: "التمهيد", search: "بحث بالرقم أو الاسم أو رقم الجرد أو المادة", allHalls: "كل القاعات", noHall: "بدون قاعة",
-            types: { all: "كل الأنواع", piece: "قطع", group: "مجموعات أمشاط", text: "صفحات نصية", miss: "ناقصها صور", video: "فيها فيديو/ريل", q: "فيها صور q", nopdf: "الـPDF مش جاهز" },
+            types: { all: "كل الأنواع", piece: "قطع", group: "مجموعات أمشاط", text: "صفحات نصية", miss: "ناقصها صور", video: "فيها فيديو/ريل", q: "فيها صور q", nopdf: "الـPDF مش جاهز", fb: "فيها ملاحظات مفتوحة" },
             tabs: { grid: "القطع", report: "تقرير الصور الناقصة", photos: "كل الصور" },
             st: { pieces: "قطعة", groups: "مجموعة أمشاط", combs: "مشط", photos: "صورة مرفوعة", miss: "صورة ناقصة", videos: "فيديو وريل", pdf: "PDF جاهز" },
             loading: "جاري التحميل...", shown: "معروض", of: "من",
@@ -178,12 +210,22 @@
             filesErr: "مقدرتش أقرأ قايمة الصور من GitHub (ممكن تجرب بعد شوية). الصور المعروضة صح، بس عدّ الناقص مش دقيق.",
             f: { inventory_number: "رقم الجرد", from: "المصدر", date: "التاريخ", dimensions: "المقاسات", section: "القسم", hall: "القاعة", material: "المادة",
                  registered: "التسجيل", acquisition: "الاقتناء", catalogue_no: "رقم الكتالوج", catalogue_page: "صفحة الكتالوج", link: "اللينك", qlink: "لينك /q", pdf: "PDF" },
-            allPhotos: "كل الصور المرفوعة، مترتبة بالقطعة", photosNote: "اضغط على أي صورة تكبّرها، أو على اسم القطعة تفتح تفاصيلها."
+            allPhotos: "كل الصور المرفوعة، مترتبة بالقطعة", photosNote: "اضغط على أي صورة تكبّرها، أو على اسم القطعة تفتح تفاصيلها.",
+            fb: { pen: "✎ ملاحظة", general: "ملاحظة عامة على القطعة", title: "عنوان القطعة", photo: "صورة", comb: "مشط",
+                  boxT: "ملاحظة مراجعة", where: "على", cur: "النص الحالي", empty: "(فاضي)",
+                  types: { correction: "تصحيح", suggestion: "اقتراح", comment: "تعليق" },
+                  proposed: "النص المقترح (عدّل عليه زي ما تحب)", comment: "تعليق أو سبب (اختياري)", commentReq: "التعليق",
+                  name: "اسمك", send: "إرسال", cancel: "إلغاء", sending: "بيتبعت...", sent: "اتبعتت الملاحظة، شكرا",
+                  needName: "اكتب اسمك الأول.", needText: "اكتب الملاحظة.", same: "النص المقترح زي الحالي بالظبط.",
+                  err: "حصلت مشكلة في الإرسال، جرّب تاني.", off: "خاصية المراجعة لسه مش متفعلة على السيرفر.",
+                  list: "ملاحظات المراجعة", none: "مفيش ملاحظات على القطعة دي لسه.", reply: "رد",
+                  st: { "new": "جديدة", done: "اتنفذت", rejected: "مرفوضة" }, open: "ملاحظة مفتوحة", notesB: "ملاحظة",
+                  hint: "اضغط ✎ جنب أي حقل أو فقرة أو صورة علشان تقترح تصحيح أو تكتب تعليق. الملاحظات بتروح لتاب feedback في الشيت، ومفيش حاجة بتتغير في الموقع غير لما تتراجع." }
         },
         en: {
             title: "Staff Catalogue: From the Life of an Artefact", sub: "Internal use for NADIM Foundation and the Museum of Islamic Art", other: "العربية",
             brief: "Preface", search: "Search by id, title, inventory no. or material", allHalls: "All halls", noHall: "No hall",
-            types: { all: "All types", piece: "Pieces", group: "Comb groups", text: "Text pages", miss: "Missing photos", video: "With video/reel", q: "With q photos", nopdf: "PDF not ready" },
+            types: { all: "All types", piece: "Pieces", group: "Comb groups", text: "Text pages", miss: "Missing photos", video: "With video/reel", q: "With q photos", nopdf: "PDF not ready", fb: "With open notes" },
             tabs: { grid: "Pieces", report: "Missing photos report", photos: "All photos" },
             st: { pieces: "pieces", groups: "comb groups", combs: "combs", photos: "photos uploaded", miss: "missing photos", videos: "videos & reels", pdf: "PDFs ready" },
             loading: "Loading...", shown: "shown", of: "of",
@@ -200,7 +242,17 @@
             filesErr: "Couldn't read the photo list from GitHub (try again later). Photos shown are correct, but missing counts may be off.",
             f: { inventory_number: "Inventory no.", from: "Provenance", date: "Date", dimensions: "Dimensions", section: "Section", hall: "Hall", material: "Material",
                  registered: "Registered", acquisition: "Acquisition", catalogue_no: "Catalogue no.", catalogue_page: "Catalogue page", link: "Link", qlink: "/q link", pdf: "PDF" },
-            allPhotos: "Every uploaded photo, grouped by piece", photosNote: "Click a photo to enlarge it, or a piece name to open its details."
+            allPhotos: "Every uploaded photo, grouped by piece", photosNote: "Click a photo to enlarge it, or a piece name to open its details.",
+            fb: { pen: "✎ Note", general: "General note on this piece", title: "Piece title", photo: "Photo", comb: "Comb",
+                  boxT: "Review note", where: "On", cur: "Current text", empty: "(empty)",
+                  types: { correction: "Correction", suggestion: "Suggestion", comment: "Comment" },
+                  proposed: "Proposed text (edit it as you like)", comment: "Comment or reason (optional)", commentReq: "Comment",
+                  name: "Your name", send: "Send", cancel: "Cancel", sending: "Sending...", sent: "Note sent, thank you",
+                  needName: "Please write your name first.", needText: "Please write the note.", same: "The proposed text is identical to the current one.",
+                  err: "Sending failed, please try again.", off: "Review notes are not switched on on the server yet.",
+                  list: "Review notes", none: "No notes on this piece yet.", reply: "Reply",
+                  st: { "new": "new", done: "done", rejected: "rejected" }, open: "open note", notesB: "notes",
+                  hint: "Click ✎ next to any field, paragraph or photo to propose a correction or leave a comment. Notes go to the feedback tab in the sheet; nothing on the site changes until they are reviewed." }
         }
     };
     const t = () => T[lang];
@@ -311,7 +363,29 @@
         INFO = DATA.map(analyse);
         $("loader").style.display = "none";
         applyLang();
+        loadFeedback();
     }).catch(() => { $("loader").textContent = "Error loading data."; });
+
+    // ===== review notes (POST /api/feedback -> Apps Script -> sheet tab "feedback") =====
+    let FB = {}, FB_OK = false;
+    const FB_CLOSED = ["done", "rejected"];
+    async function fbCall(body) {
+        const r = await fetch("/api/feedback", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        let j = {}; try { j = await r.json(); } catch (e) {}
+        if (!r.ok || !j.ok) { const e = new Error(j.error || ("HTTP " + r.status)); e.status = r.status; throw e; }
+        return j;
+    }
+    async function loadFeedback() {
+        try {
+            const j = await fbCall({ action: "list" });
+            FB = {};
+            (j.rows || []).forEach(r => { (FB[r.id] = FB[r.id] || []).push(r); });
+            FB_OK = true;
+        } catch (e) { FB_OK = false; }
+        renderStats(); if (tab === "grid") render();
+        if (openId) openDetail(openId, true);
+    }
+    const fbOpen = id => (FB[id] || []).filter(r => FB_CLOSED.indexOf(String(r.status).trim().toLowerCase()) < 0);
 
     // ===== UI =====
     function applyLang() {
@@ -340,6 +414,7 @@
         const S = t().st;
         const items = [[pieces, S.pieces, "piece"], [groups.length, S.groups, "group"], [combs, S.combs, "group"], [photos, S.photos, "photos"],
             [miss, S.miss, "miss", miss ? "bad" : ""], [vids, S.videos, "video"], [pdf + " / " + INFO.length, S.pdf, "nopdf"]];
+        if (FB_OK) { const fo = INFO.reduce((s, i) => s + fbOpen(i.id).length, 0); items.push([fo, t().fb.open, "fb", fo ? "bad" : ""]); }
         $("stats").innerHTML = items.map(x => `<div class="stat ${x[3] || ""}" data-q="${x[2]}"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("") +
             (FILES_OK ? "" : `<div class="stat bad" style="grid-column:1/-1;cursor:default"><span>${t().filesErr}</span></div>`);
         $("stats").querySelectorAll(".stat[data-q]").forEach(el => el.onclick = () => {
@@ -376,6 +451,7 @@
         if (ty === "video" && !(i.videos + i.reels)) return false;
         if (ty === "q" && !i.q.length) return false;
         if (ty === "nopdf" && pdfReady(i.id)) return false;
+        if (ty === "fb" && !fbOpen(i.id).length) return false;
         return true;
     }
     function thumbOf(i) {
@@ -397,6 +473,8 @@
         if (i.notes.indexOf("noteHeroVid") >= 0) b.push(`<span class="bd warn">${x.heroVideo}</span>`);
         if (i.missing.length) b.push(`<span class="bd bad">${i.missing.length} ${x.missB}</span>`);
         b.push(pdfReady(i.id) ? `<span class="bd ok">${x.pdfOk} ✓</span>` : `<span class="bd warn">${x.pdfNo}</span>`);
+        const fo = fbOpen(i.id).length;
+        if (fo) b.push(`<span class="bd warn">✎ ${fo} ${x.fb.notesB}</span>`);
         return b.join("");
     }
     function render() {
@@ -418,26 +496,66 @@
 
     // ===== detail =====
     let openId = null;
+    let CUR = {}; // field key -> { label, text } for the review box of the open piece
     function imgTag(src, cls) { return `<img loading="lazy" class="${cls || ""}" src="${esc(src)}" alt="" data-z="${esc(src)}" onerror="this.style.display='none'">`; }
-    function paraBlock(txt) {
+    // which sheet cell a shown text comes from: current language first, else the other one (same fallback as fld)
+    function pick(a, pre, suf) {
+        for (const lg of [lang, lang === "ar" ? "en" : "ar"]) { const k = pre + lg + (suf || ""); if (L(a[k])) return { key: k, val: L(a[k]) }; }
+        return { key: pre + lang + (suf || ""), val: "" };
+    }
+    function pen(field, label, text) {
+        CUR[field] = { label: label, text: text || "" };
+        const rs = (FB[openId] || []).filter(r => r.field === field), open = rs.filter(r => FB_CLOSED.indexOf(String(r.status).trim().toLowerCase()) < 0).length;
+        const cls = rs.length ? (open ? "pen has" : "pen has done") : "pen";
+        return `<button class="${cls}" data-f="${esc(field)}" title="${esc(field)}">${rs.length ? "✎ " + rs.length : t().fb.pen}</button>`;
+    }
+    function paraBlock(txt, pn) {
         if (!txt) return "";
-        return `<div class="blk txt"><div class="lbl">${t().text}</div><div class="para">${txt}</div><button class="more">${t().more}</button></div>`;
+        return `<div class="blk txt"><div class="lbl">${t().text} ${pn || ""}</div><div class="para">${txt}</div><button class="more">${t().more}</button></div>`;
     }
     function mediaBlock(m, label) {
         const th = m.yt ? `<img src="https://img.youtube.com/vi/${m.yt}/mqdefault.jpg" alt="">` : "";
-        return `<div class="blk"><div class="lbl">${label} · ${m.kind === "reel" ? t().reels : t().vids} <code>${m.key}</code></div>
+        return `<div class="blk"><div class="lbl">${label} · ${m.kind === "reel" ? t().reels : t().vids} <code>${m.key}</code> ${pen(m.key, label, m.url)}</div>
             <div class="vid">${th}<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.url)}</a></div></div>`;
     }
     function fileLabel(f) { return f ? `<code>${esc(f.replace(/^images\//, ""))}</code>` : ""; }
-    function openDetail(id) {
-        const i = INFO.find(x => x.id === id); if (!i) return; openId = id;
+    // only the changed words: removed = red strike, added = green
+    function wordDiff(a, b) {
+        const A = String(a).split(/(\s+)/), B = String(b).split(/(\s+)/);
+        if (A.length * B.length > 400000) return esc(b);
+        const n = A.length, m = B.length, D = Array.from({ length: n + 1 }, () => new Uint16Array(m + 1));
+        for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) D[i][j] = A[i] === B[j] ? D[i + 1][j + 1] + 1 : Math.max(D[i + 1][j], D[i][j + 1]);
+        let i = 0, j = 0, h = "";
+        while (i < n || j < m) {
+            if (i < n && j < m && A[i] === B[j]) { h += esc(A[i]); i++; j++; }
+            else if (j < m && (i >= n || D[i][j + 1] >= D[i + 1][j])) { h += `<ins>${esc(B[j])}</ins>`; j++; }
+            else { h += `<del>${esc(A[i])}</del>`; i++; }
+        }
+        return h;
+    }
+    function notesList(id) {
+        const x = t().fb, rs = (FB[id] || []).slice().sort((p, q) => String(q.time).localeCompare(String(p.time)));
+        if (!rs.length) return `<div class="note">${x.none}</div>`;
+        return `<div class="fbl">` + rs.map(r => {
+            const st = String(r.status).trim().toLowerCase() || "new", d = r.time ? new Date(r.time).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-GB") : "";
+            return `<div class="fbi ${esc(st)}"><div class="h"><b>${esc(x.types[r.type] || r.type)}</b><code>${esc(r.field)}</code><span>${esc(r.reviewer)}</span><span>${esc(d)}</span><span class="bd ${st === "done" ? "ok" : st === "new" ? "warn" : ""}">${esc(x.st[st] || r.status)}</span></div>
+                ${r.proposed ? `<div class="p">${r.current && r.type !== "comment" ? wordDiff(r.current, r.proposed) : esc(r.proposed)}</div>` : ""}${r.comment ? `<div class="p" style="color:var(--muted)">${esc(r.comment)}</div>` : ""}
+                ${r.reply ? `<div class="r">${x.reply}: ${esc(r.reply)}</div>` : ""}</div>`;
+        }).join("") + `</div>`;
+    }
+    function openDetail(id, keep) {
+        const i = INFO.find(x => x.id === id); if (!i) return; openId = id; CUR = {};
         const a = i.a, x = t(), F = x.f;
         const link = SITE + i.id, qlink = SITE + "q" + i.id;
         let rows = [];
-        const add = (k, v) => { v = L(v); if (v) rows.push(`<tr><td>${k}</td><td>${v}</td></tr>`); };
-        add(F.inventory_number, esc(a.inventory_number));
-        ["from", "date", "dimensions", "section", "hall", "material", "registered", "acquisition"].forEach(k => add(F[k], esc(fld(a, k))));
-        add(F.catalogue_no, esc(a.catalogue_no)); add(F.catalogue_page, esc(a.catalogue_page));
+        const add = (k, v, pn) => { v = L(v); if (v) rows.push(`<tr><td>${k}</td><td>${v}</td><td class="pc">${pn || ""}</td></tr>`); };
+        const addF = (k, label) => { const p = pick(a, k + "_"); add(label, esc(p.val), pen(p.key, label, p.val)); };
+        const tt = pick(a, "title_");
+        add(x.fb.title, esc(tt.val), pen(tt.key, x.fb.title, tt.val));
+        add(F.inventory_number, esc(a.inventory_number), pen("inventory_number", F.inventory_number, L(a.inventory_number)));
+        ["from", "date", "dimensions", "section", "hall", "material", "registered", "acquisition"].forEach(k => addF(k, F[k]));
+        add(F.catalogue_no, esc(a.catalogue_no), pen("catalogue_no", F.catalogue_no, L(a.catalogue_no)));
+        add(F.catalogue_page, esc(a.catalogue_page), pen("catalogue_page", F.catalogue_page, L(a.catalogue_page)));
         add(F.link, `<a href="${link}" target="_blank">${link}</a>`);
         add(F.qlink, `<a href="${qlink}" target="_blank">${qlink}</a>`);
         const pa = PDFS[i.id + "-ar"], pe = PDFS[i.id + "-en"];
@@ -445,11 +563,13 @@
 
         let lay = "";
         if (i.kind === "group") {
-            lay += paraBlock(fld(a, "dsc1") || fld(a, "desc"));
+            const gd = pick(a, "dsc_", "1").val ? pick(a, "dsc_", "1") : pick(a, "desc_");
+            lay += paraBlock(gd.val, pen(gd.key, x.text, gd.val));
             lay = `<div class="sec"><h3>${x.combsT} (${i.combs.length})</h3><div class="combs">` + i.combs.map(c => {
                 const p = c.p, pics = [c.front].concat(c.backs).filter(Boolean);
+                const sum = [L(p.inventory_number), fld(p, "dimensions"), fld(p, "material"), fld(p, "date")].filter(Boolean).join("\n");
                 return `<div class="comb ${c.front ? "" : "miss"}"><div class="pics ${pics.length > 1 ? "dbl" : ""}">${pics.map(s => imgTag(s)).join("") || `<div class="none" style="color:var(--bad)">${x.missing}: <code>${esc(c.inv)}.webp</code></div>`}</div>
-                    <div style="margin-top:6px"><b>${esc(p.inventory_number)}</b></div>
+                    <div style="margin-top:6px;display:flex;gap:6px;align-items:center;justify-content:space-between"><b>${esc(p.inventory_number)}</b>${pen("comb " + L(p.inventory_number), x.fb.comb + " " + L(p.inventory_number), sum)}</div>
                     <div>${esc(fld(p, "dimensions"))}</div><div>${esc(fld(p, "material"))}</div>
                     <div style="color:var(--muted)">${pics.map((s, k) => fileLabel(s) + " " + (k ? x.back : x.front)).join(" · ")}</div></div>`;
             }).join("") + `</div></div>` + (lay ? `<div class="sec"><h3>${x.text}</h3>${lay}</div>` : "");
@@ -457,34 +577,100 @@
             i.top.forEach(m => lay += mediaBlock(m, x.top));
             i.slots.forEach(s => {
                 const lbl = s.n === 1 ? x.hero : x.slot + " " + s.n;
-                const cap = s.cap[lang] || s.cap[lang === "ar" ? "en" : "ar"];
-                const dsc = s.dsc[lang] || s.dsc[lang === "ar" ? "en" : "ar"] || (s.n === 1 ? fld(a, "desc") : "");
+                const cp = pick(a, "info_", s.n), cap = cp.val;
+                let dp = pick(a, "dsc_", s.n);
+                if (!dp.val && s.n === 1) dp = pick(a, "desc_");
+                const capPen = pen(cp.key, x.caption + " · " + lbl, cap);
                 if (s.media.length) s.media.forEach(m => lay += mediaBlock(m, lbl));
                 else if (s.file) {
-                    lay += `<div class="blk"><div class="lbl">${lbl} ${fileLabel(s.file)} ${s.pair ? "+ " + fileLabel(s.pair) + " (" + x.pair + ")" : ""}</div>
-                        <div class="pics ${s.pair ? "dbl" : ""}">${imgTag(s.file)}${s.pair ? imgTag(s.pair) : ""}</div>${cap ? `<div class="cap">${cap}</div>` : ""}</div>`;
+                    const ph = s.file.replace(/^images\//, "");
+                    lay += `<div class="blk"><div class="lbl">${lbl} ${fileLabel(s.file)} ${s.pair ? "+ " + fileLabel(s.pair) + " (" + x.pair + ")" : ""} ${pen("photo " + ph, x.fb.photo + " " + ph, "")}</div>
+                        <div class="pics ${s.pair ? "dbl" : ""}">${imgTag(s.file)}${s.pair ? imgTag(s.pair) : ""}</div>${cap ? `<div class="cap">${cap} ${capPen}</div>` : ""}</div>`;
                 } else if (FILES_OK && cap && findFile("images/q" + i.id + slotLetter(s.n))) {
-                    lay += `<div class="blk txt"><div class="lbl">${lbl} · ${x.noteQOnly} ${fileLabel(findFile("images/q" + i.id + slotLetter(s.n)))}</div><div class="cap">${x.caption}: ${cap}</div></div>`;
+                    lay += `<div class="blk txt"><div class="lbl">${lbl} · ${x.noteQOnly} ${fileLabel(findFile("images/q" + i.id + slotLetter(s.n)))}</div><div class="cap">${x.caption}: ${cap} ${capPen}</div></div>`;
                 } else if (FILES_OK && cap) {
-                    lay += `<div class="blk miss"><div class="lbl">${lbl} · <b style="color:var(--bad)">${x.missing}</b> <code>${esc(i.id + slotLetter(s.n))}.webp</code></div><div class="cap">${x.caption}: ${cap}</div></div>`;
+                    lay += `<div class="blk miss"><div class="lbl">${lbl} · <b style="color:var(--bad)">${x.missing}</b> <code>${esc(i.id + slotLetter(s.n))}.webp</code></div><div class="cap">${x.caption}: ${cap} ${capPen}</div></div>`;
                 }
-                lay += paraBlock(dsc);
+                lay += paraBlock(dp.val, pen(dp.key, x.text + " · " + lbl, dp.val));
             });
             lay = `<div class="sec"><h3>${x.layout}</h3><div class="lay">${lay}</div></div>`;
-            if (i.q.length) lay += `<div class="sec"><h3>${x.qT} (${i.q.length})</h3><div class="combs">` + i.q.map(g =>
-                `<div class="comb"><div class="pics">${imgTag(g.src)}</div><div style="color:var(--muted)">${fileLabel(g.src)}</div><div>${esc(L(a["info_" + lang + g.n]))}</div></div>`).join("") + `</div></div>`;
+            if (i.q.length) lay += `<div class="sec"><h3>${x.qT} (${i.q.length})</h3><div class="combs">` + i.q.map(g => {
+                const gp = pick(a, "info_", g.n);
+                return `<div class="comb"><div class="pics">${imgTag(g.src)}</div><div style="color:var(--muted)">${fileLabel(g.src)}</div><div>${esc(gp.val)} ${pen(gp.key, x.caption + " · q" + g.n, gp.val)}</div></div>`;
+            }).join("") + `</div></div>`;
         }
         const notes = i.notes.map(k => `<div class="bd warn" style="display:inline-block;margin:0 0 6px">${x[k]}</div>`).join(" ");
+        const nAll = (FB[i.id] || []).length;
+        const fbSec = `<div class="sec" id="fbSec"><h3>${x.fb.list}${nAll ? " (" + nAll + ")" : ""}</h3>${FB_OK ? notesList(i.id) : `<div class="note">${x.fb.off}</div>`}</div>`;
+        const st = keep ? $("drawer").scrollTop : 0;
         $("drawer").innerHTML = `<div class="dh"><h2>${esc(i.id)} · ${esc(fld(a, "title"))}</h2>
             <a class="btn" href="${link}" target="_blank">${x.open}</a>${i.kind !== "text" ? `<a class="btn" href="${qlink}" target="_blank">${x.openQ}</a>` : ""}
             <button class="btn" id="cpy">${x.copy}</button><button class="btn" id="cls">✕</button></div>
-            <div class="db">${notes}<div class="badges" style="margin-bottom:14px">${badges(i)}</div>
-            <div class="sec"><h3>${x.fields}</h3><table class="kv">${rows.join("")}</table></div>${lay}</div>`;
+            <div class="db">${notes}<div class="badges" style="margin-bottom:10px">${badges(i)}</div>
+            <div class="note">${x.fb.hint} ${pen("general", x.fb.general, "")}</div>
+            <div class="sec"><h3>${x.fields}</h3><table class="kv">${rows.join("")}</table></div>${lay}${fbSec}</div>`;
         $("cls").onclick = closeDetail;
         $("cpy").onclick = () => { navigator.clipboard && navigator.clipboard.writeText(link); $("cpy").textContent = x.copied; };
         wireDrawer($("drawer"));
-        $("drawer").classList.add("open"); $("shade").style.display = "block"; $("drawer").scrollTop = 0;
+        $("drawer").querySelectorAll(".pen").forEach(b => b.onclick = e => { e.stopPropagation(); openFb(b.dataset.f); });
+        $("drawer").classList.add("open"); $("shade").style.display = "block"; $("drawer").scrollTop = st;
     }
+
+    // ===== review box =====
+    function plain(html) {
+        const d = document.createElement("div");
+        d.innerHTML = String(html || "").replace(/<br\s*\/?>/gi, "\n").replace(/<\/(p|div|li)>/gi, "\n");
+        return (d.textContent || "").replace(/\n{3,}/g, "\n\n").trim();
+    }
+    let fbType = "correction";
+    function openFb(field) {
+        const c = CUR[field] || { label: field, text: "" }, x = t().fb, cur = plain(c.text);
+        const hasText = !!cur || /^(title|from|date|dimensions|section|hall|material|registered|acquisition|info|dsc|desc)_|^(inventory_number|catalogue_no|catalogue_page)$/.test(field);
+        fbType = hasText ? "correction" : "comment";
+        let name = ""; try { name = localStorage.getItem("mia_staff_name") || ""; } catch (e) {}
+        $("fbbox").innerHTML = `<div class="dh"><h2>${x.boxT} · ${esc(openId)}</h2><button class="btn" id="fbX">✕</button></div>
+            <div class="db">
+                <div class="note" style="margin:0">${x.where}: <b>${esc(c.label)}</b> <code style="direction:ltr;background:#f1eee2;padding:1px 6px;border-radius:4px">${esc(field)}</code></div>
+                ${hasText ? `<label>${x.cur}<div class="fbcur">${cur ? esc(cur) : x.empty}</div></label>` : ""}
+                <div class="fbtypes">${["correction", "suggestion", "comment"].map(k => `<button class="btn ${k === fbType ? "on" : ""}" data-k="${k}">${x.types[k]}</button>`).join("")}</div>
+                <label id="fbPropL">${x.proposed}<textarea id="fbProp" dir="auto" style="min-height:${cur.length > 300 ? 220 : cur.length > 80 ? 130 : 70}px">${esc(cur)}</textarea></label>
+                <label><span id="fbComL">${x.comment}</span><textarea id="fbCom" dir="auto" style="min-height:60px"></textarea></label>
+                <label>${x.name}<input id="fbName" value="${esc(name)}" maxlength="80"></label>
+                <div class="fbmsg" id="fbMsg"></div>
+                <div style="display:flex;gap:8px"><button class="btn" id="fbSend" style="background:var(--teal);color:#fff;border-color:var(--teal)">${x.send}</button><button class="btn" id="fbCancel">${x.cancel}</button></div>
+            </div>`;
+        const sync = () => {
+            $("fbbox").querySelectorAll(".fbtypes button").forEach(b => b.classList.toggle("on", b.dataset.k === fbType));
+            $("fbPropL").style.display = fbType === "comment" ? "none" : "";
+            $("fbComL").textContent = fbType === "comment" ? x.commentReq : x.comment;
+        };
+        $("fbbox").querySelectorAll(".fbtypes button").forEach(b => b.onclick = () => { fbType = b.dataset.k; sync(); });
+        sync();
+        $("fbX").onclick = $("fbCancel").onclick = closeFb;
+        $("fbSend").onclick = async () => {
+            const msg = $("fbMsg"), prop = $("fbProp").value.trim(), com = $("fbCom").value.trim(), nm = $("fbName").value.trim();
+            const bad = s => { msg.className = "fbmsg bad"; msg.textContent = s; };
+            if (!nm) return bad(x.needName);
+            if (fbType === "comment" ? !com : !prop) return bad(x.needText);
+            if (fbType !== "comment" && prop === cur && !com) return bad(x.same);
+            try { localStorage.setItem("mia_staff_name", nm); } catch (e) {}
+            $("fbSend").disabled = true; msg.className = "fbmsg"; msg.textContent = x.sending;
+            try {
+                await fbCall({ action: "add", id: openId, field: field, type: fbType, current: cur,
+                    proposed: fbType === "comment" ? "" : prop, comment: com, reviewer: nm });
+                closeFb(); toast(x.sent);
+                loadFeedback();
+            } catch (e) {
+                $("fbSend").disabled = false;
+                bad(e.status === 503 ? x.off : x.err + " (" + e.message + ")");
+            }
+        };
+        $("fbm").classList.add("open");
+        setTimeout(() => (fbType === "comment" ? $("fbCom") : $("fbProp")).focus(), 30);
+    }
+    function closeFb() { $("fbm").classList.remove("open"); }
+    $("fbm").onclick = e => { if (e.target === $("fbm")) closeFb(); };
+    function toast(s) { const el = $("toast"); el.textContent = s; el.style.display = "block"; clearTimeout(toast.h); toast.h = setTimeout(() => el.style.display = "none", 3000); }
     function wireDrawer(root) {
         root.querySelectorAll(".para").forEach(p => { const b = p.nextElementSibling; if (p.scrollHeight <= p.clientHeight + 4) b.remove(); else b.onclick = () => { p.classList.toggle("full"); b.textContent = p.classList.contains("full") ? t().less : t().more; }; });
         root.querySelectorAll("img[data-z]").forEach(im => im.onclick = e => { e.stopPropagation(); $("zoomImg").src = im.dataset.z; $("zoom").style.display = "flex"; });
@@ -492,7 +678,7 @@
     function closeDetail() { openId = null; $("drawer").classList.remove("open"); $("shade").style.display = "none"; }
     $("shade").onclick = closeDetail;
     $("zoom").onclick = () => { $("zoom").style.display = "none"; };
-    document.addEventListener("keydown", e => { if (e.key === "Escape") { if ($("zoom").style.display === "flex") $("zoom").style.display = "none"; else closeDetail(); } });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") { if ($("zoom").style.display === "flex") $("zoom").style.display = "none"; else if ($("fbm").classList.contains("open")) closeFb(); else closeDetail(); } });
 
     // ===== reports =====
     function renderReport() {
