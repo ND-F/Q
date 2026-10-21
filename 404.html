@@ -162,6 +162,24 @@
       }
 
       // =========================================
+      // W -> wide.html (نسخة من c بمساحة أوسع، للمقارنة)
+      // =========================================
+      else if (
+        upperSeg.startsWith('W')
+      ) {
+
+        var realId =
+          segment.substring(1);
+
+        window.location.replace(
+          base +
+          '/wide.html?id=' +
+          realId +
+          extraQuery
+        );
+      }
+
+      // =========================================
       // Default -> c.html
       // =========================================
       else {
