@@ -709,6 +709,78 @@
         body.dark #modalClose { color: white; }
         footer { display: block; width: 100%; clear: both; text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
 
+        /* صورتين عريضين جدًا (وش وظهر): فوق بعض */
+        .has-double.pair-stack { flex-direction: column; flex-wrap: nowrap; }
+        .has-double.pair-stack img { max-width: 100% !important; }
+
+        /* ===== تصميم A (scan-b، ديسكتوب بس): الصورة فوق بعرض الصفحة، تحتها بطاقة البيانات، والنص في عمود مريح للقراية ===== */
+        @media (min-width: 1000px) {
+            .header-inner { max-width: 1200px; }
+            body.lang-ar .header-title, body.lang-en .header-title { transform: none; }
+            body.lang-en .logos-group { width: auto; padding-left: 0 !important; }
+
+            body.lang-ar .container, body.lang-en .container {
+                flex-direction: column; align-items: center; gap: 0; max-width: 1240px; margin-top: 36px;
+            }
+            .article-content { display: contents; }
+            #videoContainer, #reelContainer { order: 1; }
+            #heroSection { order: 2; width: 100%; }
+            .article-header { order: 3; }
+            #articleBody { order: 4; width: 100%; max-width: 760px; }
+
+            /* المسرح: خلفية هادية ورا الصورة، عرضها على قد شكل الصورة */
+            #heroSection .main-figure { margin: 0; }
+            #heroSection .viewer {
+                box-sizing: border-box; max-height: none; margin: 0 auto; padding: 44px;
+                border-radius: 22px; background: rgba(6, 68, 76, 0.045);
+            }
+            body.dark #heroSection .viewer { background: rgba(255, 255, 255, 0.04); }
+            .container[data-hero="tall"] #heroSection .viewer { max-width: 760px; }
+            .container[data-hero="mid"] #heroSection .viewer { max-width: 1000px; }
+            #heroSection .viewer img { max-height: clamp(420px, calc(100vh - 360px), 820px); }
+            #heroSection .viewer.pair-stack img { max-height: clamp(210px, calc((100vh - 390px) / 2), 400px); }
+            #heroSection .viewer.has-double { gap: 28px; }
+            #heroSection .viewer.has-double:not(.pair-stack) img { max-width: calc(50% - 14px); }
+            #heroSection figcaption { max-width: 760px; margin: 16px auto 0; }
+            #heroSection .pg-viewer { height: min(62vh, 720px); }
+            #heroSection .pg-desc { max-width: 760px; margin-left: auto; margin-right: auto; }
+
+            /* فيديو فوق أو مكان الصورة: 16:9 بعرض لحد 1000 ومن غير ما يعدّي طول الشاشة */
+            #videoContainer, #heroSection .video-container {
+                width: min(100%, 1000px, calc((100vh - 240px) * 16 / 9)); max-width: none;
+                padding-bottom: 0; height: auto; aspect-ratio: 16 / 9; margin: 0 auto 36px;
+            }
+            #heroSection .video-container { margin-bottom: 0; }
+
+            /* بطاقة البيانات: العنوان على جنب والبيانات على الجنب التاني، بين خطين دهبي */
+            .article-header {
+                position: static; width: 100%; max-width: 760px; box-sizing: border-box;
+                display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); column-gap: 48px; align-items: start;
+                padding: 30px 0 28px !important; margin: 34px 0 40px !important;
+                border-top: 1px solid rgba(225, 169, 62, 0.45); border-bottom: 1px solid rgba(225, 169, 62, 0.45);
+            }
+            .container[data-hero="none"] .article-header { margin-top: 10px !important; }
+            .article-header h1 { grid-column: 1; grid-row: 1; margin: 0; font-size: 34px; line-height: 1.35; }
+            .article-header .title-separator { grid-column: 1; grid-row: 2; margin-top: 18px; margin-bottom: 0; }
+            .article-header .meta-group { grid-column: 2; grid-row: 1 / span 3; gap: 6px; font-size: 17px; padding-top: 6px; }
+            .article-header .meta-inv { margin-top: 12px; }
+            .article-header .meta-inv::before { margin-bottom: 12px; }
+            .article-header .meta-inv:empty { display: none; }
+
+            /* الصور والفيديو جوه النص: أعرض من عمود الكلام (1100) عشان تاخد حقها */
+            .article-body .image-pair-container {
+                --bw: min(1100px, calc(100vw - 120px));
+                width: auto; margin: 44px calc(50% - var(--bw) / 2);
+            }
+            .article-body .image-pair-wrapper img { max-height: min(72vh, 780px); }
+            .article-body .image-pair-wrapper.pair-stack img { max-height: min(36vh, 400px); }
+            .article-body .image-pair-container figcaption { max-width: 760px; margin-left: auto; margin-right: auto; box-sizing: border-box; }
+            .article-body .video-container {
+                width: min(100%, 1000px, calc((100vh - 240px) * 16 / 9)); padding-bottom: 0; height: auto;
+                aspect-ratio: 16 / 9; margin-left: auto; margin-right: auto;
+            }
+        }
+
         /* ===== قائمة التحميل (PDF / HTML) ===== */
         .dl-overlay { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(6,68,76,.45); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); z-index: 3000; display: flex; align-items: center; justify-content: center; }
         .dl-menu { background: var(--beige); color: var(--teal); border: 1px solid var(--gold); border-radius: 18px; padding: 22px 18px; width: 260px; max-width: 84vw; box-shadow: 0 20px 60px rgba(0,0,0,.4); text-align: center; font-family: 'Tajawal', sans-serif; }
@@ -892,6 +964,25 @@
             .map(s => "<p>" + s.replace(/\n/g, "<br>") + "</p>").join("");
     }
     function imageList(a) { return Array.from({ length: slotCount(a) }, (_, i) => a["image" + (i + 1)]); }
+    // شكل الصورة الرئيسية (tall / mid / wide / xwide / video / reel / gallery / none) على الكونتينر: التصميم بيظبط المقاسات عليه
+    function setHeroShape(shape) {
+        let c = document.getElementById("mainContainer");
+        if (c && c.dataset.hero !== shape) c.dataset.hero = shape;
+        if (typeof onHeroShape === "function") onHeroShape();
+    }
+    // صورتين (وش وظهر) عريضين جدًا: فوق بعض بدل جنب بعض، عشان كل واحدة متبقاش شريط رفيع
+    function pairShape(box) {
+        let ims = Array.from(box.querySelectorAll("img")).filter(i => i.naturalWidth && i.style.display !== "none");
+        let r = ims.map(i => i.naturalWidth / i.naturalHeight);
+        box.classList.toggle("pair-stack", r.length === 2 && r.every(x => x > 1.8));
+        return r;
+    }
+    function updateHeroShape(viewer) {
+        let r = pairShape(viewer);
+        if (!r.length) return;
+        let ratio = r.length === 2 ? (viewer.classList.contains("pair-stack") ? 1 / (1 / r[0] + 1 / r[1]) : r[0] + r[1]) : r[0];
+        setHeroShape(ratio < 0.85 ? "tall" : ratio < 1.6 ? "mid" : ratio < 2.8 ? "wide" : "xwide");
+    }
     const LINK_PREFIX = "q"; // scan-b: mia.nadimfoundation.org/q<id>   (c.html: من غير prefix)
     let zoomStartTime = 0, isZoomTracked = false;
 
@@ -1199,14 +1290,15 @@
             } else if (images[0]) {
                 let viewer = document.createElement("div"); viewer.className = "viewer";
                 let img = document.createElement("img"); img.src = images[0];
-                img.onerror = function() { this.closest('.viewer').style.display = 'none'; };
+                img.onerror = function() { this.closest('.viewer').style.display = 'none'; setHeroShape(videoBySlot[-1] ? "video" : reelBySlot[-1] ? "reel" : "none"); };
+                img.addEventListener("load", () => updateHeroShape(viewer));
                 img.onclick = () => openModal(img.src);
                 viewer.appendChild(img);
                 // الصورة المزدوجة للصورة الأولى: 3.webp + 3a.webp جنب بعض (زي 3b + 3bb)
                 let heroDouble = images[0].replace(/\.webp$/, "") + "a.webp";
                 let img2 = document.createElement("img"); img2.style.display = "none";
-                img2.onload = function() { this.style.display = ""; viewer.classList.add("has-double"); this.style.opacity = 1; };
-                img2.onerror = function() { this.remove(); };
+                img2.onload = function() { this.style.display = ""; viewer.classList.add("has-double"); this.style.opacity = 1; updateHeroShape(viewer); };
+                img2.onerror = function() { this.remove(); updateHeroShape(viewer); };
                 img2.onclick = (e) => { e.stopPropagation(); openModal(heroDouble); };
                 img2.src = heroDouble;
                 viewer.appendChild(img2);
@@ -1220,6 +1312,10 @@
             }
             heroSection.appendChild(heroFig);
         }
+        // الصورة بتعدّل الشكل بعد ما تحمّل (updateHeroShape)؛ ده الشكل المبدئي
+        setHeroShape(artwork.pieces && artwork.pieces.length || viewList ? "gallery"
+            : videoBySlot[0] ? "video" : reelBySlot[0] ? "reel" : images[0] ? "mid"
+            : videoBySlot[-1] ? "video" : reelBySlot[-1] ? "reel" : "none");
 
         let articleBody = document.getElementById("articleBody");
         articleBody.innerHTML = "";
@@ -1517,7 +1613,8 @@
         let doubleChar = String.fromCharCode(97 + idx); let doubleSrc = src.replace(/\.webp$/, "") + doubleChar + ".webp"; 
         if (idx < 26) { // الصورة المزدوجة (3b + 3bb) لحد حرف z بس
         let img2 = document.createElement("img"); img2.src = doubleSrc; img2.style.display = "none"; 
-        img2.onload = function() { this.style.display = "block"; wrapper.classList.add("has-double"); };
+        img2.onload = function() { this.style.display = "block"; wrapper.classList.add("has-double"); pairShape(wrapper); };
+        img1.addEventListener("load", () => pairShape(wrapper));
         img2.onerror = function() { this.remove(); }; img2.onclick = () => openModal(doubleSrc); wrapper.appendChild(img2);
         }
         
