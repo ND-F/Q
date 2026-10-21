@@ -469,8 +469,11 @@
         body.dark .image-pair-wrapper img { box-shadow: none; border: none; }
         .image-pair-wrapper img:hover { transform: scale(1.02); }
         
-        @media (min-width: 600px) {
-            .image-pair-wrapper.has-double img { max-width: calc(50% - 10px); }
+        .image-pair-wrapper.has-double { flex-wrap: nowrap; }
+        .image-pair-wrapper.has-double img { max-width: calc(50% - 10px); }
+        @media (max-width: 600px) {
+            .image-pair-wrapper.has-double { gap: 10px; }
+            .image-pair-wrapper.has-double img { max-width: calc(50% - 5px); }
         }
 
         /* الشرح تحت الصور - باستخدام ألوان البراند مع شفافية بسيطة */
@@ -578,7 +581,9 @@
         .viewer.has-double { max-height: none; gap: 20px; flex-wrap: wrap; align-items: center; }
         /* الوش دايمًا على الشمال والظهر على اليمين، حتى في العربي */
         .viewer.has-double, .image-pair-wrapper { direction: ltr; }
-        @media (min-width: 600px) { .viewer.has-double img { max-width: calc(50% - 10px); } }
+        .viewer.has-double { flex-wrap: nowrap; }
+        .viewer.has-double img { max-width: calc(50% - 10px); }
+        @media (max-width: 600px) { .viewer.has-double { gap: 10px; } .viewer.has-double img { max-width: calc(50% - 5px); } }
 
         /* ===== معرض القطع (مجموعة أمشاط): بوكس عرض + ثامنيلز، تقليب بين القطع ===== */
         .piece-gallery { margin-bottom: 30px; }
