@@ -1,5 +1,5 @@
 {
- "built_at": "2026-10-19T12:29:35.471Z",
+ "built_at": "2026-10-24T13:49:12.882Z",
  "files": {
   "0-ar": {
    "file": "0-ar.pdf",
@@ -63,15 +63,15 @@
   },
   "2-ar": {
    "file": "2-ar.pdf",
-   "hash": "f7898bb142d64d95",
+   "hash": "41653f015a9428e1",
    "name": "Inv. no. 560 - Door From the Mausoleum of Sultan Al-Ghuri",
-   "bytes": 5089362
+   "bytes": 6206504
   },
   "2-en": {
    "file": "2-en.pdf",
-   "hash": "4c63f955a4d82ed2",
+   "hash": "0aa5b0fde11544b0",
    "name": "Inv. no. 560 - Door From the Mausoleum of Sultan Al-Ghuri",
-   "bytes": 5041486
+   "bytes": 6158750
   },
   "3-ar": {
    "file": "3-ar.pdf",
@@ -1022,5 +1022,5 @@
    "bytes": 355237
   }
  },
- "sha": "4a45d04147ed4a343c5ebbe35a43652fc8d78ab3"
+ "sha": "f7e2107127a7c17c0e01098640b3c65a092127fa"
 }
