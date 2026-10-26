@@ -1,5 +1,5 @@
 {
- "built_at": "2026-10-25T09:23:41.654Z",
+ "built_at": "2026-10-26T09:35:17.110Z",
  "files": {
   "0-ar": {
    "file": "0-ar.pdf",
@@ -21,9 +21,9 @@
   },
   "gw-en": {
    "file": "gw-en.pdf",
-   "hash": "f5314540b240e6cd",
+   "hash": "9c987baa89ee0e79",
    "name": "Inv. no. A.6 - Gaston Wiet",
-   "bytes": 4718051
+   "bytes": 5997988
   },
   "ha-ar": {
    "file": "ha-ar.pdf",
@@ -1022,5 +1022,5 @@
    "bytes": 355237
   }
  },
- "sha": "6ca83c54df2c5fdb5c247b5bf769ef8009c131e7"
+ "sha": "5e132842f39b07504ddb310cb014228fbcf20284"
 }
