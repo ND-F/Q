@@ -124,23 +124,20 @@
         }
 
         .logos-group {
-            display: flex; align-items: center; gap: 00px;
+            display: flex; align-items: center; gap: 16px;
             flex-shrink: 0; 
         }
         .logos-group a:first-child {
-            margin-inline-end: 00px; 
+            margin-inline-end: 0;
             position: relative;
             z-index: 2;
         }
+        .logos-group a { display: flex; line-height: 0; }
 
         .logo { 
             height: 65px; 
             width: auto; 
             cursor: pointer; 
-            /* السطرين دول هم "السر" عشان اللوجو ميبكسلش وهو بيصغر ويكبر */
-            image-rendering: -webkit-optimize-contrast; 
-            transform: translateZ(0);
-            /* لغينا الـ translateZ والـ cubic-bezier النطاط وخليناها ناعمة جداً */
             /* خلي الـ transition ناعم وبسيط */
             transition: height 0.3s ease-out, transform 0.3s ease-out;
         }
@@ -808,7 +805,7 @@
         
         <div class="logos-group">
             <a href="https://qr.nadimfoundation.org/">
-                <img src="https://ndf-mia.ebraheem-shaar.workers.dev/images/logo-v-teal.svg" onerror="this.onerror=null;this.src='images/logo-v-teal.svg'" class="logo">
+                <img src="https://ndf-mia.ebraheem-shaar.workers.dev/images/logo-v-teal-tight.svg" onerror="this.onerror=null;this.src='images/logo-v-teal-tight.svg'" class="logo">
             </a>
             
             <a href="https://www.miaegypt.org/ar-eg/museum/collection/Collection" target="_blank">
