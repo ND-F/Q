@@ -124,7 +124,7 @@
         }
 
         .logos-group {
-            display: flex; align-items: center; gap: 16px;
+            display: flex; align-items: center; gap: 10px;
             flex-shrink: 0; 
         }
         .logos-group a:first-child {
@@ -185,7 +185,7 @@
             .logos-group {
                 position: static; width: auto;
                 display: flex; flex-direction: row; justify-content: flex-end;
-                gap: 10px; flex-shrink: 0;
+                gap: 6px; flex-shrink: 0;
             }
             
             .logo { height: 42px; }
@@ -720,6 +720,16 @@
             .header-inner { max-width: 1360px; }
             body.lang-ar .header-title, body.lang-en .header-title { transform: none; }
             body.lang-en .logos-group { width: auto; padding-left: 0 !important; }
+            /* الإنجليزي: الهيدر بنفس أعمدة الصفحة، عشان اللوجوهات تبدأ من نفس خط عنوان القطعة */
+            body:has(.container[data-hero="tall"]) { --media-fr: 1fr; }
+            body:has(.container[data-hero="reel"]) { --media-fr: 0.9fr; }
+            body:has(.container[data-hero="wide"]), body:has(.container[data-hero="video"]) { --media-fr: 1.45fr; }
+            body:has(.container[data-hero="xwide"]) { --media-fr: 1.6fr; }
+            body.lang-en:not(:has(.container[data-hero="none"])) .header-inner {
+                display: grid; column-gap: 64px;
+                grid-template-columns: minmax(0, var(--media-fr, 1.25fr)) minmax(0, 1fr);
+            }
+            body.lang-en .logos-group { justify-self: start; }
 
             /* الصورة على الشمال في اللغتين، والعمود بيعرض أو يضيق على قد شكل الصورة */
             body.lang-ar .container, body.lang-en .container {

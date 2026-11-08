@@ -124,7 +124,7 @@
         }
 
         .logos-group {
-            display: flex; align-items: center; gap: 16px;
+            display: flex; align-items: center; gap: 10px;
             flex-shrink: 0; 
         }
         .logos-group a:first-child {
@@ -185,7 +185,7 @@
             .logos-group {
                 position: static; width: auto;
                 display: flex; flex-direction: row; justify-content: flex-end;
-                gap: 10px; flex-shrink: 0;
+                gap: 6px; flex-shrink: 0;
             }
             
             .logo { height: 42px; }
@@ -377,12 +377,14 @@
         @media (min-width: 1000px) {
             /* توحيد المقاسات بين الهيدر والكونتينر بالمللي */
             .header-inner { max-width: 1400px; width: 100%; box-sizing: border-box; }
+            /* الإنجليزي: عرض الهيدر = عرض محتوى الصفحة بالظبط، عشان اللوجوهات تفضل على خط العنوان في كل المقاسات */
+            body.lang-en .header-inner { max-width: 1360px; }
             
            /* ضبط اللوجوهات في الإنجليزي ومحاذاتها للشمال براحتك */
             body.lang-en .logos-group { 
                 width: 320px; 
                 box-sizing: border-box;
-                padding-left: 60px !important; /* دي بتثبتهم عشان ميتزحلقوش وقت السكرول */
+                padding-left: 0 !important; /* اللوجوهات بتبدأ من نفس خط بداية عنوان القطعة */
                 justify-content: flex-start; 
                 transform: none !important; 
                 
@@ -392,7 +394,6 @@
             }
             /* ترحيل عنوان الهيدر ليكون محاذي للمتن (بالعربي والإنجليزي) */
             body.lang-ar .header-title { transform: translateX(-20px); } /* رحلناه يمين في العربي */
-            body.lang-en .header-title { transform: translateX(20px); } /* رحلناه شمال في الإنجليزي */
 
             /* ⚠️ التعديل الجذري هنا: ضفنا box-sizing عشان الـ padding ميكبرش الكونتينر ويبوظ المحاذاة */
             .container { display: flex; align-items: flex-start; gap: 60px; justify-content: center; max-width: 1400px; box-sizing: border-box; } 
