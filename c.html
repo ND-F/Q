@@ -377,8 +377,6 @@
         @media (min-width: 1000px) {
             /* توحيد المقاسات بين الهيدر والكونتينر بالمللي */
             .header-inner { max-width: 1400px; width: 100%; box-sizing: border-box; }
-            /* الإنجليزي: عرض الهيدر = عرض محتوى الصفحة بالظبط، عشان اللوجوهات تفضل على خط العنوان في كل المقاسات */
-            body.lang-en .header-inner { max-width: 1360px; }
             
            /* ضبط اللوجوهات في الإنجليزي ومحاذاتها للشمال براحتك */
             body.lang-en .logos-group { 
@@ -712,6 +710,30 @@
         body.dark #modalClose { color: white; }
         footer { display: block; width: 100%; clear: both; text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
 
+        /* ===== التصميم الرئيسي بمساحة أوسع (ديسكتوب بس): اتبدل مع wide.html يوم 2026-11-09 ===== */
+        @media (min-width: 1000px) {
+            .header-inner { max-width: 1560px; }
+            /* الإنجليزي: عرض الهيدر = عرض محتوى الصفحة بالظبط، عشان اللوجوهات تفضل على خط العنوان في كل المقاسات */
+            body.lang-en .header-inner { max-width: 1520px; }
+            body.lang-en #museumHeader, body.lang-en #museumHeader.header-small { padding-left: 40px !important; padding-right: 40px !important; }
+            .container { max-width: 1600px; padding: 0 40px; gap: 80px; margin-top: 64px; }
+            .article-content { max-width: 1160px; }
+            .article-header { top: 140px; }
+
+            /* الصورة اللي فوق: بتبدأ عند أول سطر بعد العنوان اللي في الجنب (الرقم بيتحسب في alignHeroToMeta)، ومسافة أقرب للكلام */
+            .main-figure { margin-top: var(--hero-top, 88px); margin-bottom: 36px; }
+            .main-figure.no-offset { margin-top: 0; } /* تحت فيديو/ريل فوق الصورة */
+            .main-figure.no-media { margin-top: 0; margin-bottom: 60px; } /* مفيش ملف صورة (زي Preface وقطعة 4) */
+            .main-figure .viewer { max-height: none; }
+            .viewer img { max-height: 72vh; }
+            .pg-viewer { height: 62vh; }
+            .video-container { margin-bottom: 56px; }
+
+            /* الصور اللي جوه الكلام: مسافة أكبر فوقها وتحتها */
+            .image-pair-container { margin: 52px 0; }
+            .image-pair-wrapper img { max-height: 72vh; }
+        }
+
         /* ===== قائمة التحميل (PDF / HTML) ===== */
         .dl-overlay { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(6,68,76,.45); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); z-index: 3000; display: flex; align-items: center; justify-content: center; }
         .dl-menu { background: var(--beige); color: var(--teal); border: 1px solid var(--gold); border-radius: 18px; padding: 22px 18px; width: 260px; max-width: 84vw; box-shadow: 0 20px 60px rgba(0,0,0,.4); text-align: center; font-family: 'Tajawal', sans-serif; }
@@ -945,9 +967,11 @@
         if (h) document.documentElement.style.setProperty("--hdr-h", Math.ceil(h.getBoundingClientRect().bottom) + "px");
     }
     window.addEventListener("resize", syncHeaderHeight);
+    window.addEventListener("resize", alignHeroToMeta);
     window.addEventListener("load", syncHeaderHeight);
     document.addEventListener("DOMContentLoaded", () => { let h = document.getElementById("museumHeader"); if (h) h.addEventListener("transitionend", syncHeaderHeight); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncHeaderHeight);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(alignHeroToMeta);
 
     function setInfoDrawer(open) {
         if (open) syncHeaderHeight();
@@ -1119,6 +1143,16 @@
         }
     }
 
+    // الصورة اللي فوق تبدأ عند أول سطر مكتوب بعد العنوان في العمود الجانبي (العنوان ممكن ياخد سطرين أو تلاتة)
+    function alignHeroToMeta() {
+        const side = document.getElementById("articleHeader");
+        if (!side || window.innerWidth < 1000) return;
+        const first = Array.from(side.querySelectorAll(".meta-group > *")).find(el => el.textContent.trim() !== "" && el.offsetHeight > 0);
+        if (!first) return;
+        const top = Math.round(first.getBoundingClientRect().top - side.getBoundingClientRect().top);
+        document.documentElement.style.setProperty("--hero-top", top + "px");
+    }
+
     function renderArticle() {
         const ar = lang === "ar";
         document.documentElement.dir = ar ? "rtl" : "ltr";
@@ -1213,7 +1247,7 @@
             } else if (images[0]) {
                 let viewer = document.createElement("div"); viewer.className = "viewer";
                 let img = document.createElement("img"); img.src = images[0];
-                img.onerror = function() { this.closest('.viewer').style.display = 'none'; };
+                img.onerror = function() { this.closest('.viewer').style.display = 'none'; heroFig.classList.add('no-media'); };
                 img.onclick = () => openModal(img.src);
                 viewer.appendChild(img);
                 // الصورة المزدوجة للصورة الأولى: 3.webp + 3a.webp جنب بعض (زي 3b + 3bb)
@@ -1234,6 +1268,8 @@
             }
             heroSection.appendChild(heroFig);
         }
+
+        if (videoBySlot[-1] || reelBySlot[-1]) heroSection.querySelectorAll(".main-figure").forEach(f => f.classList.add("no-offset"));
 
         let articleBody = document.getElementById("articleBody");
         articleBody.innerHTML = "";
@@ -1273,6 +1309,7 @@
         
         const infoBtnEl = document.getElementById("infoToggleBtn");
         if(infoBtnEl) infoBtnEl.setAttribute('data-tooltip', infoBtnEl.getAttribute(`data-${lang}`) || '');
+        alignHeroToMeta();
     }
 
     // ===== مجموعة قطع (الأمشاط): العنوان والقاعة والوصف العام ثابتين، وبيانات كل قطعة بتتغير مع التقليب =====

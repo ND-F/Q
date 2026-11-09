@@ -377,6 +377,8 @@
         @media (min-width: 1000px) {
             /* توحيد المقاسات بين الهيدر والكونتينر بالمللي */
             .header-inner { max-width: 1400px; width: 100%; box-sizing: border-box; }
+            /* الإنجليزي: عرض الهيدر = عرض محتوى الصفحة بالظبط، عشان اللوجوهات تفضل على خط العنوان في كل المقاسات */
+            body.lang-en .header-inner { max-width: 1360px; }
             
            /* ضبط اللوجوهات في الإنجليزي ومحاذاتها للشمال براحتك */
             body.lang-en .logos-group { 
@@ -710,28 +712,6 @@
         body.dark #modalClose { color: white; }
         footer { display: block; width: 100%; clear: both; text-align: center; margin: 40px 0 120px 0; font-size: 13px; opacity: 0.4; }
 
-        /* ===== تجربة "c بمساحة أوسع" (wide.html، ديسكتوب بس): نفس تصميم c بالظبط، بس أعرض وفيه براح أكتر حوالين الصورة اللي فوق الكلام ===== */
-        @media (min-width: 1000px) {
-            .header-inner { max-width: 1560px; }
-            /* الإنجليزي: عرض الهيدر = عرض محتوى الصفحة بالظبط، عشان اللوجوهات تفضل على خط العنوان في كل المقاسات */
-            body.lang-en .header-inner { max-width: 1520px; }
-            body.lang-en #museumHeader, body.lang-en #museumHeader.header-small { padding-left: 40px !important; padding-right: 40px !important; }
-            .container { max-width: 1600px; padding: 0 40px; gap: 80px; margin-top: 64px; }
-            .article-content { max-width: 1160px; }
-            .article-header { top: 140px; }
-
-            /* الصورة اللي فوق: أكبر شوية، ومساحة ثابتة حواليها حتى لو الصورة عريضة وقصيرة */
-            .main-figure { margin-bottom: 60px; }
-            .main-figure .viewer { min-height: clamp(320px, 46vh, 540px); max-height: none; }
-            .viewer img { max-height: 72vh; }
-            .pg-viewer { height: 62vh; }
-            .video-container { margin-bottom: 56px; }
-
-            /* الصور اللي جوه الكلام: مسافة أكبر فوقها وتحتها */
-            .image-pair-container { margin: 52px 0; }
-            .image-pair-wrapper img { max-height: 72vh; }
-        }
-
         /* ===== قائمة التحميل (PDF / HTML) ===== */
         .dl-overlay { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(6,68,76,.45); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); z-index: 3000; display: flex; align-items: center; justify-content: center; }
         .dl-menu { background: var(--beige); color: var(--teal); border: 1px solid var(--gold); border-radius: 18px; padding: 22px 18px; width: 260px; max-width: 84vw; box-shadow: 0 20px 60px rgba(0,0,0,.4); text-align: center; font-family: 'Tajawal', sans-serif; }
@@ -915,7 +895,7 @@
             .map(s => "<p>" + s.replace(/\n/g, "<br>") + "</p>").join("");
     }
     function imageList(a) { return Array.from({ length: slotCount(a) }, (_, i) => a["image" + (i + 1)]); }
-    const LINK_PREFIX = "w"; // wide.html (نسخة من c بمساحة أوسع): mia.nadimfoundation.org/w<id>   (c.html: من غير prefix)
+    const LINK_PREFIX = "w"; // wide.html (التصميم الأضيق القديم، اتبدل مع c يوم 2026-11-09): mia.nadimfoundation.org/w<id>   (c.html: من غير prefix)
     let zoomStartTime = 0, isZoomTracked = false;
 
     const modal = document.getElementById("fullscreenModal"), modalImage = document.getElementById("modalImage");
