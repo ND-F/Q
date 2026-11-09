@@ -51,9 +51,10 @@ Short copy for claude.ai web sessions. The master is the owner's private skill `
 | `Q…`/`VQ…` (any case) | `scan-b.html` (id, then inventory-number fallback; rewrites URL to `q<id>`) |
 | `M…`/`VM…` | `scan.html` |
 | `N…`/`VN…` | `n.html` |
-| anything else | `c.html` (**printed QR stickers**, id only) |
+| anything else | `c.html` (**printed QR stickers**; id first, then inventory number) |
 - Comb groups: `/<CODE>` (SSC DSC DLC DEP DRK DGD DGR DGO DVG DZM DAC) = viewer + thumbnails, fields switch per comb.
 - Unknown id or no id = redirect to `/Preface` on all 5 pages (`goPreface()` in c, wide, scan-b, scan, n).
+- Inventory numbers open their piece on all 5 pages (`findArtwork()`, id always wins). `404.html` joins numeric paths: `/8367/2` = `8367-2`.
 
 ## Rules that must not break
 - **Printed ids are permanent.** Old: 0, aq, gw, ha, gn, 1–77 (74/75 unused); old group codes 67=SSC 69=DSC 70=DLC 71=DEP

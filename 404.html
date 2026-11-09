@@ -18,6 +18,18 @@
         .filter(Boolean)
         .pop();
 
+    // رقم جرد مكتوب بشرطة مائلة: /8367/2 = 8367-2 (مش القطعة 2)، ومع البادئة: /w8367/2 = w8367-2
+    var pathParts =
+      path.split('/').filter(Boolean);
+
+    if (
+      pathParts.length > 1 &&
+      /^(v?[qmnw])?\d+(-\d+)?$/i.test(pathParts[0]) &&
+      pathParts.slice(1).every(function (p) { return /^\d+(-\d+)?$/.test(p); })
+    ) {
+      segment = pathParts.join('-');
+    }
+
     // GitHub Pages => /Q
     // Vercel / Custom Domain => ''
     var base =
