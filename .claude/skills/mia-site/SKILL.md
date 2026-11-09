@@ -53,6 +53,7 @@ Short copy for claude.ai web sessions. The master is the owner's private skill `
 | `N…`/`VN…` | `n.html` |
 | anything else | `c.html` (**printed QR stickers**, id only) |
 - Comb groups: `/<CODE>` (SSC DSC DLC DEP DRK DGD DGR DGO DVG DZM DAC) = viewer + thumbnails, fields switch per comb.
+- Unknown id or no id = redirect to `/Preface` on all 5 pages (`goPreface()` in c, wide, scan-b, scan, n).
 
 ## Rules that must not break
 - **Printed ids are permanent.** Old: 0, aq, gw, ha, gn, 1–77 (74/75 unused); old group codes 67=SSC 69=DSC 70=DLC 71=DEP

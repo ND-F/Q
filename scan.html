@@ -1155,9 +1155,11 @@
                 if (fileName && fileName !== "c" && fileName !== "Q" && fileName !== "scan") id = /^m./i.test(fileName) ? fileName.substring(1) : fileName;
             }
             if (!allArtworks || allArtworks.length === 0) return;
-            const finalId = id || allArtworks[0].id;
+            if (!id) { goPreface(); return; }
+            const finalId = id;
             startPieceKey = new URLSearchParams(location.search).get("p") || "";
             initPiece(finalId);
+            if (!artwork) return; // جاري التحويل لصفحة التمهيد
             if (artwork && artwork.pieces) syncPieceUrl();
             else if (window.location.search.includes("id=")) {
                 window.history.replaceState({id: finalId}, '', LINK_PREFIX + finalId);
@@ -1182,9 +1184,18 @@
             || allArtworks.find(a => a.inventory_number && String(a.inventory_number).replace(/^\s*inv\.?\s*(no\.?)?/i, "").split(/[;,]/).some(part => normInv(part) === key));
     }
 
+    // أي لينك أو رقم مش موجود -> صفحة التمهيد (Preface). بنسيب بس باراميترات التتبّع (q, s, staff)
+    function goPreface() {
+        const q = new URLSearchParams(location.search);
+        q.delete("id"); q.delete("p");
+        const rest = q.toString();
+        location.replace((location.hostname.includes("github.io") ? "/Q" : "") + "/Preface" + (rest ? "?" + rest : ""));
+    }
+
     function initPiece(id) {
         if (!allArtworks || allArtworks.length === 0) return;
         artwork = findArtwork(id);
+        if (!artwork && String(id).trim().toUpperCase() !== "PREFACE") { goPreface(); return; }
         if(!artwork) artwork = allArtworks[0];
         if(!artwork) return;
 

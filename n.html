@@ -723,8 +723,10 @@
                 if (fileName && fileName !== "scan-c" && fileName !== "Q") id = fileName;
             }
             if (!allArtworks || allArtworks.length === 0) return;
-            const finalId = id || allArtworks[0].id;
+            if (!id) { goPreface(); return; }
+            const finalId = id;
             initPiece(finalId);
+            if (!artwork) return; // جاري التحويل لصفحة التمهيد
             if (window.location.search.includes("id=")) {
                 let urlPath = String(finalId).toUpperCase().startsWith('V') ? 'VN' + String(finalId).substring(1) : 'N' + finalId;
                 window.history.replaceState({id: finalId}, '', urlPath);
@@ -732,10 +734,19 @@
         } catch(e) { console.error(e); }
     }
 
+    // أي لينك أو رقم مش موجود -> صفحة التمهيد (Preface). بنسيب بس باراميترات التتبّع (q, s, staff)
+    function goPreface() {
+        const q = new URLSearchParams(location.search);
+        q.delete("id"); q.delete("p");
+        const rest = q.toString();
+        location.replace((location.hostname.includes("github.io") ? "/Q" : "") + "/Preface" + (rest ? "?" + rest : ""));
+    }
+
     function initPiece(id) {
         if (!allArtworks || allArtworks.length === 0) return;
         let targetId = String(id).trim().toUpperCase(); 
         artwork = allArtworks.find(a => a.id && String(a.id).trim().toUpperCase() === targetId);
+        if (!artwork && String(id).trim().toUpperCase() !== "PREFACE") { goPreface(); return; }
         if(!artwork) artwork = allArtworks[0];
         if(!artwork) return;
 
