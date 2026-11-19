@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-16T14:37:13.110Z",
+ "built_at": "2026-11-19T08:14:30.317Z",
  "files": {
   "0-ar": {
    "file": "0-ar.pdf",
@@ -45,9 +45,9 @@
   },
   "gn-en": {
    "file": "gn-en.pdf",
-   "hash": "c6b5f58d8340544b",
+   "hash": "b31d2e3f62f052c8",
    "name": "MIA.A.16 - Glass Negatives",
-   "bytes": 4929761
+   "bytes": 4929760
   },
   "1-ar": {
    "file": "1-ar.pdf",
@@ -75,9 +75,9 @@
   },
   "3-ar": {
    "file": "3-ar.pdf",
-   "hash": "321a5658f47df509",
+   "hash": "7fcc13213e36bd88",
    "name": "Inv. no. 3553 - Door From the Complex of Sultan Qalawun",
-   "bytes": 8471398
+   "bytes": 8471400
   },
   "3-en": {
    "file": "3-en.pdf",
@@ -1022,5 +1022,5 @@
    "bytes": 355237
   }
  },
- "sha": "e0972aac48064f9e61bda622b32d6e15191fa27a"
+ "sha": "01081e1bc3b0c34c5c5eabe7a9574d0ddf0af760"
 }
